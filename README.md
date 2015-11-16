@@ -5,8 +5,8 @@ V.2 of itrak.cmms
 
 # Architecture
 
-- Go at the backend
-- Lumx / angular / material design front end
+- [Go at the backend](http://golang.org/)
+- [Lumx / angular / material design front end](https://github.com/lumapps/lumX)
 
 ## SQL Database
 
@@ -14,7 +14,7 @@ V.2 of itrak.cmms
 
 ## WebApp
 
-- Single Page App, with JWT login validation
+- Single Page App, with JWT login validation, using [https://github.com/dgrijalva/jwt-go](https://github.com/dgrijalva/jwt-go)
 
 ## Server
 
