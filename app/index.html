@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" ng-app="cmms">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>iTrak CMMS v.2</title>
+
+    <!-- Head -->
+	<link rel="stylesheet" href="bower_components/lumx/dist/lumx.css">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">   
+    <link href="./css/app.css" rel="stylesheet" type="text/css">
+    <link rel="icon" href="http://shared.supaloc.com.au/themes/supaloc-foundation/assets/img/icons/favicon.ico?v=2" type="image/x-icon">
+
+	<!-- LumX -->
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/velocity/velocity.js"></script>
+	<script src="bower_components/moment/min/moment-with-locales.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/lumx/dist/lumx.js"></script>
+
+	<!-- Out App -->
+    <script src="./js/app.js"></script>
+
+
+  </head>
+  <body ng-controller="mainPageCtrl as ctrl">
+
+<style>
+    .scroll-section {overflow-y: scroll;}
+</style>
+
+    <div class="grid-frame vertical scroll-section">
+      <div class="grid-content shrink" style="padding: 0;">
+
+        <div class="title-bar primary">
+
+          <span class="left show-medium-up">
+              <a><img src="./img/supaloc-logo-white.png" style="width:120px" alt="Supaloc logo"></a>
+          </span>
+          <span class="title center">
+              <a><strong>iTrak CMMS</strong></a>
+          </span>         
+        </div>
+
+      <div ui-view class="grid-content">
+      </div>
+
+    </div>
+
+  </body>
+</html>
