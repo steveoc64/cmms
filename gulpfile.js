@@ -4,7 +4,8 @@ var gulp = require('gulp'),
 	sass = require('gulp-sass'),
 	rimraf = require('rimraf'),
 	sequence = require('gulp-sequence').use(gulp),
-	minifyCss = require('gulp-minify-css')
+	minifyCss = require('gulp-minify-css'),
+	plumber = require('gulp-plumber')
 	;
 
 var paths = {
@@ -21,6 +22,13 @@ var paths = {
   appJS: [
   	'app/app.js',
     'app/code/**/*.*'
+  ],
+  SassIncludes: [
+	'bower_components/lumx/dist/scss/', 
+	'bower_components/mdi/scss/',
+	'bower_components/bourbon/app/assets/stylesheets/', 
+	'bower_components/bitters/app/assets/stylesheets/', 
+	'bower_components/neat/app/assets/stylesheets/', 
   ]
 }
 
@@ -29,22 +37,26 @@ gulp.task('clean', function(cb){
 });
 
 gulp.task('sass', function () {
-  gulp.src('./app/scss/**/*.scss')
-    .pipe(sass().on('error', sass.logError))
-	//.pipe(minifyCss({compatibility: 'ie8'}))    
-    .pipe(gulp.dest('./build/css'))
-   ;
+  	return gulp.src('./app/scss/**/*.scss')
+	    .pipe(plumber())
+		//.pipe(minifyCss({compatibility: 'ie8'}))  
+	    .pipe(sass({includePaths: paths.SassIncludes}))
+	    .pipe(gulp.dest('./build/css'))
+	   ;
 });
 
 gulp.task('lumx:css', function() {
 	return gulp.src('bower_components/lumx/dist/lumx.css')
-	//	.pipe(minifyCss({compatibility: 'ie8'}))
+		//	.pipe(minifyCss({compatibility: 'ie8'}))
+	    .pipe(plumber())
+	    .pipe(sass({includePaths: paths.SassIncludes}))
 		.pipe(gulp.dest('./build/css'))
 		;
 });
 
 gulp.task('lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
+	    .pipe(plumber())
 	    .pipe($.concat('lumx.js'))
 	    //.pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
@@ -52,8 +64,15 @@ gulp.task('lumx:js', function() {
 });
 
 gulp.task('lumx',  
-	sequence(['lumx:css','lumx:js'])
+	//sequence(['lumx:css','lumx:js'])
+	sequence(['lumx:js'])
 );
+
+gulp.task('copy:fonts', function() {
+	return gulp.src('./bower_components/mdi/fonts/**/*')
+		.pipe(gulp.dest('./build/fonts'))
+		;
+});
 
 gulp.task('copy:img', function() {
 	return gulp.src('./app/img/**/*')
@@ -75,7 +94,7 @@ gulp.task('app:js', function() {
 });
 
 gulp.task('build', 
-	sequence('clean',['sass','lumx','copy:img','copy:html','app:js'])
+	sequence('clean',['sass','lumx','copy:img','copy:fonts','copy:html','app:js'])
 );
 
 gulp.task('watch', function () {
