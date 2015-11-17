@@ -9,14 +9,17 @@ var gulp = require('gulp'),
 var paths = {
   lumX_JS: [
  	'bower_components/jquery/dist/jquery.js',
+    'bower_components/fastclick/lib/fastclick.js',	
 	'bower_components/velocity/velocity.js',
 	'bower_components/moment/min/moment-with-locales.js',
 	'bower_components/angular/angular.js',
+	'bower_components/angular-ui-router/release/angular-ui-router.js',
 	'bower_components/lumx/dist/lumx.js',
   ],
   // These files are for your app's JavaScript
   appJS: [
-    'app/js/**/*.*'
+  	'app/app.js',
+    'app/code/**/*.*'
   ]
 }
 
@@ -40,7 +43,7 @@ gulp.task('lumx:css', function() {
 gulp.task('lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
 	    .pipe($.concat('lumx.js'))
-	    .pipe($.uglify())
+	    //.pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
 	    ;
 });
@@ -61,19 +64,23 @@ gulp.task('copy:html', function() {
   ;
 });
 
-gulp.task('copy:js', function() {
-	return gulp.src('./app/**/*.js')
+gulp.task('app:js', function() {
+	return gulp.src(paths.appJS)
+		.pipe($.concat('app.js'))
 		.pipe(gulp.dest('./build/js'))
 		;
 });
 
 gulp.task('build', 
-	sequence('clean',['sass','lumx','copy:img','copy:html','copy:js'])
+	sequence('clean',['sass','lumx','copy:img','copy:html','app:js'])
 );
 
 gulp.task('watch', function () {
   gulp.watch('./app/scss/**/*.scss', ['sass']);
   gulp.watch('./app/**/*.html', ['copy:html']);
-  gulp.watch('./app/**/*.js', ['copy:js']);
+  gulp.watch('./app/app.js', ['app:js']);
+  gulp.watch('./app/code/**/*.js', ['app:js']);
   gulp.watch('./app/img/*', ['copy:img']);
 });
+
+gulp.task('run', sequence('build','watch'));
