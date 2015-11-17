@@ -40,6 +40,7 @@ gulp.task('lumx:css', function() {
 gulp.task('lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
 	    .pipe($.concat('lumx.js'))
+	    .pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
 	    ;
 });
@@ -62,12 +63,12 @@ gulp.task('copy:html', function() {
 
 gulp.task('copy:js', function() {
 	return gulp.src('./app/**/*.js')
-		.pipe(gulp.dest('./build'))
+		.pipe(gulp.dest('./build/js'))
 		;
 });
 
 gulp.task('build', 
-	sequence('clean',['sass','copy:lumx','copy:img','copy:html','copy:js'])
+	sequence('clean',['sass','lumx','copy:img','copy:html','copy:js'])
 );
 
 gulp.task('watch', function () {
