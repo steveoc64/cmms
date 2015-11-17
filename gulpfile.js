@@ -3,7 +3,8 @@ var $ = require('gulp-load-plugins')();
 var gulp = require('gulp'),
 	sass = require('gulp-sass'),
 	rimraf = require('rimraf'),
-	sequence = require('gulp-sequence').use(gulp)
+	sequence = require('gulp-sequence').use(gulp),
+	minifyCss = require('gulp-minify-css')
 	;
 
 var paths = {
@@ -30,12 +31,14 @@ gulp.task('clean', function(cb){
 gulp.task('sass', function () {
   gulp.src('./app/scss/**/*.scss')
     .pipe(sass().on('error', sass.logError))
+	//.pipe(minifyCss({compatibility: 'ie8'}))    
     .pipe(gulp.dest('./build/css'))
    ;
 });
 
 gulp.task('lumx:css', function() {
 	return gulp.src('bower_components/lumx/dist/lumx.css')
+	//	.pipe(minifyCss({compatibility: 'ie8'}))
 		.pipe(gulp.dest('./build/css'))
 		;
 });
