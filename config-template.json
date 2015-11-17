@@ -1,0 +1,5 @@
+{
+	"Debug": false,
+	"DataSourceName": "user=your-username-here password=your-password-here dbname=your-dbname-here",
+	"WebPort": 8081,
+}
