@@ -4,7 +4,8 @@ var gulp = require('gulp'),
 	sass = require('gulp-sass'),
 	rimraf = require('rimraf'),
 	sequence = require('gulp-sequence').use(gulp),
-	minifyCss = require('gulp-minify-css')
+	minifyCss = require('gulp-minify-css'),
+	plumber = require('gulp-plumber')
 	;
 
 var paths = {
@@ -21,7 +22,15 @@ var paths = {
   appJS: [
   	'app/app.js',
     'app/code/**/*.*'
-  ]
+  ],
+  // Include Paths for Sass
+  sassPaths: [
+  	"bower_components/lumx/dist/scss",
+  	"bower_components/mdi/scss",
+  	"bower_components/bourbon/app/assets/stylesheets",
+  	"bower_components/neat/app/assets/stylesheets",
+  	"bower_components/bitters/app/assets/stylesheets",
+  ],
 }
 
 gulp.task('clean', function(cb){
@@ -30,7 +39,8 @@ gulp.task('clean', function(cb){
 
 gulp.task('sass', function () {
   gulp.src('./app/scss/**/*.scss')
-    .pipe(sass().on('error', sass.logError))
+  	.pipe(plumber())
+    .pipe(sass({includePaths: paths.sassPaths}))
 	//.pipe(minifyCss({compatibility: 'ie8'}))    
     .pipe(gulp.dest('./build/css'))
    ;
@@ -52,12 +62,18 @@ gulp.task('lumx:js', function() {
 });
 
 gulp.task('lumx',  
-	sequence(['lumx:css','lumx:js'])
+	sequence(['lumx:js'])
 );
 
 gulp.task('copy:img', function() {
 	return gulp.src('./app/img/**/*')
 		.pipe(gulp.dest('./build/img'))
+		;
+});
+
+gulp.task('copy:fonts', function() {
+	return gulp.src(['./bower_components/mdi/fonts/**/*','./app/fonts/**/*'])
+		.pipe(gulp.dest('./build/fonts'))
 		;
 });
 
@@ -75,7 +91,7 @@ gulp.task('app:js', function() {
 });
 
 gulp.task('build', 
-	sequence('clean',['sass','lumx','copy:img','copy:html','app:js'])
+	sequence('clean',['sass','lumx','copy:img','copy:html','copy:fonts','app:js'])
 );
 
 gulp.task('watch', function () {

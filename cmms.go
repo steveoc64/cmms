@@ -13,7 +13,7 @@ var e *echo.Echo
 
 func main() {
 
-	LoadConfig()
+	_loadConfig()
 
 	e = echo.New()
 	e.Index("./build/index.html")
@@ -36,6 +36,9 @@ func main() {
 
 	// Define all the Routes
 	_initRoutes()
+
+	// Connect to the DB
+	_initDB()
 
 	// Start the web server
 	if Config.Debug {

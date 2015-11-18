@@ -1,4 +1,67 @@
-//@import "./app/scss/settings"
-@import "./bower_components/lumx/dist/scss/lumx"
+@import "lumx";
+@import "neat"
+;@import "base";
 
+@import "settings";
+//@import "fonts";
 
+.logo {
+    float: left;
+    width: 165px;
+    height: 41px;
+    text-indent: -9999px;
+    overflow: hidden;
+    margin: 0;
+    background: url(/img/logo.png) no-repeat;
+}
+
+.mainPage {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+
+  header {
+    min-height: 5vh;
+  }
+
+  footer {
+    background-color: $footer-bg;
+    color: #fff;
+    align-text: center;
+    flex: 1;
+    height: 3em;
+    align-text: center;
+  }
+
+}
+
+.mainPage-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 90vh;
+}
+
+.mainPage-content {
+  flex: 1;
+}
+
+.mainPage-nav {
+  flex: 0 0 12em;
+}
+
+.mainPage-alerts {
+  flex: 0 0 8em;
+}
+
+.mainPage-nav {
+  /* put the nav on the left */
+  order: -1;
+}
+
+@media (min-width: 768px) {
+  .mainPage-body {
+    flex-direction: row;
+    flex: 1;
+  }
+}
