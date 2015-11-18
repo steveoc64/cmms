@@ -22,7 +22,7 @@
   </head>
   <!-- <body ng-controller="loginCtrl">-->
 
-<body class="mainPage" ng-controller="welcomeCtrl">
+<body class="mainPage" ng-controller="cmmsCtrl">
     <header id="header"><!-- header -->
         <h1 class="logo"><a href="#">Steel Building Systems International</a></h1>
         <nav id="nav">
@@ -49,8 +49,8 @@
 <lx-dialog class="dialog dialog--l" 
   id="loginDialog" 
   auto-close="true" 
-  onclose="welcomeCtrl.closingDialog()" 
-  onscrollend="scrollEndDialog()">
+  onclose="cmmsCtrl.closingDialog()" 
+  onscrollend="cmmsCtrl.scrollEndDialog()">
 
     <div class="dialog__header">
         <div class="toolbar bgc-blue-700 pl++">
@@ -66,11 +66,11 @@
         <div flex-item>
             <form>
                 <lx-text-field label="User Name" fixed-label="true" icon="account">
-                    <input type="text" ng-model="loginCtrl.username">
+                    <input type="text" ng-model="cmmsCtrl.username">
                 </lx-text-field>
 
                 <lx-text-field label="Password" fixed-label="true" icon="fingerprint">
-                    <input type="password" ng-model="loginCtrl.passwd">
+                    <input type="password" ng-model="cmmsCtrl.passwd">
                 </lx-text-field>
             </form>
         </div>
@@ -80,7 +80,7 @@
 
     <div class="dialog__actions">
         <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
-        <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple ng-click="welcomeCtrl.login()">Login !</button>
+        <a href="#"><button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="alert('hi'); cmmsCtrl.login()">Login !</button></a>
     </div>
 </lx-dialog>
 

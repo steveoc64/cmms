@@ -20,28 +20,21 @@
 
 	    // Manually create all the routes here
 	    $stateProvider
-	    	.state('welcome',{
+	    	.state('cmms',{
 	    		url:'/',
 	    		acl: '*',
-	    		templateUrl:'welcome.html',
-	    		controller: 'welcomeCtrl',
+	    		templateUrl:'templates/cmms.html',
+	    		controller: 'cmmsCtrl',
 	    	})
-	      .state('login',{
-	        url: '/login',
-	        acl: '*',
-	        templateUrl: 'templates/login.html',
-	        controller: 'loginCtrl',
-	        controllerAs: 'loginCtrl',
-	      })	      
-	      .state('admin',{
+	      .state('cmms.admin',{
 	      	url: '/admin',
 	      	acl: 'admin',
 	      	template: 'You are now in the admin area',
 	      	controller: 'adminCtrl',
 	      	controllerAs: 'adminCtrl',
 	      })
-	      .state('worker',{
-	      	url: '/worker',
+	      .state('cmms.worker',{
+	      	url: 'worker',
 	      	acl: 'worker',
 	      	template: 'You are now in the worker area',
 	      	controller: 'workerCtrl',
@@ -49,13 +42,13 @@
 	      })
 	  }
 
-	function run($rootScope, $state, LxDialogService, Session) {
+	function run($rootScope, $state, LxDialogService, Session, $controller) {
 	   FastClick.attach(document.body);
 
 	  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
 	  	if (toState.url != '/login' && toState.url != '/') {
 		  	var acl = toState.acl
-		  	console.log('change state to',toState,'with event',event)
+		  	//console.log('change state to',toState,'with event',event)
 
 		  	var allGood = true
 		  	switch (toState.acl) {
@@ -91,7 +84,7 @@
 		  	if (!allGood) {
 		  		event.preventDefault()
 		  		console.log('opening login dialog from inside state change detector')
-		  		LxDialogService.open('loginDialog')
+		  		$controller('cmmsCtrl').openLoginDialog()
 		  	}
 		  }
 	  });	   
