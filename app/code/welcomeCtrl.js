@@ -3,10 +3,10 @@
 	console.log('Inside the welcomeCtrl code file')
 
 	angular.module('cmms').controller('welcomeCtrl',
-		function($state, $stateParams, LxDialogService, $timeout) {
+		function($state, $stateParams, LxDialogService, Session, $timeout) {
 
 			// if not logged in, then raise the login dialog
-			console.log('Running welcomeCtrl')
+			console.log('Running welcomeCtrl', Session)
 
 			// Wait for a couple of secs ... then move on to login screen
 			/*
