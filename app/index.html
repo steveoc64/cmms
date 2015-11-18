@@ -11,6 +11,7 @@
     <link rel="icon" href="http://shared.supaloc.com.au/themes/supaloc-foundation/assets/img/icons/favicon.ico?v=2" type="image/x-icon">
 
 	<!-- LumX -->
+    <!-- <script src="js/lumx.js"></script> -->
 	<script src="js/lumx.js"></script>
 
 	<!-- Our App -->
@@ -22,7 +23,7 @@
   </head>
   <!-- <body ng-controller="loginCtrl">-->
 
-<body class="mainPage" ng-controller="cmmsCtrl">
+<body class="mainPage" ng-controller="cmmsCtrl" id="mainPage">
     <header id="header"><!-- header -->
         <h1 class="logo"><a href="#">Steel Building Systems International</a></h1>
         <nav id="nav">
@@ -46,11 +47,7 @@
 
 
 
-<lx-dialog class="dialog dialog--l" 
-  id="loginDialog" 
-  auto-close="true" 
-  onclose="cmmsCtrl.closingDialog()" 
-  onscrollend="cmmsCtrl.scrollEndDialog()">
+<lx-dialog class="dialog dialog--l" id='loginDialog'>
 
     <div class="dialog__header">
         <div class="toolbar bgc-blue-700 pl++">
@@ -62,15 +59,16 @@
 
     <div class="dialog__content">
 
+
     <div class="mt++" flex-container="row" flex-gutter="24">
         <div flex-item>
             <form>
                 <lx-text-field label="User Name" fixed-label="true" icon="account">
-                    <input type="text" ng-model="cmmsCtrl.username">
+                    <input type="text" ng-model="username">
                 </lx-text-field>
 
                 <lx-text-field label="Password" fixed-label="true" icon="fingerprint">
-                    <input type="password" ng-model="cmmsCtrl.passwd">
+                    <input type="password" ng-model="passwd">
                 </lx-text-field>
             </form>
         </div>
@@ -80,7 +78,7 @@
 
     <div class="dialog__actions">
         <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
-        <a href="#"><button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="alert('hi'); cmmsCtrl.login()">Login !</button></a>
+        <button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="login()" lx-dialog-close>Login !</button>
     </div>
 </lx-dialog>
 

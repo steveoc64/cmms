@@ -1,6 +1,6 @@
 @import "lumx";
-@import "neat"
-;@import "base";
+@import "neat";
+//@import "base";
 
 @import "settings";
 //@import "fonts";
@@ -30,7 +30,9 @@
     align-text: center;
     flex: 1;
     height: 3em;
-    align-text: center;
+    align: center;
+    font-size: 11px;
+    float: right;
   }
 
 }

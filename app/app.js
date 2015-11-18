@@ -25,6 +25,7 @@
 	    		acl: '*',
 	    		templateUrl:'templates/cmms.html',
 	    		controller: 'cmmsCtrl',
+	    		controllerAs: 'cmmsCtrl',
 	    	})
 	      .state('cmms.admin',{
 	      	url: '/admin',
@@ -42,15 +43,35 @@
 	      })
 	  }
 
-	function run($rootScope, $state, LxDialogService, Session, $controller) {
+	function run($rootScope, $state, Session, LxDialogService, LxNotificationService) {
 	   FastClick.attach(document.body);
 
-	  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-	  	if (toState.url != '/login' && toState.url != '/') {
-		  	var acl = toState.acl
-		  	//console.log('change state to',toState,'with event',event)
+			angular.extend($rootScope,{
+				username: 'aa',
+				passwd: 'bb',
+				openLoginDialog: function() {
+					console.log('Opening Dialog from inside rootscope')
+					LxDialogService.open('loginDialog')
+				},
+				closeLoginDialog: function() {
+					LxNotificationService.info('Login Dialog Closed from inside rootscope')
+				},
+				login: function() {
+					console.log('Rootscope Login !!')
+					LxDialogService.close()
+				},
+				scrollEndDialog: function() {
+					console.log('Rootscope scrollEndDialog')
+				},
+				Session: Session,
+			})
 
-		  	var allGood = true
+	  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+	  	if (toState.url != '/') {
+		  	var acl = toState.acl
+		  	console.log('change state to',toState,'with event',event,'Session',Session)
+
+		  	var allGood = false
 		  	switch (toState.acl) {
 		  		case 'admin':
 		  			console.log('This page requires admin priv !!')
@@ -84,11 +105,12 @@
 		  	if (!allGood) {
 		  		event.preventDefault()
 		  		console.log('opening login dialog from inside state change detector')
-		  		$controller('cmmsCtrl').openLoginDialog()
-		  	}
+		  		$rootScope.openLoginDialog()
+				}
+
 		  }
-	  });	   
-	}  
+		 }) // rootscope on   
+	}  // run function
 
 })();
 
