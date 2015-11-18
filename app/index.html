@@ -6,37 +6,42 @@
     <title>iTrak CMMS v.2</title>
 
     <!-- Head -->
-	<link rel="stylesheet" href="css/lumx.css">
-	<!-- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">   -->
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">   
     <link href="css/app.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="http://shared.supaloc.com.au/themes/supaloc-foundation/assets/img/icons/favicon.ico?v=2" type="image/x-icon">
 
 	<!-- LumX -->
 	<script src="js/lumx.js"></script>
 
-	<!-- Out App -->
+	<!-- Our App -->
     <script src="./js/app.js"></script>
 
 	<style>
-	    .scroll-section {overflow-y: scroll;}
 	</style>
 
   </head>
-  <body ng-controller="loginCtrl">
+  <!-- <body ng-controller="loginCtrl">-->
 
-<div>
-    <button class="btn btn--m btn--black btn--flat" ng-click="notify('simple')" lx-ripple>Simple notification</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="notify('sticky')" lx-ripple>Sticky notification</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="notify('icon')" lx-ripple>Notification with icon</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="notify('color')" lx-ripple>Notification with colored icon</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="notify('info')" lx-ripple>Info notification</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="notify('success')" lx-ripple>Success notification</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="notify('warning')" lx-ripple>Warning notification</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="notify('error')" lx-ripple>Error notification</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="alert()" lx-ripple>Alert box</button>
-    <button class="btn btn--m btn--black btn--flat" ng-click="confirm()" lx-ripple>Confirm box</button>
-</div>
+<body class="mainPage" ng-controller="loginCtrl as loginCtrl">
+    <header id="header"><!-- header -->
+        <h1 class="logo"><a href="#">Steel Building Systems International</a></h1>
+        <nav id="nav">
+        </nav>
+    </header><!-- end header -->
 
+      <div class="mainPage-body">
+        <main class="mainPage-content">
+            <ui-view></ui-view>
+        </main>
 
-  </body>
+        <nav class="mainPage-nav">
+        </nav>
+
+        <aside class="mainPage-alerts">
+        </aside>
+      </div>
+      <footer id="footer">
+        <p>&copy;2015 Steel Building Systems International</p>         
+      </footer>
+</body>
 </html>
