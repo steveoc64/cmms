@@ -20,14 +20,19 @@
 
 	    // Manually create all the routes here
 	    $stateProvider
+	    	.state('welcome'),{
+	    		url:'/',
+	    		templateUrl:'welcome.html',
+	    		controller: 'welcomeCtrl'
+	    	})
 	      .state('login',{
-	        url: '/',
+	        url: '/login',
 	        templateUrl: 'templates/login.html',
 	        controller: 'loginCtrl',
-	        controllerAs: 'loginCtrl',
-	        animation: {
-	          enter: 'hingeInFromTop'
-	        },
+	      })	      
+	      .state('admin',{
+	      	url: '/admin',
+	      	template: 'You are now in the admin area',
 	      })
 	  }
 

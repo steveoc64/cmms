@@ -7,8 +7,7 @@
 
 			// if not logged in, then raise the login dialog
 			console.log('Not logged in, so open the login dialog')
-
-			//LxDialogService.open('loginDialog')
+			LxDialogService.open('loginDialog')
 
 			angular.extend(this,{
 				loginState: 'loggedIn',
@@ -22,6 +21,8 @@
 				},
 				login: function() {
 					console.log('Login !!')
+					$state.go('admin')
+					LxDialogService.close('loginDialog')
 				},
 			})
 		})

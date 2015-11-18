@@ -43,5 +43,45 @@
       <footer id="footer">
         <p>&copy;2015 Steel Building Systems International</p>         
       </footer>
+
+
+<lx-dialog class="dialog dialog--l" 
+  id="loginDialog" 
+  auto-close="true" 
+  onclose="closingDialog()" 
+  onscrollend="scrollEndDialog()">
+
+    <div class="dialog__header">
+        <div class="toolbar bgc-blue-700 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                CMMS Login
+            </span>
+        </div>
+    </div>
+
+    <div class="dialog__content">
+
+    <div class="mt++" flex-container="row" flex-gutter="24">
+        <div flex-item>
+            <form>
+                <lx-text-field label="User Name" fixed-label="true" icon="account">
+                    <input type="text" ng-model="loginCtrl.username">
+                </lx-text-field>
+
+                <lx-text-field label="Password" fixed-label="true" icon="fingerprint">
+                    <input type="password" ng-model="loginCtrl.passwd">
+                </lx-text-field>
+            </form>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="dialog__actions">
+        <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+        <button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="loginCtrl.login()">Login</button>
+    </div>
+</lx-dialog>
+
 </body>
 </html>
