@@ -22,7 +22,7 @@
   </head>
   <!-- <body ng-controller="loginCtrl">-->
 
-<body class="mainPage" ng-controller="loginCtrl as loginCtrl">
+<body class="mainPage" ng-controller="welcomeCtrl">
     <header id="header"><!-- header -->
         <h1 class="logo"><a href="#">Steel Building Systems International</a></h1>
         <nav id="nav">
@@ -47,6 +47,7 @@
 
 <lx-dialog class="dialog dialog--l" 
   id="loginDialog" 
+  controller="loginCtrl"
   auto-close="true" 
   onclose="closingDialog()" 
   onscrollend="scrollEndDialog()">
@@ -79,7 +80,7 @@
 
     <div class="dialog__actions">
         <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
-        <button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="loginCtrl.login()">Login</button>
+        <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple ng-click="loginCtrl.login()">Login</button>
     </div>
 </lx-dialog>
 
