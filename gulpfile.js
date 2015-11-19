@@ -14,7 +14,7 @@ var gulp = require('gulp'),
 var paths = {
   lumX_JS: [
  	'bower_components/jquery/dist/jquery.js',
-    'bower_components/fastclick/lib/fastclick.js',	
+  'bower_components/fastclick/lib/fastclick.js',	
 	'bower_components/velocity/velocity.js',
 	'bower_components/moment/min/moment-with-locales.js',
 	'bower_components/angular/angular.js',
@@ -25,6 +25,7 @@ var paths = {
   appJS: [
   	'app/app.js',
     'app/code/**/*.*',
+    'app/services/**/*.*',
     'app/controllers/**/*.*',
   ],
   // Include Paths for Sass
@@ -197,16 +198,14 @@ gulp.task('dist',
 gulp.task('watch', function () {
   gulp.watch('./app/scss/**/*.scss', ['sass']);
   gulp.watch('./app/**/*.html', ['copy:html']);
-  gulp.watch('./app/app.js', ['app:js']);
-  gulp.watch('./app/code/**/*.js', ['app:js']);
+  gulp.watch(paths.appJS, ['app:js']);
   gulp.watch('./app/img/*', ['copy:img']);
 });
 
 gulp.task('distwatch', function () {
   gulp.watch('./app/scss/**/*.scss', ['dx:sass']);
   gulp.watch('./app/**/*.html', ['dx:copy:html:min']);
-  gulp.watch('./app/app.js', ['dx:app:js']);
-  gulp.watch('./app/code/**/*.js', ['dx:app:js']);
+  gulp.watch(paths.appJS, ['dx:app:js']);
   gulp.watch('./app/img/*', ['dx:copy:img']);
 });
 
