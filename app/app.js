@@ -125,11 +125,12 @@
 
 		  	if (!allGood) {
 		  		if (Session.loggedIn) {
+			  		event.preventDefault()		  			
 		  			// But we are already logged in - so just raise a notification, and then fail the state transition
 		  			LxNotificationService.alert('Not for You!','You dont have sufficient access levels to visit that page', 
 		  				'OK, Got it',
 		  				function(answer) {
-		  					console.log(answer)
+		  					$state.go(fromState.name)
 		  				})
 		  		} else {
 		  			// Not even logged in, so present the user with the opportunity to login

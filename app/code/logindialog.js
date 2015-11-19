@@ -2,7 +2,7 @@
     'use strict';
 
 angular.module('cmms')
-    .controller('LxLoginDialogController', function($scope, LxDialogService,$state,$stateParams,Session)
+    .controller('LxLoginDialogController', function($scope, LxDialogService,$state,$stateParams,Session,LxNotificationService)
     {
         angular.extend($scope, {
           username: '',
@@ -17,7 +17,7 @@ angular.module('cmms')
             $state.go(Session.toState)
             Session.fromState = ''
             Session.toState = ''
-            LxNotificationService.success('You are now Logged with Role',Session.role);
+            LxNotificationService.success('You are now Logged as: '+Session.role);
 
           },
           lxDialogOnclose: function()
