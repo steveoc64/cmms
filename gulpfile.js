@@ -145,7 +145,7 @@ gulp.task('dx:app:js', function() {
 	return gulp.src(paths.appJS)
 		.pipe(ngfix())
 		.pipe($.concat('app.js'))
-    //.pipe($.uglify())
+    //.pipe($.uglify())       // Works well with ng-annotate !!
 		.pipe(gulp.dest('./build/js'))
 		;
 });
