@@ -17,6 +17,8 @@ angular.module('cmms')
             $state.go(Session.toState)
             Session.fromState = ''
             Session.toState = ''
+            LxNotificationService.success('You are now Logged with Role',Session.role);
+
           },
           lxDialogOnclose: function()
           {

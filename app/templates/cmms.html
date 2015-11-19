@@ -7,10 +7,27 @@
 <hr>
 <div ng-if="cmmsCtrl.session.loggedIn">
 
-Session details {{cmmsCtrl.session}}	
-<br>
+
+<div flex-container="column">
+	<div flex-item="1">
+		<div class="checkbox mt+">
+	    <input type="checkbox" id="loggedin" class="checkbox__input"  checked>
+	    <label for="loggedin" class="checkbox__label">Logged In</label>
+		</div>
+	</div>
+  <div flex-item="1">
+    <lx-text-field label="UserName" disabled="true">
+      <input type="text" ng-model="cmmsCtrl.session.username" ng-disabled="true">
+    </lx-text-field>
+  </div>
+	<div flex-item="1">
+		<lx-text-field label="Role" disabled="true">
+			<input type="text" ng-model="cmmsCtrl.session.role" ng-disabled="true">
+		</lx-text-field>
+	</div>
+</div>
+
 <button ng-click="cmmsCtrl.logout()">Logout</button>
 
 </div>
 
-Session details {{cmmsCtrl.session}}	

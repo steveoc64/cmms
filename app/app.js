@@ -55,14 +55,14 @@
 	      .state('worker',{
 	      	url: '/worker',
 	      	acl: 'worker',
-	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a><br><a ui-sref="worker.timesheet">TimeSheets</a><hr><ui-view></ui-view>',
+	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a><br><a ui-sref="worker.timesheet">TimeSheets</a><hr><ui-view>Summary of Worker Details Here</ui-view>',
 	      	controller: 'workerCtrl',
 	      	controllerAs: 'workerCtrl',
 	      })
 	      .state('worker.timesheet',{
 	      	url: '/timesheet',
 	      	acl: 'worker',
-	      	template: 'Lil bit of timesheet stuff here. <a ui-sref="worker">Close</a>',
+	      	template: 'Lil bit of timesheet stuff here, in place of where the worker details were <a ui-sref="worker">Close</a>',
 	      	controller: 'workerCtrl',
 	      	controllerAs: 'workerCtrl',
 	      })
@@ -124,10 +124,20 @@
 		  	}
 
 		  	if (!allGood) {
-		  		event.preventDefault()
-		  		Session.fromState = fromState.name
-		  		Session.toState = toState.name
-		  		$state.go('login')
+		  		if (Session.loggedIn) {
+		  			// But we are already logged in - so just raise a notification, and then fail the state transition
+		  			LxNotificationService.alert('Not for You!','You dont have sufficient access levels to visit that page', 
+		  				'OK, Got it',
+		  				function(answer) {
+		  					console.log(answer)
+		  				})
+		  		} else {
+		  			// Not even logged in, so present the user with the opportunity to login
+			  		event.preventDefault()
+			  		Session.fromState = fromState.name
+			  		Session.toState = toState.name
+			  		$state.go('login')
+		  		}
 				}
 		 }) // rootscope on   
 	}  // run function
