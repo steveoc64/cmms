@@ -5,7 +5,7 @@ var gulp = require('gulp'),
 	rimraf = require('rimraf'),
 	sequence = require('gulp-sequence').use(gulp),
 	minifyCss = require('gulp-minify-css'),
-	ngmin = require('gulp-ngmin'),
+	ngfix = require('gulp-ng-annotate'),
 	plumber = require('gulp-plumber')
 	;
 
@@ -143,7 +143,7 @@ gulp.task('dx:copy:html', function() {
 
 gulp.task('dx:app:js', function() {
 	return gulp.src(paths.appJS)
-		.pipe(ngmin())
+		.pipe(ngfix())
 		.pipe($.concat('app.js'))
     //.pipe($.uglify())
 		.pipe(gulp.dest('./build/js'))
