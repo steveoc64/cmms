@@ -4,3 +4,6 @@
 <a ui-sref="public">Public</a>
 <a ui-sref="worker">Worker</a>
 <a ui-sref="admin">Admin</a>
+<button ng-if="Session.loggedIn" ng-click="logout()">Logout</button>
+
+Session details {{Session}}

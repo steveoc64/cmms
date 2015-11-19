@@ -2,25 +2,24 @@
     'use strict';
 
 angular.module('cmms')
-    .controller('LxLoginDialogController', function($scope, LxDialogService,Session,$state,$stateParams)
+    .controller('LxLoginDialogController', function($scope, LxDialogService,$state,$stateParams,Session)
     {
         angular.extend($scope, {
           username: '',
           passwd: '',
-          Session: Session,
-          state: $state,
-          params: $stateParams,
           login: function() {
-            console.log('Clicked login')
-            console.log('username=', $scope.username)
-            console.log('passwd=', $scope.passwd)
-            console.log('Session=', Session)
-            console.log('$state=', $state)
-            console.log('$stateParams=', $stateParams)
+            Session.loggedIn = true
+            Session.role = 'worker'
+            Session.username = this.username
+
+            LxDialogService.close('loginDialog', true)
+            $state.go(Session.toState)
+            Session.fromState = ''
+            Session.toState = ''
           },
           lxDialogOnclose: function()
           {
-              console.log('Closing login screen - revert to previous state ?', $state, $stateParams)
+              $state.go(Session.fromState)
           }
         })
 

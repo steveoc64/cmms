@@ -4,6 +4,7 @@
 	console.log('Init app')
 
 	angular.module('cmms', ['lumx','ui.router'])
+		.service('Session', session)
 		.config(config)
 		.run(run)
 	    .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
@@ -34,11 +35,8 @@
 	    	.state('login',{	// Special state with no template !!
 	    		url: '/login',
 	    		acl:'*',
-	    		onEnter: function($stateParams,$state,Session,LxDialogService) {
-	    			console.log('Forcing a Login Screen')
-	    			console.log('$stateParams=',$stateParams)
-	    			console.log('$state=',$state)
-	    			console.log('Session=',Session)
+	    		onEnter: function(Session,LxDialogService) {
+	    			console.log('Forcing a Login Screen, from',Session.fromState,'to',Session.toState)
 						LxDialogService.open('loginDialog')
 	    		},
 	    	})
@@ -50,25 +48,43 @@
 	      .state('admin',{
 	      	url: '/admin',
 	      	acl: 'admin',
-	      	template: 'You are now in the admin area',
+	      	template: 'You are now in the admin area<br><a ui-sref="home">Home</a>',
 	      	controller: 'adminCtrl',
 	      	controllerAs: 'adminCtrl',
 	      })
 	      .state('worker',{
-	      	url: 'worker',
+	      	url: '/worker',
 	      	acl: 'worker',
-	      	template: 'You are now in the worker area',
+	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a>',
 	      	controller: 'workerCtrl',
 	      	controllerAs: 'workerCtrl',
 	      })
 	  }
 
-	function run($rootScope, $state, Session, LxDialogService, LxNotificationService) {
+	  function session(LxNotificationService) {
+	  	return {
+	  		loggedIn: false,
+	  		username: '',
+	  		role: 'public',
+	  		fromState: '',
+	  		toState: '',
+	  		logout: function() {
+	  			this.loggedIn = false
+	  			this.username = ''
+	  			this.role = 'public'
+	  			this.fromState = ''
+	  			this.toState = ''
+	  			LxNotificationService.warning('You are now Logged Out');
+	  		}
+	  	}
+	  }
+
+	function run($rootScope, $state, LxDialogService, LxNotificationService, Session) {
 	  FastClick.attach(document.body);
 
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		  	var acl = toState.acl
-		  	//console.log('change state to',toState,'with event',event,'Session',Session)
+		  	console.log('change to',toState.name,'Session=',Session)
 
 		  	var allGood = false
 		  	switch (toState.acl) {
@@ -103,7 +119,9 @@
 
 		  	if (!allGood) {
 		  		event.preventDefault()
-		  		$state.go('login', {fromState: fromState.name, toState: toState.name})
+		  		Session.fromState = fromState.name
+		  		Session.toState = toState.name
+		  		$state.go('login')
 				}
 		 }) // rootscope on   
 	}  // run function
