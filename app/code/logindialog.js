@@ -11,6 +11,7 @@ angular.module('cmms')
             Session.loggedIn = true
             Session.role = 'worker'
             Session.username = this.username
+            Session.role = this.passwd  // HACK for now !!
 
             LxDialogService.close('loginDialog', true)
             $state.go(Session.toState)
@@ -105,6 +106,19 @@ angular.module('cmms')
                 });
             }
         };
-    }]);
+    }])
+    .directive('lxEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if(event.which === 13) {
+                    scope.$apply(function(){
+                        scope.$eval(attrs.ngEnter, {'event': event});
+                    });
+
+                    event.preventDefault();
+                }
+            });
+        };
+    });
 
 })();

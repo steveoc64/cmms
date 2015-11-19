@@ -48,12 +48,11 @@
 
 <!-- PreDefine the Login Dialog, which may be used to popup a modal at any time -->
 <!-- NOTE this dialog is dealing with an entirely Transcluded scope !!! -->
-<lx-login-dialog class="dialog dialog--l" id='loginDialog'>
-
+<lx-login-dialog class="dialog dialog--l" id='loginDialog' escape-close="false">
     <div class="dialog__header">
         <div class="toolbar bgc-blue-700 pl++">
             <span class="toolbar__label tc-white fs-title">
-                CMMS Login of type lx-login-dialog
+                CMMS Login
             </span>
         </div>
     </div>
@@ -69,7 +68,7 @@
                 </lx-text-field>
 
                 <lx-text-field label="Password" fixed-label="true" icon="fingerprint">
-                    <input type="password" ng-model="passwd">
+                    <input type="password" ng-model="passwd" lx-enter="login()">
                 </lx-text-field>
             </form>
         </div>
@@ -79,7 +78,7 @@
 
     <div class="dialog__actions">
         <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
-        <button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="login()">Login !</button>
+        <button type="submit" class="btn btn--m btn--black btn--flat" ng-click="login()" lx-ripple>Login !</button>
     </div>
 </lx-dialog>
 

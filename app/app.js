@@ -19,10 +19,6 @@
 
 	    $locationProvider.hashPrefix('!');
 
-	    // Setup a special login modal state
-	    $stateProvider
-
-
 	    // Manually create all the routes here
 	    $stateProvider
 	    	.state('home',{
@@ -35,9 +31,13 @@
 	    	.state('login',{	// Special state with no template !!
 	    		url: '/login',
 	    		acl:'*',
-	    		onEnter: function(Session,LxDialogService) {
-	    			console.log('Forcing a Login Screen, from',Session.fromState,'to',Session.toState)
-						LxDialogService.open('loginDialog')
+	    		onEnter: function($state,Session,LxDialogService) {
+	    			if (Session.fromState == '') {
+	    				$state.go('home')
+	    			} else {
+		    			console.log('Forcing a Login Screen, from',Session.fromState,'to',Session.toState)
+							LxDialogService.open('loginDialog')	    				
+	    			}
 	    		},
 	    	})
 	      .state('public',{
@@ -55,7 +55,14 @@
 	      .state('worker',{
 	      	url: '/worker',
 	      	acl: 'worker',
-	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a>',
+	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a><br><a ui-sref="worker.timesheet">TimeSheets</a><hr><ui-view></ui-view>',
+	      	controller: 'workerCtrl',
+	      	controllerAs: 'workerCtrl',
+	      })
+	      .state('worker.timesheet',{
+	      	url: '/timesheet',
+	      	acl: 'worker',
+	      	template: 'Lil bit of timesheet stuff here. <a ui-sref="worker">Close</a>',
 	      	controller: 'workerCtrl',
 	      	controllerAs: 'workerCtrl',
 	      })
@@ -84,23 +91,22 @@
 
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		  	var acl = toState.acl
-		  	console.log('change to',toState.name,'Session=',Session)
+		  	//console.log('change to',toState.name,'Session=',Session)
 
 		  	var allGood = false
 		  	switch (toState.acl) {
 		  		case 'admin':
-		  			console.log('This page requires admin priv !!')
 		  			switch (Session.role) {
 		  				case 'admin':
 		  					allGood = true
 		  					break
 		  				default:
+				  			console.log('This page requires admin access !',Session.username,':',Session.role)
 		  					allGood = false
 		  					break
 		  			}
 		  			break
 		  		case 'worker':
-		  			console.log('This page requires worker access !, and your Session is',Session.loggedIn, Session.username,Session.role)
 		  			switch (Session.role) {
 		  				case 'admin':
 		  				case 'worker':
@@ -108,11 +114,11 @@
 		  					break
 		  				default:
 		  					allGood = false
+				  			console.log('This page requires worker access !',Session.username,':',Session.role)
 		  					break
 		  			}
 		  			break
 		  		case '*':
-		  			console.log('This page is available to all !')
 		  			allGood = true
 		  			break
 		  	}
