@@ -5,8 +5,10 @@ var gulp = require('gulp'),
 	rimraf = require('rimraf'),
 	sequence = require('gulp-sequence').use(gulp),
 	minifyCss = require('gulp-minify-css'),
+	minifyHtml = require('gulp-minify-html'),
 	ngfix = require('gulp-ng-annotate'),
-	plumber = require('gulp-plumber')
+	plumber = require('gulp-plumber'),
+	templates = require('gulp-ng-html2js')
 	;
 
 var paths = {
@@ -22,7 +24,8 @@ var paths = {
   // These files are for your app's JavaScript
   appJS: [
   	'app/app.js',
-    'app/code/**/*.*'
+    'app/code/**/*.*',
+    'app/controllers/**/*.*',
   ],
   // Include Paths for Sass
   sassPaths: [
@@ -135,23 +138,60 @@ gulp.task('dx:copy:fonts', function() {
 		;
 });
 
-gulp.task('dx:copy:html', function() {
-  return gulp.src('./app/**/*.html')
+gulp.task('dx:copy:html:index', function() {
+  return gulp.src('./app/index.html')
+  	.pipe(minifyHtml({
+  		empty: true,
+  		spare: true,
+  		quotes: true
+  	}))
     .pipe(gulp.dest('./build'))
   ;
 });
+
+gulp.task('dx:copy:html:templates', function() {
+  return gulp.src('./app/templates/**/*.html')
+  	.pipe(minifyHtml({
+  		empty: true,
+  		spare: true,
+  		quotes: true
+  	}))
+  	.pipe(templates({
+  		moduleName: 'templates',
+  		prefix: ''
+  	}))
+  	.pipe($.concat('templates.js'))
+  	//.pipe($.uglify())
+    .pipe(gulp.dest('./build/js'))
+  ;
+});
+
+gulp.task('dx:copy:html:min', function() {
+  return gulp.src('./app/**/*.html')
+  	.pipe(minifyHtml({
+  		empty: true,
+  		spare: true,
+  		quotes: true
+  	}))
+    .pipe(gulp.dest('./build'))
+  ;
+});
+
+gulp.task('dx:copy:html', function() {
+	sequence('dx:copy:html:templates','dx:copy:html:index')
+})
 
 gulp.task('dx:app:js', function() {
 	return gulp.src(paths.appJS)
 		.pipe(ngfix())
 		.pipe($.concat('app.js'))
-    //.pipe($.uglify())       // Works well with ng-annotate !!
+    	.pipe($.uglify())       // Works well with ng-annotate !!
 		.pipe(gulp.dest('./build/js'))
 		;
 });
 
 gulp.task('dist', 
-	sequence('clean',['dx:sass','dx:lumx','dx:copy:img','dx:copy:html','dx:copy:fonts','dx:app:js'])
+	sequence('clean',['dx:sass','dx:lumx','dx:copy:img','dx:copy:html:min','dx:copy:fonts','dx:app:js'])
 );
 
 gulp.task('watch', function () {
@@ -164,7 +204,7 @@ gulp.task('watch', function () {
 
 gulp.task('distwatch', function () {
   gulp.watch('./app/scss/**/*.scss', ['dx:sass']);
-  gulp.watch('./app/**/*.html', ['dx:copy:html']);
+  gulp.watch('./app/**/*.html', ['dx:copy:html:min']);
   gulp.watch('./app/app.js', ['dx:app:js']);
   gulp.watch('./app/code/**/*.js', ['dx:app:js']);
   gulp.watch('./app/img/*', ['dx:copy:img']);

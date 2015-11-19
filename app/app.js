@@ -1,7 +1,7 @@
 ;(function() {
 	'use strict';
 
-	console.log('Init app')
+	//console.log('Init app')
 
 	angular.module('cmms', ['lumx','ui.router'])
 		.service('Session', session)
@@ -35,7 +35,7 @@
 	    			if (Session.fromState == '') {
 	    				$state.go('home')
 	    			} else {
-		    			console.log('Forcing a Login Screen, from',Session.fromState,'to',Session.toState)
+		    			//console.log('Forcing a Login Screen, from',Session.fromState,'to',Session.toState)
 							LxDialogService.open('loginDialog')	    				
 	    			}
 	    		},
@@ -101,7 +101,8 @@
 		  					allGood = true
 		  					break
 		  				default:
-				  			console.log('This page requires admin access !',Session.username,':',Session.role)
+				  			//console.log('This page requires admin access !',Session.username,':',Session.role)
+				  			LxNotificationService.warning('This page requires admin access')
 		  					allGood = false
 		  					break
 		  			}
@@ -114,7 +115,8 @@
 		  					break
 		  				default:
 		  					allGood = false
-				  			console.log('This page requires worker access !',Session.username,':',Session.role)
+				  			LxNotificationService.warning('This page requires worker access')
+				  			//console.log('This page requires worker access !',Session.username,':',Session.role)
 		  					break
 		  			}
 		  			break
@@ -127,7 +129,7 @@
 		  		if (Session.loggedIn) {
 			  		event.preventDefault()		  			
 		  			// But we are already logged in - so just raise a notification, and then fail the state transition
-		  			LxNotificationService.alert('Not for You!','You dont have sufficient access levels to visit that page', 
+		  			LxNotificationService.alert('Not for You!','Insufficient access level to visit that page', 
 		  				'OK, Got it',
 		  				function(answer) {
 		  					$state.go(fromState.name)
