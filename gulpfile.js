@@ -5,6 +5,7 @@ var gulp = require('gulp'),
 	rimraf = require('rimraf'),
 	sequence = require('gulp-sequence').use(gulp),
 	minifyCss = require('gulp-minify-css'),
+	ngmin = require('gulp-ngmin'),
 	plumber = require('gulp-plumber')
 	;
 
@@ -94,6 +95,65 @@ gulp.task('build',
 	sequence('clean',['sass','lumx','copy:img','copy:html','copy:fonts','app:js'])
 );
 
+gulp.task('dx:sass', function () {
+  gulp.src('./app/scss/**/*.scss')
+  	.pipe(plumber())
+    .pipe(sass({includePaths: paths.sassPaths}))
+		.pipe(minifyCss({compatibility: 'ie8'}))    
+    .pipe(gulp.dest('./build/css'))
+   ;
+});
+
+gulp.task('dx:lumx:css', function() {
+	return gulp.src('bower_components/lumx/dist/lumx.css')
+		.pipe(minifyCss({compatibility: 'ie8'}))
+		.pipe(gulp.dest('./build/css'))
+		;
+});
+
+gulp.task('dx:lumx:js', function() {
+	return gulp.src(paths.lumX_JS)
+	    .pipe($.concat('lumx.js'))
+	    .pipe($.uglify())
+	    .pipe(gulp.dest('./build/js/'))
+	    ;
+});
+
+gulp.task('dx:lumx',  
+	sequence(['dx:lumx:js'])
+);
+
+gulp.task('dx:copy:img', function() {
+	return gulp.src('./app/img/**/*')
+		.pipe(gulp.dest('./build/img'))
+		;
+});
+
+gulp.task('dx:copy:fonts', function() {
+	return gulp.src(['./bower_components/mdi/fonts/**/*','./app/fonts/**/*'])
+		.pipe(gulp.dest('./build/fonts'))
+		;
+});
+
+gulp.task('dx:copy:html', function() {
+  return gulp.src('./app/**/*.html')
+    .pipe(gulp.dest('./build'))
+  ;
+});
+
+gulp.task('dx:app:js', function() {
+	return gulp.src(paths.appJS)
+		.pipe(ngmin())
+		.pipe($.concat('app.js'))
+    //.pipe($.uglify())
+		.pipe(gulp.dest('./build/js'))
+		;
+});
+
+gulp.task('dist', 
+	sequence('clean',['dx:sass','dx:lumx','dx:copy:img','dx:copy:html','dx:copy:fonts','dx:app:js'])
+);
+
 gulp.task('watch', function () {
   gulp.watch('./app/scss/**/*.scss', ['sass']);
   gulp.watch('./app/**/*.html', ['copy:html']);
@@ -102,4 +162,13 @@ gulp.task('watch', function () {
   gulp.watch('./app/img/*', ['copy:img']);
 });
 
+gulp.task('distwatch', function () {
+  gulp.watch('./app/scss/**/*.scss', ['dx:sass']);
+  gulp.watch('./app/**/*.html', ['dx:copy:html']);
+  gulp.watch('./app/app.js', ['dx:app:js']);
+  gulp.watch('./app/code/**/*.js', ['dx:app:js']);
+  gulp.watch('./app/img/*', ['dx:copy:img']);
+});
+
 gulp.task('run', sequence('build','watch'));
+gulp.task('distrun', sequence('dist','distwatch'));
