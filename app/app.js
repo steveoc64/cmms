@@ -71,6 +71,7 @@
 	  function session(LxNotificationService) {
 	  	return {
 	  		loggedIn: false,
+	  		token: '',
 	  		username: '',
 	  		role: 'public',
 	  		fromState: '',

@@ -59,22 +59,17 @@
     </div>
 
     <div class="dialog__content">
-
-
-    <div class="mt++" flex-container="row" flex-gutter="24">
+      <div class="mt++" flex-container="row" flex-gutter="24">
         <div flex-item>
-            <form>
-                <lx-text-field label="User Name" fixed-label="true" icon="account">
-                    <input type="text" ng-model="username">
-                </lx-text-field>
+          <lx-text-field label="User Name" fixed-label="true" icon="account">
+              <input type="text" ng-model="username">
+          </lx-text-field>
 
-                <lx-text-field label="Password" fixed-label="true" icon="fingerprint">
-                    <input type="password" ng-model="passwd" lx-enter="login()">
-                </lx-text-field>
-            </form>
+          <lx-text-field label="Password" fixed-label="true" icon="fingerprint">
+              <input type="password" ng-model="passwd" lx-enter="login()">
+          </lx-text-field>
         </div>
-    </div>
-
+      </div>
     </div>
 
     <div class="dialog__actions">

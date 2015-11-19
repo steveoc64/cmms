@@ -1,6 +1,6 @@
 ;(function(){
 	'use strict';
-	console.log('Inside the cmmsCtrl code file')
+//	console.log('Inside the cmmsCtrl code file')
 
 	angular.module('cmms').controller('cmmsCtrl',	function($scope,Session,LxNotificationService) {
 

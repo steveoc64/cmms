@@ -27,12 +27,15 @@
   footer {
     background-color: $footer-bg;
     color: #fff;
-    align-text: center;
     flex: 1;
+    justify-content: center;
     height: 3em;
-    align: center;
     font-size: 11px;
     float: right;
+
+    p {
+      align-self: center;
+    }
   }
 
 }

@@ -2,18 +2,23 @@
     'use strict';
 
 angular.module('cmms')
-    .controller('LxLoginDialogController', function($scope, LxDialogService,$state,$stateParams,Session,LxNotificationService)
+    .controller('LxLoginDialogController', function($scope, LxDialogService,$state,$stateParams,Session,LxNotificationService,DBLogin)
     {
         angular.extend($scope, {
           username: '',
           passwd: '',
+          role: '',
+          token: '',
+          loggedIn: false,
           login: function() {
+            // First, get login creds from login service
+            Session.token
             Session.loggedIn = true
             Session.role = 'worker'
             Session.username = this.username
             Session.role = this.passwd  // HACK for now !!
 
-            LxDialogService.close('loginDialog', true)
+            LxDialogService.close('loginDialog', true)            
             $state.go(Session.toState)
             Session.fromState = ''
             Session.toState = ''
