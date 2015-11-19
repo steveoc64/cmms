@@ -18,23 +18,43 @@
 
 	    $locationProvider.hashPrefix('!');
 
+	    // Setup a special login modal state
+	    $stateProvider
+
+
 	    // Manually create all the routes here
 	    $stateProvider
-	    	.state('cmms',{
+	    	.state('home',{
 	    		url:'/',
 	    		acl: '*',
 	    		templateUrl:'templates/cmms.html',
 	    		controller: 'cmmsCtrl',
 	    		controllerAs: 'cmmsCtrl',
 	    	})
-	      .state('cmms.admin',{
+	    	.state('login',{	// Special state with no template !!
+	    		url: '/login',
+	    		acl:'*',
+	    		onEnter: function($stateParams,$state,Session,LxDialogService) {
+	    			console.log('Forcing a Login Screen')
+	    			console.log('$stateParams=',$stateParams)
+	    			console.log('$state=',$state)
+	    			console.log('Session=',Session)
+						LxDialogService.open('loginDialog')
+	    		},
+	    	})
+	      .state('public',{
+	      	url: '/public',
+	      	acl: '*',
+	      	template: 'This is a public page, available to all<br><a ui-sref="home">Home</a>',
+	      })
+	      .state('admin',{
 	      	url: '/admin',
 	      	acl: 'admin',
 	      	template: 'You are now in the admin area',
 	      	controller: 'adminCtrl',
 	      	controllerAs: 'adminCtrl',
 	      })
-	      .state('cmms.worker',{
+	      .state('worker',{
 	      	url: 'worker',
 	      	acl: 'worker',
 	      	template: 'You are now in the worker area',
@@ -44,32 +64,11 @@
 	  }
 
 	function run($rootScope, $state, Session, LxDialogService, LxNotificationService) {
-	   FastClick.attach(document.body);
+	  FastClick.attach(document.body);
 
-			angular.extend($rootScope,{
-				username: 'aa',
-				passwd: 'bb',
-				openLoginDialog: function() {
-					console.log('Opening Dialog from inside rootscope')
-					LxDialogService.open('loginDialog')
-				},
-				closeLoginDialog: function() {
-					LxNotificationService.info('Login Dialog Closed from inside rootscope')
-				},
-				login: function() {
-					console.log('Rootscope Login !!')
-					LxDialogService.close()
-				},
-				scrollEndDialog: function() {
-					console.log('Rootscope scrollEndDialog')
-				},
-				Session: Session,
-			})
-
-	  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-	  	if (toState.url != '/') {
+		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		  	var acl = toState.acl
-		  	console.log('change state to',toState,'with event',event,'Session',Session)
+		  	//console.log('change state to',toState,'with event',event,'Session',Session)
 
 		  	var allGood = false
 		  	switch (toState.acl) {
@@ -104,11 +103,8 @@
 
 		  	if (!allGood) {
 		  		event.preventDefault()
-		  		console.log('opening login dialog from inside state change detector')
-		  		$rootScope.openLoginDialog()
+		  		$state.go('login', {fromState: fromState.name, toState: toState.name})
 				}
-
-		  }
 		 }) // rootscope on   
 	}  // run function
 

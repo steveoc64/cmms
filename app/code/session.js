@@ -5,8 +5,8 @@
 	
 		return {
 			loggedIn: false,
-			username: '',
-			role: '',
+			username: 'public',
+			role: 'public',
 		}	
 	})
 })

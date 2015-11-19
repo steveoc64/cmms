@@ -24,35 +24,36 @@
   <!-- <body ng-controller="loginCtrl">-->
 
 <body class="mainPage" ng-controller="cmmsCtrl" id="mainPage">
-    <header id="header"><!-- header -->
-        <h1 class="logo"><a href="#">Steel Building Systems International</a></h1>
+    <header id="header"><!-- header -->    
+        <h1 class="logo"><a ui-sref="home">Steel Building Systems International</a></h1>
         <nav id="nav">
         </nav>
     </header><!-- end header -->
 
-      <div class="mainPage-body">
-        <main class="mainPage-content">
-            <ui-view></ui-view>
-        </main>
+    <div class="mainPage-body">
+      <main class="mainPage-content">
+          <ui-view></ui-view>
+      </main>
 
-        <nav class="mainPage-nav">
-        </nav>
+      <nav class="mainPage-nav">
+      </nav>
 
-        <aside class="mainPage-alerts">
-        </aside>
-      </div>
-      <footer id="footer">
-        <p>&copy;2015 Steel Building Systems International</p>         
-      </footer>
+      <aside class="mainPage-alerts">
+      </aside>
+    </div>
+    <footer id="footer">
+      <p>&copy;2015 Steel Building Systems International</p>         
+    </footer>
+</body>
 
-
-
-<lx-dialog class="dialog dialog--l" id='loginDialog'>
+<!-- PreDefine the Login Dialog, which may be used to popup a modal at any time -->
+<!-- NOTE this dialog is dealing with an entirely Transcluded scope !!! -->
+<lx-login-dialog class="dialog dialog--l" id='loginDialog'>
 
     <div class="dialog__header">
         <div class="toolbar bgc-blue-700 pl++">
             <span class="toolbar__label tc-white fs-title">
-                CMMS Login
+                CMMS Login of type lx-login-dialog
             </span>
         </div>
     </div>
@@ -78,10 +79,8 @@
 
     <div class="dialog__actions">
         <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
-        <button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="login()" lx-dialog-close>Login !</button>
+        <button class="btn btn--m btn--black btn--flat" lx-ripple ng-click="login()">Login !</button>
     </div>
 </lx-dialog>
 
-
-</body>
 </html>
