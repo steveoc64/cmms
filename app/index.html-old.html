@@ -11,30 +11,36 @@
     <link rel="icon" href="http://shared.supaloc.com.au/themes/supaloc-foundation/assets/img/icons/favicon.ico?v=2" type="image/x-icon">
 
 	<!-- LumX -->
-  <!-- <script src="js/lumx.js"></script> -->
-  	<script src="js/lumx.js"></script>
+    <!-- <script src="js/lumx.js"></script> -->
+	<script src="js/lumx.js"></script>
 
 	<!-- Our App -->
     <script src="./js/app.js"></script>
+
+	<style>
+	</style>
 
   </head>
   <!-- <body ng-controller="loginCtrl">-->
 
 <body class="mainPage" ng-controller="cmmsCtrl" id="mainPage">
 
-  <div flex-container="column" flex-align="space=between">
-    <header flex-item="1">
-      <h1 class="logo"><a ui-sref="home">Steel Building Systems International</a></h1>
-    </header>
 
-    <ui-view flex-item="10"></ui-view>
 
-    <footer flex-item="1">
+    <header id="header"><!-- header -->    
+        <h1 class="logo"><a ui-sref="home">Steel Building Systems International</a></h1>
+        <nav id="nav">
+        </nav>
+    </header><!-- end header -->
+
+  <main>
+    <ui-view></ui-view>
+  </main>
+
+    <footer id="footer">
       <p>&copy;2015 Steel Building Systems International</p>         
     </footer>
-  </div>
 </body>
-
 
 <!-- PreDefine the Login Dialog, which may be used to popup a modal at any time -->
 <!-- NOTE this dialog is dealing with an entirely Transcluded scope !!! -->

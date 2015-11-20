@@ -1,33 +1,42 @@
-<p>CMMS dev version landing page</p>
+<div flex-container="row" flex-gutter="32" flex-align="space-between flex-start">
+	<div flex-item="2" flex-grow="0">
+		menu bar goes in here
 
-<h3>Testing some links with authentication</h3>
-<a ui-sref="public">Public</a>
-<a ui-sref="worker">Worker</a>
-<a ui-sref="admin">Admin</a>
-<hr>
-<div ng-if="cmmsCtrl.session.loggedIn">
+		<ul>
+			<li ng-repeat="m in cmmsCtrl.menu.options">Menu {{m}}	</li>
+		</ul>
+	</div>
 
+	<div flex-item="10" flex-grow="1">
+		<p>CMMS dev version landing page</p>
 
-<div flex-container="column">
-	<div flex-item="1">
-		<div class="checkbox mt+">
-	    <input type="checkbox" id="loggedin" class="checkbox__input"  checked>
-	    <label for="loggedin" class="checkbox__label">Logged In</label>
+		<h3>Testing some links with authentication</h3>
+		<a ui-sref="public">Public</a>
+		<a ui-sref="worker">Worker</a>
+		<a ui-sref="admin">Admin</a>
+		<hr>
+		<div ng-if="cmmsCtrl.session.loggedIn">
+			<div flex-container="row">
+				<div flex-item="1">
+					<div class="checkbox mt+">
+				    <input type="checkbox" id="loggedin" class="checkbox__input"  checked>
+				    <label for="loggedin" class="checkbox__label">Logged In</label>
+					</div>
+				</div>
+			  <div flex-item="1">
+			    <lx-text-field label="UserName" disabled="true">
+			      <input type="text" ng-model="cmmsCtrl.session.username" ng-disabled="true">
+			    </lx-text-field>
+			  </div>
+				<div flex-item="1">
+					<lx-text-field label="Role" disabled="true">
+						<input type="text" ng-model="cmmsCtrl.session.role" ng-disabled="true">
+					</lx-text-field>
+				</div>
+			</div>
+			<button ng-click="cmmsCtrl.logout()">Logout</button>
 		</div>
 	</div>
-  <div flex-item="1">
-    <lx-text-field label="UserName" disabled="true">
-      <input type="text" ng-model="cmmsCtrl.session.username" ng-disabled="true">
-    </lx-text-field>
-  </div>
-	<div flex-item="1">
-		<lx-text-field label="Role" disabled="true">
-			<input type="text" ng-model="cmmsCtrl.session.role" ng-disabled="true">
-		</lx-text-field>
-	</div>
-</div>
-
-<button ng-click="cmmsCtrl.logout()">Logout</button>
 
 </div>
 
