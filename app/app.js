@@ -3,8 +3,10 @@
 
 	//console.log('Init app')
 
-	angular.module('cmms', ['lumx','ui.router'])
+	angular.module('cmms', ['lumx','ui.router','ngResource'])
 		.service('Session', session)
+    .constant('ServerName', '')
+    .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	
 		.config(config)
 		.run(run)
 	    .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
@@ -68,20 +70,27 @@
 	      })
 	  }
 
-	  function session(LxNotificationService) {
+	  function session(LxNotificationService,DBLogin,$state) {
 	  	return {
 	  		loggedIn: false,
 	  		token: '',
 	  		username: '',
+	  		uid: 0,
 	  		role: 'public',
 	  		fromState: '',
 	  		toState: '',
+	  		site: 0,
+	  		siteName: '',
 	  		logout: function() {
+	  			DBLogin.logout({id: this.uid})
 	  			this.loggedIn = false
 	  			this.username = ''
 	  			this.role = 'public'
 	  			this.fromState = ''
 	  			this.toState = ''
+	  			this.site = 0,
+	  			this.uid = 0,
+	  			this.siteName = '',
 	  			LxNotificationService.warning('You are now Logged Out');
 	  		}
 	  	}
@@ -103,7 +112,7 @@
 		  					break
 		  				default:
 				  			//console.log('This page requires admin access !',Session.username,':',Session.role)
-				  			LxNotificationService.warning('This page requires admin access')
+				  			//LxNotificationService.warning('This page requires admin access')
 		  					allGood = false
 		  					break
 		  			}
@@ -116,7 +125,7 @@
 		  					break
 		  				default:
 		  					allGood = false
-				  			LxNotificationService.warning('This page requires worker access')
+				  			//LxNotificationService.warning('This page requires worker access')
 				  			//console.log('This page requires worker access !',Session.username,':',Session.role)
 		  					break
 		  			}

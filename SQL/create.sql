@@ -7,7 +7,9 @@ create table users (
 	address text,
 	email text,
 	sms text,
-	avatar text
+	avatar text,
+	site_id int,
+	role text
 );
 
 drop table if exists site;
@@ -46,11 +48,19 @@ create unique index user_skill_idx on user_skill (user_id,skill_id);
 drop table if exists user_log;
 create table user_log (
 	user_id int,
-	logdate timestamp,
+	logdate timestamp default localtimestamp,
 	ip text,
 	descr text
 );
 create unique index user_log_idx on user_log (user_id,logdate);
+
+drop table if exists sys_log;
+create table sys_log (
+	id serial primary key,
+	logdate timestamp,
+	ip text,
+	descr text
+);
 
 drop table if exists doc;
 create table doc (

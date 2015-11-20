@@ -30,12 +30,21 @@
         </nav>
     </header><!-- end header -->
 
+  {{cmmsCtrl.menu}}
     <div class="mainPage-body">
       <main class="mainPage-content">
           <ui-view></ui-view>
       </main>
 
       <nav class="mainPage-nav">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestias a nulla suscipit officia odio, nihil dignissimos illo. Eveniet molestias cupiditate hic possimus illo! Aliquid saepe unde blanditiis quos necessitatibus?
+
+        <ul>
+          <li ng-repeat="m in cmmsCtrl.menu.options">
+            {{m.title}}{{m}}
+          </li>
+        </ul>
+
       </nav>
 
       <aside class="mainPage-alerts">

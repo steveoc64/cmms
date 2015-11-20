@@ -7,27 +7,36 @@ angular.module('cmms')
         angular.extend($scope, {
           username: '',
           passwd: '',
-          role: '',
-          token: '',
-          loggedIn: false,
           login: function() {
             // First, get login creds from login service
-            Session.token
-            Session.loggedIn = true
-            Session.role = 'worker'
-            Session.username = this.username
-            Session.role = this.passwd  // HACK for now !!
-
-            LxDialogService.close('loginDialog', true)            
-            $state.go(Session.toState)
-            Session.fromState = ''
-            Session.toState = ''
-            LxNotificationService.success('You are now Logged as: '+Session.role);
-
+            var vm = this
+            DBLogin.login({
+              username: this.username,
+              passwd: this.passwd
+            },function(retval,r){
+              //console.log('login from dialog OK', retval)
+              Session.loggedIn = true
+              Session.uid = retval.ID
+              Session.username = retval.Username
+              Session.role = retval.Role
+              Session.token = retval.Token
+              Session.site = retval.Site
+              Session.siteName = retval.SiteName.String
+              LxDialogService.close('loginDialog', true)  
+              if (Session.toState != '') {
+                //console.log('Change state from dialog to',Session.toState,Session)
+                $state.go(Session.toState)
+              }
+              Session.toState = Session.fromState = ''
+            },function(){
+              LxNotificationService.warning('Login Failed ...')
+            })
           },
           lxDialogOnclose: function()
           {
-              $state.go(Session.fromState)
+            if (Session.fromState) {
+              $state.go(Session.fromState)              
+            }
           }
         })
 

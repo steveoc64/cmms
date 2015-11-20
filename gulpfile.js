@@ -18,7 +18,8 @@ var paths = {
 	'bower_components/velocity/velocity.js',
 	'bower_components/moment/min/moment-with-locales.js',
 	'bower_components/angular/angular.js',
-	'bower_components/angular-ui-router/release/angular-ui-router.js',
+  'bower_components/angular-ui-router/release/angular-ui-router.js',
+	'bower_components/angular-resource/angular-resource.js',
 	'bower_components/lumx/dist/lumx.js',
   ],
   // These files are for your app's JavaScript
