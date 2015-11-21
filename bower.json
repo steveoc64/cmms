@@ -1,0 +1,30 @@
+{
+  "name": "cmms",
+  "description": "CMMS",
+  "main": "cmms",
+  "authors": [
+    "SteveOC64 <steveoc64@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/steveoc64/cmms",
+  "moduleType": [
+    "amd"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "build",
+    "SQL",
+    "app",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lumx": "~0.3.96",
+    "angular-resource": "~1.4.8",
+    "neat": "~1.7.2",
+    "angular-ui-router": "~0.2.15",
+    "ngstorage": "~0.3.10"
+  }
+}
