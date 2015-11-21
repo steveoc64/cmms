@@ -212,3 +212,5 @@ gulp.task('distwatch', function () {
 
 gulp.task('run', sequence('build','watch'));
 gulp.task('distrun', sequence('dist','distwatch'));
+
+gulp.task('default', sequence('distrun'))
