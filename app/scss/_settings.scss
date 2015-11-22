@@ -54,6 +54,21 @@ $palette_16: #ECEFF4;
 .bgc-palette_16 {
   background-color: $palette_16 !important; }
 
+.bgc-dark-gradient {
+  @include linear-gradient($palette_1, $palette_4);
+}
+.bgc-light-gradient {
+  @include linear-gradient(#ffffff, $palette_16);
+}
+.white {
+  color: $palette_16;
+}
+
+$header-font-color: #3f5364;
+
+h1 h2 h3 {
+  color: $header-font-color;
+}
 
 $base-text-color:       $palette_2;
 $base-background-color: $palette_15;

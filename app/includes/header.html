@@ -5,8 +5,10 @@
    
     <nav class="main-nav">
         <ul>
-            <li><a ng-if="!cmmsCtrl.Session.loggedIn" ui-sref="loginpage">Login</a></li>
-            <li><a ng-if="cmmsCtrl.Session.loggedIn" ui-sref="loginpage">Login</a></li>
+            <!-- <li>Session = {{cmmsCtrl.Session}} -->
+            <li><button ng-if="!cmmsCtrl.Session.loggedIn" ui-sref="landing">Login</button>
+            <li><button ng-if="cmmsCtrl.Session.loggedIn" ng-click="cmmsCtrl.logout()">Logout</button>
+
         </ul>
     </nav>
 

@@ -13,7 +13,7 @@
         username: '',
         passwd: '',
         login: function() {
-        	console.log('Calling login from loginpage',Session)
+        	//console.log('Calling login from loginpage',Session)
           // First, get login creds from login service
           var vm = this
           DBLogin.login({
@@ -29,7 +29,7 @@
             Session.site = retval.Site
             Session.siteName = retval.SiteName.String
             Session.toState = Session.fromState = ''
-            $state.go('public')
+            $state.go('landing')
           },function(){
             LxNotificationService.warning('Login Failed ...')
           })

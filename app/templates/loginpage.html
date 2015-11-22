@@ -1,13 +1,14 @@
-<form class="wrapper">
+<div flex-container="column" flex-align="space-between center" style="height: 100%">
+<form class="wrapper" flex-item="1">
     <div class="dialog__header">
-        <div class="toolbar bgc-palette_3 pl++">
+        <div class="toolbar bgc-dark-gradient pl++">
             <span class="toolbar__label tc-white fs-title">
                 CMMS Login
             </span>       
         </div>
     </div>
 
-    <div class="dialog__content">
+    <div class="dialog__content bgc-light-gradient">
       <div class="mt++" flex-container="row" flex-gutter="24">
         <div flex-item>
           <lx-text-field label="User Name" fixed-label="true" icon="account">
@@ -26,3 +27,4 @@
         <button type="submit" class="btn btn--m btn--black btn--flat" ng-click="loginCtrl.login()" lx-ripple>Login !</button>
     </div>
 </form>
+</div>

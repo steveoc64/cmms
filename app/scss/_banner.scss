@@ -39,7 +39,7 @@
     // Banner subtitle
     .banner__subtitle {
         font-weight: 300;
-
+        
         @include media-query(desk) {
             margin: 40px;
             @include font-size(32px);

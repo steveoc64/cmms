@@ -5,6 +5,7 @@ body {
 
 // Wrapper
 .wrapper {
+
     @include media-query(desk) {
 		width: 960px;
 		margin: 0 auto;

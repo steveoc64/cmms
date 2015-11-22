@@ -1,10 +1,7 @@
 
-.login-dialog: {
-
-}
-
-.login-header {
-}
-
-.login-content {
+// Center the dialog vertically
+.dialog__header {
+  flex: 1 0 auto;
+  align-items: center;	
+	justify-content: center;
 }

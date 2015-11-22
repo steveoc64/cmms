@@ -4,26 +4,30 @@
         <img src="/img/factory-equip.jpg">
     </div>
 
-    <h2 class="banner__subtitle">
-    	CMMS System For Facilities Maintenance
-    </h2>
-
-    Session = {{cmmsCtrl.session}}
-
+    <h1 class="banner__subtitle">
+    	CMMS
+    </h1>
+    <h3 class="banner__subtitle">
+    	Facilities Management
+    </h3>
     <div class="banner__stripe"></div>
 </div>
 
-
-<div flex-container="row" flex-gutter="24" flex-align="space-between flex-start">
+<div class="main">
+	<div class="main-section">
 
 	<div flex-item="10" flex-grow="1">
-		<p>CMMS dev version landing page</p>
+		<p>CMMS dev version main entrance screen page</p>
 
 		<h3>Testing some links with authentication</h3>
+		<span>Clicking on the link will take you to the page if you have sufficient priv, otherwise it will force a login and proceed.
+		If already logged in with lesser privileges, then it will produce an error.</span>
+		
 		<a ui-sref="public">Public</a>
 		<a ui-sref="worker">Worker</a>
 		<a ui-sref="admin">Admin</a>
 		<hr>
+		<h3>Login Status :</h3>
 		<div ng-if="cmmsCtrl.session.loggedIn">
 			<div flex-container="row">
 				<div flex-item="1">
@@ -47,5 +51,5 @@
 		</div>
 	</div>
 
+	</div>
 </div>
-

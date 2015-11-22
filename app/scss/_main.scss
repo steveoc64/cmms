@@ -6,7 +6,7 @@
 .main {
 	padding: 60px 0 0;
 	background-color: $palette_16;
-	@include linear-gradient($palette_16, $palette_14);
+  @include linear-gradient(#ffffff, $palette_16);
 }
 
 
@@ -14,6 +14,7 @@
 .main-section {
 	@include media-query(desk) {
 		margin: 0 0 0 260px;
+  	@include linear-gradient(#ffffff, $palette_16);
 	}
 }
 

@@ -41,6 +41,12 @@
 	    			}
 	    		},
 	    	})
+	      .state('landing',{
+	      	url: '/landing',
+	      	acl: 'landing',
+	      	template: 'This is the landing page',
+	      	controller: 'landingCtrl',    	
+	      })
 	      .state('loginpage',{
 	      	url: '/loginpage',
 	      	acl: '*',
@@ -61,9 +67,48 @@
 	      .state('admin',{
 	      	url: '/admin',
 	      	acl: 'admin',
-	      	template: 'You are now in the admin area<br><a ui-sref="home">Home</a>',
+	      	abstract: true,
+	      	templateUrl: 'templates/admin.html',
 	      	controller: 'adminCtrl as adminCtrl',
 	      })
+	      	/////////////////////////////////////////////////////
+	      	// Admin States - defaulting to dashboard
+		      .state('admin.dashboard',{
+		      	url: '',		
+		      	acl: 'admin',
+		      	templateUrl: 'templates/admin/dashboard.html',
+		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      })
+		      .state('admin.users',{
+		      	url: 'users',
+		      	acl: 'admin',
+		      	templateUrl: 'templates/admin/users.html',
+		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      })
+		      .state('admin.sites',{
+		      	url: 'sites',
+		      	acl: 'admin',
+		      	templateUrl: 'templates/admin/sites.html',
+		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      })
+		      .state('admin.eqiup',{
+		      	url: 'equip',
+		      	acl: 'admin',
+		      	templateUrl: 'templates/admin/equip.html',
+		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      })
+		      .state('admin.parts',{
+		      	url: 'parts',
+		      	acl: 'admin',
+		      	templateUrl: 'templates/admin/parts.html',
+		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      })
+		      .state('admin.reports',{
+		      	url: 'reports',
+		      	acl: 'admin',
+		      	templateUrl: 'templates/admin/reports.html',
+		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      })
 	      .state('worker',{
 	      	url: '/worker',
 	      	acl: 'worker',
@@ -113,6 +158,14 @@
 
 		  	var allGood = false
 		  	switch (toState.acl) {
+		  		case 'landing':
+		  			// This is the landing page, just need to be logged in correctly as any role
+		  			// before being sent off to the correct homepage
+		  			console.log('into the landing state, with session',Session)
+		  			if (Session.loggedIn) {
+		  				allGood = true
+		  			}
+		  			break
 		  		case 'admin':
 		  			switch (Session.role) {
 		  				case 'admin':
