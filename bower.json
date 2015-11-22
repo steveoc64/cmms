@@ -25,6 +25,7 @@
     "angular-resource": "~1.4.8",
     "neat": "~1.7.2",
     "angular-ui-router": "~0.2.15",
-    "ngstorage": "~0.3.10"
+    "ngstorage": "~0.3.10",
+    "fastclick": "~1.0.6"
   }
 }
