@@ -1,12 +1,9 @@
-<!-- PreDefine the Login Dialog, which may be used to popup a modal at any time -->
-<!-- NOTE this dialog is dealing with an entirely Transcluded scope !!! -->
-<lx-login-dialog class="dialog dialog--l bgc-palette_16" id='loginDialog' escape-close="true">
+<form class="wrapper">
     <div class="dialog__header">
-        <div class="toolbar bgc-palette_4 pl++">
+        <div class="toolbar bgc-palette_3 pl++">
             <span class="toolbar__label tc-white fs-title">
                 CMMS Login
             </span>       
-            <span lx-dialog-close>X</span>     
         </div>
     </div>
 
@@ -14,11 +11,11 @@
       <div class="mt++" flex-container="row" flex-gutter="24">
         <div flex-item>
           <lx-text-field label="User Name" fixed-label="true" icon="account">
-              <input type="text" ng-model="username">
+              <input type="text" ng-model="loginCtrl.username">
           </lx-text-field>
 
           <lx-text-field label="Password" fixed-label="true" icon="fingerprint">
-              <input type="password" ng-model="passwd">
+              <input type="password" ng-model="loginCtrl.passwd">
           </lx-text-field>
         </div>
       </div>
@@ -26,6 +23,6 @@
 
     <div class="dialog__actions">
         <!-- <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button> -->
-        <button type="submit" class="btn btn--m btn--black btn--flat" ng-click="login()" lx-ripple>Login !</button>
+        <button type="submit" class="btn btn--m btn--black btn--flat" ng-click="loginCtrl.login()" lx-ripple>Login !</button>
     </div>
-</lx-dialog>
+</form>

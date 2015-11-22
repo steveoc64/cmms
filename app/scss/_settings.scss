@@ -20,20 +20,41 @@ $palette_14: #B0B1B7;
 $palette_15: #CAC8CC;
 $palette_16: #ECEFF4;
 
+
+.bgc-palette_1 {
+  background-color: $palette_1 !important; }
+.bgc-palette_2 {
+  background-color: $palette_2 !important; }
+.bgc-palette_3 {
+  background-color: $palette_3 !important; }
+.bgc-palette_4 {
+  background-color: $palette_4 !important; }
+.bgc-palette_5 {
+  background-color: $palette_5 !important; }
+.bgc-palette_6 {
+  background-color: $palette_6 !important; }
+.bgc-palette_7 {
+  background-color: $palette_7 !important; }
+.bgc-palette_8 {
+  background-color: $palette_8 !important; }
+.bgc-palette_9 {
+  background-color: $palette_9 !important; }
+.bgc-palette_10 {
+  background-color: $palette_10 !important; }
+.bgc-palette_11 {
+  background-color: $palette_11 !important; }
+.bgc-palette_12 {
+  background-color: $palette_12 !important; }
+.bgc-palette_13 {
+  background-color: $palette_13 !important; }
+.bgc-palette_14 {
+  background-color: $palette_14 !important; }
+.bgc-palette_15 {
+  background-color: $palette_15 !important; }
+.bgc-palette_16 {
+  background-color: $palette_16 !important; }
+
+
 $base-text-color:       $palette_2;
 $base-background-color: $palette_15;
-
-// SBS Logo
-
-.logo {
-	@include media-query(lap) {
-	    float: left;
-	    width: 165px;
-	    height: 41px;
-	    text-indent: -9999px;
-	    overflow: hidden;
-	    margin: 0;
-	    background: url(/img/logo.png) no-repeat;
-	}
-}
 

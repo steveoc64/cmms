@@ -1,6 +1,24 @@
 $header-bg: 		$palette_15;
 $header-bg-stripe: 	$palette_2;
 
+// SBS Logo
+
+.logo {
+    float: left;
+    width: 165px;
+    height: 41px;
+    text-indent: -9999px;
+    overflow: hidden;
+    margin: 0;
+	@include media-query(lap-and-up) {
+	    background: url(/img/logo.png) no-repeat;
+	}
+	@include media-query(palm) {
+	    background: url(/img/logo-tiny.png) no-repeat;
+	}
+}
+
+
 // Header base styles
 .header {
 	@include position(fixed, 0 0 null 0);
@@ -8,19 +26,20 @@ $header-bg-stripe: 	$palette_2;
     height: 60px;
     padding: $base-spacing-unit * 1.5;
     background-color: $header-bg;
+    @include linear-gradient($palette_12, $palette_15);
     @include z-depth(1);
     @include clearfix;
 }
 
-.header-stripe {
-	@include position(fixed, 60px 0 null 0);
-	z-index: 999;
-    height: 2px;
-    padding: $base-spacing-unit * 0.5;
-    background-color: $header-bg-stripe;
-    @include z-depth(1);
-    @include clearfix;
-}
+		.header__stripe {
+			@include position(fixed, 60px 0 null 0);
+			z-index: 999;
+		    height: 1px;
+		    padding: $base-spacing-unit * 0.3;
+		    background-color: $header-bg-stripe;
+		    @include z-depth(1);
+		    @include clearfix;
+		}
 
 // Menubar
 .menubar {

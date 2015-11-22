@@ -9,6 +9,14 @@
     color: white;
     text-align: center;
 }
+    .banner__stripe {
+        z-index: 999;
+        height: 1px;
+        padding: $base-spacing-unit * 0.3;
+        background-color: $header-bg-stripe;
+        @include z-depth(1);
+        @include clearfix;
+    }
 
     // Banner title
     .banner__logo {

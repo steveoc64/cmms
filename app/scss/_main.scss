@@ -5,10 +5,9 @@
 // Main base styles
 .main {
 	padding: 60px 0 0;
+	background-color: $palette_16;
+	@include linear-gradient($palette_16, $palette_14);
 }
-
-
-
 
 
 // Main section

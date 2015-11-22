@@ -27,8 +27,7 @@
 	    		url:'/',
 	    		acl: '*',
 	    		templateUrl:'templates/cmms.html',
-	    		controller: 'cmmsCtrl',
-	    		controllerAs: 'cmmsCtrl',
+	    		controller: 'cmmsCtrl as cmmsCtrl',
 	    	})
 	    	.state('login',{	// Special state with no template !!
 	    		url: '/login',
@@ -42,31 +41,40 @@
 	    			}
 	    		},
 	    	})
+	      .state('loginpage',{
+	      	url: '/loginpage',
+	      	acl: '*',
+	      	templateUrl: 'templates/loginpage.html',
+	      	controller: 'loginCtrl as loginCtrl',    	
+	      })
+	      .state('homepage', {
+	      	url: '/home',
+	      	acl: '*',
+	      	template: 'Home',
+	      	controller: 'homeCtrl as homeCtrl',
+	      })
 	      .state('public',{
 	      	url: '/public',
 	      	acl: '*',
-	      	template: 'This is a public page, available to all<br><a ui-sref="home">Home</a>',
+	      	templateUrl: 'templates/public.html'	      	
 	      })
 	      .state('admin',{
 	      	url: '/admin',
 	      	acl: 'admin',
 	      	template: 'You are now in the admin area<br><a ui-sref="home">Home</a>',
-	      	controller: 'adminCtrl',
-	      	controllerAs: 'adminCtrl',
+	      	controller: 'adminCtrl as adminCtrl',
 	      })
 	      .state('worker',{
 	      	url: '/worker',
 	      	acl: 'worker',
 	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a><br><a ui-sref="worker.timesheet">TimeSheets</a><hr><ui-view>Summary of Worker Details Here</ui-view>',
-	      	controller: 'workerCtrl',
-	      	controllerAs: 'workerCtrl',
+	      	controller: 'workerCtrl as workerCtrl',
 	      })
 	      .state('worker.timesheet',{
 	      	url: '/timesheet',
 	      	acl: 'worker',
 	      	template: 'Lil bit of timesheet stuff here, in place of where the worker details were <a ui-sref="worker">Close</a>',
-	      	controller: 'workerCtrl',
-	      	controllerAs: 'workerCtrl',
+	      	controller: 'workerCtrl as workerCtrl',
 	      })
 	  }
 

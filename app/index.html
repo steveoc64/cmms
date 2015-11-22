@@ -6,25 +6,23 @@
     <title>iTrak CMMS v.2</title>
 
     <!-- Head -->
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">   
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">   
     <link href="css/app.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="http://shared.supaloc.com.au/themes/supaloc-foundation/assets/img/icons/favicon.ico?v=2" type="image/x-icon">
 
-	<!-- LumX -->
-  <!-- <script src="js/lumx.js"></script> -->
+    <!-- <script src="js/lumx.js"></script> -->
   	<script src="js/lumx.js"></script>
 
-	<!-- Our App -->
+	  <!-- Our App -->
     <script src="./js/app.js"></script>
 
   </head>
-  <!-- <body ng-controller="loginCtrl">-->
 
 <body class="mainPage" ng-controller="cmmsCtrl" id="mainPage">
 
   <ng-include src="'/includes/header.html'"></ng-include>
-
   <div class="main" ui-view></div>
+
 </body>
 
 <ng-include src="'/includes/login_dialog.html'"></ng-include>
