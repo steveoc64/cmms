@@ -1,0 +1,26 @@
+<div class="sidebar-filter" ng-class="{ 'sidebar-filter--is-shown': Sidebar.isSidebarShown() }" ng-click="Sidebar.toggleSidebar()"></div>
+
+<div class="sidebar" ng-class="{ 'sidebar--is-shown': Sidebar.isSidebarShown() }">
+    <div class="sidebar-menu">
+        <ul>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.dashboard" ng-click="Sidebar.toggleSidebar()">Dashboard</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.users" ng-click="Sidebar.toggleSidebar()">Users</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.sites" ng-click="Sidebar.toggleSidebar()">Sites</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.equip" ng-click="Sidebar.toggleSidebar()">Equipment</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.parts" ng-click="Sidebar.toggleSidebar()">Spare Parts</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.reports" ng-click="Sidebar.toggleSidebar()">Reports</a>
+            </li>
+        </ul>
+    </div>
+</div>

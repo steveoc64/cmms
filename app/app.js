@@ -45,19 +45,19 @@
 	      	url: '/landing',
 	      	acl: 'landing',
 	      	template: 'This is the landing page',
-	      	controller: 'landingCtrl',    	
+	      	controller: 'landingCtrl as landing',    	
 	      })
 	      .state('loginpage',{
 	      	url: '/loginpage',
 	      	acl: '*',
 	      	templateUrl: 'templates/loginpage.html',
-	      	controller: 'loginCtrl as loginCtrl',    	
+	      	controller: 'loginCtrl as login',    	
 	      })
 	      .state('homepage', {
 	      	url: '/home',
 	      	acl: '*',
 	      	template: 'Home',
-	      	controller: 'homeCtrl as homeCtrl',
+	      	controller: 'homeCtrl as home',
 	      })
 	      .state('public',{
 	      	url: '/public',
@@ -67,60 +67,58 @@
 	      .state('admin',{
 	      	url: '/admin',
 	      	acl: 'admin',
-	      	abstract: true,
-	      	templateUrl: 'templates/admin.html',
-	      	controller: 'adminCtrl as adminCtrl',
+	      	abstract: true
+	      	//templateUrl: 'templates/admin/dashboard.html',
+	      	//controller: 'adminCtrl as admin'
 	      })
-	      	/////////////////////////////////////////////////////
-	      	// Admin States - defaulting to dashboard
 		      .state('admin.dashboard',{
-		      	url: '',		
+		      	url: '/dashboard',		
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/dashboard.html',
-		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      	controller: 'adminDashCtrl as adminDash',
 		      })
 		      .state('admin.users',{
-		      	url: 'users',
+		      	url: '/users',
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/users.html',
-		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      	controller: 'adminUserCtrl as adminUser',
 		      })
 		      .state('admin.sites',{
-		      	url: 'sites',
+		      	url: '/sites',
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/sites.html',
-		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      	controller: 'adminSitesCtrl as adminSites',
 		      })
 		      .state('admin.eqiup',{
-		      	url: 'equip',
+		      	url: '/equip',
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/equip.html',
-		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      	controller: 'adminEquipCtrl as adminEquip',
 		      })
 		      .state('admin.parts',{
-		      	url: 'parts',
+		      	url: '/parts',
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/parts.html',
-		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      	controller: 'adminPartsCtrl as adminParts',
 		      })
 		      .state('admin.reports',{
-		      	url: 'reports',
+		      	url: '/reports',
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/reports.html',
-		      	controller: 'adminUserCtrl as adminUserCtrl',
+		      	controller: 'adminReportsCtrl as adminReports',
 		      })
 	      .state('worker',{
 	      	url: '/worker',
 	      	acl: 'worker',
 	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a><br><a ui-sref="worker.timesheet">TimeSheets</a><hr><ui-view>Summary of Worker Details Here</ui-view>',
-	      	controller: 'workerCtrl as workerCtrl',
+	      	controller: 'workerCtrl as worker',
 	      })
-	      .state('worker.timesheet',{
-	      	url: '/timesheet',
-	      	acl: 'worker',
-	      	template: 'Lil bit of timesheet stuff here, in place of where the worker details were <a ui-sref="worker">Close</a>',
-	      	controller: 'workerCtrl as workerCtrl',
-	      })
+		      .state('worker.timesheet',{
+		      	url: '/timesheet',
+		      	acl: 'worker',
+		      	template: 'Lil bit of timesheet stuff here, in place of where the worker details were <a ui-sref="worker">Close</a>',
+		      	controller: 'workerCtrl as worker',
+		      })
 	  }
 
 	  function session(LxNotificationService,DBLogin,$state) {
