@@ -55,7 +55,7 @@ $palette_16: #ECEFF4;
   background-color: $palette_16 !important; }
 
 .bgc-dark-gradient {
-  @include linear-gradient($palette_1, $palette_4);
+  @include linear-gradient($palette_4, $palette_1);
 }
 .bgc-light-gradient {
   @include linear-gradient(#ffffff, $palette_16);

@@ -9,7 +9,7 @@
 			value2: '2 on the child controller',		
 		})
 
-		console.log("controller vars = ",this.value1,this.value2)
+		console.log("controller vars = ",this.parent,this.value1,this.value2)
 		
 	})
 

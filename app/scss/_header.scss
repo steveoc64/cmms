@@ -26,7 +26,7 @@ $header-bg-stripe: 	$palette_2;
     height: 60px;
     padding: $base-spacing-unit * 1.5;
     background-color: $header-bg;
-    @include linear-gradient($palette_12, $palette_16);
+    @include linear-gradient($palette_16, $palette_12);
     @include z-depth(1);
     @include clearfix;
 }

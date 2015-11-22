@@ -1,73 +1,30 @@
 <!-- Sidebar -->
-<ng-include src="'/includes/sidebar-admin.html'"></ng-include>
+<!-- <ng-include src="'/includes/sidebar-admin.html'"></ng-include> -->
+<div class="sidebar-filter" ng-class="{ 'sidebar-filter--is-shown': Sidebar.isSidebarShown() }" ng-click="Sidebar.toggleSidebar()"></div>
 
-<div class="main-section">
-    <h3 class="main-section__title">Dropdowns</h3>
-
-    <div class="main-section__content">
-        <div class="example">
-            <div class="example__content">
-                <ng-include src="'/includes/modules/dropdown/includes/example.html'"></ng-include>
-            </div>
-
-            <!-- Example -->
-            <div class="example__code" hljs include="'/includes/modules/dropdown/includes/example.html'" language="html"></div>
-            <!-- /Example -->
-        </div>
-    </div>
-
-    <div class="main-section__content">
-        <h4 class="main-section__subtitle">Usage</h4>
-
-        <div class="example mt++">
-            <!-- Example -->
-            <div class="example__code" hljs include="'/includes/modules/dropdown/includes/usage.html'" language="html"></div>
-            <!-- /Example -->
-        </div>
-    </div>
-
-    <div class="main-section__content">
-        <h4 class="main-section__subtitle">API</h4>
-
-        <table class="data-table mt++">
-            <thead>
-                <tr>
-                    <th>Attr</th>
-                    <th>Type</th>
-                    <th>Default</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>position<br /><i>(optionnal)</i></td>
-                    <td><code>string</code></td>
-                    <td>left</td>
-                    <td>
-                        The position of the dropdown menu.
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>width<br /><i>(optionnal)</i></td>
-                    <td><code>string</code></td>
-                    <td>undefined</td>
-                    <td>
-                        If 'full' specified, fit dropdown menu width to dropdown toggle width.<br />
-                        If a number is specified, fit to toggle width and add this value to dropdown menu.
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>from-top<br /><i>(optionnal)</i></td>
-                    <td><code>boolean</code></td>
-                    <td>false</td>
-                    <td>
-                        Dropdown menu top will correspond to dropdown toggle top instead of dropdown toggle bottom.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div class="sidebar" ng-class="{ 'sidebar--is-shown': Sidebar.isSidebarShown() }">
+    <div class="sidebar-menu">
+        <ul>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.dashboard" ng-click="Sidebar.toggleSidebar()">Dashboard</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.users" ng-click="Sidebar.toggleSidebar()">Users</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.sites" ng-click="Sidebar.toggleSidebar()">Sites</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.equip" ng-click="Sidebar.toggleSidebar()">Equipment</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.parts" ng-click="Sidebar.toggleSidebar()">Spare Parts</a>
+            </li>
+            <li>
+                <a class="sidebar-menu__link" ui-sref="admin.reports" ng-click="Sidebar.toggleSidebar()">Reports</a>
+            </li>
+        </ul>
     </div>
 </div>
+
+<ui-view></ui-view>
