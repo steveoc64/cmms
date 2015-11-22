@@ -1,9 +1,22 @@
-<div flex-container="row" flex-gutter="32" flex-align="space-between flex-start">
-	<div flex-item="2" flex-grow="0">
-		menu bar goes in here
+<!-- Banner -->
+<div class="banner">
+    <div class="banner__logo">
+        <img src="/img/factory-equip.jpg">
+    </div>
 
+    <h2 class="banner__subtitle">
+    	CMMS System For Facilities Maintenance
+    </h2>
+</div>
+
+
+<div flex-container="row" flex-gutter="24" flex-align="space-between flex-start">
+	<div flex-item="2" flex-grow="0">
+		Menu
 		<ul>
-			<li ng-repeat="m in cmmsCtrl.menu.options">Menu {{m}}	</li>
+			<li ng-repeat="m in cmmsCtrl.menu.options">
+			<a ui-sref="{{m.sref}}">{{m.title}}</a>
+			</li>
 		</ul>
 	</div>
 

@@ -1,5 +1,39 @@
-$base-text-color:       #000000;
-$base-background-color: #f5f5f5;
-$header-bg: #f8feff;
-$footer-bg: #061b29;
+// Palette generated from the factory item image
+
+$palette_1: #000000;
+$palette_2: #151514;
+$palette_3: #292828;
+$palette_4: #232E86;
+
+$palette_5: #413D3B;
+$palette_6: #545151;
+$palette_7: #615F5E;
+$palette_8: #6C6869;
+
+$palette_9: #767272;
+$palette_10: #807C7D;
+$palette_11: #8A878A;
+$palette_12: #939599;
+
+$palette_13: #A3A4A7;
+$palette_14: #B0B1B7;
+$palette_15: #CAC8CC;
+$palette_16: #ECEFF4;
+
+$base-text-color:       $palette_2;
+$base-background-color: $palette_15;
+
+// SBS Logo
+
+.logo {
+	@include media-query(lap) {
+	    float: left;
+	    width: 165px;
+	    height: 41px;
+	    text-indent: -9999px;
+	    overflow: hidden;
+	    margin: 0;
+	    background: url(/img/logo.png) no-repeat;
+	}
+}
 
