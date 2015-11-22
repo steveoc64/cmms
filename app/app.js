@@ -67,9 +67,9 @@
 	      .state('admin',{
 	      	url: '/admin',
 	      	acl: 'admin',
-	      	abstract: true
-	      	//templateUrl: 'templates/admin/dashboard.html',
-	      	//controller: 'adminCtrl as admin'
+	      	abstract: true,
+	      	templateUrl: 'templates/admin/dashboard.html',
+	      	controller: 'adminCtrl as admin'
 	      })
 		      .state('admin.dashboard',{
 		      	url: '/dashboard',		
