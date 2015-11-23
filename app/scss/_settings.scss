@@ -77,8 +77,9 @@ $sidebar_margin: 160px;
 
 
 .data-table__selectable-row--is-selected th:first-child:before, .data-table__selectable-row--is-selected td:first-child:before {
-  content: "\f20c";
-  //content: &#x2611;
+  //content: "\f20c";
+  background-color: $yellow-100;
+  content: &#x2611;
   //content: &spades;
   //color: $white; 
   //background-color: $black;
