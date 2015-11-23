@@ -62,7 +62,7 @@ func getID(c *echo.Context) int {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // UserLog
 
-type userLog struct {
+type UserLog struct {
 	UserId  int          `db:"user_id"`
 	LogDate dat.NullTime `db:"logdate"`
 	IP      string       `db:"ip"`
@@ -72,7 +72,7 @@ type userLog struct {
 func logUser(id int, status string, c *echo.Context) {
 
 	req := c.Request()
-	ulog := &userLog{
+	ulog := &UserLog{
 		UserId: id,
 		Descr:  status,
 		IP:     req.RemoteAddr,
@@ -80,12 +80,7 @@ func logUser(id int, status string, c *echo.Context) {
 	DB.InsertInto("user_log").
 		Whitelist("user_id", "ip", "descr").
 		Record(ulog).
-		Exec() /*.
-		Returning("logdate").
-		QueryStruct(&ulog)
-
-
-	log.Println("Log Record", ulog) */
+		Exec()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,4 +138,80 @@ func logout(c *echo.Context) error {
 	}
 	logUser(i, fmt.Sprintf("Logout %s", id), c)
 	return c.String(http.StatusOK, "bye")
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// User Functions
+
+/*
+	e.Get("/users", queryUsers)
+	e.Get("/users/:id", getUser)
+	e.Post("/users/:id", newUser)
+	e.Patch("/users/:id", saveUser)
+	e.Delete("/users/:id", deleteUser)
+*/
+
+type DBusers struct {
+	ID       int     `db:"id"`
+	Username string  `db:"username"`
+	Passwd   string  `db:"passwd"`
+	Name     string  `db:"name"`
+	Email    string  `db:"email"`
+	Address  *string `db:"address"`
+	SMS      *string `db:"sms"`
+	Avatar   *string `db:"avatar"`
+	SiteId   int     `db:"site_id"`
+	Role     string  `db:"role"`
+}
+
+func queryUsers(c *echo.Context) error {
+
+	var users []*DBusers
+
+	err := DB.
+		Select(`*`).
+		From(`users`).
+		QueryStructs(&users)
+
+	log.Println(`users`, users)
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, users)
+}
+
+func getUser(c *echo.Context) error {
+	var user DBusers
+
+	id := getID(c)
+	err := DB.
+		Select(`*`).
+		From(`users`).
+		Where(`id = $1`, id).
+		QueryStruct(&user)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, user)
+}
+
+func newUser(c *echo.Context) error {
+	//var user DBusers
+
+	return c.String(http.StatusOK, `TODO - insert new user`)
+}
+
+func saveUser(c *echo.Context) error {
+	//var user DBusers
+	//id := getID(c)
+
+	return c.String(http.StatusOK, `TODO - save user`)
+}
+
+func deleteUser(c *echo.Context) error {
+	//var user DBusers
+	//id := getID(c)
+
+	return c.String(http.StatusOK, `TODO - delete the user`)
 }

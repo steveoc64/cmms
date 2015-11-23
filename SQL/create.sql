@@ -1,32 +1,32 @@
 drop table if exists users;
 create table users (
 	id serial primary key,
-	username varchar(32),
-	passwd varchar(32),
-	name text,
+	username varchar(32) not null,
+	passwd varchar(32) not null,
+	name text not null,
 	address text,
-	email text,
+	email text not null,
 	sms text,
 	avatar text,
-	site_id int,
-	role text
+	site_id int not null default 0,
+	role text not null default 'public'
 );
 
 drop table if exists site;
 create table site (
 	id serial primary key,
-	name text,
-	address text,
-	phone text,
+	name text not null,
+	address text not null,
+	phone text not null,
 	fax text,
 	image text
 );
 
 drop table if exists user_role;
 create table user_role (
-	user_id int,
-	site_id int,
-	worker boolean,
+	user_id int not null,
+	site_id int not null,
+	worker boolean not null default false,
 	sitemgr boolean,
 	contractor boolean
 );
