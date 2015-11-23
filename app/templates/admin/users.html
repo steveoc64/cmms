@@ -1,9 +1,81 @@
 <div class="main-section">
-    <h3 class="main-section__title">CMMS Users</h3>
-
     <div class="main-section__content">
-        <h4 class="main-section__subtitle">All Users</h4>
-        ... Show a list of users here
+			<div class="data-table-container">
+			  <header class="data-table-header">
+			    <div class="data-table-header__label">
+			      <span class="fs-title">Users List</span>
+			    </div>
+
+			    <div class="data-table-header__actions">
+			      <lx-dropdown position="right" over-toggle="true">
+			        <button class="btn btn--l btn--blue btn--icon" lx-ripple lx-dropdown-toggle>
+			          <i class="mdi mdi-dots-vertical"></i>
+			        </button>
+
+			        <lx-dropdown-menu>
+                <ul>
+                    <li><a class="dropdown-link" ui-sref="admin.users.new">New User</a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a class="dropdown-link" ng-click="deleteSelected()">Show Logs</a></li>
+                    <li><a class="dropdown-link" ng-click="deleteSelected()">Delete Selected</a></li>
+                </ul>
+            	</lx-dropdown-menu>
+        		</lx-dropdown>
+			     </div>
+			  </header>
+
+		    <table class="data-table">
+	        <thead>
+            <tr class="data-table__header">
+              <th class="data-table__sortable-cell data-table__sortable-cell--desc"> <i class="mdi mdi-account"></i>Username</th>
+              <th> <i class="mdi mdi-comment-account"></i>Name</th>
+              <th> <i class="mdi mdi-email"></i>Email</th>
+              <th> <i class="mdi mdi-cellphone"></i>SMS</th>
+              <th> <i class="mdi mdi-factory"></i>Site</th>
+              <th> Edit </th>
+            </tr>
+	        </thead>
+
+	        <tbody>
+<!--            <tr class="data-table__selectable-row"
+            		ng-repeat="u in adminUser.users"
+            		on-click="clickedRow()"> -->
+            <tr class="data-table__selectable-row"
+            		ng-class="adminUser.getClass(u)"
+            		ng-repeat="u in adminUser.users"
+            		ng-click="adminUser.clickedRow(u)"> 
+	                <td>{{u.Username}}</td>
+	                <td>{{u.Name}}</td>
+	                <td>{{u.Email}}</td>
+	                <td>{{u.SMS}}</td>
+	                <td>{{u.Site}}</td>
+	                <td>
+	                <!--
+ <div class="fab">
+        <button class="fab__primary btn btn--l btn--blue btn--fab" lx-ripple lx-tooltip="User Actions" tooltip-position="top">
+            <i class="mdi mdi-plus"></i>
+            <i class="mdi mdi-account"></i>
+        </button>
+
+        <div class="fab__actions fab__actions--left">
+            <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Lorem Ipsum" tooltip-position="top"><i class="mdi mdi-delete"></i></button>
+            <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Lorem Ipsum" tooltip-position="top"><i class="mdi mdi-package"></i></button>
+            <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Lorem Ipsum" tooltip-position="top"><i class="mdi mdi-pencil"></i></button>
+        </div>
+    </div>
+    -->
+	                
+	                	<button class="btn btn--m btn--blue btn--icon" 
+	                					ng-click="adminUser.clickEdit(u); $event.stopPropagation()"
+	                					lx-ripple>
+	                						<i class="mdi mdi-plus"></i>
+	                	</button>
+	                </td>
+            </tr>
+	        </tbody>
+		    </table>
+	</div>
+
     </div>
 
 </div>

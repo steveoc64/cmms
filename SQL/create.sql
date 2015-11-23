@@ -47,10 +47,10 @@ create unique index user_skill_idx on user_skill (user_id,skill_id);
 
 drop table if exists user_log;
 create table user_log (
-	user_id int,
-	logdate timestamp default localtimestamp,
-	ip text,
-	descr text
+	user_id int not null,
+	logdate timestamp not null default localtimestamp,
+	ip text not null,
+	descr text not null
 );
 create unique index user_log_idx on user_log (user_id,logdate);
 

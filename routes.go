@@ -152,26 +152,25 @@ func logout(c *echo.Context) error {
 */
 
 type DBusers struct {
-	ID       int     `db:"id"`
-	Username string  `db:"username"`
-	Passwd   string  `db:"passwd"`
-	Name     string  `db:"name"`
-	Email    string  `db:"email"`
-	Address  *string `db:"address"`
-	SMS      *string `db:"sms"`
-	Avatar   *string `db:"avatar"`
-	SiteId   int     `db:"site_id"`
-	Role     string  `db:"role"`
+	ID       int       `db:"id"`
+	Username string    `db:"username"`
+	Passwd   string    `db:"passwd"`
+	Name     string    `db:"name"`
+	Email    string    `db:"email"`
+	Address  *string   `db:"address"`
+	SMS      *string   `db:"sms"`
+	Avatar   *string   `db:"avatar"`
+	SiteId   int       `db:"site_id"`
+	Role     string    `db:"role"`
+	Logs     []UserLog `db:"logs"`
 }
 
 func queryUsers(c *echo.Context) error {
 
 	var users []*DBusers
+	//		SQL(`select *,array(select concat(logdate,ip,descr) from user_log where user_id=users.id order by logdate desc) as logs from users`).
 
-	err := DB.
-		Select(`*`).
-		From(`users`).
-		QueryStructs(&users)
+	err := DB.SQL(`select * from users order by username`).QueryStructs(&users)
 
 	log.Println(`users`, users)
 	if err != nil {
@@ -185,8 +184,9 @@ func getUser(c *echo.Context) error {
 
 	id := getID(c)
 	err := DB.
-		Select(`*`).
+		SelectDoc(`*`).
 		From(`users`).
+		Many(`logs`, `select * from user_log where user_id=$1 order by logdate desc limit 12`, id).
 		Where(`id = $1`, id).
 		QueryStruct(&user)
 
