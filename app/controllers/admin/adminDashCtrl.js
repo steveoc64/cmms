@@ -6,11 +6,8 @@
 		console.log('inside adminDashCtrl')	
 
 		angular.extend(this, {
-			value2: '2 on the child controller',		
 		})
-
-		console.log("controller vars = ",this.parent,this.value1,this.value2)
-		
+	
 	})
 
 })();

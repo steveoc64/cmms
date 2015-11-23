@@ -68,7 +68,7 @@
 	      	url: '/admin',
 	      	acl: 'admin',
 	      	abstract: true,
-	      	templateUrl: 'templates/admin.html',
+	      	templateUrl: 'templates/admin/admin.html',
 	      	controller: 'adminCtrl as admin'
 	      })
 		      .state('admin.dashboard',{
@@ -89,7 +89,7 @@
 		      	templateUrl: 'templates/admin/sites.html',
 		      	controller: 'adminSitesCtrl as adminSites',
 		      })
-		      .state('admin.eqiup',{
+		      .state('admin.equip',{
 		      	url: '/equip',
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/equip.html',

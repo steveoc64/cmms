@@ -4,7 +4,7 @@
 	angular.module('cmms').controller('landingCtrl',
 	 function(Session, $state){
 	
-		console.log('Entering landingCtrl with session',Session)
+		//console.log('Entering landingCtrl with session',Session)
 		switch(Session.role) {
 			case 'admin':
 				console.log('redirect to admin.dashboard')
