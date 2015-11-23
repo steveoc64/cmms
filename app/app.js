@@ -82,6 +82,11 @@
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/users.html',
 		      	controller: 'adminUserCtrl as adminUser',
+		      	resolve: {
+		      		users: function(DBUsers) {
+		      			return DBUsers.query()
+		      		}
+		      	}
 		      })
 		      .state('admin.sites',{
 		      	url: '/sites',
@@ -159,7 +164,6 @@
 		  		case 'landing':
 		  			// This is the landing page, just need to be logged in correctly as any role
 		  			// before being sent off to the correct homepage
-		  			console.log('into the landing state, with session',Session)
 		  			if (Session.loggedIn) {
 		  				allGood = true
 		  			}

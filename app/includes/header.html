@@ -5,10 +5,9 @@
    
     <nav class="main-nav">
         <ul>
-            <!-- <li>Session = {{cmmsCtrl.Session}} -->
-            <li><button ng-if="!cmmsCtrl.Session.loggedIn" ui-sref="landing">Login</button>
-            <li><button ng-if="cmmsCtrl.Session.loggedIn" ng-click="cmmsCtrl.logout()">Logout</button>
-
+            <li><button class="btn btn--l btn--indigo btn--raised" 
+                        ui-sref="landing"
+                        lx-ripple>Login</button>
         </ul>
     </nav>
 

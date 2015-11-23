@@ -29,6 +29,11 @@ func _initRoutes() {
 	e.Post("/login", login)
 	e.Delete("/login/:id", logout)
 
+	e.Get("/users", queryUsers)
+	e.Get("/users/:id", getUser)
+	e.Post("/users/:id", newUser)
+	e.Patch("/users/:id", saveUser)
+	e.Delete("/users/:id", deleteUser)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

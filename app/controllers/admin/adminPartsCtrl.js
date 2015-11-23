@@ -3,7 +3,7 @@
 
 	angular.module('cmms').controller('adminPartsCtrl', function(){
 	
-		console.log('inside adminPartsCtrl')
+		console.log('.. adminPartsCtrl')
 
 		angular.extend(this, {
 		})

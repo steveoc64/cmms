@@ -26,7 +26,7 @@ var paths = {
   appJS: [
   	'app/app.js',
     'app/code/**/*.*',
-    'app/services/**/*.*',
+    'app/database/**/*.*',
     'app/controllers/**/*.*',
   ],
   // Include Paths for Sass

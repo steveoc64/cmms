@@ -15,7 +15,7 @@
 }
 
 .sidebar-filter--is-shown {
-    @include media-query(portable) {
+    @include media-query(lap-and-up) {
         opacity: 1;
         pointer-events: auto;
     }
@@ -28,7 +28,7 @@
 // Sidebar base styles
 .sidebar {
     z-index: 998;
-    width: 260px;
+    width: 180px;
     border-right: solid 1px #ddd;
     background-color: #fff;
     @include transition-property(box-shadow, transform);
@@ -36,19 +36,19 @@
     @include transition-timing-function($ease-out-quint);
     overflow: auto;
 
-    @include media-query(desk) {
+    @include media-query(lap-and-up) {
         @include position(fixed, 60px null 0 null);
     }
 
-    @include media-query(portable) {
-        @include position(fixed, 60px null 0 -260px);
+    @include media-query(lap) {
+        @include position(fixed, 60px null 0 -180px);
     }
 }
 
 .sidebar--is-shown {
-    @include media-query(portable) {
+    @include media-query(lap) {
         box-shadow: 3px 0 6px rgba(0, 0, 0, 0.4);
-        @include transform(translateX(260px));
+        @include transform(translateX(180px));
     }
 }
 
