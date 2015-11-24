@@ -41,7 +41,7 @@ read something
 cp -r build /var/run/cmms/build
 chown -r cmms /var/run/cmms
 chgrp -r cmms /var/run/cmms
-sudo cp initscripts/cmms /etc/init.d
+sudo cp initscripts/cmms.sh /etc/init.d/cmms
 chmod a+x /etc/init.d/cmms
 sudo mkdir /var/log/cmms
 sudo chown cmms /var/log/cmms
