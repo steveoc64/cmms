@@ -14,8 +14,8 @@ import (
 
 // location of the files used for signing and verification
 const (
-	privKeyPath = "keys/app.rsa"     // openssl genrsa -out app.rsa keysize
-	pubKeyPath  = "keys/app.rsa.pub" // openssl rsa -in app.rsa -pubout > app.rsa.pub
+	privKeyPath = "keys/cmms.rsa"     // openssl genrsa -out app.rsa keysize
+	pubKeyPath  = "keys/cmms.rsa.pub" // openssl rsa -in app.rsa -pubout > app.rsa.pub
 )
 
 // keys are held in global variables

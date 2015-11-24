@@ -1,5 +1,6 @@
 <!-- PreDefine the Login Dialog, which may be used to popup a modal at any time -->
 <!-- NOTE this dialog is dealing with an entirely Transcluded scope !!! -->
+
 <lx-login-dialog class="dialog dialog--l bgc-light-gradient" id='loginDialog' escape-close="true">
     <div class="dialog__header">
 <!--        <div class="toolbar bgc-dark-gradient pl++">  -->
@@ -15,7 +16,7 @@
       <div class="mt++" flex-container="row" flex-gutter="24">
         <div flex-item>
           <lx-text-field label="User Name" fixed-label="true" icon="account">
-              <input type="text" ng-model="username">
+              <input type="text" ng-model="username" autofocus id="username">
           </lx-text-field>
 
           <lx-text-field label="Password" fixed-label="true" icon="barcode">
@@ -29,4 +30,5 @@
         <!-- <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button> -->
         <button type="submit" class="btn btn--m btn--black btn--flat" ng-click="login()" lx-ripple>Login !</button>
     </div>
-</lx-dialog>
+</lx-login-dialog>
+

@@ -17,9 +17,6 @@
 			$httpProvider.interceptors.push(function ($q, Session) {
 			   return {
 			       'request': function (config) {
-			       		console.log('request, config =',config.url, config.Token, Session.Token)
-			           config.headers = config.headers || {}
-			           config.headers.Addthis = 'I added this'
 			           config.headers.Token = Session.Token
 			           if (Session.Token && Session.Token != '') {
 			               config.headers.Authorization = Session.Token;

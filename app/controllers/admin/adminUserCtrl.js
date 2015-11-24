@@ -15,7 +15,7 @@
 				}
 			},
 			clickedRow: function(u) {
-				console.log('Clicked on',u.ID, '=',u)
+				//console.log('Clicked on',u.ID, '=',u)
 				if (!angular.isDefined(u.selected)) {
 					u.selected = false
 				}

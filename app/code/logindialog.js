@@ -7,6 +7,7 @@ angular.module('cmms')
         angular.extend($scope, {
           username: '',
           passwd: '',
+          focusValue: false,
           login: function() {
             // First, get login creds from login service
             var vm = this

@@ -12,7 +12,7 @@
 
 // Main section
 .main-section {
-	@include media-query(desk) {
+	@include media-query(lap-and-up) {
 		margin: 0 0 0 $sidebar_margin;
   	@include linear-gradient(#ffffff, $palette_16);
 	}
