@@ -15,9 +15,9 @@ create table users (
 drop table if exists site;
 create table site (
 	id serial primary key,
-	name text not null,
-	address text not null,
-	phone text not null,
+	name text not null default '',
+	address text not null default '',
+	phone text not null default '',
 	fax text,
 	image text
 );

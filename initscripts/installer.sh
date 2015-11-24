@@ -39,8 +39,8 @@ du -k build
 echo Will that fit ?
 read something
 cp -r build /var/run/cmms/build
-chown -r cmms /var/run/cmms
-chgrp -r cmms /var/run/cmms
+chown -R cmms /var/run/cmms
+chgrp -R cmms /var/run/cmms
 sudo cp initscripts/cmms.sh /etc/init.d/cmms
 chmod a+x /etc/init.d/cmms
 sudo mkdir /var/log/cmms
