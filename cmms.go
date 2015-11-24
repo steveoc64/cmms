@@ -14,6 +14,7 @@ var e *echo.Echo
 func main() {
 
 	_loadConfig()
+	_initJWT()
 
 	e = echo.New()
 	e.Index("./build/index.html")
@@ -42,7 +43,7 @@ func main() {
 
 	// Start the web server
 	if Config.Debug {
-		log.Printf("Starting Web Server of port %d ...", Config.WebPort)
+		log.Printf("... Starting Web Server on port %d", Config.WebPort)
 	}
 	e.Run(fmt.Sprintf(":%d", Config.WebPort))
 }
