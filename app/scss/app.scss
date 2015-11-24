@@ -11,3 +11,36 @@
 @import "main";
 @import "footer";
 
+
+// Now that everything is defined, provide last minute overrides for bits of CSS
+
+.data-table__selectable-row--is-selected th:first-child:before, .data-table__selectable-row--is-selected td:first-child:before {
+  background-color: $yellow-100;
+  //content: &#x2611;
+}
+
+.data-table__selectable-row--is-selected td { 
+  background-color: $yellow-50;   
+  //background-color: $blue-grey-100; 
+  //@include linear-gradient($palette_16, $palette_14);
+}
+
+.data-table {
+  th {
+      height: 56px;
+      @include font-size(16px);
+      font-weight: bold;
+      color: $black-2;
+      text-align: left;
+      white-space: nowrap;
+
+      i {
+          margin-right: $base-spacing-unit / 2;
+      }
+  }
+}
+
+.sidebar {
+  @include background-color($palette_4);
+}
+
