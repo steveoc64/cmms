@@ -10,7 +10,7 @@ V.2 of itrak.cmms
 
 ## SQL Database
 
-- Postgres, using the awesome [DAT toolkit for postgres](https://github.com/mgutz/dat)
+- Postgres, using [DAT toolkit for postgres](https://github.com/mgutz/dat) to keep the backend short & easy to read.
 
 ## WebApp
 
