@@ -97,7 +97,7 @@
 		      	}
 		      })
 		      .state('admin.edituser',{
-		      	url: '/edit',
+		      	url: '/edit/:id',
 		      	acl: 'admin',
 		      	templateUrl: 'templates/admin/users.edit.html',
 		      	controller: 'adminEditUserCtrl as adminEditUser',
