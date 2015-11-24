@@ -13,6 +13,7 @@ npm-debug.log
 bower_components
 build
 .sass-cache
+keys
 
 # Architecture specific extensions/prefixes
 *.[568vq]
