@@ -1,7 +1,7 @@
 ;(function(){
 	'use strict';
 
-	angular.module('cmms').factory('DBUsers', function($resource,ServerName){
+	angular.module('cmms').factory('DBUsers', function($resource,ServerName,Session){
 		return $resource(ServerName+'/users/:id',{},{
 			'get':    {method:'GET'},
   		'save':   {method:'PATCH'},

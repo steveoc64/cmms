@@ -8,6 +8,7 @@
 			console.log('.. cmmsCtrl')
 
 			angular.extend(this,{
+				label: 'cmmsCtrl',
 				session: Session,
 				getLoginState: function() {
 					return 'login state'

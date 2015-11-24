@@ -7,7 +7,7 @@
 		console.log('.. landingCtrl')
 		
 		//console.log('Entering landingCtrl with session',Session)
-		switch(Session.role) {
+		switch(Session.Role) {
 			case 'admin':
 				console.log('redirect to admin.dashboard')
 				$state.go('admin.dashboard')
@@ -19,7 +19,7 @@
 				$state.go('vendor.dashboard')
 				break
 			default:
-				console.log('Unknown Role',Session.role)
+				console.log('Unknown Role',Session.Role)
 				Session.logout()
 				$state.go('/')
 				break

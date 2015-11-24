@@ -125,7 +125,14 @@ func login(c *echo.Context) error {
 	} else {
 		logUser(res.ID, fmt.Sprintf("Login %s", l.Username), c)
 		log.Println(res)
-		res.Token = "a new token generated here"
+
+		tokenString, err := generateToken(res.ID, res.Role)
+		if err != nil {
+			log.Println(`Generating Token`, err.Error())
+			return c.String(http.StatusInternalServerError, err.Error())
+		}
+
+		res.Token = tokenString
 		return c.JSON(http.StatusOK, res)
 	}
 }
@@ -166,6 +173,13 @@ type DBusers struct {
 }
 
 func queryUsers(c *echo.Context) error {
+
+	// Lets get the details from the request
+	r := c.Request()
+	rh := r.Header
+	log.Println("addthis = ", rh[`Addthis`])
+	log.Println("token = ", rh[`Token`])
+	log.Println("auth = ", rh[`Authorization`])
 
 	var users []*DBusers
 	//		SQL(`select *,array(select concat(logdate,ip,descr) from user_log where user_id=users.id order by logdate desc) as logs from users`).

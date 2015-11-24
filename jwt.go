@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"runtime"
+	"time"
 )
 
 // location of the files used for signing and verification
@@ -114,4 +115,20 @@ func securityCheck(passedToken string) (int, string) {
 		log.Printf("Token parse error: %v\n", err)
 		return http.StatusUnauthorized, "Invalid Token!"
 	}
+}
+
+func generateToken(ID int, Role string) (string, error) {
+	// create a signer for rsa 256
+	t := jwt.New(jwt.GetSigningMethod("HS256"))
+
+	// set our claims
+	t.Claims["ID"] = ID
+	t.Claims["Role"] = Role
+
+	// set the expire time for 30 days
+	// see http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-20#section-4.1.4
+	t.Claims["exp"] = time.Now().Add(time.Hour * 24 * 30).Unix()
+
+	tokenString, err := t.SignedString(signKey)
+	return tokenString, err
 }

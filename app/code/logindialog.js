@@ -2,7 +2,7 @@
     'use strict';
 
 angular.module('cmms')
-    .controller('LxLoginDialogController', function($scope, LxDialogService,$state,$stateParams,Session,LxNotificationService,DBLogin)
+    .controller('LxLoginDialogController', function($scope, LxDialogService, $http, $state,$stateParams,Session,LxNotificationService,DBLogin)
     {
         angular.extend($scope, {
           username: '',
@@ -16,13 +16,16 @@ angular.module('cmms')
             },function(retval,r){
               //console.log('login from dialog OK', retval)
               Session.loggedIn = true
-              Session.uid = retval.ID
-              Session.username = retval.Username
-              Session.role = retval.Role
-              Session.token = retval.Token
-              Session.site = retval.Site
-              Session.siteName = retval.SiteName.String
+              Session.ID = retval.ID
+              Session.Username = retval.Username
+              Session.Role = retval.Role
+              Session.Token = retval.Token
+              Session.Site = retval.Site
+              Session.SiteName = retval.SiteName.String
               LxDialogService.close('loginDialog', true)  
+               vm.username = ''
+               vm.password = ''    // clear it out, so its no longer visible in the browser memory
+
               if (Session.toState != '') {
                 //console.log('Change state from dialog to',Session.toState,Session)
                 $state.go(Session.toState)

@@ -41,6 +41,6 @@
 }
 
 .sidebar {
-  @include background-color($palette_4);
+  background-color: $palette_4;
 }
 

@@ -48,7 +48,5 @@ func _initDB() {
 	if dbErr != nil {
 		log.Fatalln(dbErr.Error())
 	}
-	if Config.Debug {
-		log.Println("... Test connection to DB, today =", _res.Today)
-	}
+	log.Println("... Test connection to DB, today =", _res.Today)
 }

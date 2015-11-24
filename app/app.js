@@ -11,7 +11,24 @@
 		.run(run)
 	    .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
 
-  	function config($stateProvider, $urlRouterProvider, $locationProvider) {
+  	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+
+  		// Force all outgoing http requests to include the Auth token, if defined
+			$httpProvider.interceptors.push(function ($q, Session) {
+			   return {
+			       'request': function (config) {
+			       		console.log('request, config =',config.url, config.Token, Session.Token)
+			           config.headers = config.headers || {}
+			           config.headers.Addthis = 'I added this'
+			           config.headers.Token = Session.Token
+			           if (Session.Token && Session.Token != '') {
+			               config.headers.Authorization = Session.Token;
+			           }
+			           return config;
+			       },
+			   }
+			}) 
+
 	    $urlRouterProvider.otherwise('/');
 
 	    $locationProvider.html5Mode({
@@ -46,12 +63,6 @@
 	      	acl: 'landing',
 	      	template: 'This is the landing page',
 	      	controller: 'landingCtrl as landing',    	
-	      })
-	      .state('loginpage',{
-	      	url: '/loginpage',
-	      	acl: '*',
-	      	templateUrl: 'templates/loginpage.html',
-	      	controller: 'loginCtrl as login',    	
 	      })
 	      .state('homepage', {
 	      	url: '/home',
@@ -126,27 +137,27 @@
 		      })
 	  }
 
-	  function session(LxNotificationService,DBLogin,$state) {
+	  function session(LxNotificationService) {
 	  	return {
 	  		loggedIn: false,
-	  		token: '',
-	  		username: '',
-	  		uid: 0,
-	  		role: 'public',
+	  		Token: '',
+	  		Username: '',
+	  		ID: 0,
+	  		Role: 'public',
 	  		fromState: '',
 	  		toState: '',
-	  		site: 0,
-	  		siteName: '',
+	  		Site: 0,
+	  		SiteName: '',
 	  		logout: function() {
-	  			DBLogin.logout({id: this.uid})
+	  			//DBLogin.logout({id: this.uid})
 	  			this.loggedIn = false
-	  			this.username = ''
-	  			this.role = 'public'
+	  			this.Username = ''
+	  			this.Role = 'public'
 	  			this.fromState = ''
 	  			this.toState = ''
-	  			this.site = 0,
-	  			this.uid = 0,
-	  			this.siteName = '',
+	  			this.Site = 0,
+	  			this.ID = 0,
+	  			this.SiteName = '',
 	  			LxNotificationService.warning('You are now Logged Out');
 	  		}
 	  	}
@@ -169,7 +180,7 @@
 		  			}
 		  			break
 		  		case 'admin':
-		  			switch (Session.role) {
+		  			switch (Session.Role) {
 		  				case 'admin':
 		  					allGood = true
 		  					break
@@ -181,7 +192,7 @@
 		  			}
 		  			break
 		  		case 'worker':
-		  			switch (Session.role) {
+		  			switch (Session.Role) {
 		  				case 'admin':
 		  				case 'worker':
 		  					allGood = true

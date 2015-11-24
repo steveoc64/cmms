@@ -198,6 +198,7 @@ gulp.task('dist',
 
 gulp.task('watch', function () {
   gulp.watch('./app/scss/**/*.scss', ['sass']);
+  gulp.watch('./app/scss/app.scss', ['sass']);
   gulp.watch('./app/**/*.html', ['copy:html']);
   gulp.watch(paths.appJS, ['app:js']);
   gulp.watch('./app/img/*', ['copy:img']);
@@ -205,6 +206,7 @@ gulp.task('watch', function () {
 
 gulp.task('distwatch', function () {
   gulp.watch('./app/scss/**/*.scss', ['dx:sass']);
+  gulp.watch('./app/scss/app.scss', ['dx:sass']);
   gulp.watch('./app/**/*.html', ['dx:copy:html:min']);
   gulp.watch(paths.appJS, ['dx:app:js']);
   gulp.watch('./app/img/*', ['dx:copy:img']);

@@ -20,7 +20,7 @@
             username: this.username,
             passwd: this.passwd
           },function(retval,r){
-            //console.log('login from dialog OK', retval)
+            console.log('login from dialog OK', retval)
             Session.loggedIn = true
             Session.uid = retval.ID
             Session.username = retval.Username
@@ -29,6 +29,14 @@
             Session.site = retval.Site
             Session.siteName = retval.SiteName.String
             Session.toState = Session.fromState = ''
+            vm.username = ''
+            vm.password = ''    // clear it out, so its no longer visible in the browser memory
+
+            // Set common header
+            $httpProvider.defaults.headers.common.CMMSToken = Session.token;
+            console.log('Rx token',retval.Token)
+            console.log('header defaults',$httpProvider.defaults.headers)
+
             $state.go('landing')
           },function(){
             LxNotificationService.warning('Login Failed ...')

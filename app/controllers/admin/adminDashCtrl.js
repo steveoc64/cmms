@@ -6,6 +6,7 @@
 		console.log('.. adminDashCtrl')	
 
 		angular.extend(this, {
+			label: 'adminDashCtrl',
 		})
 	
 	})

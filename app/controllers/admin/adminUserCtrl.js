@@ -1,12 +1,14 @@
 ;(function() {
 	'use strict';
 
-	angular.module('cmms').controller('adminUserCtrl', function(users){
+	angular.module('cmms').controller('adminUserCtrl', function(users, Session){
 	
 		console.log('.. adminUserCtrl')
 
 		angular.extend(this, {
+			label: 'adminUserCtrl',
 			users: users,
+			session: Session,
 			getClass: function(u) {
 				if (u.selected) {
 					return "data-table__selectable-row--is-selected"
