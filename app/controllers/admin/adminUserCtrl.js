@@ -1,7 +1,7 @@
 ;(function() {
 	'use strict';
 
-	angular.module('cmms').controller('adminUserCtrl', function(users, Session){
+	angular.module('cmms').controller('adminUserCtrl', function($state, users, Session){
 	
 		console.log('.. adminUserCtrl')
 
@@ -23,6 +23,7 @@
 			},
 			clickEdit: function(u) {
 				console.log('Edit click for',u.ID)
+				$state.go('admin.edituser',{id: u.ID})
 			}
 		})
 

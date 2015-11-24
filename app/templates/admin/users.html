@@ -14,7 +14,7 @@
 
 			        <lx-dropdown-menu>
                 <ul>
-                    <li><a class="dropdown-link" ui-sref="admin.users.new">New User</a></li>
+                    <li><a class="dropdown-link" ui-sref="admin.newuser">New User</a></li>
                     <li class="dropdown-divider"></li>
                     <li><a class="dropdown-link" ng-click="deleteSelected()">Show Logs</a></li>
                     <li><a class="dropdown-link" ng-click="deleteSelected()">Delete Selected</a></li>
@@ -50,21 +50,6 @@
 	                <td>{{u.SMS}}</td>
 	                <td>{{u.Site}}</td>
 	                <td>
-	                <!--
- <div class="fab">
-        <button class="fab__primary btn btn--l btn--blue btn--fab" lx-ripple lx-tooltip="User Actions" tooltip-position="top">
-            <i class="mdi mdi-plus"></i>
-            <i class="mdi mdi-account"></i>
-        </button>
-
-        <div class="fab__actions fab__actions--left">
-            <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Lorem Ipsum" tooltip-position="top"><i class="mdi mdi-delete"></i></button>
-            <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Lorem Ipsum" tooltip-position="top"><i class="mdi mdi-package"></i></button>
-            <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Lorem Ipsum" tooltip-position="top"><i class="mdi mdi-pencil"></i></button>
-        </div>
-    </div>
-    -->
-	                
 	                	<button class="btn btn--m btn--blue btn--icon" 
 	                					ng-click="adminUser.clickEdit(u); $event.stopPropagation()"
 	                					lx-ripple>

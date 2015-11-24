@@ -96,6 +96,23 @@
 		      		}
 		      	}
 		      })
+		      .state('admin.edituser',{
+		      	url: '/edit',
+		      	acl: 'admin',
+		      	templateUrl: 'templates/admin/users.edit.html',
+		      	controller: 'adminEditUserCtrl as adminEditUser',
+		      	/* resolve: {
+		      		user: function(DBUsers) {
+		      			return DBUsers.get({id: id})
+		      		}
+		      	}*/
+		      })
+		      .state('admin.newuser',{
+		      	url: '/new',
+		      	acl: 'admin',
+		      	templateUrl: 'templates/admin/users.new.html',
+		      	controller: 'adminNewUserCtrl as adminNewUser'
+		      })
 		      .state('admin.sites',{
 		      	url: '/sites',
 		      	acl: 'admin',
