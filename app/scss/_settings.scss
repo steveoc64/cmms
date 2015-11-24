@@ -70,30 +70,11 @@ h1 h2 h3 {
   color: $header-font-color;
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+// Add in variables and mixins prior to processing the CSS
+
 $base-text-color:       $palette_2;
 $base-background-color: $palette_15;
 
 $sidebar_margin: 160px;
 
-
-.data-table__selectable-row--is-selected th:first-child:before, .data-table__selectable-row--is-selected td:first-child:before {
-  //content: "\f20c";
-  background-color: $yellow-100;
-  content: &#x2611;
-  //content: &spades;
-  //color: $white; 
-  //background-color: $black;
-}
-
-.data-table__selectable-row--is-selected td { 
-  background-color: $yellow-50;   
-  //background-color: $blue-grey-100; 
-  //@include linear-gradient($palette_16, $palette_14);
-}
-
-.data-table__header {
-  // @include linear-gradient($blue-grey-50, $blue-grey-400);
-  //background-color: $blue-grey-100;
-  background-color: $palette_16;
-  font-size: 200%;
-}
