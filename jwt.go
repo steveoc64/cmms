@@ -99,25 +99,25 @@ func generateToken(ID int, Role string) (string, error) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-func securityCheck(c *echo.Context, action string) error {
+func securityCheck(c *echo.Context, action string) (map[string]interface{}, error) {
 
 	t := c.Request().Header["Token"]
 	if len(t) < 1 {
-		return errors.New("No Auth Token")
+		return nil, errors.New("No Auth Token")
 	}
 	if len(t) > 1 {
-		return errors.New("Too many Tokens")
+		return nil, errors.New("Too many Tokens")
 	}
 
 	token, err := jwt.Parse(t[0], func(token *jwt.Token) (interface{}, error) {
 		return signKey, nil
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if !token.Valid {
-		return errors.New("Invalid Token")
+		return nil, errors.New("Invalid Token")
 	}
 
 	// Check the Role in the claim (inside the token) against the allowed roles for this page
@@ -136,7 +136,7 @@ func securityCheck(c *echo.Context, action string) error {
 	switch v {
 	case reflect.String:
 		if claimedRole != role {
-			return errors.New("Invalid Role")
+			return nil, errors.New("Invalid Role")
 		}
 	case reflect.Slice:
 		ok := false
@@ -147,12 +147,12 @@ func securityCheck(c *echo.Context, action string) error {
 			}
 		}
 		if !ok {
-			return errors.New("Invalid Role")
+			return nil, errors.New("Invalid Role")
 		}
 	default:
-		return errors.New("Invalid Security Rule")
+		return nil, errors.New("Invalid Security Rule")
 	}
-	return nil
+	return token.Claims, nil
 }
 
 func _initSecurityRules() {

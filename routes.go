@@ -172,7 +172,7 @@ type DBusers struct {
 
 func queryUsers(c *echo.Context) error {
 
-	err := securityCheck(c, "readUser")
+	_, err := securityCheck(c, "readUser")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
@@ -208,7 +208,13 @@ func getUser(c *echo.Context) error {
 func newUser(c *echo.Context) error {
 	//var user DBusers
 
-	log.Println("Adding new user")
+	claim, err := securityCheck(c, "writeUser")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+	log.Println("Adding new user, with Secure Token", claim)
+	UID := claim["ID"] //.(int)
+	log.Println("Claiming to be UID", UID)
 
 	newUser := &DBusers{}
 	if err := c.Bind(newUser); err != nil {
@@ -218,10 +224,14 @@ func newUser(c *echo.Context) error {
 
 	log.Println("Found the following params :", newUser)
 
-	/*DB.Update("users").
-	  SetWhitelist(user, "user_name", "avatar", "quote").
-	  Where("id = $1", session.UserID).
-	  Exec()*/
+	DB.InsertInto("users").
+		Blacklist("id", "site_id").
+		Record(newUser).
+		Returning("id").
+		QueryScalar(&newUser.ID)
+
+	// Now log the creation of the new user
+	//logUser(UID, fmt.Sprintf("NewUser: (%d) %s", newUser.ID, newUser.Username), c)
 
 	// insert into DB, fill in the ID of the new user
 	return c.JSON(http.StatusCreated, newUser)
