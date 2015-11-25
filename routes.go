@@ -225,7 +225,7 @@ func newUser(c *echo.Context) error {
 	log.Println("Found the following params :", newUser)
 
 	DB.InsertInto("users").
-		Blacklist("id", "site_id").
+		Whitelist("username", "passwd", "address", "name", "email", "role").
 		Record(newUser).
 		Returning("id").
 		QueryScalar(&newUser.ID)

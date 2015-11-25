@@ -37,10 +37,17 @@
 			session: Session,
 			user: new DBUsers(),
 			roles: ['Public','Worker','Vendor','Service Contractor','Site Mananger','Admin'],
-			addUser: function(form) {
+			validate: function(form) {
 				if (form.$valid) {
-					// convert the SMS into a string
-					user.SMS = ' '+user.SMS
+					console.log('form is valid')
+					return true
+				} else {
+					console.log('form is not valid')
+				}
+				return false
+			},
+			addUser: function(form) {
+				if (this.validate(form)) {
 					this.user.$insert(function(somevalue) {
 						console.log('insert returned with',somevalue)
 						$state.go('admin.users')
@@ -54,6 +61,16 @@
 				$state.go('admin.users')
 			}
 		})
+
+		// Populate the user structure, to kick off the validation logic in the form
+		this.user.Username = ''
+		this.user.Passwd = ''
+		this.user.Role = 'Public'
+		this.user.SMS = ''
+		this.user.Address = ''
+		this.user.Name = ''
+		this.user.Email = ''		
+
 	})
 
 	app.controller('adminEditUserCtrl', function($state,user,Session){

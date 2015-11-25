@@ -61,7 +61,7 @@
 <div flex-container="row">
     <div flex-item>
         <lx-text-field label="SMS">
-            <input type="number" 
+            <input type="text" 
             			 name="SMS"
             			 ng-minlength="10"
             			 ng-maxlength="10"
@@ -76,8 +76,6 @@
  		<br>
         <lx-select ng-model="newUser.user.Role" 
         			     name="Role"
-            			 required
-            			 aria-required="true"
         				   placeholder="Role" 
         				   choices="newUser.roles" 
         				   floating-label>
