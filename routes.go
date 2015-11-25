@@ -180,7 +180,7 @@ func queryUsers(c *echo.Context) error {
 	var users []*DBusers
 	//		SQL(`select *,array(select concat(logdate,ip,descr) from user_log where user_id=users.id order by logdate desc) as logs from users`).
 
-	err = DB.SQL(`select * from users order by username`).QueryStructs(&users)
+	err = DB.SQL(`select * from users order by lower(username)`).QueryStructs(&users)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -219,7 +219,7 @@ func newUser(c *echo.Context) error {
 	}
 
 	DB.InsertInto("users").
-		Whitelist("username", "passwd", "address", "name", "email", "role").
+		Columns("username", "passwd", "address", "name", "email", "role").
 		Record(newUser).
 		Returning("id").
 		QueryScalar(&newUser.ID)
