@@ -11,8 +11,8 @@
             <input type="text" 
             			 name="Username"
             			 autofocus 
-            			 required
-            			 error="form.Username.$invalid"
+            			 aria-required="true"
+            			 error="newUser.form.Username.$invalid"
             			 ng-model="newUser.user.Username">
         </lx-text-field>
     </div>
@@ -21,7 +21,7 @@
             <input type="text" 
             			 name="Passwd"
             			 ng-minlength="6"
-            			 required
+            			 aria-required="true"
             			 valid="form.Passwd.$valid && form.Username.$valid"
             			 error="form.Passwd.$invalid || form.Username.$invalid"
             			 ng-model="newUser.user.Passwd">
@@ -39,7 +39,7 @@
     </div>
     <div flex-item>
         <lx-text-field label="Email">
-            <input type="text" 
+            <input type="email" 
             			 name="form.Email"
             			 valid="emailValidation(form.Email)"
             			 error="!emailValidation(form.Email)"
@@ -63,7 +63,6 @@
         <lx-text-field label="SMS">
             <input type="number" 
             			 name="SMS"
-            			 required
             			 ng-minlength="10"
             			 ng-maxlength="10"
             			 valid="form.SMS.$valid"
@@ -78,6 +77,7 @@
         <lx-select ng-model="newUser.user.Role" 
         			     name="Role"
             			 required
+            			 aria-required="true"
         				   placeholder="Role" 
         				   choices="newUser.roles" 
         				   floating-label>

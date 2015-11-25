@@ -37,16 +37,16 @@
 			session: Session,
 			user: new DBUsers(),
 			roles: ['Public','Worker','Vendor','Service Contractor','Site Mananger','Admin'],
-			validate: function(form) {
-				console.log('form =',form,form.$valid)
-				return false
-			},
 			addUser: function(form) {
-				if (this.validate(form)) {
+				if (form.$valid) {
+					// convert the SMS into a string
+					user.SMS = ' '+user.SMS
 					this.user.$insert(function(somevalue) {
 						console.log('insert returned with',somevalue)
 						$state.go('admin.users')
 					})					
+				} else {
+					LxNotificationService.error('Field Errors')
 				}
 			},
 			abort: function() {
