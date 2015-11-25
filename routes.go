@@ -29,7 +29,7 @@ func _initRoutes() {
 
 	e.Get("/users", queryUsers)
 	e.Get("/users/:id", getUser)
-	e.Post("/users/:id", newUser)
+	e.Post("/users", newUser)
 	e.Patch("/users/:id", saveUser)
 	e.Delete("/users/:id", deleteUser)
 }
@@ -208,7 +208,23 @@ func getUser(c *echo.Context) error {
 func newUser(c *echo.Context) error {
 	//var user DBusers
 
-	return c.String(http.StatusOK, `TODO - insert new user`)
+	log.Println("Adding new user")
+
+	newUser := &DBusers{}
+	if err := c.Bind(newUser); err != nil {
+		log.Println("Bind:", err.Error())
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	log.Println("Found the following params :", newUser)
+
+	/*DB.Update("users").
+	  SetWhitelist(user, "user_name", "avatar", "quote").
+	  Where("id = $1", session.UserID).
+	  Exec()*/
+
+	// insert into DB, fill in the ID of the new user
+	return c.JSON(http.StatusCreated, newUser)
 }
 
 func saveUser(c *echo.Context) error {

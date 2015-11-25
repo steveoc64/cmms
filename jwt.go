@@ -141,7 +141,6 @@ func securityCheck(c *echo.Context, action string) error {
 	case reflect.Slice:
 		ok := false
 		for _, r := range role.([]string) {
-			log.Println("cmp ", r, claimedRole)
 			if r == claimedRole {
 				ok = true
 				break

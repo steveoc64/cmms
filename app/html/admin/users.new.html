@@ -1,7 +1,110 @@
+<!-- TODO - write a generator that creates a LumX form based on an SQL table layout -->
+
 <div class="main-section">
+	<h3 class="main-section__title">Add New User</h3>
     <div class="main-section__content">
 
-      .. New user data entry
-      
+<form name="form" ng-submit="newUser.addUser(form)">
+<div flex-container="row" flex-gutter="24">
+    <div flex-item>
+        <lx-text-field label="Username">
+            <input type="text" 
+            			 name="Username"
+            			 autofocus 
+            			 required
+            			 error="form.Username.$invalid"
+            			 ng-model="newUser.user.Username">
+        </lx-text-field>
+    </div>
+    <div flex-item>
+        <lx-text-field label="Initial Password (6+ Characters)">
+            <input type="text" 
+            			 name="Passwd"
+            			 ng-minlength="6"
+            			 required
+            			 valid="form.Passwd.$valid && form.Username.$valid"
+            			 error="form.Passwd.$invalid || form.Username.$invalid"
+            			 ng-model="newUser.user.Passwd">
+        </lx-text-field>
+    </div>
+</div>
+
+<div flex-container="row" flex-gutter="24">
+    <div flex-item>
+        <lx-text-field label="Name">
+            <input type="text" 
+            			 name="form.Name"
+            			 ng-model="newUser.user.Name">
+        </lx-text-field>
+    </div>
+    <div flex-item>
+        <lx-text-field label="Email">
+            <input type="text" 
+            			 name="form.Email"
+            			 valid="emailValidation(form.Email)"
+            			 error="!emailValidation(form.Email)"
+            			 ng-model="newUser.user.Email">
+        </lx-text-field>
+    </div>
+</div>
+
+<div flex-container="row">
+    <div flex-item>
+        <lx-text-field label="Address">
+            <input type="text" 
+            			 name="Address"
+            			 ng-model="newUser.user.Address">
+        </lx-text-field>
+    </div>
+</div>
+
+<div flex-container="row">
+    <div flex-item>
+        <lx-text-field label="SMS">
+            <input type="number" 
+            			 name="SMS"
+            			 required
+            			 ng-minlength="10"
+            			 ng-maxlength="10"
+            			 valid="form.SMS.$valid"
+            			 ng-model="newUser.user.SMS">
+        </lx-text-field>
+    </div>
+</div>
+
+<div flex-container="row">
+ 		<div flex-item>
+ 		<br>
+        <lx-select ng-model="newUser.user.Role" 
+        			     name="Role"
+            			 required
+        				   placeholder="Role" 
+        				   choices="newUser.roles" 
+        				   floating-label>
+            <lx-select-selected>
+                {{ $selected }}
+            </lx-select-selected>
+
+            <lx-select-choices>
+                {{ $choice }}
+            </lx-select-choices>
+        </lx-select>
+    </div>
+</div>
+
+<div flex-container="row" flex-align="end">
+    <div flex-item>
+	    <button type="button" class="btn btn--l btn--orange btn--raised" ng-click="newUser.abort()" lx-ripple>Cancel</button>
+    </div>
+    <div flex-item>
+	    <button type="submit" 
+	    			  class="btn btn--l btn--blue btn--raised" 
+	    			  lx-ripple>
+	    			  	Add New User
+	    </button>
+    </div>
+</div>
+</form>
+
     </div>
 </div>

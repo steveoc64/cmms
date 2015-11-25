@@ -100,18 +100,18 @@
 		      	url: '/edit/:id',
 		      	acl: 'admin',
 		      	templateUrl: 'html/admin/users.edit.html',
-		      	controller: 'adminEditUserCtrl as adminEditUser',
-		      	/* resolve: {
-		      		user: function(DBUsers) {
-		      			return DBUsers.get({id: id})
+		      	controller: 'adminEditUserCtrl as editUser',
+		      	resolve: {
+		      		user: function(DBUsers,$stateParams) {
+		      			return DBUsers.get({id: $stateParams.id})
 		      		}
-		      	}*/
+		      	}
 		      })
 		      .state('admin.newuser',{
 		      	url: '/new',
 		      	acl: 'admin',
 		      	templateUrl: 'html/admin/users.new.html',
-		      	controller: 'adminNewUserCtrl as adminNewUser'
+		      	controller: 'adminNewUserCtrl as newUser'
 		      })
 		      .state('admin.sites',{
 		      	url: '/sites',

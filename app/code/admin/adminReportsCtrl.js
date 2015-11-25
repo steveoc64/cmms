@@ -6,7 +6,6 @@
 		console.log('.. adminReportsCtrl')
 
 		angular.extend(this, {
-			label: 'adminReportsCtrl',
 		})
 
 	})

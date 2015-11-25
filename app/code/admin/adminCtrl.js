@@ -6,7 +6,6 @@
 		console.log('.. adminCtrl')
 
 		angular.extend(this, {
-			label: 'adminCtrl',
 			session: Session
 		})
 		

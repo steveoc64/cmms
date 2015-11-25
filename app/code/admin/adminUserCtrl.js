@@ -1,12 +1,13 @@
 ;(function() {
 	'use strict';
 
-	angular.module('cmms').controller('adminUserCtrl', function($state, users, Session){
+	var app = angular.module('cmms')
+
+	app.controller('adminUserCtrl', function($state, users, Session){
 	
 		console.log('.. adminUserCtrl')
 
 		angular.extend(this, {
-			label: 'adminUserCtrl',
 			users: users,
 			session: Session,
 			getClass: function(u) {
@@ -26,7 +27,58 @@
 				$state.go('admin.edituser',{id: u.ID})
 			}
 		})
+	})
 
+	app.controller('adminNewUserCtrl', function($state,Session,DBUsers,LxNotificationService){
+	
+		console.log('.. adminNewUserCtrl')
+
+		angular.extend(this, {
+			session: Session,
+			user: new DBUsers(),
+			roles: ['Public','Worker','Vendor','Service Contractor','Site Mananger','Admin'],
+			validate: function(form) {
+				console.log('form =',form,form.$valid)
+				return false
+			},
+			addUser: function(form) {
+				if (this.validate(form)) {
+					this.user.$insert(function(somevalue) {
+						console.log('insert returned with',somevalue)
+						$state.go('admin.users')
+					})					
+				}
+			},
+			abort: function() {
+				LxNotificationService.warning('New User - Cancelled')
+				$state.go('admin.users')
+			}
+		})
+	})
+
+	app.controller('adminEditUserCtrl', function($state,user,Session){
+	
+		console.log('.. adminEditUserCtrl', user)
+
+		angular.extend(this, {
+			session: Session,
+			Username: '',
+			Passwd: '',
+			Name: '',
+			Email: '',
+			Address: '',
+			SMS: '',
+			SideId: 0,
+			Role: 'public',
+			roles: ['Public','Worker','Vendor','Service Contractor','Site Mananger','Admin'],
+			addUser: function() {
+				console.log('save user')
+			},
+			abort: function() {
+				console.log('abort')
+				$state.go('admin.users')
+			}
+		})
 	})
 
 })();

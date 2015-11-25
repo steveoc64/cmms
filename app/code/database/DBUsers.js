@@ -5,7 +5,7 @@
 		return $resource(ServerName+'/users/:id',{},{
 			'get':    {method:'GET'},
   		'save':   {method:'PATCH'},
-  		'new':   {method:'POST'},
+  		'insert': {method:'POST'},
   		'query':  {method:'GET', isArray:true},
 		  'delete': {method:'DELETE'}
 		})
