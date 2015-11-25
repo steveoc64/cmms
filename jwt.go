@@ -152,7 +152,13 @@ func securityCheck(c *echo.Context, action string) (map[string]interface{}, erro
 	default:
 		return nil, errors.New("Invalid Security Rule")
 	}
+	log.Println("Returning claims structure of :", token.Claims)
 	return token.Claims, nil
+}
+
+func getUID(claim map[string]interface{}) int {
+	UID := int(claim["ID"].(float64))
+	return UID
 }
 
 func _initSecurityRules() {

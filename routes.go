@@ -212,17 +212,11 @@ func newUser(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
-	log.Println("Adding new user, with Secure Token", claim)
-	UID := claim["ID"] //.(int)
-	log.Println("Claiming to be UID", UID)
 
 	newUser := &DBusers{}
 	if err := c.Bind(newUser); err != nil {
-		log.Println("Bind:", err.Error())
 		return c.String(http.StatusBadRequest, err.Error())
 	}
-
-	log.Println("Found the following params :", newUser)
 
 	DB.InsertInto("users").
 		Whitelist("username", "passwd", "address", "name", "email", "role").
@@ -231,7 +225,7 @@ func newUser(c *echo.Context) error {
 		QueryScalar(&newUser.ID)
 
 	// Now log the creation of the new user
-	//logUser(UID, fmt.Sprintf("NewUser: (%d) %s", newUser.ID, newUser.Username), c)
+	logUser(getUID(claim), fmt.Sprintf("NewUser: (%d) %s", newUser.ID, newUser.Username), c)
 
 	// insert into DB, fill in the ID of the new user
 	return c.JSON(http.StatusCreated, newUser)
