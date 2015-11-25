@@ -6,7 +6,7 @@ create table users (
 	name text not null,
 	address text,
 	email text not null,
-	sms text,
+	sms int,
 	avatar text,
 	site_id int not null default 0,
 	role text not null default 'public'
