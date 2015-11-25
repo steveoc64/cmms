@@ -1,15 +1,13 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"github.com/labstack/echo"
 	"github.com/thoas/stats"
 	"gopkg.in/mgutz/dat.v1"
-	//	"gopkg.in/mgutz/dat.v1/sqlx-runner"
 	"log"
 	"net/http"
-	//"time"
-	"database/sql"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -124,7 +122,7 @@ func login(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, "invalid")
 	} else {
 		logUser(res.ID, fmt.Sprintf("Login %s", l.Username), c)
-		log.Println(res)
+		//		log.Println(res)
 
 		tokenString, err := generateToken(res.ID, res.Role)
 		if err != nil {
@@ -174,19 +172,16 @@ type DBusers struct {
 
 func queryUsers(c *echo.Context) error {
 
-	// Lets get the details from the request
-	r := c.Request()
-	rh := r.Header
-	log.Println("addthis = ", rh[`Addthis`])
-	log.Println("token = ", rh[`Token`])
-	log.Println("auth = ", rh[`Authorization`])
+	err := securityCheck(c, "readUser")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
 
 	var users []*DBusers
 	//		SQL(`select *,array(select concat(logdate,ip,descr) from user_log where user_id=users.id order by logdate desc) as logs from users`).
 
-	err := DB.SQL(`select * from users order by username`).QueryStructs(&users)
+	err = DB.SQL(`select * from users order by username`).QueryStructs(&users)
 
-	log.Println(`users`, users)
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}

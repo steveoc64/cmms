@@ -3,7 +3,6 @@
 //@import "base";
 
 @import "settings";
-//@import "fonts";
 
 @import "layout";
 @import "header";
@@ -11,6 +10,8 @@
 @import "main";
 @import "footer";
 
+body {
+  font-family: 'Ubuntu', sans-serif; }
 
 // Now that everything is defined, provide last minute overrides for bits of CSS
 

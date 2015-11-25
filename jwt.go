@@ -3,11 +3,13 @@ package main
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/labstack/echo"
 	"io/ioutil"
 	"log"
-	"net/http"
+	"reflect"
 	"runtime"
 	"time"
 )
@@ -26,6 +28,8 @@ var (
 	verifyKey, signKey []byte
 )
 
+var SecurityRules map[string]interface{}
+
 // read the JWT key files before starting http handlers
 func _initJWT() {
 	var err error
@@ -42,6 +46,8 @@ func _initJWT() {
 		return
 	}
 	log.Println("... loaded RSA Keys")
+
+	_initSecurityRules()
 }
 
 // Catch fatal conditions, and print a stack trace
@@ -75,48 +81,6 @@ func GetMD5HexHash(text string) string {
 	return hex.EncodeToString(hash[:])
 }
 
-// Validate the received security token
-// If good, return the UserID
-func securityCheck(passedToken string) (int, string) {
-	// validate the token
-
-	//log.Println("Security Check:", passedToken)
-	token, err := jwt.Parse(passedToken, func(token *jwt.Token) (interface{}, error) {
-		// since we only use the one private key to sign the tokens,
-		// we also only use its public counter part to verify
-		return signKey, nil
-	})
-
-	// branch out into the possible error from signing
-	switch err.(type) {
-
-	case nil: // no error
-
-		if !token.Valid { // but may still be invalid
-			log.Println("Invalid Token", passedToken)
-			return http.StatusUnauthorized, err.Error()
-		}
-
-		log.Printf("Token OK:%+v\n", token.Claims)
-		return http.StatusOK, "Token Valid"
-
-	case *jwt.ValidationError: // something was wrong during the validation
-		vErr := err.(*jwt.ValidationError)
-
-		switch vErr.Errors {
-		case jwt.ValidationErrorExpired:
-			return http.StatusUnauthorized, err.Error()
-
-		default:
-			return http.StatusUnauthorized, "Invalid Token!"
-		}
-
-	default: // something else went wrong
-		log.Printf("Token parse error: %v\n", err)
-		return http.StatusUnauthorized, "Invalid Token!"
-	}
-}
-
 func generateToken(ID int, Role string) (string, error) {
 	// create a signer for rsa 256
 	t := jwt.New(jwt.GetSigningMethod("HS256"))
@@ -131,4 +95,77 @@ func generateToken(ID int, Role string) (string, error) {
 
 	tokenString, err := t.SignedString(signKey)
 	return tokenString, err
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//
+func securityCheck(c *echo.Context, action string) error {
+
+	t := c.Request().Header["Token"]
+	if len(t) < 1 {
+		return errors.New("No Auth Token")
+	}
+	if len(t) > 1 {
+		return errors.New("Too many Tokens")
+	}
+
+	token, err := jwt.Parse(t[0], func(token *jwt.Token) (interface{}, error) {
+		return signKey, nil
+	})
+	if err != nil {
+		return err
+	}
+
+	if !token.Valid {
+		return errors.New("Invalid Token")
+	}
+
+	// Check the Role in the claim (inside the token) against the allowed roles for this page
+	// Role can be passed in as either a single string, or a []string for multiple allowed roles
+	claimedRole := token.Claims["Role"]
+
+	// Now get the matching roles for this action
+	role := SecurityRules["defaultAllow"]
+	if _, hasAction := SecurityRules[action]; hasAction {
+		role = SecurityRules[action]
+	} else {
+		log.Println("Action", action, "not defined, so using the defaultAllow role instead = ", role)
+	}
+
+	v := reflect.TypeOf(role).Kind()
+	switch v {
+	case reflect.String:
+		if claimedRole != role {
+			return errors.New("Invalid Role")
+		}
+	case reflect.Slice:
+		ok := false
+		for _, r := range role.([]string) {
+			log.Println("cmp ", r, claimedRole)
+			if r == claimedRole {
+				ok = true
+				break
+			}
+		}
+		if !ok {
+			return errors.New("Invalid Role")
+		}
+	default:
+		return errors.New("Invalid Security Rule")
+	}
+	return nil
+}
+
+func _initSecurityRules() {
+
+	SecurityRules = make(map[string]interface{})
+
+	SecurityRules["defaultAllow"] = []string{"admin", "sitemgr"}
+	SecurityRules["read"] = []string{"admin", "worker"}
+	SecurityRules["write"] = []string{"admin", "sitemgr"}
+	SecurityRules["new"] = []string{"admin", "sitemgr"}
+	SecurityRules["delete"] = "admin"
+
+	SecurityRules["readUser"] = []string{"admin", "worker", "sitemgr"}
+	SecurityRules["writeUser"] = []string{"admin", "sitemgr"}
 }
