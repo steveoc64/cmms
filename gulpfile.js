@@ -27,7 +27,7 @@ var paths = {
   	'app/app.js',
     'app/code/**/*.*',
     'app/database/**/*.*',
-    'app/controllers/**/*.*',
+    'app/code/**/*.*',
   ],
   // Include Paths for Sass
   sassPaths: [
@@ -152,7 +152,7 @@ gulp.task('dx:copy:html:index', function() {
 });
 
 gulp.task('dx:copy:html:templates', function() {
-  return gulp.src('./app/templates/**/*.html')
+  return gulp.src('./app/html/**/*.html')
   	.pipe(minifyHtml({
   		empty: true,
   		spare: true,

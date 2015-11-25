@@ -40,7 +40,7 @@
 	    	.state('home',{
 	    		url:'/',
 	    		acl: '*',
-	    		templateUrl:'templates/cmms.html',
+	    		templateUrl:'html/cmms.html',
 	    		controller: 'cmmsCtrl as cmmsCtrl',
 	    	})
 	    	.state('login',{	// Special state with no template !!
@@ -70,25 +70,25 @@
 	      .state('public',{
 	      	url: '/public',
 	      	acl: '*',
-	      	templateUrl: 'templates/public.html'	      	
+	      	templateUrl: 'html/public.html'	      	
 	      })
 	      .state('admin',{
 	      	url: '/admin',
 	      	acl: 'admin',
 	      	abstract: true,
-	      	templateUrl: 'templates/admin/admin.html',
+	      	templateUrl: 'html/admin/admin.html',
 	      	controller: 'adminCtrl as admin'
 	      })
 		      .state('admin.dashboard',{
 		      	url: '/dashboard',		
 		      	acl: 'admin',
-		      	templateUrl: 'templates/admin/dashboard.html',
+		      	templateUrl: 'html/admin/dashboard.html',
 		      	controller: 'adminDashCtrl as adminDash',
 		      })
 		      .state('admin.users',{
 		      	url: '/users',
 		      	acl: 'admin',
-		      	templateUrl: 'templates/admin/users.html',
+		      	templateUrl: 'html/admin/users.html',
 		      	controller: 'adminUserCtrl as adminUser',
 		      	resolve: {
 		      		users: function(DBUsers) {
@@ -99,7 +99,7 @@
 		      .state('admin.edituser',{
 		      	url: '/edit/:id',
 		      	acl: 'admin',
-		      	templateUrl: 'templates/admin/users.edit.html',
+		      	templateUrl: 'html/admin/users.edit.html',
 		      	controller: 'adminEditUserCtrl as adminEditUser',
 		      	/* resolve: {
 		      		user: function(DBUsers) {
@@ -110,31 +110,31 @@
 		      .state('admin.newuser',{
 		      	url: '/new',
 		      	acl: 'admin',
-		      	templateUrl: 'templates/admin/users.new.html',
+		      	templateUrl: 'html/admin/users.new.html',
 		      	controller: 'adminNewUserCtrl as adminNewUser'
 		      })
 		      .state('admin.sites',{
 		      	url: '/sites',
 		      	acl: 'admin',
-		      	templateUrl: 'templates/admin/sites.html',
+		      	templateUrl: 'html/admin/sites.html',
 		      	controller: 'adminSitesCtrl as adminSites',
 		      })
 		      .state('admin.equip',{
 		      	url: '/equip',
 		      	acl: 'admin',
-		      	templateUrl: 'templates/admin/equip.html',
+		      	templateUrl: 'html/admin/equip.html',
 		      	controller: 'adminEquipCtrl as adminEquip',
 		      })
 		      .state('admin.parts',{
 		      	url: '/parts',
 		      	acl: 'admin',
-		      	templateUrl: 'templates/admin/parts.html',
+		      	templateUrl: 'html/admin/parts.html',
 		      	controller: 'adminPartsCtrl as adminParts',
 		      })
 		      .state('admin.reports',{
 		      	url: '/reports',
 		      	acl: 'admin',
-		      	templateUrl: 'templates/admin/reports.html',
+		      	templateUrl: 'html/admin/reports.html',
 		      	controller: 'adminReportsCtrl as adminReports',
 		      })
 	      .state('worker',{
