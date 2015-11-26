@@ -1,101 +1,23 @@
 <h3 class="main-section__title">Add New User</h3>
 
-<form name="form" ng-submit="newUser.addUser(form)">
-<div flex-container="row" flex-gutter="24">
-    <div flex-item>
-        <lx-text-field label="Username">
-            <input type="text" 
-            			 name="Username"
-            			 autofocus 
-            			 aria-required="true"
-            			 error="newUser.form.Username.$invalid"
-            			 ng-model="newUser.user.Username">
-        </lx-text-field>
-    </div>
-    <div flex-item>
-        <lx-text-field label="Initial Password (6+ Characters)">
-            <input type="text" 
-            			 name="Passwd"
-            			 ng-minlength="6"
-            			 aria-required="true"
-            			 valid="form.Passwd.$valid && form.Username.$valid"
-            			 error="form.Passwd.$invalid || form.Username.$invalid"
-            			 ng-model="newUser.user.Passwd">
-        </lx-text-field>
-    </div>
-</div>
+<form name="newUser.form" ng-submit="newUser.addUser()">
 
-<div flex-container="row" flex-gutter="24">
-    <div flex-item>
-        <lx-text-field label="Name">
-            <input type="text" 
-            			 name="form.Name"
-            			 ng-model="newUser.user.Name">
-        </lx-text-field>
-    </div>
-    <div flex-item>
-        <lx-text-field label="Email">
-            <input type="email" 
-            			 name="form.Email"
-            			 valid="emailValidation(form.Email)"
-            			 error="!emailValidation(form.Email)"
-            			 ng-model="newUser.user.Email">
-        </lx-text-field>
-    </div>
-</div>
-
-<div flex-container="row">
-    <div flex-item>
-        <lx-text-field label="Address">
-            <input type="text" 
-            			 name="Address"
-            			 ng-model="newUser.user.Address">
-        </lx-text-field>
-    </div>
-</div>
-
-<div flex-container="row">
-    <div flex-item>
-        <lx-text-field label="SMS">
-            <input type="text" 
-            			 name="SMS"
-            			 ng-minlength="10"
-            			 ng-maxlength="10"
-            			 valid="form.SMS.$valid"
-            			 ng-model="newUser.user.SMS">
-        </lx-text-field>
-    </div>
-</div>
-
-<div flex-container="row">
- 		<div flex-item>
- 		<br>
-        <lx-select ng-model="newUser.user.Role" 
-        			     name="Role"
-        				   placeholder="Role" 
-        				   choices="newUser.roles" 
-        				   floating-label>
-            <lx-select-selected>
-                {{ $selected }}
-            </lx-select-selected>
-
-            <lx-select-choices>
-                {{ $choice }}
-            </lx-select-choices>
-        </lx-select>
-    </div>
-</div>
+<formly-form model="newUser.user" fields="newUser.formFields">
 
 <div flex-container="row" flex-align="end">
     <div flex-item>
-	    <button type="button" class="btn btn--l btn--orange btn--raised" ng-click="newUser.abort()" lx-ripple>Cancel</button>
+      <button type="button" class="btn btn--l btn--orange btn--raised" ng-click="newUser.abort()" lx-ripple>Cancel</button>
     </div>
     <div flex-item>
-	    <button type="submit" 
-	    			  class="btn btn--l btn--blue btn--raised" 
-	    			  lx-ripple>
-	    			  	Add New User
-	    </button>
+      <button type="submit" 
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Add New User
+      </button>
     </div>
 </div>
+
+</formly-form>
+</form>
+
 </form>

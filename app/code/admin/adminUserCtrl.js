@@ -23,7 +23,6 @@
 				u.selected = !u.selected
 			},
 			clickEdit: function(u) {
-				console.log('Edit click for',u.ID)
 				$state.go('admin.edituser',{id: u.ID})
 			}
 		})
@@ -36,24 +35,12 @@
 		angular.extend(this, {
 			session: Session,
 			user: new DBUsers(),
-			roles: ['Public','Worker','Vendor','Service Contractor','Site Mananger','Admin'],
-			validate: function(form) {
-				if (form.$valid) {
-					console.log('form is valid')
-					return true
-				} else {
-					console.log('form is not valid')
-				}
-				return false
-			},
-			addUser: function(form) {
-				if (this.validate(form)) {
-					this.user.$insert(function(somevalue) {
-						console.log('insert returned with',somevalue)
+			formFields: getUserForm(),
+			addUser: function() {
+				if (this.form.$valid) {
+					this.user.$insert(function(newuser) {
 						$state.go('admin.users')
 					})					
-				} else {
-					LxNotificationService.error('Field Errors')
 				}
 			},
 			abort: function() {
@@ -61,38 +48,23 @@
 				$state.go('admin.users')
 			}
 		})
-
-		// Populate the user structure, to kick off the validation logic in the form
-		this.user.Username = ''
-		this.user.Passwd = ''
-		this.user.Role = 'Public'
-		this.user.SMS = ''
-		this.user.Address = ''
-		this.user.Name = ''
-		this.user.Email = ''		
-
 	})
 
-	app.controller('adminEditUserCtrl', function($state,user,Session){
+	app.controller('adminEditUserCtrl', function($state,$stateParams,user,Session){
 	
-		console.log('.. adminEditUserCtrl', user)
+		console.log('.. adminEditUserCtrl', user, $stateParams,$stateParams.id)
 
 		angular.extend(this, {
 			session: Session,
-			Username: '',
-			Passwd: '',
-			Name: '',
-			Email: '',
-			Address: '',
-			SMS: '',
-			SideId: 0,
-			Role: 'public',
-			roles: ['Public','Worker','Vendor','Service Contractor','Site Mananger','Admin'],
-			addUser: function() {
-				console.log('save user')
+			user: user,
+			formFields: getUserForm(),		
+			submit: function() {
+				this.user._id = $stateParams.id
+				this.user.$update(function(newuser) {
+					$state.go('admin.users')
+				})					
 			},
 			abort: function() {
-				console.log('abort')
 				$state.go('admin.users')
 			}
 		})

@@ -81,13 +81,14 @@ func GetMD5HexHash(text string) string {
 	return hex.EncodeToString(hash[:])
 }
 
-func generateToken(ID int, Role string) (string, error) {
+func generateToken(ID int, Role string, Username string) (string, error) {
 	// create a signer for rsa 256
 	t := jwt.New(jwt.GetSigningMethod("HS256"))
 
 	// set our claims
 	t.Claims["ID"] = ID
 	t.Claims["Role"] = Role
+	t.Claims["Username"] = Username
 
 	// set the expire time for 30 days
 	// see http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-20#section-4.1.4
@@ -101,7 +102,7 @@ func generateToken(ID int, Role string) (string, error) {
 //
 func securityCheck(c *echo.Context, action string) (map[string]interface{}, error) {
 
-	t := c.Request().Header["Token"]
+	t := c.Request().Header["Authorization"]
 	if len(t) < 1 {
 		return nil, errors.New("No Auth Token")
 	}

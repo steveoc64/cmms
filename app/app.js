@@ -9,6 +9,21 @@
 		.config(config)
 		.run(run)
 	    .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
+			.directive('stringToNumber', function() {
+			  return {
+			    require: 'ngModel',
+			    link: function(scope, element, attrs, ngModel) {
+			      ngModel.$parsers.push(function(value) {
+			      	console.log('from number',value,'to string',''+value)
+			        return '' + value;
+			      });
+			      ngModel.$formatters.push(function(value) {
+			      	console.log('from string',value,'to number')
+			        return parseFloat(value, 10);
+			      });
+			    }
+			  };
+			})
 
   	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 
@@ -16,7 +31,7 @@
 			$httpProvider.interceptors.push(function ($q, Session) {
 			   return {
 			       'request': function (config) {
-			           config.headers.Token = Session.Token
+			           //config.headers.Token = Session.Token
 			           if (Session.Token && Session.Token != '') {
 			               config.headers.Authorization = Session.Token;
 			           }
@@ -96,7 +111,7 @@
 		      	}
 		      })
 		      .state('admin.edituser',{
-		      	url: '/edit/:id',
+		      	url: '/user/edit/:id',
 		      	acl: 'admin',
 		      	templateUrl: 'html/admin/users.edit.html',
 		      	controller: 'adminEditUserCtrl as editUser',
@@ -107,7 +122,7 @@
 		      	}
 		      })
 		      .state('admin.newuser',{
-		      	url: '/new',
+		      	url: '/newuser',
 		      	acl: 'admin',
 		      	templateUrl: 'html/admin/users.new.html',
 		      	controller: 'adminNewUserCtrl as newUser'
@@ -176,7 +191,7 @@
 	  	}
 	  }
 
-	function run($rootScope, $state, LxDialogService, LxNotificationService, Session) {
+	function run($rootScope, $state, LxDialogService, LxNotificationService, Session, formlyConfig) {
 	  FastClick.attach(document.body);
 
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -240,7 +255,10 @@
 		  		}
 				}
 		 }) // rootscope on   
+
+		loadFieldDefinitions(formlyConfig)
 	}  // run function
+
 
 })();
 

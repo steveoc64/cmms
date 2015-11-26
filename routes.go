@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo"
 	"github.com/thoas/stats"
-	"gopkg.in/mgutz/dat.v1"
+	//	"gopkg.in/mgutz/dat.v1"
 	"log"
 	"net/http"
 	"strconv"
@@ -30,7 +30,7 @@ func _initRoutes() {
 	e.Get("/users", queryUsers)
 	e.Get("/users/:id", getUser)
 	e.Post("/users", newUser)
-	e.Patch("/users/:id", saveUser)
+	e.Put("/users/:id", saveUser)
 	e.Delete("/users/:id", deleteUser)
 }
 
@@ -58,26 +58,29 @@ func getID(c *echo.Context) int {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-// UserLog
+// System Log
 
-type UserLog struct {
-	UserId  int          `db:"user_id"`
-	LogDate dat.NullTime `db:"logdate"`
-	IP      string       `db:"ip"`
-	Descr   string       `db:"descr"`
+type SysLog struct {
+	Type    string `db:"type"`
+	RefType string `db:"ref_type"`
+	Ref     int    `db:"ref"`
+	IP      string `db:"ip"`
+	Descr   string `db:"descr"`
 }
 
-func logUser(id int, status string, c *echo.Context) {
+func sysLog(t string, reftype string, ref int, descr string, c *echo.Context) {
 
 	req := c.Request()
-	ulog := &UserLog{
-		UserId: id,
-		Descr:  status,
-		IP:     req.RemoteAddr,
+	l := &SysLog{
+		Type:    t,
+		RefType: reftype,
+		Ref:     ref,
+		Descr:   descr,
+		IP:      req.RemoteAddr,
 	}
-	DB.InsertInto("user_log").
-		Whitelist("user_id", "ip", "descr").
-		Record(ulog).
+	DB.InsertInto("sys_log").
+		Whitelist("type", "ref_type", "ref", "ip", "descr").
+		Record(l).
 		Exec()
 }
 
@@ -117,14 +120,14 @@ func login(c *echo.Context) error {
 		QueryStruct(&res)
 
 	if err != nil {
-		logUser(res.ID, fmt.Sprintf("Failed Login %s:%s  (%s)", l.Username, l.Passwd, err.Error()), c)
+		sysLog("LognFail", "U", res.ID, fmt.Sprintf("Failed Login %s:%s  (%s)", l.Username, l.Passwd, err.Error()), c)
 		log.Println("Login Failed:", err.Error())
 		return c.String(http.StatusUnauthorized, "invalid")
 	} else {
-		logUser(res.ID, fmt.Sprintf("Login %s", l.Username), c)
+		sysLog("Login", "U", res.ID, fmt.Sprintf("Login %s", l.Username), c)
 		//		log.Println(res)
 
-		tokenString, err := generateToken(res.ID, res.Role)
+		tokenString, err := generateToken(res.ID, res.Role, l.Username)
 		if err != nil {
 			log.Println(`Generating Token`, err.Error())
 			return c.String(http.StatusInternalServerError, err.Error())
@@ -141,7 +144,7 @@ func logout(c *echo.Context) error {
 	if err != nil {
 		i = 0
 	}
-	logUser(i, fmt.Sprintf("Logout %s", id), c)
+	sysLog("Logout", "U", i, fmt.Sprintf("Logout %s", id), c)
 	return c.String(http.StatusOK, "bye")
 }
 
@@ -157,17 +160,16 @@ func logout(c *echo.Context) error {
 */
 
 type DBusers struct {
-	ID       int       `db:"id"`
-	Username string    `db:"username"`
-	Passwd   string    `db:"passwd"`
-	Name     string    `db:"name"`
-	Email    string    `db:"email"`
-	Address  *string   `db:"address"`
-	SMS      *string   `db:"sms"`
-	Avatar   *string   `db:"avatar"`
-	SiteId   int       `db:"site_id"`
-	Role     string    `db:"role"`
-	Logs     []UserLog `db:"logs"`
+	ID       int           `db:"id",json:"number"`
+	Username string        `db:"username"`
+	Passwd   string        `db:"passwd"`
+	Name     string        `db:"name"`
+	Email    string        `db:"email"`
+	Address  string        `db:"address"`
+	SMS      string        `db:"sms"`
+	SiteId   int           `db:"site_id"`
+	Role     string        `db:"role"`
+	Logs     []interface{} `db:"logs"`
 }
 
 func queryUsers(c *echo.Context) error {
@@ -191,11 +193,16 @@ func queryUsers(c *echo.Context) error {
 func getUser(c *echo.Context) error {
 	var user DBusers
 
+	_, err := securityCheck(c, "readUser")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
 	id := getID(c)
-	err := DB.
+	err = DB.
 		SelectDoc(`*`).
 		From(`users`).
-		Many(`logs`, `select * from user_log where user_id=$1 order by logdate desc limit 12`, id).
+		Many(`logs`, `select * from sys_log where ref_type='U' and ref=$1 order by logdate desc limit 12`, id).
 		Where(`id = $1`, id).
 		QueryStruct(&user)
 
@@ -218,24 +225,49 @@ func newUser(c *echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	DB.InsertInto("users").
-		Columns("username", "passwd", "address", "name", "email", "role").
+	err = DB.InsertInto("users").
+		Columns("username", "passwd", "address", "name", "email", "role", "sms").
 		Record(newUser).
 		Returning("id").
 		QueryScalar(&newUser.ID)
 
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
 	// Now log the creation of the new user
-	logUser(getUID(claim), fmt.Sprintf("NewUser: (%d) %s", newUser.ID, newUser.Username), c)
+	sysLog("NewUser", "U", getUID(claim), fmt.Sprintf("Added User (%d) %s", newUser.ID, newUser.Username), c)
+	sysLog("NewUser", "U", newUser.ID, fmt.Sprintf("Account Created by %s", claim["Username"].(string)), c)
 
 	// insert into DB, fill in the ID of the new user
 	return c.JSON(http.StatusCreated, newUser)
 }
 
 func saveUser(c *echo.Context) error {
-	//var user DBusers
-	//id := getID(c)
 
-	return c.String(http.StatusOK, `TODO - save user`)
+	claim, err := securityCheck(c, "writeUser")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	updateUser := &DBusers{}
+	if err = c.Bind(updateUser); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	userID := getID(c)
+
+	_, err = DB.Update("users").
+		SetWhitelist(updateUser, "username", "name", "passwd", "email", "address", "sms", "role").
+		Where("id = $1", userID).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	sysLog("UserMod", "U", userID, fmt.Sprintf("Details updated by %s", claim["Username"].(string)), c)
+	return c.JSON(http.StatusOK, updateUser)
 }
 
 func deleteUser(c *echo.Context) error {
