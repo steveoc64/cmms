@@ -50,13 +50,14 @@
 		})
 	})
 
-	app.controller('adminEditUserCtrl', function($state,$stateParams,user,Session){
+	app.controller('adminEditUserCtrl', function($state,$stateParams,user,logs,Session){
 	
 		console.log('.. adminEditUserCtrl', user, $stateParams,$stateParams.id)
 
 		angular.extend(this, {
 			session: Session,
 			user: user,
+			logs: logs,
 			formFields: getUserForm(),		
 			submit: function() {
 				this.user._id = $stateParams.id

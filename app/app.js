@@ -118,6 +118,9 @@
 		      	resolve: {
 		      		user: function(DBUsers,$stateParams) {
 		      			return DBUsers.get({id: $stateParams.id})
+		      		},
+		      		logs: function(DBUserlog,$stateParams) {
+		      			return DBUserlog.query({id: $stateParams.id})
 		      		}
 		      	}
 		      })

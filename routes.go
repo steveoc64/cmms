@@ -28,6 +28,7 @@ func _initRoutes() {
 	e.Delete("/login/:id", logout)
 
 	e.Get("/users", queryUsers)
+	e.Get("/userlog/:id", queryUserlog)
 	e.Get("/users/:id", getUser)
 	e.Post("/users", newUser)
 	e.Put("/users/:id", saveUser)
@@ -160,16 +161,23 @@ func logout(c *echo.Context) error {
 */
 
 type DBusers struct {
-	ID       int           `db:"id",json:"number"`
-	Username string        `db:"username"`
-	Passwd   string        `db:"passwd"`
-	Name     string        `db:"name"`
-	Email    string        `db:"email"`
-	Address  string        `db:"address"`
-	SMS      string        `db:"sms"`
-	SiteId   int           `db:"site_id"`
-	Role     string        `db:"role"`
-	Logs     []interface{} `db:"logs"`
+	ID       int    `db:"id",json:"number"`
+	Username string `db:"username"`
+	Passwd   string `db:"passwd"`
+	Name     string `db:"name"`
+	Email    string `db:"email"`
+	Address  string `db:"address"`
+	SMS      string `db:"sms"`
+	SiteId   int    `db:"site_id"`
+	Role     string `db:"role"`
+}
+
+type DBuserlog struct {
+	Type    string `db:"type"`
+	Ref     int    `db:"ref"`
+	Logdate string `db:"logdate"`
+	IP      string `db:"ip"`
+	Descr   string `db:"descr"`
 }
 
 func queryUsers(c *echo.Context) error {
@@ -190,8 +198,7 @@ func queryUsers(c *echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
-func getUser(c *echo.Context) error {
-	var user DBusers
+func queryUserlog(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readUser")
 	if err != nil {
@@ -199,12 +206,31 @@ func getUser(c *echo.Context) error {
 	}
 
 	id := getID(c)
-	err = DB.
-		SelectDoc(`*`).
-		From(`users`).
-		Many(`logs`, `select * from sys_log where ref_type='U' and ref=$1 order by logdate desc limit 12`, id).
-		Where(`id = $1`, id).
-		QueryStruct(&user)
+	var userlogs []*DBuserlog
+	err = DB.SQL(`
+		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr
+		from sys_log l
+		where ref=$1 and ref_type='U' 
+		order by l.logdate desc
+		limit 20`, id).
+		QueryStructs(&userlogs)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, userlogs)
+}
+
+func getUser(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readUser")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var user DBusers
+	err = DB.SQL(`select * from users where id=$1`, id).QueryStruct(&user)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
