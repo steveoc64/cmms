@@ -107,25 +107,6 @@ getUserFields = function() {
 				required: true,
 			}
 		}
-  },{		
-		name: 'user.RoleSelect',
-		extends: 'lx-dropdown',
-		defaultOptions: {
-			key: 'Role',
-			templateOptions: {
-				type: 'number',
-				label: 'Role',
-				icon: 'account-plus',
-				options: [
-					{text: 'Public'},
-					{text: 'Worker'},
-					{text: 'Vendor'},
-					{text: 'Service Contractor'},
-					{text: 'Site Mananger'},
-					{text: 'Admin'}
-				],	
-			}
-		}
 	},{
 		name: 'user.RoleDisplay',
 		extends: 'lx-input',
