@@ -18,6 +18,7 @@
     "gulp-sass": "^2.1.0",
     "gulp-sequence": "^0.4.1",
     "gulp-uglify": "^1.5.1",
+    "js-yaml": "^3.4.5",
     "ng-html2js": "^2.0.0",
     "ngstorage": "^0.3.10",
     "rimraf": "^2.4.4"

@@ -17,9 +17,14 @@ var paths = {
   'bower_components/fastclick/lib/fastclick.js',	
 	'bower_components/velocity/velocity.js',
 	'bower_components/moment/min/moment-with-locales.js',
-	'bower_components/angular/angular.js',
+  'bower_components/angular/angular.js',
+	'bower_components/api-check/dist/api-check.js',
   'bower_components/angular-ui-router/release/angular-ui-router.js',
-	'bower_components/angular-resource/angular-resource.js',
+  'bower_components/angular-resource/angular-resource.js',
+  'bower_components/angular-formly/dist/formly.js',
+  'bower_components/angular-messages/angular-messages.js',
+  'bower_components/angular-aria/angular-aria.js',
+	'bower_components/angular-formly-templates-lumx/dist/formlyLumx.js',
 	'bower_components/lumx/dist/lumx.js',
   ],
   // These files are for your app's JavaScript
@@ -53,7 +58,10 @@ gulp.task('sass', function () {
 });
 
 gulp.task('lumx:css', function() {
-	return gulp.src('bower_components/lumx/dist/lumx.css')
+	return gulp.src([
+      'bower_components/lumx/dist/lumx.css',
+      'bower_components/angular-formly-templates-lumx/dist/formlyLumx.css'])
+    .pipe($.concat('lumx.css'))
 	//	.pipe(minifyCss({compatibility: 'ie8'}))
 		.pipe(gulp.dest('./build/css'))
 		;
@@ -61,7 +69,7 @@ gulp.task('lumx:css', function() {
 
 gulp.task('lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
-	    .pipe($.concat('lumx.js'))
+	    .pipe($.concat('libs.js'))
 	    //.pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
 	    ;
@@ -78,7 +86,9 @@ gulp.task('copy:img', function() {
 });
 
 gulp.task('copy:fonts', function() {
-	return gulp.src(['./bower_components/mdi/fonts/**/*','./app/fonts/**/*'])
+	return gulp.src([
+      './bower_components/mdi/fonts/**/*',
+      './app/fonts/**/*'])
 		.pipe(gulp.dest('./build/fonts'))
 		;
 });
@@ -110,7 +120,9 @@ gulp.task('dx:sass', function () {
 });
 
 gulp.task('dx:lumx:css', function() {
-	return gulp.src('bower_components/lumx/dist/lumx.css')
+  return gulp.src([
+      'bower_components/lumx/dist/lumx.css',
+      'bower_components/angular-formly-templates-lumx/dist/formlyLumx.css'])
 		.pipe(minifyCss({compatibility: 'ie8'}))
 		.pipe(gulp.dest('./build/css'))
 		;
@@ -118,7 +130,7 @@ gulp.task('dx:lumx:css', function() {
 
 gulp.task('dx:lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
-	    .pipe($.concat('lumx.js'))
+	    .pipe($.concat('libs.js'))
 	    .pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
 	    ;

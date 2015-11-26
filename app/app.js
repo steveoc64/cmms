@@ -2,8 +2,7 @@
 	'use strict';
 
 	//console.log('Init app')
-
-	angular.module('cmms', ['lumx','ui.router','ngResource'])
+	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource'])
 		.service('Session', session)
     .constant('ServerName', '')
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	
