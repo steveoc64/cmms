@@ -166,12 +166,12 @@ func _initSecurityRules() {
 
 	SecurityRules = make(map[string]interface{})
 
-	SecurityRules["defaultAllow"] = []string{"admin", "sitemgr"}
-	SecurityRules["read"] = []string{"admin", "worker"}
-	SecurityRules["write"] = []string{"admin", "sitemgr"}
-	SecurityRules["new"] = []string{"admin", "sitemgr"}
-	SecurityRules["delete"] = "admin"
+	SecurityRules["defaultAllow"] = []string{"Admin", "Site Manager"}
+	SecurityRules["read"] = []string{"Admin", "Worker"}
+	SecurityRules["write"] = []string{"Admin", "Site Manager"}
+	SecurityRules["new"] = []string{"Admin", "Site Manager"}
+	SecurityRules["delete"] = "Admin"
 
-	SecurityRules["readUser"] = []string{"admin", "worker", "sitemgr"}
-	SecurityRules["writeUser"] = []string{"admin", "sitemgr"}
+	SecurityRules["readUser"] = []string{"Admin", "Worker", "Site Manager"}
+	SecurityRules["writeUser"] = []string{"Admin", "Site Manager"}
 }

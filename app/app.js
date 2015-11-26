@@ -88,20 +88,20 @@
 	      })
 	      .state('admin',{
 	      	url: '/admin',
-	      	acl: 'admin',
+	      	acl: 'Admin',
 	      	abstract: true,
 	      	templateUrl: 'html/admin/admin.html',
 	      	controller: 'adminCtrl as admin'
 	      })
 		      .state('admin.dashboard',{
 		      	url: '/dashboard',		
-		      	acl: 'admin',
+		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/dashboard.html',
 		      	controller: 'adminDashCtrl as adminDash',
 		      })
 		      .state('admin.users',{
 		      	url: '/users',
-		      	acl: 'admin',
+		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/users.html',
 		      	controller: 'adminUserCtrl as adminUser',
 		      	resolve: {
@@ -115,7 +115,7 @@
 		      })
 		      .state('admin.edituser',{
 		      	url: '/user/edit/:id',
-		      	acl: 'admin',
+		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/users.edit.html',
 		      	controller: 'adminEditUserCtrl as editUser',
 		      	resolve: {
@@ -129,43 +129,109 @@
 		      })
 		      .state('admin.newuser',{
 		      	url: '/newuser',
-		      	acl: 'admin',
+		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/users.new.html',
 		      	controller: 'adminNewUserCtrl as newUser'
 		      })
 		      .state('admin.sites',{
 		      	url: '/sites',
-		      	acl: 'admin',
+		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/sites.html',
 		      	controller: 'adminSitesCtrl as adminSites',
 		      })
 		      .state('admin.equip',{
 		      	url: '/equip',
-		      	acl: 'admin',
+		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/equip.html',
 		      	controller: 'adminEquipCtrl as adminEquip',
 		      })
 		      .state('admin.parts',{
 		      	url: '/parts',
-		      	acl: 'admin',
+		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/parts.html',
 		      	controller: 'adminPartsCtrl as adminParts',
 		      })
 		      .state('admin.reports',{
 		      	url: '/reports',
-		      	acl: 'admin',
+		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/reports.html',
 		      	controller: 'adminReportsCtrl as adminReports',
 		      })
+	      .state('sitemgr',{
+	      	url: '/sitemgr',
+	      	acl: 'Site Manager',
+	      	abstract: true,
+	      	templateUrl: 'html/sitemgr/sitemgr.html',
+	      	controller: 'sitemgrCtrl as sitemgr'
+	      })
+		      .state('sitemgr.dashboard',{
+		      	url: '/dashboard',		
+		      	acl: 'Site Manager',
+		      	templateUrl: 'html/sitemgr/dashboard.html',
+		      	controller: 'sitemgrDashCtrl as sitemgrDash',
+		      })
+		      .state('sitemgr.workorders',{
+		      	url: '/workorders',		
+		      	acl: 'Site Manager',
+		      	templateUrl: 'html/sitemgr/workorders.html',
+		      	controller: 'sitemgrWorkorderCtrl as sitemgrWorkorder',
+		      })
+		      .state('sitemgr.users',{
+		      	url: '/users',
+		      	acl: 'Site Manager',
+		      	templateUrl: 'html/sitemgr/users.html',
+		      	controller: 'sitemgrUserCtrl as sitemgrUser',
+		      	resolve: {
+		      		users: function(DBUsers) {
+		      			return DBUsers.query()
+		      		},
+		      		logs: function(DBUserlog) {
+		      			return DBUserlog.query()
+		      		}
+		      	}
+		      })
+		      .state('sitemgr.edituser',{
+		      	url: '/user/edit/:id',
+		      	acl: 'Site Manager',
+		      	templateUrl: 'html/sitemgr/users.edit.html',
+		      	controller: 'sitemgrEditUserCtrl as editUser',
+		      	resolve: {
+		      		user: function(DBUsers,$stateParams) {
+		      			return DBUsers.get({id: $stateParams.id})
+		      		},
+		      		logs: function(DBUserlog,$stateParams) {
+		      			return DBUserlog.get({id: $stateParams.id})
+		      		}
+		      	}
+		      })
+		      .state('sitemgr.equip',{
+		      	url: '/equip',
+		      	acl: 'Site Manager',
+		      	templateUrl: 'html/sitemgr/equip.html',
+		      	controller: 'sitemgrEquipCtrl as sitemgrEquip',
+		      })
+		      .state('sitemgr.parts',{
+		      	url: '/parts',
+		      	acl: 'Site Manager',
+		      	templateUrl: 'html/sitemgr/parts.html',
+		      	controller: 'sitemgrPartsCtrl as sitemgrParts',
+		      })
+		      .state('sitemgr.reports',{
+		      	url: '/reports',
+		      	acl: 'Site Manager',
+		      	templateUrl: 'html/sitemgr/reports.html',
+		      	controller: 'sitemgrReportsCtrl as sitemgrReports',
+		      })
+
 	      .state('worker',{
 	      	url: '/worker',
-	      	acl: 'worker',
+	      	acl: 'Worker',
 	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a><br><a ui-sref="worker.timesheet">TimeSheets</a><hr><ui-view>Summary of Worker Details Here</ui-view>',
 	      	controller: 'workerCtrl as worker',
 	      })
 		      .state('worker.timesheet',{
 		      	url: '/timesheet',
-		      	acl: 'worker',
+		      	acl: 'Worker',
 		      	template: 'Lil bit of timesheet stuff here, in place of where the worker details were <a ui-sref="worker">Close</a>',
 		      	controller: 'workerCtrl as worker',
 		      })
@@ -213,9 +279,9 @@
 		  				allGood = true
 		  			}
 		  			break
-		  		case 'admin':
+		  		case 'Admin':
 		  			switch (Session.Role) {
-		  				case 'admin':
+		  				case 'Admin':
 		  					allGood = true
 		  					break
 		  				default:
@@ -225,10 +291,24 @@
 		  					break
 		  			}
 		  			break
-		  		case 'worker':
+		  		case 'Site Manager':
 		  			switch (Session.Role) {
-		  				case 'admin':
-		  				case 'worker':
+		  				case 'Admin':
+		  				case 'Site Manager':
+		  					allGood = true
+		  					break
+		  				default:
+		  					allGood = false
+				  			//LxNotificationService.warning('This page requires worker access')
+				  			//console.log('This page requires worker access !',Session.username,':',Session.role)
+		  					break
+		  			}
+		  			break
+		  		case 'Worker':
+		  			switch (Session.Role) {
+		  				case 'Admin':
+		  				case 'Site Manager':
+		  				case 'Worker':
 		  					allGood = true
 		  					break
 		  				default:

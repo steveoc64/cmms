@@ -123,8 +123,8 @@ func login(c *echo.Context) error {
 		QueryStruct(&res)
 
 	if err != nil {
-		sysLog("LognFail", "U", res.ID, fmt.Sprintf("Failed Login %s:%s  (%s)", l.Username, l.Passwd, err.Error()), c)
 		log.Println("Login Failed:", err.Error())
+		sysLog("LognFail", "U", res.ID, fmt.Sprintf("Failed Login %s:%s", l.Username, l.Passwd), c)
 		return c.String(http.StatusUnauthorized, "invalid")
 	} else {
 		sysLog("Login", "U", res.ID, fmt.Sprintf("Login %s", l.Username), c)
@@ -175,12 +175,12 @@ type DBusers struct {
 }
 
 type DBuserlog struct {
-	Type     string `db:"type"`
-	Ref      int    `db:"ref"`
-	Username string `db:"username"`
-	Logdate  string `db:"logdate"`
-	IP       string `db:"ip"`
-	Descr    string `db:"descr"`
+	Type     string  `db:"type"`
+	Ref      int     `db:"ref"`
+	Username *string `db:"username"`
+	Logdate  string  `db:"logdate"`
+	IP       string  `db:"ip"`
+	Descr    *string `db:"descr"`
 }
 
 func queryUsers(c *echo.Context) error {
@@ -233,7 +233,7 @@ func queryUserlogs(c *echo.Context) error {
 
 	var userlogs []*DBuserlog
 	err = DB.SQL(`
-		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,username
+		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,u.username
 		from sys_log l
 		left outer join users u on (u.id = l.ref)
 		where ref_type='U' 

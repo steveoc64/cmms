@@ -103,7 +103,7 @@ getUserFields = function() {
 			key: 'Role',
 			templateOptions: {
 				placeholder: "Select Role",
-				options: ['Public','Worker','Vendor','Service Contractor','Site Mananger','Admin'],	
+				options: ['Public','Worker','Vendor','Service Contractor','Site Manager','Admin'],	
 				required: true,
 			}
 		}
