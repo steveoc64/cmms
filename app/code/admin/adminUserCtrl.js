@@ -28,6 +28,19 @@
 			},
 			showLogs: function() {
 				LxDialogService.open('userLogDialog')
+			},
+			getSelectedLogs: function() {
+				var l = []
+				var vm = this
+				angular.forEach (vm.logs, function(v,k){
+					angular.forEach(vm.users, function(vv,kk){
+						if (vv.selected && v.Ref == vv.ID) {
+							l.push(v)
+						}
+					})
+				})
+				// l now contains filtered logs
+				return l
 			}
 		})
 	})

@@ -5,6 +5,7 @@
         <thead>
           <tr>
             <th> Event</th>
+            <th> UserName</th>
             <th> Date</th>
             <th> Description</th>
             <th> IP Address</th>
@@ -12,8 +13,9 @@
         </thead>
         <tbody>
           <tr class="data-table"
-              ng-repeat="l in adminUser.logs">
+              ng-repeat="l in adminUser.getSelectedLogs()">
                 <td>{{l.Type}}</td>
+                <td>{{l.Username}}</td>
                 <td>{{l.Logdate}}</td>
                 <td>{{l.Descr}}</td>
                 <td>{{l.IP}}</td>
@@ -39,7 +41,7 @@
           <ul>
               <li><a class="dropdown-link" ui-sref="admin.newuser">New User</a></li>
               <li class="dropdown-divider"></li>
-              <li><a class="dropdown-link" ng-click="adminUser.showLogs()">Show Logs</a></li>
+              <li><a class="dropdown-link" ng-click="adminUser.showLogs()">Show Selected Logs</a></li>
               <li><a class="dropdown-link" ng-click="adminUser.deleteSelected()">Delete Selected</a></li>
           </ul>
       	</lx-dropdown-menu>

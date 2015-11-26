@@ -175,11 +175,12 @@ type DBusers struct {
 }
 
 type DBuserlog struct {
-	Type    string `db:"type"`
-	Ref     int    `db:"ref"`
-	Logdate string `db:"logdate"`
-	IP      string `db:"ip"`
-	Descr   string `db:"descr"`
+	Type     string `db:"type"`
+	Ref      int    `db:"ref"`
+	Username string `db:"username"`
+	Logdate  string `db:"logdate"`
+	IP       string `db:"ip"`
+	Descr    string `db:"descr"`
 }
 
 func queryUsers(c *echo.Context) error {
@@ -211,7 +212,7 @@ func queryUserlog(c *echo.Context) error {
 	var userlogs []*DBuserlog
 	err = DB.SQL(`
 		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr
-		from sys_log l
+		from sys_log l 
 		where ref=$1 and ref_type='U' 
 		order by l.logdate desc
 		limit 20`, id).
@@ -232,8 +233,9 @@ func queryUserlogs(c *echo.Context) error {
 
 	var userlogs []*DBuserlog
 	err = DB.SQL(`
-		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr
+		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,username
 		from sys_log l
+		left outer join users u on (u.id = l.ref)
 		where ref_type='U' 
 		order by l.logdate desc
 		limit 50`).
