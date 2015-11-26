@@ -13,7 +13,8 @@
 
 	angular.module('cmms').factory('DBUserlog', function($resource,ServerName,Session){
 		return $resource(ServerName+'/userlog/:id',{id: '@_id'},{
-			'query':    {method:'GET', isArray:true}
+			'get':    {method:'GET', isArray:true}, // always pass the user ID = get last 20 for this user
+			'query':  {method:'GET', isArray:true}  // never pass the user ID = get last 50 logs for everyone
 		})
 	})
 

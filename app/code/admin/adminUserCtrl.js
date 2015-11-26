@@ -3,13 +3,14 @@
 
 	var app = angular.module('cmms')
 
-	app.controller('adminUserCtrl', function($state, users, Session){
+	app.controller('adminUserCtrl', function($state, users, Session, LxDialogService, logs){
 	
 		console.log('.. adminUserCtrl')
 
 		angular.extend(this, {
 			users: users,
 			session: Session,
+			logs: logs,
 			getClass: function(u) {
 				if (u.selected) {
 					return "data-table__selectable-row--is-selected"
@@ -24,6 +25,9 @@
 			},
 			clickEdit: function(u) {
 				$state.go('admin.edituser',{id: u.ID})
+			},
+			showLogs: function() {
+				LxDialogService.open('userLogDialog')
 			}
 		})
 	})

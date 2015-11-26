@@ -107,6 +107,9 @@
 		      	resolve: {
 		      		users: function(DBUsers) {
 		      			return DBUsers.query()
+		      		},
+		      		logs: function(DBUserlog) {
+		      			return DBUserlog.query()
 		      		}
 		      	}
 		      })
@@ -120,7 +123,7 @@
 		      			return DBUsers.get({id: $stateParams.id})
 		      		},
 		      		logs: function(DBUserlog,$stateParams) {
-		      			return DBUserlog.query({id: $stateParams.id})
+		      			return DBUserlog.get({id: $stateParams.id})
 		      		}
 		      	}
 		      })

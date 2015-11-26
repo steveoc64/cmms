@@ -28,11 +28,13 @@ func _initRoutes() {
 	e.Delete("/login/:id", logout)
 
 	e.Get("/users", queryUsers)
-	e.Get("/userlog/:id", queryUserlog)
 	e.Get("/users/:id", getUser)
 	e.Post("/users", newUser)
 	e.Put("/users/:id", saveUser)
 	e.Delete("/users/:id", deleteUser)
+
+	e.Get("/userlog/:id", queryUserlog)
+	e.Get("/userlog", queryUserlogs)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,6 +215,28 @@ func queryUserlog(c *echo.Context) error {
 		where ref=$1 and ref_type='U' 
 		order by l.logdate desc
 		limit 20`, id).
+		QueryStructs(&userlogs)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, userlogs)
+}
+
+func queryUserlogs(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readUser")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var userlogs []*DBuserlog
+	err = DB.SQL(`
+		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr
+		from sys_log l
+		where ref_type='U' 
+		order by l.logdate desc
+		limit 50`).
 		QueryStructs(&userlogs)
 
 	if err != nil {

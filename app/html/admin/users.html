@@ -1,3 +1,28 @@
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='userLogDialog' escape-close="true">
+  <h3>Recent User Activity</h3>
+    <div class="data-table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th> Event</th>
+            <th> Date</th>
+            <th> Description</th>
+            <th> IP Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="data-table"
+              ng-repeat="l in adminUser.logs">
+                <td>{{l.Type}}</td>
+                <td>{{l.Logdate}}</td>
+                <td>{{l.Descr}}</td>
+                <td>{{l.IP}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</lx-dialog>
+
 <div class="data-table-container">
   <header class="data-table-header">
     <div class="data-table-header__label">
@@ -14,8 +39,8 @@
           <ul>
               <li><a class="dropdown-link" ui-sref="admin.newuser">New User</a></li>
               <li class="dropdown-divider"></li>
-              <li><a class="dropdown-link" ng-click="deleteSelected()">Show Logs</a></li>
-              <li><a class="dropdown-link" ng-click="deleteSelected()">Delete Selected</a></li>
+              <li><a class="dropdown-link" ng-click="adminUser.showLogs()">Show Logs</a></li>
+              <li><a class="dropdown-link" ng-click="adminUser.deleteSelected()">Delete Selected</a></li>
           </ul>
       	</lx-dropdown-menu>
   		</lx-dropdown>
