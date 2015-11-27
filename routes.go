@@ -500,10 +500,11 @@ func newSite(c *echo.Context) error {
 	if err := c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
+	log.Println("Received site", record)
 
 	err = DB.InsertInto("site").
-		Whitelist("name", "address", "phone", "fax", "image").
-		Record(newSite).
+		Whitelist("name", "address", "phone", "fax").
+		Record(record).
 		Returning("id").
 		QueryScalar(&record.ID)
 

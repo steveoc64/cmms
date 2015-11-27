@@ -33,7 +33,7 @@ getSiteFields = function() {
 				type: 'text',
 				label: 'Address',
 				minlength: 6,
-				maxlength: 64,
+				maxlength: 128,
 				requried: true,
 			},
 			ngModelAttrs: {

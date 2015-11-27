@@ -1,3 +1,20 @@
+// Some global functions available for all
+
+var logClass = function(l) {
+			switch (l.Status) {
+				case 1:
+					return 'syslog-status-1'
+					break
+				case 2:
+					return 'syslog-status-2'
+					break
+				case 3:
+					return 'syslog-status-3'
+					break
+			}
+			return ''
+		}
+
 ;(function() {
 	'use strict';
 
@@ -157,8 +174,8 @@
 		      		sites: function(DBSites) {
 		      			return DBSites.query()
 		      		},
-		      		logs: function(DBSitelog,$stateParams) {
-		      			return DBSitelog.get({id: $stateParams.id})
+		      		logs: function(DBSysLog) {
+		      			return DBSysLog.query({RefType: 'S', Limit: 100})
 		      		}
 		      	}
 		      })
@@ -171,8 +188,11 @@
 			      		site: function(DBSites,$stateParams) {
 			      			return DBSites.get({id: $stateParams.id})
 			      		},
-			      		logs: function(DBSitelog,$stateParams) {
-			      			return DBSitelog.get({id: $stateParams.id})
+			      		logs: function(DBSysLog,$stateParams) {
+			      			return DBSysLog.query({
+			      				RefType: 'S', 
+			      				RefID: $stateParams.id,
+			      				Limit: 100})
 			      		}
 			      	}
 			      })

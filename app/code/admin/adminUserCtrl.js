@@ -3,21 +3,6 @@
 
 	var app = angular.module('cmms')
 
-	var logClass = function(l) {
-				switch (l.Status) {
-					case 1:
-						return 'syslog-status-1'
-						break
-					case 2:
-						return 'syslog-status-2'
-						break
-					case 3:
-						return 'syslog-status-3'
-						break
-				}
-				return ''
-			}
-
 	app.controller('adminUserCtrl', function($state, users, Session, LxDialogService, logs){
 	
 		angular.extend(this, {

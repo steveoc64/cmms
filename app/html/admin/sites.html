@@ -21,6 +21,7 @@
         </thead>
         <tbody>
           <tr class="data-table"
+              ng-class="adminSites.logClass(l)"        
               ng-repeat="l in adminSites.getSelectedLogs()">
                 <td>{{l.Type}}</td>
                 <td>{{l.Username}}</td>

@@ -9,6 +9,7 @@
 			sites: sites,
 			session: Session,
 			logs: logs,
+			logClass: logClass,
 			getClass: function(s) {
 				if (s.selected) {
 					return "data-table__selectable-row--is-selected"
@@ -21,7 +22,7 @@
 				s.selected = !s.selected
 			},
 			clickEdit: function(s) {
-				$state.go('admin.editsite',{id: u.ID})
+				$state.go('admin.editsite',{id: s.ID})
 			},
 			showLogs: function() {
 				LxDialogService.open('siteLogDialog')
@@ -30,7 +31,7 @@
 				var l = []
 				var vm = this
 				angular.forEach (vm.logs, function(v,k){
-					angular.forEach(vm.users, function(vv,kk){
+					angular.forEach(vm.sites, function(vv,kk){
 						if (vv.selected && v.RefID == vv.ID) {
 							l.push(v)
 						}
@@ -51,7 +52,8 @@
 			addSite: function() {
 				if (this.form.$valid) {
 					this.site.$insert(function(newsite) {
-						$state.go('admin.sites')
+						console.log('insert',newsite)
+						//$state.go('admin.sites')
 					})					
 				}
 			},
@@ -68,6 +70,7 @@
 			session: Session,
 			site: site,
 			logs: logs,
+			logClass: logClass,
 			formFields: getSiteForm(),		
 			submit: function() {
 				this.site._id = $stateParams.id

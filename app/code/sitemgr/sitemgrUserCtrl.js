@@ -5,12 +5,11 @@
 
 	app.controller('sitemgrUserCtrl', function($state, users, Session, LxDialogService, logs){
 	
-		console.log('.. sitemgrUserCtrl')
-
 		angular.extend(this, {
 			users: users,
 			session: Session,
 			logs: logs,
+			logClass: logClass,
 			getClass: function(u) {
 				if (u.selected) {
 					return "data-table__selectable-row--is-selected"
@@ -75,6 +74,7 @@
 			session: Session,
 			user: user,
 			logs: logs,
+			logClass: logClass,
 			formFields: getUserForm(),		
 			submit: function() {
 				this.user._id = $stateParams.id

@@ -21,6 +21,7 @@
         </thead>
         <tbody>
           <tr class="data-table"
+              ng-class="sitemgrUser.logClass(l)"
               ng-repeat="l in sitemgrUser.getSelectedLogs()">
                 <td>{{l.Type}}</td>
                 <td>{{l.Username}}</td>
