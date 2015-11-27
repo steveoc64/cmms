@@ -108,8 +108,8 @@
 		      		users: function(DBUsers) {
 		      			return DBUsers.query()
 		      		},
-		      		logs: function(DBUserlog) {
-		      			return DBUserlog.query()
+		      		logs: function(DBSysLog) {
+		      			return DBSysLog.query({RefType: 'U', Limit: 100})
 		      		}
 		      	}
 		      })
@@ -122,8 +122,10 @@
 			      		user: function(DBUsers,$stateParams) {
 			      			return DBUsers.get({id: $stateParams.id})
 			      		},
-			      		logs: function(DBUserlog,$stateParams) {
-			      			return DBUserlog.get({id: $stateParams.id})
+			      		logs: function(DBSysLog,$stateParams) {
+			      			return DBSysLog.query({
+			      				UserID: $stateParams.id
+			      			})
 			      		}
 			      	}
 			      })

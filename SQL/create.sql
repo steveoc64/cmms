@@ -3,13 +3,14 @@ create table users (
 	id serial not null primary key,
 	username varchar(32) not null,
 	passwd varchar(32) not null,
-	name text not null,
+	name text not null default '',
 	address text not null default '',
-	email text not null,
+	email text not null default '',
 	sms text not null default '',
 	site_id int not null default 0,
 	role text not null default 'Public'
 );
+insert into users (id,username,passwd,name,role) values (1,'admin','admin','Admin Bootstrap User','Admin');
 
 drop table if exists site;
 create table site (
@@ -47,9 +48,10 @@ create unique index user_skill_idx on user_skill (user_id,skill_id);
 drop table if exists sys_log;
 create table sys_log (
 	id serial not null primary key,
+	status int not null default 0,
 	type char(8) not null,
 	ref_type char(1) not null,
-	ref int not null,
+	ref_id int not null,
 	logdate timestamp not null default localtimestamp,
 	ip text not null,
 	descr text not null,
@@ -57,6 +59,8 @@ create table sys_log (
 	username text not null default ''
 );
 create unique index sys_log_idx on sys_log (logdate,id);
+insert into sys_log (id,status,type,ref_type,ref_id,ip,descr,user_id,username)
+	values (1,1,'InitData','I',1,'localhost','Initialize Data',1,'Admin');
 
 drop table if exists doc;
 create table doc (

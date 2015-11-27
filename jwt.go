@@ -123,7 +123,7 @@ func securityCheck(c *echo.Context, action string) (map[string]interface{}, erro
 
 	// Check the Role in the claim (inside the token) against the allowed roles for this page
 	// Role can be passed in as either a single string, or a []string for multiple allowed roles
-	claimedRole := token.Claims["Role"]
+	claimedRole := token.Claims["Role"].(string)
 
 	// Now get the matching roles for this action
 	role := SecurityRules["defaultAllow"]
@@ -136,7 +136,7 @@ func securityCheck(c *echo.Context, action string) (map[string]interface{}, erro
 	v := reflect.TypeOf(role).Kind()
 	switch v {
 	case reflect.String:
-		if role == "*" || claimedRole != role {
+		if role != "*" && claimedRole != role {
 			return nil, errors.New("Invalid Role")
 		}
 	case reflect.Slice:
@@ -153,7 +153,7 @@ func securityCheck(c *echo.Context, action string) (map[string]interface{}, erro
 	default:
 		return nil, errors.New("Invalid Security Rule")
 	}
-	log.Println("Returning claims structure of :", token.Claims)
+	//	log.Println("Returning claims structure of :", token.Claims)
 	return token.Claims, nil
 }
 

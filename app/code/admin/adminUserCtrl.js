@@ -3,6 +3,21 @@
 
 	var app = angular.module('cmms')
 
+	var logClass = function(l) {
+				switch (l.Status) {
+					case 1:
+						return 'syslog-status-1'
+						break
+					case 2:
+						return 'syslog-status-2'
+						break
+					case 3:
+						return 'syslog-status-3'
+						break
+				}
+				return ''
+			}
+
 	app.controller('adminUserCtrl', function($state, users, Session, LxDialogService, logs){
 	
 		console.log('.. adminUserCtrl')
@@ -11,6 +26,7 @@
 			users: users,
 			session: Session,
 			logs: logs,
+			logClass: logClass,
 			getClass: function(u) {
 				if (u.selected) {
 					return "data-table__selectable-row--is-selected"
@@ -34,7 +50,7 @@
 				var vm = this
 				angular.forEach (vm.logs, function(v,k){
 					angular.forEach(vm.users, function(vv,kk){
-						if (vv.selected && v.Ref == vv.ID) {
+						if (vv.selected && v.RefID == vv.ID) {
 							l.push(v)
 						}
 					})
@@ -53,6 +69,7 @@
 			session: Session,
 			user: new DBUsers(),
 			formFields: getUserForm(),
+			logClass: logClass,
 			addUser: function() {
 				if (this.form.$valid) {
 					this.user.$insert(function(newuser) {
@@ -76,6 +93,7 @@
 			user: user,
 			logs: logs,
 			formFields: getUserForm(),		
+			logClass: logClass,
 			submit: function() {
 				this.user._id = $stateParams.id
 				this.user.$update(function(newuser) {

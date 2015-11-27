@@ -37,15 +37,18 @@
               <th> Date</th>
               <th> Description</th>
               <th> IP Address</th>
+              <th> By</th>
             </tr>
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-class="editUser.logClass(l)"           
                 ng-repeat="l in editUser.logs">
                   <td>{{l.Type}}</td>
                   <td>{{l.Logdate}}</td>
                   <td>{{l.Descr}}</td>
                   <td>{{l.IP}}</td>
+                  <td>{{l.Username}}</td>
             </tr>
           </tbody>
         </table>

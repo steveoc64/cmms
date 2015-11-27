@@ -42,6 +42,16 @@ body {
   }
 }
 
+.syslog-status-1 {
+  background-color: $green-A200;
+}
+.syslog-status-2 {
+  background-color: $amber-A200;
+}
+.syslog-status-3 {
+  background-color: $red-A200;
+}
+
 .sidebar {
   background-color: $palette_4;
 }

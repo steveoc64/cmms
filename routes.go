@@ -27,21 +27,24 @@ func _initRoutes() {
 	e.Post("/login", login)
 	e.Delete("/login/:id", logout)
 
+	e.Post("/syslog", querySyslog)
+
 	e.Get("/users", queryUsers)
 	e.Get("/users/:id", getUser)
 	e.Post("/users", newUser)
 	e.Put("/users/:id", saveUser)
 	e.Delete("/users/:id", deleteUser)
-	e.Get("/userlog/:id", queryUserlog)
-	e.Get("/userlog", queryUserlogs)
 
 	e.Get("/sites", querySites)
 	e.Get("/sites/:id", getSite)
 	e.Post("/sites", newSite)
 	e.Put("/sites/:id", saveSite)
 	e.Delete("/sites/:id", deleteSite)
+
 	e.Get("/sitelog/:id", querySitelog)
 	e.Get("/sitelog", querySitelogs)
+	e.Get("/userlog/:id", queryUserlog)
+	e.Get("/userlog", queryUserlogs)
 
 }
 
@@ -72,6 +75,7 @@ func getID(c *echo.Context) int {
 // System Log
 
 type SysLog struct {
+	Status   int    `db:"status"`
 	Type     string `db:"type"`
 	RefType  string `db:"ref_type"`
 	RefID    int    `db:"ref_id"`
@@ -81,7 +85,7 @@ type SysLog struct {
 	Username string `db:"username"`
 }
 
-func sysLog(t string, reftype string, ref int, descr string, c *echo.Context, claim map[string]interface{}) {
+func sysLog(status int, t string, reftype string, ref int, descr string, c *echo.Context, claim map[string]interface{}) {
 
 	req := c.Request()
 	ip := req.RemoteAddr
@@ -93,6 +97,7 @@ func sysLog(t string, reftype string, ref int, descr string, c *echo.Context, cl
 	log.Println("syslog", UserID, Username)
 
 	l := &SysLog{
+		Status:   status,
 		Type:     t,
 		RefType:  reftype,
 		RefID:    ref,
@@ -102,7 +107,7 @@ func sysLog(t string, reftype string, ref int, descr string, c *echo.Context, cl
 		Username: Username,
 	}
 	DB.InsertInto("sys_log").
-		Whitelist("type", "ref_type", "ref_id", "ip", "descr", "user_id", "username").
+		Whitelist("status", "type", "ref_type", "ref_id", "ip", "descr", "user_id", "username").
 		Record(l).
 		Exec()
 }
@@ -144,14 +149,14 @@ func login(c *echo.Context) error {
 
 	if err != nil {
 		log.Println("Login Failed:", err.Error())
-		sysLog("Login", "U", res.ID, fmt.Sprintf("Failed Login (%s:%s)", l.Username, l.Passwd), c, nil)
+		sysLog(3, "Login", "U", res.ID, fmt.Sprintf("Failed Login (%s:%s)", l.Username, l.Passwd), c, nil)
 		return c.String(http.StatusUnauthorized, "invalid")
 	} else {
 		claim := map[string]interface{}{
 			"ID":       float64(res.ID),
 			"Username": res.Username,
 		}
-		sysLog("Login", "U", res.ID, "Login", c, claim)
+		sysLog(0, "Login", "U", res.ID, "Login OK", c, claim)
 		//		log.Println(res)
 
 		tokenString, err := generateToken(res.ID, res.Role, l.Username)
@@ -177,7 +182,7 @@ func logout(c *echo.Context) error {
 	if err != nil {
 		i = 0
 	}
-	sysLog("Logout", "U", i, "Logout", c, claim)
+	sysLog(0, "Logout", "U", i, "Logout", c, claim)
 	return c.String(http.StatusOK, "bye")
 }
 
@@ -206,7 +211,7 @@ type DBusers struct {
 
 type DBuserlog struct {
 	Type     string  `db:"type"`
-	Ref      int     `db:"ref"`
+	RefID    int     `db:"ref_id"`
 	Username *string `db:"username"`
 	Logdate  string  `db:"logdate"`
 	IP       string  `db:"ip"`
@@ -241,9 +246,10 @@ func queryUserlog(c *echo.Context) error {
 	id := getID(c)
 	var userlogs []*DBuserlog
 	err = DB.SQL(`
-		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr
+		select type,ref_id,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,username
 		from sys_log l 
-		where ref=$1 and ref_type='U' 
+		where ref_id=$1 and ref_type='U' 
+			 or user_id=$1
 		order by l.logdate desc
 		limit 20`, id).
 		QueryStructs(&userlogs)
@@ -263,9 +269,8 @@ func queryUserlogs(c *echo.Context) error {
 
 	var userlogs []*DBuserlog
 	err = DB.SQL(`
-		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,u.username
+		select type,ref_id,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,username
 		from sys_log l
-		left outer join users u on (u.id = l.ref)
 		where ref_type='U' 
 		order by l.logdate desc
 		limit 50`).
@@ -275,6 +280,81 @@ func queryUserlogs(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 	return c.JSON(http.StatusOK, userlogs)
+}
+
+type DBsyslog struct {
+	ID       int    `db:"id"`
+	Status   int    `db:"status"`
+	Type     string `db:"type"`
+	RefType  string `db:"ref_type"`
+	RefID    string `db:"ref_id"`
+	Logdate  string `db:"logdate"`
+	IP       string `db:"ip"`
+	Descr    string `db:"descr"`
+	UserID   int    `db:"user_id"`
+	Username string `db:"username"`
+}
+
+type SysLogRequest struct {
+	RefType string
+	RefID   string
+	UserID  string
+	Limit   uint64
+}
+
+func querySyslog(c *echo.Context) error {
+
+	_, err := securityCheck(c, "log")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	req := &SysLogRequest{}
+	if err := c.Bind(req); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	log.Println("Syslog request", req)
+
+	if req.Limit < 20 {
+		req.Limit = 20
+	}
+	if req.Limit > 100 {
+		req.Limit = 100
+	}
+
+	query := DB.Select("status",
+		"type", "ref_type", "ref_id",
+		"ip", "descr",
+		"user_id", "username",
+		"to_char(l.logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate").
+		From("sys_log l").
+		OrderBy("l.logdate desc").
+		Limit(req.Limit)
+
+	// Add extra options to the SQL query
+	if req.RefType != "" {
+		query.Where("ref_type = $1", req.RefType)
+	}
+
+	if req.RefID != "" {
+		query.Where("ref_id = $1", req.RefID)
+	}
+
+	if req.UserID != "" {
+		// Grab any log records created by this specific user
+		query.Where("user_id = $1", req.UserID)
+		// And any log records of type U related to this specific user
+		query.Where("ref_type = 'U' and ref_id=$1", req.UserID)
+	}
+
+	var record []*DBsyslog
+	err = query.QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, record)
 }
 
 func getUser(c *echo.Context) error {
@@ -317,7 +397,7 @@ func newUser(c *echo.Context) error {
 	}
 
 	// Now log the creation of the new user
-	sysLog("Users", "U", record.ID, fmt.Sprintf("Account Created - %s", record.Username), c, claim)
+	sysLog(1, "Users", "U", record.ID, fmt.Sprintf("Account Created - %s", record.Username), c, claim)
 
 	// insert into DB, fill in the ID of the new user
 	return c.JSON(http.StatusCreated, newUser)
@@ -346,7 +426,7 @@ func saveUser(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sysLog("Users", "U", userID, "User Updated", c, claim)
+	sysLog(1, "Users", "U", userID, "User Updated", c, claim)
 	return c.JSON(http.StatusOK, record)
 }
 
@@ -435,7 +515,7 @@ func newSite(c *echo.Context) error {
 	}
 
 	// Now log the creation of the new site
-	sysLog("Sites", "S", record.ID, "Site Created", c, claim)
+	sysLog(1, "Sites", "S", record.ID, "Site Created", c, claim)
 
 	// insert into DB, fill in the ID of the new user
 	return c.JSON(http.StatusCreated, record)
@@ -464,7 +544,7 @@ func saveSite(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sysLog("Sites", "S", siteID, "Updated", c, claim)
+	sysLog(1, "Sites", "S", siteID, "Updated", c, claim)
 	return c.JSON(http.StatusOK, siteID)
 }
 
@@ -483,8 +563,8 @@ func querySitelog(c *echo.Context) error {
 	id := getID(c)
 	var record []*DBuserlog
 	err = DB.SQL(`
-		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr
-		from sys_log l 
+		select type,ref_id,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,username
+		from sys_log l
 		where ref=$1 and ref_type='S' 
 		order by l.logdate desc
 		limit 20`, id).
@@ -505,9 +585,8 @@ func querySitelogs(c *echo.Context) error {
 
 	var record []*DBuserlog
 	err = DB.SQL(`
-		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,u.username
-		from sys_log l
-		left outer join users u on (u.id = l.ref)
+		select type,ref_id,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,username
+		from sys_log l 
 		where ref_type='S' 
 		order by l.logdate desc
 		limit 50`).

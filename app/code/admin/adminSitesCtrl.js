@@ -33,7 +33,7 @@
 				var vm = this
 				angular.forEach (vm.logs, function(v,k){
 					angular.forEach(vm.users, function(vv,kk){
-						if (vv.selected && v.Ref == vv.ID) {
+						if (vv.selected && v.RefID == vv.ID) {
 							l.push(v)
 						}
 					})
