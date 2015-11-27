@@ -2,7 +2,7 @@
 	'use strict';
 
 	//console.log('Init app')
-	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource'])
+	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','LocalStorageModule'])
 		.service('Session', session)
     .constant('ServerName', '')
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	
@@ -25,7 +25,7 @@
 			  };
 			})
 
-  	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
 
   		// Force all outgoing http requests to include the Auth token, if defined
 			$httpProvider.interceptors.push(function ($q, Session) {
@@ -39,6 +39,8 @@
 			       },
 			   }
 			}) 
+
+			localStorageServiceProvider.setPrefix('cmms')
 
 	    $urlRouterProvider.otherwise('/');
 
@@ -60,13 +62,24 @@
 	    	.state('login',{	// Special state with no template !!
 	    		url: '/login',
 	    		acl:'*',
-	    		onEnter: function($state,Session,LxDialogService) {
+	    		onEnter: function($state,Session,LxDialogService,localStorageService) {
 	    			if (Session.fromState == '') {
 	    				$state.go('home')
 	    			} else {
 		    			//console.log('Forcing a Login Screen, from',Session.fromState,'to',Session.toState)
-							LxDialogService.open('loginDialog')	    				
+							LxDialogService.open('loginDialog')	    					    					
 	    			}
+	    		},
+	    	})
+	    	.state('logout',{	// Special state with no template !!
+	    		url: '/logout',
+	    		acl:'*',
+	    		onEnter: function($state,Session,LxNotificationService,localStorageService) {
+	    			Session.logout()
+	    			localStorageService.remove('token')
+	    			localStorageService.remove('session')
+	   				LxNotificationService.warning('Logged Out')
+	   				$state.go('home')
 	    		},
 	    	})
 	      .state('landing',{
@@ -267,7 +280,7 @@
 		      })
 	  }
 
-	  function session(LxNotificationService) {
+	  function session() {
 	  	return {
 	  		loggedIn: false,
 	  		Token: '',
@@ -279,7 +292,6 @@
 	  		Site: 0,
 	  		SiteName: '',
 	  		logout: function() {
-	  			//DBLogin.logout({id: this.uid})
 	  			this.loggedIn = false
 	  			this.Username = ''
 	  			this.Role = 'public'
@@ -287,18 +299,40 @@
 	  			this.toState = ''
 	  			this.Site = 0,
 	  			this.ID = 0,
-	  			this.SiteName = '',
-	  			LxNotificationService.warning('You are now Logged Out');
+	  			this.SiteName = ''
 	  		}
 	  	}
 	  }
 
-	function run($rootScope, $state, LxDialogService, LxNotificationService, Session, formlyConfig) {
+	function run($rootScope, $state, LxDialogService, LxNotificationService, Session, formlyConfig, localStorageService) {
 	  FastClick.attach(document.body);
 
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		  	var acl = toState.acl
-		  	//console.log('change to',toState.name,'Session=',Session)
+
+		  	if (!Session.loggedIn && toState.name != 'home') {
+					// Check first to see if we have a token in local storage before falling in a heap
+					// If so, we can substitute the local storage session for the real session, 
+					// and get back to running
+					var token = localStorageService.get('token')
+					var sess  = localStorageService.get('session')
+					if (token != null) {
+			  		console.log('Not logged in, and we are trying to get to',toState.name)
+						console.log('Restart session using existing token', token)
+						console.log('.... getting back into the fight')
+	          Session.loggedIn = sess.loggedIn
+	          Session.ID = sess.ID
+	          Session.Username = sess.Username
+	          Session.Role = sess.Role
+	          Session.Token = sess.Token
+	          Session.Site = sess.Site
+	          Session.SiteName = sess.SiteName.String
+	          if (Session.toState != '') {
+	            $state.go(Session.toState)
+	          }
+	        	Session.toState = Session.fromState = ''
+	        }
+	      }
 
 		  	var allGood = false
 		  	switch (toState.acl) {

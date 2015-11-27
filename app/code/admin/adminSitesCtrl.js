@@ -5,8 +5,6 @@
 
 	app.controller('adminSitesCtrl', function($state, sites, Session, LxDialogService, logs){
 	
-		console.log('.. adminSitesCtrl')
-
 		angular.extend(this, {
 			sites: sites,
 			session: Session,
@@ -46,8 +44,6 @@
 
 	app.controller('adminNewSiteCtrl', function($state,Session,DBSites,LxNotificationService){
 	
-		console.log('.. adminNewSiteCtrl')
-
 		angular.extend(this, {
 			session: Session,
 			site: new DBSites(),
@@ -68,8 +64,6 @@
 
 	app.controller('adminEditSiteCtrl', function($state,$stateParams,site,logs,Session){
 	
-		console.log('.. adminEditSiteCtrl', site, $stateParams,$stateParams.id)
-
 		angular.extend(this, {
 			session: Session,
 			site: site,

@@ -25,7 +25,7 @@ func _initRoutes() {
 	})
 
 	e.Post("/login", login)
-	e.Delete("/login/:id", logout)
+	e.Get("/logout", logout)
 
 	e.Post("/syslog", querySyslog)
 
@@ -177,12 +177,9 @@ func logout(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, "bye")
 	}
 
-	id := c.Param("id")
-	i, err := strconv.Atoi(id)
-	if err != nil {
-		i = 0
-	}
-	sysLog(0, "Logout", "U", i, "Logout", c, claim)
+	UserID, Username := getClaimedUser(claim)
+	log.Println("Logout:", UserID, Username)
+	sysLog(0, "Logout", "U", UserID, "Logout", c, claim)
 	return c.String(http.StatusOK, "bye")
 }
 

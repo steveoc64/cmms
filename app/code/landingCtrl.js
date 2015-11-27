@@ -4,8 +4,6 @@
 	angular.module('cmms').controller('landingCtrl',
 	 function(Session, $state){
 	
-		console.log('.. landingCtrl')
-		
 		//console.log('Entering landingCtrl with session',Session)
 		switch(Session.Role) {
 			case 'Admin':

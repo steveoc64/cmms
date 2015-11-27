@@ -20,8 +20,6 @@
 
 	app.controller('adminUserCtrl', function($state, users, Session, LxDialogService, logs){
 	
-		console.log('.. adminUserCtrl')
-
 		angular.extend(this, {
 			users: users,
 			session: Session,
@@ -63,8 +61,6 @@
 
 	app.controller('adminNewUserCtrl', function($state,Session,DBUsers,LxNotificationService){
 	
-		console.log('.. adminNewUserCtrl')
-
 		angular.extend(this, {
 			session: Session,
 			user: new DBUsers(),
@@ -85,8 +81,6 @@
 	})
 
 	app.controller('adminEditUserCtrl', function($state,$stateParams,user,logs,Session){
-	
-		console.log('.. adminEditUserCtrl', user, $stateParams,$stateParams.id)
 
 		angular.extend(this, {
 			session: Session,

@@ -24,7 +24,8 @@ var paths = {
   'bower_components/angular-formly/dist/formly.js',
   'bower_components/angular-messages/angular-messages.js',
   'bower_components/angular-aria/angular-aria.js',
-	'bower_components/angular-formly-templates-lumx/dist/formlyLumx.js',
+  'bower_components/angular-formly-templates-lumx/dist/formlyLumx.js',
+	'bower_components/angular-local-storage/dist/angular-local-storage.js',
 	'bower_components/lumx/dist/lumx.js',
   ],
   // These files are for your app's JavaScript

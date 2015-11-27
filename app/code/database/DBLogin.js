@@ -2,9 +2,14 @@
 	'use strict';
 
 	angular.module('cmms').factory('DBLogin', function($resource,ServerName){
-		return $resource(ServerName+'/login/:id',{},{
+		return $resource(ServerName+'/login',{},{
 			login: {method: 'POST'},
-			logout: {method: 'DELETE', params:{id: '@id'}}
+		})
+	})
+
+	angular.module('cmms').factory('DBLogout', function($resource,ServerName){
+		return $resource(ServerName+'/logout',{},{
+			logout: {method: 'GET'},
 		})
 	})
 

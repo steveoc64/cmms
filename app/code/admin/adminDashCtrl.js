@@ -3,8 +3,6 @@
 
 	angular.module('cmms').controller('adminDashCtrl', function(){
 
-		console.log('.. adminDashCtrl')	
-
 		angular.extend(this, {
 		})
 	

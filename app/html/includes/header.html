@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header" ng-controller="headerCtrl as headerCtrl">
     <div class="menubar">
         <h1 class="logo"><a ui-sref="home">Steel Building Systems International</a></h1>
     </div>
@@ -6,11 +6,17 @@
     <nav class="main-nav">
         <ul>
             <li><button class="btn btn--l btn--indigo btn--raised" 
+                        ng-if="!headerCtrl.session.loggedIn"
                         ui-sref="landing"
-                        lx-ripple>Login</button>
+                        lx-ripple>Login</button></li>
+            <li><button class="btn btn--l btn-blue btn-"
+                        ng-if="headerCtrl.session.loggedIn">User: {{headerCtrl.session.Username}}</li>
+            <li><button class="btn btn--l btn--blue-grey btn--raised" 
+                        ng-if="headerCtrl.session.loggedIn"
+                        ng-click="headerCtrl.logout()"
+                        lx-ripple>Logout</button></li>
         </ul>
     </nav>
 
     <div class="header__stripe"></div>
-
 </header>

@@ -2,7 +2,16 @@
     'use strict';
 
 angular.module('cmms')
-    .controller('LxLoginDialogController', function($scope, LxDialogService, $http, $state,$stateParams,Session,LxNotificationService,DBLogin)
+    .controller('LxLoginDialogController', function(
+      $scope, 
+      LxDialogService, 
+      $http, 
+      $state,
+      $stateParams,
+      Session,
+      LxNotificationService,
+      localStorageService,
+      DBLogin)
     {
         angular.extend($scope, {
           username: '',
@@ -32,6 +41,11 @@ angular.module('cmms')
                 $state.go(Session.toState)
               }
               Session.toState = Session.fromState = ''
+
+              // Save the token in localstorage, along with other info on the session
+              localStorageService.set('token',retval.Token)
+              localStorageService.set('session',Session)
+
             },function(){
               LxNotificationService.warning('Login Failed ...')
             })
