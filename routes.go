@@ -32,9 +32,17 @@ func _initRoutes() {
 	e.Post("/users", newUser)
 	e.Put("/users/:id", saveUser)
 	e.Delete("/users/:id", deleteUser)
-
 	e.Get("/userlog/:id", queryUserlog)
 	e.Get("/userlog", queryUserlogs)
+
+	e.Get("/sites", querySites)
+	e.Get("/sites/:id", getSite)
+	e.Post("/sites", newSite)
+	e.Put("/sites/:id", saveSite)
+	e.Delete("/sites/:id", deleteSite)
+	e.Get("/sitelog/:id", querySitelog)
+	e.Get("/sitelog", querySitelogs)
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,25 +72,37 @@ func getID(c *echo.Context) int {
 // System Log
 
 type SysLog struct {
-	Type    string `db:"type"`
-	RefType string `db:"ref_type"`
-	Ref     int    `db:"ref"`
-	IP      string `db:"ip"`
-	Descr   string `db:"descr"`
+	Type     string `db:"type"`
+	RefType  string `db:"ref_type"`
+	RefID    int    `db:"ref_id"`
+	IP       string `db:"ip"`
+	Descr    string `db:"descr"`
+	UserID   int    `db:"user_id"`
+	Username string `db:"username"`
 }
 
-func sysLog(t string, reftype string, ref int, descr string, c *echo.Context) {
+func sysLog(t string, reftype string, ref int, descr string, c *echo.Context, claim map[string]interface{}) {
 
 	req := c.Request()
+	ip := req.RemoteAddr
+	UserID := 0
+	Username := ""
+	if claim != nil {
+		UserID, Username = getClaimedUser(claim)
+	}
+	log.Println("syslog", UserID, Username)
+
 	l := &SysLog{
-		Type:    t,
-		RefType: reftype,
-		Ref:     ref,
-		Descr:   descr,
-		IP:      req.RemoteAddr,
+		Type:     t,
+		RefType:  reftype,
+		RefID:    ref,
+		Descr:    descr,
+		IP:       ip,
+		UserID:   UserID,
+		Username: Username,
 	}
 	DB.InsertInto("sys_log").
-		Whitelist("type", "ref_type", "ref", "ip", "descr").
+		Whitelist("type", "ref_type", "ref_id", "ip", "descr", "user_id", "username").
 		Record(l).
 		Exec()
 }
@@ -124,10 +144,14 @@ func login(c *echo.Context) error {
 
 	if err != nil {
 		log.Println("Login Failed:", err.Error())
-		sysLog("LognFail", "U", res.ID, fmt.Sprintf("Failed Login %s:%s", l.Username, l.Passwd), c)
+		sysLog("Login", "U", res.ID, fmt.Sprintf("Failed Login (%s:%s)", l.Username, l.Passwd), c, nil)
 		return c.String(http.StatusUnauthorized, "invalid")
 	} else {
-		sysLog("Login", "U", res.ID, fmt.Sprintf("Login %s", l.Username), c)
+		claim := map[string]interface{}{
+			"ID":       float64(res.ID),
+			"Username": res.Username,
+		}
+		sysLog("Login", "U", res.ID, "Login", c, claim)
 		//		log.Println(res)
 
 		tokenString, err := generateToken(res.ID, res.Role, l.Username)
@@ -142,12 +166,18 @@ func login(c *echo.Context) error {
 }
 
 func logout(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "*")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, "bye")
+	}
+
 	id := c.Param("id")
 	i, err := strconv.Atoi(id)
 	if err != nil {
 		i = 0
 	}
-	sysLog("Logout", "U", i, fmt.Sprintf("Logout %s", id), c)
+	sysLog("Logout", "U", i, "Logout", c, claim)
 	return c.String(http.StatusOK, "bye")
 }
 
@@ -265,31 +295,29 @@ func getUser(c *echo.Context) error {
 }
 
 func newUser(c *echo.Context) error {
-	//var user DBusers
 
 	claim, err := securityCheck(c, "writeUser")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	newUser := &DBusers{}
-	if err := c.Bind(newUser); err != nil {
+	record := &DBusers{}
+	if err := c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
 	err = DB.InsertInto("users").
-		Columns("username", "passwd", "address", "name", "email", "role", "sms").
-		Record(newUser).
+		Whitelist("username", "passwd", "address", "name", "email", "role", "sms").
+		Record(record).
 		Returning("id").
-		QueryScalar(&newUser.ID)
+		QueryScalar(&record.ID)
 
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
 	// Now log the creation of the new user
-	sysLog("NewUser", "U", getUID(claim), fmt.Sprintf("Added User (%d) %s", newUser.ID, newUser.Username), c)
-	sysLog("NewUser", "U", newUser.ID, fmt.Sprintf("Account Created by %s", claim["Username"].(string)), c)
+	sysLog("Users", "U", record.ID, fmt.Sprintf("Account Created - %s", record.Username), c, claim)
 
 	// insert into DB, fill in the ID of the new user
 	return c.JSON(http.StatusCreated, newUser)
@@ -302,15 +330,15 @@ func saveUser(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	updateUser := &DBusers{}
-	if err = c.Bind(updateUser); err != nil {
+	record := &DBusers{}
+	if err = c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
 	userID := getID(c)
 
 	_, err = DB.Update("users").
-		SetWhitelist(updateUser, "username", "name", "passwd", "email", "address", "sms", "role").
+		SetWhitelist(record, "username", "name", "passwd", "email", "address", "sms", "role").
 		Where("id = $1", userID).
 		Exec()
 
@@ -318,8 +346,8 @@ func saveUser(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sysLog("UserMod", "U", userID, fmt.Sprintf("Details updated by %s", claim["Username"].(string)), c)
-	return c.JSON(http.StatusOK, updateUser)
+	sysLog("Users", "U", userID, "User Updated", c, claim)
+	return c.JSON(http.StatusOK, record)
 }
 
 func deleteUser(c *echo.Context) error {
@@ -327,4 +355,166 @@ func deleteUser(c *echo.Context) error {
 	//id := getID(c)
 
 	return c.String(http.StatusOK, `TODO - delete the user`)
+}
+
+///////////////////////////////////////////////////////////////////////
+// Sites Maintenance
+/*
+create table site (
+	id serial not null primary key,
+	name text not null default '',
+	address text not null default '',
+	phone text not null default '',
+	fax text not null,
+	image text not null
+);
+*/
+
+type DBsite struct {
+	ID      int    `db:"id"`
+	Name    string `db:"name"`
+	Address string `db:"address"`
+	Phone   string `db:"phone"`
+	Fax     string `db:"fax"`
+	Image   string `db:"image"`
+}
+
+func querySites(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var record []*DBsite
+	err = DB.SQL(`select * from site order by lower(name)`).QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func getSite(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var record DBsite
+	err = DB.SQL(`select * from site where id=$1`, id).QueryStruct(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func newSite(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writeSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	record := &DBsite{}
+	if err := c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	err = DB.InsertInto("site").
+		Whitelist("name", "address", "phone", "fax", "image").
+		Record(newSite).
+		Returning("id").
+		QueryScalar(&record.ID)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	// Now log the creation of the new site
+	sysLog("Sites", "S", record.ID, "Site Created", c, claim)
+
+	// insert into DB, fill in the ID of the new user
+	return c.JSON(http.StatusCreated, record)
+}
+
+func saveSite(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writeSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	record := &DBsite{}
+	if err = c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	siteID := getID(c)
+
+	_, err = DB.Update("site").
+		SetWhitelist(record, "name", "address", "phone", "fax", "image").
+		Where("id = $1", siteID).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	sysLog("Sites", "S", siteID, "Updated", c, claim)
+	return c.JSON(http.StatusOK, siteID)
+}
+
+func deleteSite(c *echo.Context) error {
+
+	return c.String(http.StatusOK, "TODO delete site")
+}
+
+func querySitelog(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var record []*DBuserlog
+	err = DB.SQL(`
+		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr
+		from sys_log l 
+		where ref=$1 and ref_type='S' 
+		order by l.logdate desc
+		limit 20`, id).
+		QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func querySitelogs(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var record []*DBuserlog
+	err = DB.SQL(`
+		select type,ref,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,u.username
+		from sys_log l
+		left outer join users u on (u.id = l.ref)
+		where ref_type='S' 
+		order by l.logdate desc
+		limit 50`).
+		QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
 }

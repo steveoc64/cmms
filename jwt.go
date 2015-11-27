@@ -136,7 +136,7 @@ func securityCheck(c *echo.Context, action string) (map[string]interface{}, erro
 	v := reflect.TypeOf(role).Kind()
 	switch v {
 	case reflect.String:
-		if claimedRole != role {
+		if role == "*" || claimedRole != role {
 			return nil, errors.New("Invalid Role")
 		}
 	case reflect.Slice:
@@ -157,14 +157,18 @@ func securityCheck(c *echo.Context, action string) (map[string]interface{}, erro
 	return token.Claims, nil
 }
 
-func getUID(claim map[string]interface{}) int {
+func getClaimedUser(claim map[string]interface{}) (int, string) {
 	UID := int(claim["ID"].(float64))
-	return UID
+	Username := claim["Username"].(string)
+	return UID, Username
 }
 
 func _initSecurityRules() {
 
 	SecurityRules = make(map[string]interface{})
+
+	SecurityRules["*"] = "*"
+	SecurityRules["log"] = "*"
 
 	SecurityRules["defaultAllow"] = []string{"Admin", "Site Manager"}
 	SecurityRules["read"] = []string{"Admin", "Worker"}
@@ -174,4 +178,7 @@ func _initSecurityRules() {
 
 	SecurityRules["readUser"] = []string{"Admin", "Worker", "Site Manager"}
 	SecurityRules["writeUser"] = []string{"Admin", "Site Manager"}
+
+	SecurityRules["readSite"] = []string{"Admin", "Worker", "Site Manager", "Vendor", "Service Contractor"}
+	SecurityRules["writeSite"] = []string{"Admin", "Site Manager"}
 }

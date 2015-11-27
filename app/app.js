@@ -113,32 +113,60 @@
 		      		}
 		      	}
 		      })
-		      .state('admin.edituser',{
-		      	url: '/user/edit/:id',
-		      	acl: 'Admin',
-		      	templateUrl: 'html/admin/users.edit.html',
-		      	controller: 'adminEditUserCtrl as editUser',
-		      	resolve: {
-		      		user: function(DBUsers,$stateParams) {
-		      			return DBUsers.get({id: $stateParams.id})
-		      		},
-		      		logs: function(DBUserlog,$stateParams) {
-		      			return DBUserlog.get({id: $stateParams.id})
-		      		}
-		      	}
-		      })
-		      .state('admin.newuser',{
-		      	url: '/newuser',
-		      	acl: 'Admin',
-		      	templateUrl: 'html/admin/users.new.html',
-		      	controller: 'adminNewUserCtrl as newUser'
-		      })
+			      .state('admin.edituser',{
+			      	url: '/user/edit/:id',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/users.edit.html',
+			      	controller: 'adminEditUserCtrl as editUser',
+			      	resolve: {
+			      		user: function(DBUsers,$stateParams) {
+			      			return DBUsers.get({id: $stateParams.id})
+			      		},
+			      		logs: function(DBUserlog,$stateParams) {
+			      			return DBUserlog.get({id: $stateParams.id})
+			      		}
+			      	}
+			      })
+			      .state('admin.newuser',{
+			      	url: '/newuser',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/users.new.html',
+			      	controller: 'adminNewUserCtrl as newUser'
+			      })
 		      .state('admin.sites',{
 		      	url: '/sites',
 		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/sites.html',
 		      	controller: 'adminSitesCtrl as adminSites',
+		      	resolve: {
+		      		sites: function(DBSites) {
+		      			return DBSites.query()
+		      		},
+		      		logs: function(DBSitelog,$stateParams) {
+		      			return DBSitelog.get({id: $stateParams.id})
+		      		}
+		      	}
 		      })
+			      .state('admin.editsite',{
+			      	url: '/site/edit/:id',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/site.edit.html',
+			      	controller: 'adminEditSiteCtrl as editSite',
+			      	resolve: {
+			      		site: function(DBSites,$stateParams) {
+			      			return DBSites.get({id: $stateParams.id})
+			      		},
+			      		logs: function(DBSitelog,$stateParams) {
+			      			return DBSitelog.get({id: $stateParams.id})
+			      		}
+			      	}
+			      })
+			      .state('admin.newsite',{
+			      	url: '/newsite',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/site.new.html',
+			      	controller: 'adminNewSiteCtrl as newSite'
+			      })
 		      .state('admin.equip',{
 		      	url: '/equip',
 		      	acl: 'Admin',

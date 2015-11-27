@@ -17,8 +17,8 @@ create table site (
 	name text not null default '',
 	address text not null default '',
 	phone text not null default '',
-	fax text not null,
-	image text not null
+	fax text not null default '',
+	image text not null default ''
 );
 
 drop table if exists user_role;
@@ -52,7 +52,9 @@ create table sys_log (
 	ref int not null,
 	logdate timestamp not null default localtimestamp,
 	ip text not null,
-	descr text not null
+	descr text not null,
+	user_id int not null,
+	username text not null default ''
 );
 create unique index sys_log_idx on sys_log (logdate,id);
 

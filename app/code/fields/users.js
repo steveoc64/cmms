@@ -118,7 +118,7 @@ getUserFields = function() {
 			}
 		}
 
-	}]
+	}] // end fields
 
 } // getUserFields
 
