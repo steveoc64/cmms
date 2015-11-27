@@ -41,11 +41,6 @@ func _initRoutes() {
 	e.Put("/sites/:id", saveSite)
 	e.Delete("/sites/:id", deleteSite)
 
-	e.Get("/sitelog/:id", querySitelog)
-	e.Get("/sitelog", querySitelogs)
-	e.Get("/userlog/:id", queryUserlog)
-	e.Get("/userlog", queryUserlogs)
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,15 +69,24 @@ func getID(c *echo.Context) int {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // System Log
 
-type SysLog struct {
+type DBsyslog struct {
+	ID       int    `db:"id"`
 	Status   int    `db:"status"`
 	Type     string `db:"type"`
 	RefType  string `db:"ref_type"`
 	RefID    int    `db:"ref_id"`
+	Logdate  string `db:"logdate"`
 	IP       string `db:"ip"`
 	Descr    string `db:"descr"`
 	UserID   int    `db:"user_id"`
 	Username string `db:"username"`
+}
+
+type SysLogRequest struct {
+	RefType string
+	RefID   string
+	UserID  string
+	Limit   uint64
 }
 
 func sysLog(status int, t string, reftype string, ref int, descr string, c *echo.Context, claim map[string]interface{}) {
@@ -96,7 +100,7 @@ func sysLog(status int, t string, reftype string, ref int, descr string, c *echo
 	}
 	log.Println("syslog", UserID, Username)
 
-	l := &SysLog{
+	l := &DBsyslog{
 		Status:   status,
 		Type:     t,
 		RefType:  reftype,
@@ -110,6 +114,61 @@ func sysLog(status int, t string, reftype string, ref int, descr string, c *echo
 		Whitelist("status", "type", "ref_type", "ref_id", "ip", "descr", "user_id", "username").
 		Record(l).
 		Exec()
+}
+
+func querySyslog(c *echo.Context) error {
+
+	_, err := securityCheck(c, "log")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	req := &SysLogRequest{}
+	if err := c.Bind(req); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	log.Println("Syslog request", req)
+
+	if req.Limit < 20 {
+		req.Limit = 20
+	}
+	if req.Limit > 100 {
+		req.Limit = 100
+	}
+
+	query := DB.Select("status",
+		"type", "ref_type", "ref_id",
+		"ip", "descr",
+		"user_id", "username",
+		"to_char(l.logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate").
+		From("sys_log l").
+		OrderBy("l.logdate desc").
+		Limit(req.Limit)
+
+	// Add extra options to the SQL query
+	if req.RefType != "" {
+		query.Where("ref_type = $1", req.RefType)
+	}
+
+	if req.RefID != "" {
+		query.Where("ref_id = $1", req.RefID)
+	}
+
+	if req.UserID != "" {
+		// Grab any log records created by this specific user
+		query.Where("user_id = $1", req.UserID)
+		// And any log records of type U related to this specific user
+		query.Where("ref_type = 'U' and ref_id=$1", req.UserID)
+	}
+
+	var record []*DBsyslog
+	err = query.QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, record)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,15 +254,16 @@ func logout(c *echo.Context) error {
 */
 
 type DBusers struct {
-	ID       int    `db:"id",json:"number"`
-	Username string `db:"username"`
-	Passwd   string `db:"passwd"`
-	Name     string `db:"name"`
-	Email    string `db:"email"`
-	Address  string `db:"address"`
-	SMS      string `db:"sms"`
-	SiteId   int    `db:"site_id"`
-	Role     string `db:"role"`
+	ID       int       `db:"id",json:"number"`
+	Username string    `db:"username"`
+	Passwd   string    `db:"passwd"`
+	Name     string    `db:"name"`
+	Email    string    `db:"email"`
+	Address  string    `db:"address"`
+	SMS      string    `db:"sms"`
+	SiteId   int       `db:"site_id"`
+	Role     string    `db:"role"`
+	Sites    []*DBsite `db:"sites"`
 }
 
 type DBuserlog struct {
@@ -213,6 +273,12 @@ type DBuserlog struct {
 	Logdate  string  `db:"logdate"`
 	IP       string  `db:"ip"`
 	Descr    *string `db:"descr"`
+}
+
+type DBuserSite struct {
+	UserID int    `db:"user_id"`
+	SiteID int    `db:"site_id"`
+	Role   string `db:"role"`
 }
 
 func queryUsers(c *echo.Context) error {
@@ -231,127 +297,6 @@ func queryUsers(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 	return c.JSON(http.StatusOK, users)
-}
-
-func queryUserlog(c *echo.Context) error {
-
-	_, err := securityCheck(c, "readUser")
-	if err != nil {
-		return c.String(http.StatusUnauthorized, err.Error())
-	}
-
-	id := getID(c)
-	var userlogs []*DBuserlog
-	err = DB.SQL(`
-		select type,ref_id,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,username
-		from sys_log l 
-		where ref_id=$1 and ref_type='U' 
-			 or user_id=$1
-		order by l.logdate desc
-		limit 20`, id).
-		QueryStructs(&userlogs)
-
-	if err != nil {
-		return c.String(http.StatusNoContent, err.Error())
-	}
-	return c.JSON(http.StatusOK, userlogs)
-}
-
-func queryUserlogs(c *echo.Context) error {
-
-	_, err := securityCheck(c, "readUser")
-	if err != nil {
-		return c.String(http.StatusUnauthorized, err.Error())
-	}
-
-	var userlogs []*DBuserlog
-	err = DB.SQL(`
-		select type,ref_id,to_char(logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate,ip,descr,username
-		from sys_log l
-		where ref_type='U' 
-		order by l.logdate desc
-		limit 50`).
-		QueryStructs(&userlogs)
-
-	if err != nil {
-		return c.String(http.StatusNoContent, err.Error())
-	}
-	return c.JSON(http.StatusOK, userlogs)
-}
-
-type DBsyslog struct {
-	ID       int    `db:"id"`
-	Status   int    `db:"status"`
-	Type     string `db:"type"`
-	RefType  string `db:"ref_type"`
-	RefID    string `db:"ref_id"`
-	Logdate  string `db:"logdate"`
-	IP       string `db:"ip"`
-	Descr    string `db:"descr"`
-	UserID   int    `db:"user_id"`
-	Username string `db:"username"`
-}
-
-type SysLogRequest struct {
-	RefType string
-	RefID   string
-	UserID  string
-	Limit   uint64
-}
-
-func querySyslog(c *echo.Context) error {
-
-	_, err := securityCheck(c, "log")
-	if err != nil {
-		return c.String(http.StatusUnauthorized, err.Error())
-	}
-
-	req := &SysLogRequest{}
-	if err := c.Bind(req); err != nil {
-		return c.String(http.StatusBadRequest, err.Error())
-	}
-	log.Println("Syslog request", req)
-
-	if req.Limit < 20 {
-		req.Limit = 20
-	}
-	if req.Limit > 100 {
-		req.Limit = 100
-	}
-
-	query := DB.Select("status",
-		"type", "ref_type", "ref_id",
-		"ip", "descr",
-		"user_id", "username",
-		"to_char(l.logdate,'Dy DD-Mon-YY HH24:MI:SS') as logdate").
-		From("sys_log l").
-		OrderBy("l.logdate desc").
-		Limit(req.Limit)
-
-	// Add extra options to the SQL query
-	if req.RefType != "" {
-		query.Where("ref_type = $1", req.RefType)
-	}
-
-	if req.RefID != "" {
-		query.Where("ref_id = $1", req.RefID)
-	}
-
-	if req.UserID != "" {
-		// Grab any log records created by this specific user
-		query.Where("user_id = $1", req.UserID)
-		// And any log records of type U related to this specific user
-		query.Where("ref_type = 'U' and ref_id=$1", req.UserID)
-	}
-
-	var record []*DBsyslog
-	err = query.QueryStructs(&record)
-
-	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
-	}
-
-	return c.JSON(http.StatusOK, record)
 }
 
 func getUser(c *echo.Context) error {
@@ -414,13 +359,40 @@ func saveUser(c *echo.Context) error {
 
 	userID := getID(c)
 
+	// Get the first site from the list of sites added
+	if len(record.Sites) > 0 {
+		record.SiteId = record.Sites[0].ID
+	} else {
+		record.SiteId = 0
+	}
+
 	_, err = DB.Update("users").
-		SetWhitelist(record, "username", "name", "passwd", "email", "address", "sms", "role").
+		SetWhitelist(record, "username", "name", "passwd", "email", "address", "sms", "role", "site_id").
 		Where("id = $1", userID).
 		Exec()
 
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	// Now create the user_site records
+	DB.DeleteFrom("user_site").
+		Where("user_id=$1", userID).
+		Exec()
+
+	log.Println("Sites = ", record.Sites)
+	for _, addSite := range record.Sites {
+		log.Println("Attach user", userID, "to site", addSite.ID, "name", addSite.Name)
+
+		userSite := &DBuserSite{
+			UserID: userID,
+			SiteID: addSite.ID,
+			Role:   record.Role,
+		}
+		DB.InsertInto("user_site").
+			Whitelist("user_id", "site_id", "role").
+			Record(userSite).
+			Exec()
 	}
 
 	sysLog(1, "Users", "U", userID, "User Updated", c, claim)

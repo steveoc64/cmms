@@ -10,7 +10,7 @@ angular.module('cmms')
       $stateParams,
       Session,
       LxNotificationService,
-      localStorageService,
+      $localStorage,
       DBLogin)
     {
         angular.extend($scope, {
@@ -43,8 +43,8 @@ angular.module('cmms')
               Session.toState = Session.fromState = ''
 
               // Save the token in localstorage, along with other info on the session
-              localStorageService.set('token',retval.Token)
-              localStorageService.set('session',Session)
+              $localStorage.token = retval.Token
+              $localStorage.session = Session
 
             },function(){
               LxNotificationService.warning('Login Failed ...')

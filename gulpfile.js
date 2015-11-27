@@ -13,20 +13,20 @@ var gulp = require('gulp'),
 
 var paths = {
   lumX_JS: [
- 	'bower_components/jquery/dist/jquery.js',
+ 	'bower_components/jquery/dist/jquery.min.js',
   'bower_components/fastclick/lib/fastclick.js',	
-	'bower_components/velocity/velocity.js',
-	'bower_components/moment/min/moment-with-locales.js',
-  'bower_components/angular/angular.js',
-	'bower_components/api-check/dist/api-check.js',
-  'bower_components/angular-ui-router/release/angular-ui-router.js',
-  'bower_components/angular-resource/angular-resource.js',
-  'bower_components/angular-formly/dist/formly.js',
-  'bower_components/angular-messages/angular-messages.js',
-  'bower_components/angular-aria/angular-aria.js',
+	'bower_components/velocity/velocity.min.js',
+	'bower_components/moment/min/moment-with-locales.min.js',
+  'bower_components/angular/angular.min.js',
+	'bower_components/api-check/dist/api-check.min.js',
+  'bower_components/angular-ui-router/release/angular-ui-router.min.js',
+  'bower_components/angular-resource/angular-resource.min.js',
+  'bower_components/angular-formly/dist/formly.min.js',
+  'bower_components/angular-messages/angular-messages.min.js',
+  'bower_components/angular-aria/angular-aria.min.js',
+  'bower_components/ngstorage/ngStorage.min.js',
+  'bower_components/lumx/dist/lumx.min.js',
   'bower_components/angular-formly-templates-lumx/dist/formlyLumx.js',
-	'bower_components/angular-local-storage/dist/angular-local-storage.js',
-	'bower_components/lumx/dist/lumx.js',
   ],
   // These files are for your app's JavaScript
   appJS: [
@@ -70,8 +70,8 @@ gulp.task('lumx:css', function() {
 
 gulp.task('lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
-	    .pipe($.concat('libs.js'))
-	    //.pipe($.uglify())
+      .pipe($.concat('libs.js'))
+//	    .pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
 	    ;
 });
@@ -132,7 +132,7 @@ gulp.task('dx:lumx:css', function() {
 gulp.task('dx:lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
 	    .pipe($.concat('libs.js'))
-	    .pipe($.uglify())
+	    //.pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
 	    ;
 });

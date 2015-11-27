@@ -1,25 +1,10 @@
 // Some global functions available for all
 
-var logClass = function(l) {
-			switch (l.Status) {
-				case 1:
-					return 'syslog-status-1'
-					break
-				case 2:
-					return 'syslog-status-2'
-					break
-				case 3:
-					return 'syslog-status-3'
-					break
-			}
-			return ''
-		}
-
 ;(function() {
 	'use strict';
 
 	//console.log('Init app')
-	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','LocalStorageModule'])
+	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage'])
 		.service('Session', session)
     .constant('ServerName', '')
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	
@@ -42,7 +27,7 @@ var logClass = function(l) {
 			  };
 			})
 
-  	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
+  	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $localStorageProvider) {
 
   		// Force all outgoing http requests to include the Auth token, if defined
 			$httpProvider.interceptors.push(function ($q, Session) {
@@ -57,8 +42,7 @@ var logClass = function(l) {
 			   }
 			}) 
 
-			localStorageServiceProvider.setPrefix('cmms')
-
+			$localStorageProvider.setKeyPrefix('cmms.')
 	    $urlRouterProvider.otherwise('/');
 
 	    $locationProvider.html5Mode({
@@ -79,7 +63,7 @@ var logClass = function(l) {
 	    	.state('login',{	// Special state with no template !!
 	    		url: '/login',
 	    		acl:'*',
-	    		onEnter: function($state,Session,LxDialogService,localStorageService) {
+	    		onEnter: function($state,Session,LxDialogService) {
 	    			if (Session.fromState == '') {
 	    				$state.go('home')
 	    			} else {
@@ -91,10 +75,10 @@ var logClass = function(l) {
 	    	.state('logout',{	// Special state with no template !!
 	    		url: '/logout',
 	    		acl:'*',
-	    		onEnter: function($state,Session,LxNotificationService,localStorageService) {
+	    		onEnter: function($state,Session,LxNotificationService,$localStorageProvider) {
 	    			Session.logout()
-	    			localStorageService.remove('token')
-	    			localStorageService.remove('session')
+	    			delete $localStorage.get('token')
+	    			delete $localStorage.get('session')
 	   				LxNotificationService.warning('Logged Out')
 	   				$state.go('home')
 	    		},
@@ -152,6 +136,9 @@ var logClass = function(l) {
 			      		user: function(DBUsers,$stateParams) {
 			      			return DBUsers.get({id: $stateParams.id})
 			      		},
+			      		sites: function(DBSites) {
+			      			return DBSites.query()
+			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				UserID: $stateParams.id
@@ -163,7 +150,12 @@ var logClass = function(l) {
 			      	url: '/newuser',
 			      	acl: 'Admin',
 			      	templateUrl: 'html/admin/users.new.html',
-			      	controller: 'adminNewUserCtrl as newUser'
+			      	controller: 'adminNewUserCtrl as newUser',
+			      	resolve: {
+			      		sites: function(DBSites) {
+			      			return DBSites.query()
+			      		}		      		
+			      	}
 			      })
 		      .state('admin.sites',{
 		      	url: '/sites',
@@ -324,7 +316,7 @@ var logClass = function(l) {
 	  	}
 	  }
 
-	function run($rootScope, $state, LxDialogService, LxNotificationService, Session, formlyConfig, localStorageService) {
+	function run($rootScope, $state, LxDialogService, LxNotificationService, Session, formlyConfig, $localStorage) {
 	  FastClick.attach(document.body);
 
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -334,8 +326,8 @@ var logClass = function(l) {
 					// Check first to see if we have a token in local storage before falling in a heap
 					// If so, we can substitute the local storage session for the real session, 
 					// and get back to running
-					var token = localStorageService.get('token')
-					var sess  = localStorageService.get('session')
+					var token = $localStorage.token
+					var sess  = $localStorage.session
 					if (token != null) {
 			  		console.log('Not logged in, and we are trying to get to',toState.name)
 						console.log('Restart session using existing token', token)

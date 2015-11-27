@@ -1,6 +1,22 @@
 ;(function() {
 	'use strict';
 
+
+var logClass = function(l) {
+			switch (l.Status) {
+				case 1:
+					return 'syslog-status-1'
+					break
+				case 2:
+					return 'syslog-status-2'
+					break
+				case 3:
+					return 'syslog-status-3'
+					break
+			}
+			return ''
+		}
+
 	var app = angular.module('cmms')
 
 	app.controller('adminUserCtrl', function($state, users, Session, LxDialogService, logs){
@@ -44,12 +60,13 @@
 		})
 	})
 
-	app.controller('adminNewUserCtrl', function($state,Session,DBUsers,LxNotificationService){
+	app.controller('adminNewUserCtrl', function($state,Session,DBUsers,LxNotificationService,sites){
 	
 		angular.extend(this, {
 			session: Session,
 			user: new DBUsers(),
-			formFields: getUserForm(),
+			sites: sites,
+			formFields: getUserForm(sites),
 			logClass: logClass,
 			addUser: function() {
 				if (this.form.$valid) {
@@ -65,13 +82,14 @@
 		})
 	})
 
-	app.controller('adminEditUserCtrl', function($state,$stateParams,user,logs,Session){
+	app.controller('adminEditUserCtrl', function($state,$stateParams,user,logs,Session,sites){
 
 		angular.extend(this, {
 			session: Session,
 			user: user,
 			logs: logs,
-			formFields: getUserForm(),		
+			sites: sites,
+			formFields: getUserForm(sites),		
 			logClass: logClass,
 			submit: function() {
 				this.user._id = $stateParams.id

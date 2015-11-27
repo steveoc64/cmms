@@ -108,6 +108,20 @@ getUserFields = function() {
 			}
 		}
 	},{
+		name: 'user.Site',
+		extends: 'lx-select',
+		defaultOptions: {
+			key: 'Sites',
+			templateOptions: {
+				placeholder: "Select Sites",
+				space: true,
+				multiple: true,
+				choice: "Name",
+				selected: "Name",
+				options: [],
+			}
+		}
+	},{
 		name: 'user.RoleDisplay',
 		extends: 'lx-input',
 		defaultOptions: {
@@ -122,7 +136,7 @@ getUserFields = function() {
 
 } // getUserFields
 
-getUserForm = function() {
+getUserForm = function(sites) {
 
 	return [{
 		type: 'lx-flex',
@@ -153,9 +167,13 @@ getUserForm = function() {
 	},{
 		type: 'lx-flex',
 		templateOptions: {
-			flex: { container: "row", item: "6"},
+			flex: { container: "row", item: "4"},
 			fields: [
 				{type: 'user.SMS'},
+				{
+					type: 'user.Site',
+					templateOptions: {options: sites}
+				},
 				{type: 'user.Role'},
 			]
 		}

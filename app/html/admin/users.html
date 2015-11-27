@@ -64,6 +64,7 @@
     <thead>
       <tr>
         <th class="data-table__sortable-cell data-table__sortable-cell--desc"> <i class="mdi mdi-account"></i></th>
+        <th> Role</th>
         <th> Name</th>
         <th> <i class="mdi mdi-email"></i>Email</th>
         <!-- <th> <i class="mdi mdi-cellphone"></i>SMS</th> -->
@@ -78,6 +79,7 @@
       		ng-repeat="u in adminUser.users"
       		ng-click="adminUser.clickedRow(u)"> 
             <td>{{u.Username}}</td>
+            <td>{{u.Role}}</td>
             <td>{{u.Name}}</td>
             <td>{{u.Email}}</td>
             <!-- <td>{{u.SMS}}</td> -->

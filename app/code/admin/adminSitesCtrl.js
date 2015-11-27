@@ -1,6 +1,22 @@
 ;(function() {
 	'use strict';
 
+
+var logClass = function(l) {
+			switch (l.Status) {
+				case 1:
+					return 'syslog-status-1'
+					break
+				case 2:
+					return 'syslog-status-2'
+					break
+				case 3:
+					return 'syslog-status-3'
+					break
+			}
+			return ''
+		}
+
 	var app = angular.module('cmms')
 
 	app.controller('adminSitesCtrl', function($state, sites, Session, LxDialogService, logs){

@@ -22,6 +22,14 @@ create table site (
 	image text not null default ''
 );
 
+drop table if exists user_site;
+create table user_site (
+	user_id int not null,
+	site_id int not null,
+	role text not null 
+);
+create unique index user_site_idx on user_site (user_id,site_id);
+
 drop table if exists user_role;
 create table user_role (
 	user_id int not null,
