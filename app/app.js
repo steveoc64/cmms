@@ -132,6 +132,7 @@ var logClass = function(l) {
 		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/users.html',
 		      	controller: 'adminUserCtrl as Users',
+		      	cache: false,
 		      	resolve: {
 		      		users: function(DBUsers) {
 		      			return DBUsers.query()
@@ -180,6 +181,7 @@ var logClass = function(l) {
 		      .state('admin.skills',{
 		      	url: '/skills',
 		      	acl: 'Admin',
+		      	cache: false,
 		      	templateUrl: 'html/admin/skills.html',
 		      	controller: 'adminSkillCtrl as Skills',
 		      	resolve: {
@@ -221,6 +223,7 @@ var logClass = function(l) {
 		      .state('admin.sites',{
 		      	url: '/sites',
 		      	acl: 'Admin',
+		      	cache: false,
 		      	templateUrl: 'html/admin/sites.html',
 		      	controller: 'adminSitesCtrl as adminSites',
 		      	resolve: {

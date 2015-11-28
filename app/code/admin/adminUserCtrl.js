@@ -1,11 +1,12 @@
 ;(function() {
 	'use strict';
 
-var base = 'admin'
-
+	var base = 'admin'
 	var app = angular.module('cmms')
 
-	app.controller(base+'UserCtrl', function($state, users, Session, LxDialogService, logs){
+	app.controller(base+'UserCtrl', 
+		['$state','users','Session','LxDialogService','logs','LxNotificationService',
+		function($state, users, Session, LxDialogService, logs, LxNotificationService){
 	
 		angular.extend(this, {
 			users: users,
@@ -38,25 +39,44 @@ var base = 'admin'
 				var vm = this
 				angular.forEach (vm.logs, function(v,k){
 					angular.forEach(vm.users, function(vv,kk){
-						if (vv.selected && v.RefID == vv.ID) {
+						if (vv.selected && (v.RefID == vv.ID || v.UserID == vv.ID)) {
 							l.push(v)
 						}
 					})
 				})
 				// l now contains filtered logs
 				return l
+			},
+			deleteSelected: function() {
+				var vm = this
+				LxNotificationService.confirm('Delete Users',
+					'Do you want to delete all the selected users ?',
+					{cancel: 'No',ok:'Yes, delete them all !'},
+					function(answer){
+						if (answer) {
+							angular.forEach (vm.users, function(v,k){
+								if (v.selected) {
+									v.$delete({id: v.ID})
+								}
+							})
+							// Now refresh the users list
+							$state.reload()
+						}
+					})
 			}
 		})
-	})
+	}])
 
-	app.controller(base+'NewUserCtrl', function($state,Session,DBUsers,LxNotificationService,sites,skills){
+	app.controller(base+'NewUserCtrl', 
+		['$state','Session','DBUsers','LxNotificationService','sites','skills','$window',
+		function($state,Session,DBUsers,LxNotificationService,sites,skills,$window){
 	
 		angular.extend(this, {
 			session: Session,
 			user: new DBUsers(),
 			sites: sites,
 			skills: skills,
-			formFields: getUserForm({},sites,skills),
+			formFields: getUserForm(sites,skills),
 			logClass: logClass,
 			submit: function() {
 				if (this.form.$valid) {
@@ -69,12 +89,15 @@ var base = 'admin'
 			},
 			abort: function() {
 				LxNotificationService.warning('New User - Cancelled')
-				$state.go(base+'.users')
+				$window.history.go(-1)
+				//$state.go(base+'.users')
 			}
 		})
-	})
+	}])
 
-	app.controller(base+'EditUserCtrl', function($state,$stateParams,user,logs,Session,sites,skills){
+	app.controller(base+'EditUserCtrl', 
+		['$state','$stateParams','user','logs','Session','sites','skills','$window',
+		function($state,$stateParams,user,logs,Session,sites,skills,$window){
 
 		angular.extend(this, {
 			session: Session,
@@ -82,7 +105,7 @@ var base = 'admin'
 			logs: logs,
 			sites: sites,
 			skills: skills,
-			formFields: getUserForm({},sites,skills),		
+			formFields: getUserForm(sites,skills),		
 			logClass: logClass,
 			submit: function() {
 				this.user._id = $stateParams.id
@@ -91,9 +114,10 @@ var base = 'admin'
 				})					
 			},
 			abort: function() {
-				$state.go(base+'.users')
+				$window.history.go(-1)
+//				$state.go(base+'.users')
 			}
 		})
-	})
+	}])
 
 })();

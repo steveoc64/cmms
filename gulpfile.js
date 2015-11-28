@@ -86,6 +86,7 @@ gulp.task('lumx:css', function() {
 
 gulp.task('lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
+//      .pipe(ngfix())
       .pipe($.concat('libs.js'))
 //	    .pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
@@ -147,8 +148,9 @@ gulp.task('dx:lumx:css', function() {
 
 gulp.task('dx:lumx:js', function() {
 	return gulp.src(paths.lumX_JS)
+      .pipe(ngfix())
 	    .pipe($.concat('libs.js'))
-	    //.pipe($.uglify())
+	    .pipe($.uglify())
 	    .pipe(gulp.dest('./build/js/'))
 	    ;
 });
@@ -216,7 +218,7 @@ gulp.task('dx:app:js', function() {
 	return gulp.src(paths.appJS)
 		.pipe(ngfix())
 		.pipe($.concat('app.js'))
-    	.pipe($.uglify())       // Works well with ng-annotate !!
+    .pipe($.uglify())       // Works well with ng-annotate !!
 		.pipe(gulp.dest('./build/js'))
 		;
 });

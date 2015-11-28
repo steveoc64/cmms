@@ -160,15 +160,15 @@ getUserFields = function() {
 
 } // getUserFields
 
-getUserForm = function(options,sites,skills) {
+getUserForm = function(sites,skills) {
 
 	return [{
 		type: 'lx-flex',
 		templateOptions: {
 			flex: { container: "row", item: "6"},
 			fields: [
-				{type: 'user.Username', templateOptions: options},
-				{type: 'user.Password', templateOptions: options}
+				{type: 'user.Username'},
+				{type: 'user.Password'}
 			]
 		}
 	},{
@@ -176,8 +176,8 @@ getUserForm = function(options,sites,skills) {
 		templateOptions: {
 			flex: { container: "row", item: "6"},
 			fields: [
-				{type: 'user.Name', templateOptions: options},
-				{type: 'user.Email', templateOptions: options}
+				{type: 'user.Name'},
+				{type: 'user.Email'}
 			]
 		}
 	},{
@@ -185,8 +185,8 @@ getUserForm = function(options,sites,skills) {
 		templateOptions: {
 			flex: {container: "row", item: "8"},
 			fields: [
-				{type: 'user.Address', templateOptions: options},
-				{type: 'user.SMS', templateOptions: options},
+				{type: 'user.Address'},
+				{type: 'user.SMS'},
 			]
 		}
 	},{

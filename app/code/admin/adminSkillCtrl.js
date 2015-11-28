@@ -4,7 +4,9 @@
 	var base = 'admin'
 	var app = angular.module('cmms')
 
-	app.controller(base+'SkillCtrl', function($state, skills, Session, LxDialogService, logs){
+	app.controller(base+'SkillCtrl', 
+		['$state','skills','Session','LxDialogService','logs','LxNotificationService',
+		function($state, skills, Session, LxDialogService, logs,LxNotificationService){
 	
 		angular.extend(this, {
 			skills: skills,
@@ -40,11 +42,31 @@
 				})
 				// l now contains filtered logs
 				return l
+			},
+			deleteSelected: function() {
+				var vm = this
+				LxNotificationService.confirm('Delete Skills',
+					'Do you want to delete all the selected skills ?',
+					{cancel: 'No',ok:'Yes, delete them all !'},
+					function(answer){
+						if (answer) {
+							angular.forEach (vm.skills, function(v,k){
+								if (v.selected) {
+									v.$delete({id: v.ID})
+								}
+							})
+							// Now refresh the users list
+							$state.reload()
+						}
+					})
 			}
-		})
-	})
 
-	app.controller(base+'NewSkillCtrl', function($state,Session,DBSkills,LxNotificationService){
+		})
+	}])
+
+	app.controller(base+'NewSkillCtrl', 
+		['$state','Session','DBSkills','LxNotificationService','$window',
+		function($state,Session,DBSkills,LxNotificationService,$window){
 	
 		angular.extend(this, {
 			session: Session,
@@ -61,12 +83,15 @@
 			},
 			abort: function() {
 				LxNotificationService.warning('New Skill - Cancelled')
-				$state.go(base+'.skills')
+				$window.history.go(-1)
+				//$state.go(base+'.skills')
 			}
 		})
-	})
+	}])
 
-	app.controller(base+'EditSkillCtrl', function($state,$stateParams,skill,logs,Session,users){
+	app.controller(base+'EditSkillCtrl', 
+		['$state','$stateParams','skill','logs','Session','users','$window',
+		function($state,$stateParams,skill,logs,Session,users,$window){
 
 		angular.extend(this, {
 			session: Session,
@@ -82,7 +107,8 @@
 				})					
 			},
 			abort: function() {
-				$state.go(base+'.skills')
+				$window.history.go(-1)
+				//$state.go(base+'.skills')
 			},
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
@@ -91,6 +117,6 @@
 				$state.go(base+'.editsite',{id: row.SiteId})				
 			}
 		})
-	})
+	}])
 
 })();

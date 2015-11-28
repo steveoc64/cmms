@@ -461,7 +461,6 @@ func saveUser(c *echo.Context) error {
 	}
 
 	userID := getID(c)
-	log.Println("saveUser", record, userID)
 
 	// Get the first site from the list of sites added
 	if len(record.Sites) > 0 {
@@ -470,8 +469,6 @@ func saveUser(c *echo.Context) error {
 		record.SiteId = 0
 	}
 
-	log.Println("record2", record)
-	log.Println("record3.1", record.SiteName)
 	_, err = DB.Update("users").
 		Set("username", record.Username).
 		Set("name", record.Name).
@@ -483,7 +480,6 @@ func saveUser(c *echo.Context) error {
 		Set("site_id", record.SiteId).
 		Where("id = $1", userID).
 		Exec()
-	log.Println("record3", record, err)
 
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
@@ -519,10 +515,29 @@ func saveUser(c *echo.Context) error {
 }
 
 func deleteUser(c *echo.Context) error {
-	//var user DBusers
-	//id := getID(c)
 
-	return c.String(http.StatusOK, `TODO - delete the user`)
+	claim, err := securityCheck(c, "writeUser")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	_, err = DB.
+		DeleteFrom("users").
+		Where("id = $1", id).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	// Now delete the user_site and user_skill references
+	DB.DeleteFrom("user_site").Where("user_id=$1", id).Exec()
+	DB.DeleteFrom("user_skill").Where("user_id=$1", id).Exec()
+
+	sysLog(3, "Users", "U", id, "User Deleted", c, claim)
+
+	return c.String(http.StatusOK, "User Deleted")
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -639,7 +654,27 @@ func saveSite(c *echo.Context) error {
 
 func deleteSite(c *echo.Context) error {
 
-	return c.String(http.StatusOK, "TODO delete site")
+	claim, err := securityCheck(c, "writeSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	_, err = DB.
+		DeleteFrom("site").
+		Where("id = $1", id).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	// Now delete the user_site references
+	DB.DeleteFrom("user_site").Where("site_id=$1", id).Exec()
+
+	sysLog(3, "Sites", "S", id, "Site Deleted", c, claim)
+
+	return c.String(http.StatusOK, "Site Deleted")
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -748,5 +783,25 @@ func saveSkill(c *echo.Context) error {
 
 func deleteSkill(c *echo.Context) error {
 
-	return c.String(http.StatusOK, "TODO delete skill")
+	claim, err := securityCheck(c, "writeSkill")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	_, err = DB.
+		DeleteFrom("skill").
+		Where("id = $1", id).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	// Now delete the user_skill references
+	DB.DeleteFrom("user_skill").Where("skill_id=$1", id).Exec()
+
+	sysLog(3, "Skills", "s", id, "Skill Deleted", c, claim)
+
+	return c.String(http.StatusOK, "Skill Deleted")
 }

@@ -16,6 +16,14 @@ body {
 
 // Now that everything is defined, provide last minute overrides for bits of CSS
 
+.data-table {
+  tr {
+    a {
+      color: $blue-100
+    }
+  }
+}
+
 .data-table__selectable-row--is-selected th:first-child:before, .data-table__selectable-row--is-selected td:first-child:before {
   background-color: $yellow-100;
   //content: &#x2611;

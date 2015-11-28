@@ -4,7 +4,9 @@
 	var base = 'admin'
 	var app = angular.module('cmms')
 
-	app.controller(base+'SitesCtrl', function($state, sites, Session, LxDialogService, logs){
+	app.controller(base+'SitesCtrl', 
+		['$state','sites','Session','LxDialogService','logs','LxNotificationService',
+		function($state, sites, Session, LxDialogService, logs, LxNotificationService){
 	
 		angular.extend(this, {
 			sites: sites,
@@ -40,11 +42,31 @@
 				})
 				// l now contains filtered logs
 				return l
+			},
+			deleteSelected: function() {
+				var vm = this
+				LxNotificationService.confirm('Delete Sites',
+					'Do you want to delete all the selected sites ?',
+					{cancel: 'No',ok:'Yes, delete them all !'},
+					function(answer){
+						if (answer) {
+							angular.forEach (vm.sites, function(v,k){
+								if (v.selected) {
+									v.$delete({id: v.ID})
+								}
+							})
+							// Now refresh the users list
+							$state.reload()
+						}
+					})
 			}
-		})
-	})
 
-	app.controller(base+'NewSiteCtrl', function($state,Session,DBSites,LxNotificationService){
+		})
+	}])
+
+	app.controller(base+'NewSiteCtrl', 
+		['$state','Session','DBSites','LxNotificationService','$window',
+		function($state,Session,DBSites,LxNotificationService,$window){
 	
 		angular.extend(this, {
 			session: Session,
@@ -59,12 +81,15 @@
 			},
 			abort: function() {
 				LxNotificationService.warning('New Site - Cancelled')
-				$state.go(base+'.sites')
+				$window.history.go(-1)
+				//$state.go(base+'.sites')
 			}
 		})
-	})
+	}])
 
-	app.controller(base+'EditSiteCtrl', function($state,$stateParams,site,logs,Session){
+	app.controller(base+'EditSiteCtrl', 
+		['$state','$stateParams','site','logs','Session','$window',
+		function($state,$stateParams,site,logs,Session,$window){
 	
 		angular.extend(this, {
 			session: Session,
@@ -79,10 +104,11 @@
 				})					
 			},
 			abort: function() {
-				$state.go(base+'.sites')
+				$window.history.go(-1)
+				//$state.go(base+'.sites')
 			}
 		})
-	})
+	}])
 
 
 })();
