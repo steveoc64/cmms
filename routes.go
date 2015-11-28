@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo"
 	"github.com/thoas/stats"
-	//	"gopkg.in/mgutz/dat.v1"
+	"gopkg.in/mgutz/dat.v1"
 	"log"
 	"net/http"
 	"strconv"
@@ -54,6 +54,12 @@ func _initRoutes() {
 	e.Post("/parts", newPart)
 	e.Put("/parts/:id", savePart)
 	e.Delete("/parts/:id", deletePart)
+
+	e.Get("/equip", queryEquip)
+	e.Get("/equip/:id", getEquip)
+	e.Post("/equip", newEquip)
+	e.Put("/equip/:id", saveEquip)
+	e.Delete("/equip/:id", deleteEquip)
 
 }
 
@@ -976,4 +982,173 @@ func deletePart(c *echo.Context) error {
 	sysLog(3, "Parts", "P", id, "Part Deleted", c, claim)
 
 	return c.String(http.StatusOK, "Part Deleted")
+}
+
+///////////////////////////////////////////////////////////////////////
+// Equip Maintenance
+/*
+
+create table machine (
+	id serial not null primary key,
+	site_id int not null,
+	name text not null,
+	descr text not null,
+	make text not null,
+	model text not null,
+	serialnum text not null,
+	is_running boolean not null,
+	stopped_at timestamp,
+	started_at timestamp,
+	picture text not null
+);
+
+drop table if exists component;
+create table component (
+	machine_id int not null,
+	id serial not null,
+	site_id int not null,
+	name text not null,
+	descr text not null,
+	make text not null,
+	model text not null,
+	picture text not null
+);
+
+*/
+
+type DBmachine struct {
+	ID        int          `db:"id"`
+	SiteId    int          `db:"site_id"`
+	Name      string       `db:"name"`
+	Descr     string       `db:"descr"`
+	Make      string       `db:"make"`
+	Model     string       `db:"model"`
+	Serialnum string       `db:"serialnum"`
+	IsRunning bool         `db:"is_running"`
+	Stopped   dat.NullTime `db:"stopped"`
+	Started   dat.NullTime `db:"started"`
+	Picture   string       `db:"started"`
+}
+
+type DBcomponent struct {
+	MachineID int    `db:"machine_id"`
+	ID        int    `db:"id"`
+	SiteId    int    `db:"site_id"`
+	Name      string `db:"name"`
+	Descr     string `db:"descr"`
+	Make      string `db:"make"`
+	Model     string `db:"model"`
+	Picture   string `db:"started"`
+}
+
+func queryEquip(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEquip")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var record []*DBmachine
+	err = DB.SQL(`select * from machine order by lower(name)`).QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func getEquip(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEquip")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var record DBmachine
+	err = DB.SQL(`select * from machine where id=$1`, id).QueryStruct(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func newEquip(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writeEquip")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	record := &DBmachine{}
+	if err := c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	// Create a machine, default to 'Not Running'
+	err = DB.InsertInto("equip").
+		Whitelist("site_id", "name", "descr", "make", "model", "serialnum", "picture").
+		Record(record).
+		Returning("id").
+		QueryScalar(&record.ID)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	// Now log the creation of the new site
+	sysLog(1, "Equip", "E", record.ID, "Equip Created", c, claim)
+
+	// insert into DB, fill in the ID of the new user
+	return c.JSON(http.StatusCreated, record)
+}
+
+func saveEquip(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writeEquip")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	record := &DBmachine{}
+	if err = c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	equipID := getID(c)
+
+	_, err = DB.Update("machine").
+		SetWhitelist(record, "site_id", "name", "descr", "make", "model", "serialnum", "picture").
+		Where("id = $1", equipID).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	sysLog(1, "Equip", "E", equipID, "Updated", c, claim)
+	return c.JSON(http.StatusOK, equipID)
+}
+
+func deleteEquip(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writeEquip")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	_, err = DB.
+		DeleteFrom("eqiup").
+		Where("id = $1", id).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	sysLog(3, "Equip", "E", id, "Equipment Deleted", c, claim)
+
+	return c.String(http.StatusOK, "Equipment Deleted")
 }
