@@ -1,45 +1,34 @@
 ;(function() {
 	'use strict';
 
-
-var logClass = function(l) {
-			switch (l.Status) {
-				case 1:
-					return 'syslog-status-1'
-					break
-				case 2:
-					return 'syslog-status-2'
-					break
-				case 3:
-					return 'syslog-status-3'
-					break
-			}
-			return ''
-		}
+var base = 'admin'
 
 	var app = angular.module('cmms')
 
-	app.controller('adminUserCtrl', function($state, users, Session, LxDialogService, logs){
+	app.controller(base+'UserCtrl', function($state, users, Session, LxDialogService, logs){
 	
 		angular.extend(this, {
 			users: users,
 			session: Session,
 			logs: logs,
 			logClass: logClass,
-			getClass: function(u) {
-				if (u.selected) {
+			getClass: function(row) {
+				if (row.selected) {
 					return "data-table__selectable-row--is-selected"
 				}
 			},
-			clickedRow: function(u) {
+			clickedRow: function(row) {
 				//console.log('Clicked on',u.ID, '=',u)
-				if (!angular.isDefined(u.selected)) {
-					u.selected = false
+				if (!angular.isDefined(row.selected)) {
+					row.selected = false
 				}
-				u.selected = !u.selected
+				row.selected = !row.selected
 			},
-			clickEdit: function(u) {
-				$state.go('admin.edituser',{id: u.ID})
+			clickEdit: function(row) {
+				$state.go(base+'.edituser',{id: row.ID})
+			},
+			goSite: function(row) {
+				$state.go(base+'.editsite',{id: row.SiteId})
 			},
 			showLogs: function() {
 				LxDialogService.open('userLogDialog')
@@ -60,45 +49,49 @@ var logClass = function(l) {
 		})
 	})
 
-	app.controller('adminNewUserCtrl', function($state,Session,DBUsers,LxNotificationService,sites){
+	app.controller(base+'NewUserCtrl', function($state,Session,DBUsers,LxNotificationService,sites,skills){
 	
 		angular.extend(this, {
 			session: Session,
 			user: new DBUsers(),
 			sites: sites,
-			formFields: getUserForm(sites),
+			skills: skills,
+			formFields: getUserForm({},sites,skills),
 			logClass: logClass,
-			addUser: function() {
+			submit: function() {
 				if (this.form.$valid) {
-					this.user.$insert(function(newuser) {
-						$state.go('admin.users')
+					this.user.$insert(function(newRecord) {
+						$state.go(base+'.users')
 					})					
+				} else {
+					LxNotificationService.error('Please select a Role for this user')
 				}
 			},
 			abort: function() {
 				LxNotificationService.warning('New User - Cancelled')
-				$state.go('admin.users')
+				$state.go(base+'.users')
 			}
 		})
 	})
 
-	app.controller('adminEditUserCtrl', function($state,$stateParams,user,logs,Session,sites){
+	app.controller(base+'EditUserCtrl', function($state,$stateParams,user,logs,Session,sites,skills){
 
 		angular.extend(this, {
 			session: Session,
 			user: user,
 			logs: logs,
 			sites: sites,
-			formFields: getUserForm(sites),		
+			skills: skills,
+			formFields: getUserForm({},sites,skills),		
 			logClass: logClass,
 			submit: function() {
 				this.user._id = $stateParams.id
 				this.user.$update(function(newuser) {
-					$state.go('admin.users')
+					$state.go(base+'.users')
 				})					
 			},
 			abort: function() {
-				$state.go('admin.users')
+				$state.go(base+'.users')
 			}
 		})
 	})

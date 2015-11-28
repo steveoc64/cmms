@@ -181,4 +181,7 @@ func _initSecurityRules() {
 
 	SecurityRules["readSite"] = []string{"Admin", "Worker", "Site Manager", "Vendor", "Service Contractor"}
 	SecurityRules["writeSite"] = []string{"Admin", "Site Manager"}
+
+	SecurityRules["readSkill"] = []string{"Admin", "Worker", "Site Manager", "Vendor", "Service Contractor"}
+	SecurityRules["writeSkill"] = []string{"Admin", "Site Manager"}
 }

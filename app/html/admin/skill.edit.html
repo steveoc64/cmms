@@ -1,12 +1,12 @@
-<h3 class="main-section__title">User Details</h3>
+<h3 class="main-section__title">Skill Details</h3>
 
-<form name="editUser.form" ng-submit="editUser.submit()">
+<form name="editSkill.form" ng-submit="editSkill.submit()">
 
-<formly-form model="editUser.user" fields="editUser.formFields">
+<formly-form model="editSkill.skill" fields="editSkill.formFields">
 
 <div flex-container="row" flex-align="end" item="1">
     <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editUser.abort()" lx-ripple>Cancel</button>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editSkill.abort()" lx-ripple>Cancel</button>
     </div>
     <div flex-item>
       <button type="submit" 
@@ -31,6 +31,30 @@
     <lx-tab heading="WorkOrders">
     </lx-tab>
 
+    <lx-tab heading="Users">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Email</th>
+              <th> SMS</th>
+              <th> Site</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="u in editSkill.users">
+                  <td><a ng-click="editSkill.goUser(u)">{{u.Name}}</a></td>
+                  <td>{{u.Email}}</td>
+                  <td>{{u.SMS}}</td>
+                  <td><a ng-click="editSkill.goSite(u)">{{u.SiteName}}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
     <lx-tab heading="Activity Log">
       <div class="data-table-container">
         <table class="data-table">
@@ -45,8 +69,8 @@
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-class="editUser.logClass(l)"           
-                ng-repeat="l in editUser.logs">
+                ng-class="editSkill.logClass(l)"           
+                ng-repeat="l in editSkill.logs">
                   <td>{{l.Type}}</td>
                   <td>{{l.Logdate}}</td>
                   <td>{{l.Descr}}</td>

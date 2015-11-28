@@ -131,20 +131,44 @@ getUserFields = function() {
 				disabled: true,
 			}
 		}
+	},{
+		name: 'user.Skills',
+		extends: 'lx-select',
+		defaultOptions: {
+			key: 'Skills',
+			templateOptions: {
+				placeholder: "Select Skills",
+				space: true,
+				multiple: true,
+				choice: "Name",
+				selected: "Name",
+				options: [],
+			}
+		}
+	},{
+		name: 'skill.Name',
+		extends: 'lx-input',
+		defaultOptions: {
+			key: 'Name',
+			templateOptions: {
+				type: 'text',
+				label: 'Name',
+			}
+		}
 
 	}] // end fields
 
 } // getUserFields
 
-getUserForm = function(sites) {
+getUserForm = function(options,sites,skills) {
 
 	return [{
 		type: 'lx-flex',
 		templateOptions: {
 			flex: { container: "row", item: "6"},
 			fields: [
-				{type: 'user.Username'},
-				{type: 'user.Password'}
+				{type: 'user.Username', templateOptions: options},
+				{type: 'user.Password', templateOptions: options}
 			]
 		}
 	},{
@@ -152,16 +176,17 @@ getUserForm = function(sites) {
 		templateOptions: {
 			flex: { container: "row", item: "6"},
 			fields: [
-				{type: 'user.Name'},
-				{type: 'user.Email'}
+				{type: 'user.Name', templateOptions: options},
+				{type: 'user.Email', templateOptions: options}
 			]
 		}
 	},{
 		type: 'lx-flex',
 		templateOptions: {
-			flex: {container: "row", item: "12"},
+			flex: {container: "row", item: "8"},
 			fields: [
-				{type: 'user.Address'}
+				{type: 'user.Address', templateOptions: options},
+				{type: 'user.SMS', templateOptions: options},
 			]
 		}
 	},{
@@ -169,17 +194,32 @@ getUserForm = function(sites) {
 		templateOptions: {
 			flex: { container: "row", item: "4"},
 			fields: [
-				{type: 'user.SMS'},
 				{
 					type: 'user.Site',
 					templateOptions: {options: sites}
+				},
+				{
+					type: 'user.Skills',
+					templateOptions: {options: skills}
 				},
 				{type: 'user.Role'},
 			]
 		}
 	}]
+} // getUserForm
 
-}
+getSkillForm = function(fixedLabels) {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "6"},
+			fields: [
+				{type: 'skill.Name'},
+			]
+		}
+	}]
+} // getSkillsForm
 
 })();
 

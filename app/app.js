@@ -1,4 +1,18 @@
 // Some global functions available for all
+var logClass = function(l) {
+			switch (l.Status) {
+				case 1:
+					return 'syslog-status-1'
+					break
+				case 2:
+					return 'syslog-status-2'
+					break
+				case 3:
+					return 'syslog-status-3'
+					break
+			}
+			return ''
+		}
 
 ;(function() {
 	'use strict';
@@ -111,13 +125,13 @@
 		      	url: '/dashboard',		
 		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/dashboard.html',
-		      	controller: 'adminDashCtrl as adminDash',
+		      	controller: 'adminDashCtrl as Dashboard',
 		      })
 		      .state('admin.users',{
 		      	url: '/users',
 		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/users.html',
-		      	controller: 'adminUserCtrl as adminUser',
+		      	controller: 'adminUserCtrl as Users',
 		      	resolve: {
 		      		users: function(DBUsers) {
 		      			return DBUsers.query()
@@ -139,6 +153,9 @@
 			      		sites: function(DBSites) {
 			      			return DBSites.query()
 			      		},
+			      		skills: function(DBSkills) {
+			      			return DBSkills.query()
+			      		},	      		
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				UserID: $stateParams.id
@@ -154,8 +171,52 @@
 			      	resolve: {
 			      		sites: function(DBSites) {
 			      			return DBSites.query()
+			      		},
+			      		skills: function(DBSkills) {
+			      			return DBSkills.query()
 			      		}		      		
 			      	}
+			      })
+		      .state('admin.skills',{
+		      	url: '/skills',
+		      	acl: 'Admin',
+		      	templateUrl: 'html/admin/skills.html',
+		      	controller: 'adminSkillCtrl as Skills',
+		      	resolve: {
+		      		skills: function(DBSkills) {
+		      			return DBSkills.query()
+		      		},
+		      		logs: function(DBSysLog) {
+		      			return DBSysLog.query({RefType: 's', Limit: 100})
+		      		}
+		      	}
+		      })
+			      .state('admin.editskill',{
+			      	url: '/user/skill/:id',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/skill.edit.html',
+			      	controller: 'adminEditSkillCtrl as editSkill',
+			      	resolve: {
+			      		skill: function(DBSkills,$stateParams) {
+			      			return DBSkills.get({id: $stateParams.id})
+			      		},
+			      		users: function(DBUsersSkill,$stateParams) {
+			      			return DBUsersSkill.query({id: $stateParams.id})
+			      		},
+			      		logs: function(DBSysLog,$stateParams) {
+			      			return DBSysLog.query({
+			      				RefType: 's',
+			      				RefID: $stateParams.id,
+			      				Limit: 100
+			      			})
+			      		}
+			      	}
+			      })
+			      .state('admin.newskill',{
+			      	url: '/newskill',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/skills.new.html',
+			      	controller: 'adminNewSkillCtrl as newSkill',
 			      })
 		      .state('admin.sites',{
 		      	url: '/sites',

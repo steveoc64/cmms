@@ -1,0 +1,20 @@
+<h3 class="main-section__title">Add New Skill</h3>
+
+<form name="newSkill.form" ng-submit="newSkill.submit()">
+<formly-form model="newSkill.skill" fields="newSkill.formFields">
+
+<div flex-container="row" flex-align="end">
+    <div flex-item>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="newSkill.abort()" lx-ripple>Cancel</button>
+    </div>
+    <div flex-item>
+      <button type="submit" 
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Add New Skill
+      </button>
+    </div>
+</div>
+
+</formly-form>
+</form>

@@ -1,25 +1,10 @@
 ;(function() {
 	'use strict';
 
-
-var logClass = function(l) {
-			switch (l.Status) {
-				case 1:
-					return 'syslog-status-1'
-					break
-				case 2:
-					return 'syslog-status-2'
-					break
-				case 3:
-					return 'syslog-status-3'
-					break
-			}
-			return ''
-		}
-
+	var base = 'admin'
 	var app = angular.module('cmms')
 
-	app.controller('adminSitesCtrl', function($state, sites, Session, LxDialogService, logs){
+	app.controller(base+'SitesCtrl', function($state, sites, Session, LxDialogService, logs){
 	
 		angular.extend(this, {
 			sites: sites,
@@ -38,7 +23,7 @@ var logClass = function(l) {
 				s.selected = !s.selected
 			},
 			clickEdit: function(s) {
-				$state.go('admin.editsite',{id: s.ID})
+				$state.go(base+'.editsite',{id: s.ID})
 			},
 			showLogs: function() {
 				LxDialogService.open('siteLogDialog')
@@ -59,28 +44,27 @@ var logClass = function(l) {
 		})
 	})
 
-	app.controller('adminNewSiteCtrl', function($state,Session,DBSites,LxNotificationService){
+	app.controller(base+'NewSiteCtrl', function($state,Session,DBSites,LxNotificationService){
 	
 		angular.extend(this, {
 			session: Session,
 			site: new DBSites(),
 			formFields: getSiteForm(),
-			addSite: function() {
+			submit: function() {
 				if (this.form.$valid) {
 					this.site.$insert(function(newsite) {
-						console.log('insert',newsite)
-						//$state.go('admin.sites')
+						$state.go(base+'.sites')
 					})					
 				}
 			},
 			abort: function() {
 				LxNotificationService.warning('New Site - Cancelled')
-				$state.go('admin.sites')
+				$state.go(base+'.sites')
 			}
 		})
 	})
 
-	app.controller('adminEditSiteCtrl', function($state,$stateParams,site,logs,Session){
+	app.controller(base+'EditSiteCtrl', function($state,$stateParams,site,logs,Session){
 	
 		angular.extend(this, {
 			session: Session,
@@ -91,11 +75,11 @@ var logClass = function(l) {
 			submit: function() {
 				this.site._id = $stateParams.id
 				this.site.$update(function(newsite) {
-					$state.go('admin.sites')
+					$state.go(base+'.sites')
 				})					
 			},
 			abort: function() {
-				$state.go('admin.sites')
+				$state.go(base+'.sites')
 			}
 		})
 	})
