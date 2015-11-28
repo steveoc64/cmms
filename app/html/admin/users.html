@@ -81,13 +81,11 @@
             <td>{{u.Username}}</td>
             <td>{{u.Role}}</td>
             <td>{{u.Name}}</td>
-            <td>{{u.Email}}</td>
+            <td>{{u.Email | limitTo:16}}..</td> 
+
+
             <!-- <td>{{u.SMS}}</td> -->
-            <td>
-              <button class="btn btn--xs btn--grey-blue" 
-                      ng-click="Users.goSite(u); $event.stopPropagation()"
-                      lx-ripple> {{u.SiteName}}
-              </button>
+            <td><a ng-click="Users.goSite(u); $event.stopPropagation()"lx-ripple> {{u.SiteName}}</a>
             <td>
             	<button class="btn btn--m btn--blue btn--icon" 
             					ng-click="Users.clickEdit(u); $event.stopPropagation()"

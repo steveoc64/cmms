@@ -264,20 +264,84 @@ var logClass = function(l) {
 		      .state('admin.equip',{
 		      	url: '/equip',
 		      	acl: 'Admin',
+		      	cache: false,
 		      	templateUrl: 'html/admin/equip.html',
-		      	controller: 'adminEquipCtrl as adminEquip',
+		      	controller: 'adminEquipCtrl as Equip',
+		      	resolve: {
+		      		equip: function(DBEquip) {
+		      			return DBEquip.query()
+		      		},
+		      		logs: function(DBSysLog) {
+		      			return DBSysLog.query({RefType: 'E', Limit: 100})
+		      		}
+		      	}
 		      })
+			      .state('admin.editequip',{
+			      	url: '/equip/edit/:id',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/equip.edit.html',
+			      	controller: 'adminEditEquipCtrl as editEquip',
+			      	resolve: {
+			      		equip: function(DBEquip,$stateParams) {
+			      			return DBEquip.get({id: $stateParams.id})
+			      		},
+			      		logs: function(DBSysLog,$stateParams) {
+			      			return DBSysLog.query({
+			      				RefType: 'E', 
+			      				RefID: $stateParams.id,
+			      				Limit: 100})
+			      		}
+			      	}
+			      })
+			      .state('admin.newequip',{
+			      	url: '/newequip',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/equip.new.html',
+			      	controller: 'adminNewEquipCtrl as newEquip'
+			      })
 		      .state('admin.parts',{
 		      	url: '/parts',
 		      	acl: 'Admin',
+		      	cache: false,
 		      	templateUrl: 'html/admin/parts.html',
-		      	controller: 'adminPartsCtrl as adminParts',
+		      	controller: 'adminPartsCtrl as Parts',
+		      	resolve: {
+		      		parts: function(DBPart) {
+		      			return DBPart.query()
+		      		},
+		      		logs: function(DBSysLog) {
+		      			return DBSysLog.query({RefType: 'P', Limit: 100})
+		      		}
+		      	}
 		      })
+			      .state('admin.editpart',{
+			      	url: '/part/edit/:id',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/part.edit.html',
+			      	controller: 'adminEditPartCtrl as editPart',
+			      	resolve: {
+			      		part: function(DBPart,$stateParams) {
+			      			return DBPart.get({id: $stateParams.id})
+			      		},
+			      		logs: function(DBSysLog,$stateParams) {
+			      			return DBSysLog.query({
+			      				RefType: 'P', 
+			      				RefID: $stateParams.id,
+			      				Limit: 100})
+			      		}
+			      	}
+			      })
+			      .state('admin.newpart',{
+			      	url: '/newpart',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/part.new.html',
+			      	controller: 'adminNewPartCtrl as newPart'
+			      })
 		      .state('admin.reports',{
 		      	url: '/reports',
 		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/reports.html',
-		      	controller: 'adminReportsCtrl as adminReports',
+		      	controller: 'adminReportsCtrl as Reports',
 		      })
 	      .state('sitemgr',{
 	      	url: '/sitemgr',
@@ -290,7 +354,7 @@ var logClass = function(l) {
 		      	url: '/dashboard',		
 		      	acl: 'Site Manager',
 		      	templateUrl: 'html/sitemgr/dashboard.html',
-		      	controller: 'sitemgrDashCtrl as sitemgrDash',
+		      	controller: 'sitemgrDashCtrl as Dashboard',
 		      })
 		      .state('sitemgr.workorders',{
 		      	url: '/workorders',		

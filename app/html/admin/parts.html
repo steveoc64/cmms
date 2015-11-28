@@ -1,9 +1,87 @@
-<div class="main-section">
-    <h3 class="main-section__title">CMMS Parts</h3>
-
-    <div class="main-section__content">
-        <h4 class="main-section__subtitle">All Parts</h4>
-        ... Show a list of spare parts / consumables here
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='partLogDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Recent Parts Activity
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
     </div>
 
+    <div class="data-table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th> Event</th>
+            <th> Date</th>
+            <th> Description</th>
+            <th> IP Address</th>
+            <th> By</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="data-table"
+              ng-class="Parts.logClass(l)"        
+              ng-repeat="l in Parts.getSelectedLogs()">
+                <td>{{l.Type}}</td>
+                <td>{{l.Logdate}}</td>
+                <td>{{l.Descr}}</td>
+                <td>{{l.IP}}</td>
+                <td>{{l.Username}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</lx-dialog>
+
+<div class="data-table-container">
+  <header class="data-table-header">
+    <div class="data-table-header__label">
+      <span class="fs-title">Parts List</span>
+    </div>
+
+    <div class="data-table-header__actions">
+      <lx-dropdown position="right" over-toggle="true">
+        <button class="btn btn--l btn--blue btn--icon" lx-ripple lx-dropdown-toggle>
+          <i class="mdi mdi-dots-vertical"></i>
+        </button>
+
+        <lx-dropdown-menu>
+          <ul>
+              <li><a class="dropdown-link" ui-sref="admin.newpart">New Part</a></li>
+              <li class="dropdown-divider"></li>
+              <li><a class="dropdown-link" ng-click="Parts.showLogs()">Show Selected Logs</a></li>
+              <li><a class="dropdown-link" ng-click="Parts.deleteSelected()">Delete Selected</a></li>
+          </ul>
+      	</lx-dropdown-menu>
+  		</lx-dropdown>
+     </div>
+  </header>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th> Name</th>
+        <th> StockCode</th>
+        <th> Qty Type</th>
+        <th> Reorder Level</th>
+        <th> Reorder Qty</th>
+        <th> Last Price</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr class="data-table__selectable-row"
+      		ng-class="Skills.getClass(row)"
+      		ng-repeat="row in Skills.skills"
+      		ng-click="Skills.clickedRow(row)"> 
+            <td>{{row.Name}}</td>
+            <td>{{row.StockCode}}</td>
+            <td>{{row.QtyType}}</td>
+            <td>{{row.ReorderStocklevel}}</td>
+            <td>{{row.ReorderQty}}</td>
+            <td>{{row.LatestPrice}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
