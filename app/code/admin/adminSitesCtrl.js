@@ -88,13 +88,14 @@
 	}])
 
 	app.controller(base+'EditSiteCtrl', 
-		['$state','$stateParams','site','logs','Session','$window',
-		function($state,$stateParams,site,logs,Session,$window){
+		['$state','$stateParams','site','logs','Session','$window','users',
+		function($state,$stateParams,site,logs,Session,$window,users){
 	
 		angular.extend(this, {
 			session: Session,
 			site: site,
 			logs: logs,
+			users: users,
 			logClass: logClass,
 			formFields: getSiteForm(),		
 			submit: function() {
@@ -105,8 +106,11 @@
 			},
 			abort: function() {
 				$window.history.go(-1)
-				//$state.go(base+'.sites')
+			},
+			goUser: function(row) {
+				$state.go(base+'.edituser',{id: row.ID})
 			}
+
 		})
 	}])
 

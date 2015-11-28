@@ -13,21 +13,23 @@
         <thead>
           <tr>
             <th> Event</th>
-            <th> SiteName</th>
+            <th> Site</th>
             <th> Date</th>
             <th> Description</th>
             <th> IP Address</th>
+            <th> By</th>
           </tr>
         </thead>
         <tbody>
           <tr class="data-table"
-              ng-class="adminSites.logClass(l)"        
-              ng-repeat="l in adminSites.getSelectedLogs()">
+              ng-class="Sites.logClass(l)"        
+              ng-repeat="l in Sites.getSelectedLogs()">
                 <td>{{l.Type}}</td>
-                <td>{{l.Username}}</td>
+                <td>{{l.RefID}}</td>
                 <td>{{l.Logdate}}</td>
                 <td>{{l.Descr}}</td>
                 <td>{{l.IP}}</td>
+                <td>{{l.Username}}</td>
           </tr>
         </tbody>
       </table>
@@ -51,8 +53,8 @@
           <ul>
               <li><a class="dropdown-link" ui-sref="admin.newsite">New Site</a></li>
               <li class="dropdown-divider"></li>
-              <li><a class="dropdown-link" ng-click="adminSites.showLogs()">Show Selected Logs</a></li>
-              <li><a class="dropdown-link" ng-click="adminSites.deleteSelected()">Delete Selected</a></li>
+              <li><a class="dropdown-link" ng-click="Sites.showLogs()">Show Selected Logs</a></li>
+              <li><a class="dropdown-link" ng-click="Sites.deleteSelected()">Delete Selected</a></li>
           </ul>
       	</lx-dropdown-menu>
   		</lx-dropdown>
@@ -70,14 +72,14 @@
 
     <tbody>
       <tr class="data-table__selectable-row"
-      		ng-class="adminSites.getClass(s)"
-      		ng-repeat="s in adminSites.sites"
-      		ng-click="adminSites.clickedRow(s)"> 
+      		ng-class="Sites.getClass(s)"
+      		ng-repeat="s in Sites.sites"
+      		ng-click="Sites.clickedRow(s)"> 
             <td>{{s.Name}}</td>
             <td>{{s.Address}}</td>
             <td>
             	<button class="btn btn--m btn--blue btn--icon" 
-            					ng-click="adminSites.clickEdit(s); $event.stopPropagation()"
+            					ng-click="Sites.clickEdit(s); $event.stopPropagation()"
             					lx-ripple>
             						<i class="mdi mdi-plus"></i>
             	</button>

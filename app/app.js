@@ -225,7 +225,7 @@ var logClass = function(l) {
 		      	acl: 'Admin',
 		      	cache: false,
 		      	templateUrl: 'html/admin/sites.html',
-		      	controller: 'adminSitesCtrl as adminSites',
+		      	controller: 'adminSitesCtrl as Sites',
 		      	resolve: {
 		      		sites: function(DBSites) {
 		      			return DBSites.query()
@@ -243,6 +243,9 @@ var logClass = function(l) {
 			      	resolve: {
 			      		site: function(DBSites,$stateParams) {
 			      			return DBSites.get({id: $stateParams.id})
+			      		},
+			      		users: function(DBSiteUsers,$stateParams) {
+			      			return DBSiteUsers.query({id: $stateParams.id})
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
@@ -393,9 +396,7 @@ var logClass = function(l) {
 					var token = $localStorage.token
 					var sess  = $localStorage.session
 					if (token != null) {
-			  		console.log('Not logged in, and we are trying to get to',toState.name)
-						console.log('Restart session using existing token', token)
-						console.log('.... getting back into the fight')
+						console.log('Restart session at',toState.name,'using existing token', token)
 	          Session.loggedIn = sess.loggedIn
 	          Session.ID = sess.ID
 	          Session.Username = sess.Username

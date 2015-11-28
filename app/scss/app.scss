@@ -19,7 +19,8 @@ body {
 .data-table {
   tr {
     a {
-      color: $blue-100
+      color: $indigo-500;
+      cursor: context-menu;
     }
   }
 }

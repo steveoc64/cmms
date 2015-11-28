@@ -11,4 +11,10 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBSiteUsers', function($resource,ServerName,Session){
+		return $resource(ServerName+'/siteusers/:id',{id: '@_id'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
 })();

@@ -38,6 +38,7 @@ func _initRoutes() {
 
 	e.Get("/sites", querySites)
 	e.Get("/sites/:id", getSite)
+	e.Get("/siteusers/:id", querySiteUsers)
 	e.Post("/sites", newSite)
 	e.Put("/sites/:id", saveSite)
 	e.Delete("/sites/:id", deleteSite)
@@ -576,6 +577,30 @@ func querySites(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 	return c.JSON(http.StatusOK, record)
+}
+
+func querySiteUsers(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readUser")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var users []*DBusers
+	//		SQL(`select *,array(select concat(logdate,ip,descr) from user_log where user_id=users.id order by logdate desc) as logs from users`).
+
+	siteID := getID(c)
+	err = DB.SQL(`select 
+		u.* from user_site s
+		left join users u on u.id = s.user_id
+		where s.site_id=$1
+		order by lower(username)`, siteID).
+		QueryStructs(&users)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, users)
 }
 
 func getSite(c *echo.Context) error {

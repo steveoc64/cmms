@@ -6,7 +6,7 @@
 
 <div flex-container="row" flex-align="end">
     <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editSite.abort()" lx-ripple>Cancel</button>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editSite.abort()" lx-ripple>Back</button>
     </div>
     <div flex-item>
       <button type="submit" 
@@ -26,6 +26,27 @@
     </lx-tab>
 
     <lx-tab heading="Users">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Email</th>
+              <th> SMS</th>
+              <th> Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="u in editSite.users">
+                  <td><a ng-click="editSite.goUser(u)">{{u.Name}}</a></td>
+                  <td>{{u.Email}}</td>
+                  <td>{{u.SMS}}</td>
+                  <td>{{u.Role}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </lx-tab>
 
     <lx-tab heading="Activity Log">
