@@ -1184,7 +1184,7 @@ func queryMachineComponents(c *echo.Context) error {
 	err = DB.Select("*").
 		From("component").
 		Where("machine_id = $1", machineID).
-		OrderBy("name desc").
+		OrderBy("lower(name)").
 		QueryStructs(&components)
 
 	if err != nil {
