@@ -58,38 +58,35 @@ getPartFields = function() {
 		}	
 	},{
 		name: 'part.ReorderStocklevel',
-		extends: 'lx-input',
+		extends: 'lx-number',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
 			key: 'ReorderStocklevel',
 			templateOptions: {
-				type: 'number',
 				label: 'Reorder Level',
 				required: true,
 			}
 		}	
 	},{
 		name: 'part.ReorderQty',
-		extends: 'lx-input',
+		extends: 'lx-number',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
 			key: 'ReorderQty',
 			templateOptions: {
-				type: 'number',
 				label: 'Reorder Qty',
 				required: true,
 			}
 		}	
 	},{
 		name: 'part.LatestPrice',
-		extends: 'lx-input',
+		extends: 'lx-number',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
 			key: 'LatestPrice',
 			templateOptions: {
-				type: 'number',
-				step: 'any',
 				label: 'Latest Price',
+				step: 'any',
 				required: true,
 			}
 		}	
