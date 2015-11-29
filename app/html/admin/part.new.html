@@ -1,0 +1,21 @@
+<h3 class="main-section__title">Add New Part</h3>
+
+<form name="newPart.form" ng-submit="newPart.submit()">
+
+<formly-form model="newPart.part" fields="newPart.formFields">
+
+<div flex-container="row" flex-align="end">
+    <div flex-item>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="newPart.abort()" lx-ripple>Cancel</button>
+    </div>
+    <div flex-item>
+      <button type="submit" 
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Add New Part
+      </button>
+    </div>
+</div>
+
+</formly-form>
+</form>
