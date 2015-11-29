@@ -74,7 +74,7 @@
       		ng-repeat="row in Machines.machines"
       		ng-click="Machines.clickedRow(row)"> 
             <td>{{row.Name}}</td>
-            <td>{{row.Descr | limitTo:32}}..</td>
+            <td>{{row.Descr | limitTo:64}}</td>
             <td>{{row.Serialnum}}</td>
             <td>{{row.SiteId}}</td>
             <td>
