@@ -288,6 +288,9 @@ var logClass = function(l) {
 			      		sites: function(DBSites) {
 			      			return DBSites.query()
 			      		},
+			      		components: function(DBComponents,$stateParams) {
+			      			return DBComponents.query({id: $stateParams.id})
+			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 'M', 

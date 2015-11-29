@@ -23,6 +23,29 @@
 <div class="card">
   <lx-tabs>
     <lx-tab heading="Components">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Serial #</th>
+              <th> Description</th>
+              <th> Make</th>
+              <th> Model</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editMachine.components">
+                  <td>{{row.Name}}</td>
+                  <td>{{row.Serialnum}}</td>
+                  <td>{{row.Descr | limitTo:32}}</td>
+                  <td>{{row.Make}}</td>
+                  <td>{{row.Model}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </lx-tab>
 
     <lx-tab heading="Notes">

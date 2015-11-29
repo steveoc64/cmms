@@ -90,14 +90,15 @@
 	}])
 
 	app.controller(base+'EditMachineCtrl', 
-		['$state','$stateParams','machine','logs','Session','$window','sites',
-		function($state,$stateParams,machine,logs,Session,$window,sites){
+		['$state','$stateParams','machine','logs','Session','$window','sites','components',
+		function($state,$stateParams,machine,logs,Session,$window,sites,components){
 
 		angular.extend(this, {
 			session: Session,
 			machine: machine,
 			logs: logs,
 			sites: sites,
+			components: components,
 			formFields: getMachineForm(sites),		
 			logClass: logClass,
 			submit: function() {

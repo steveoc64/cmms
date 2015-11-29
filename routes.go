@@ -60,6 +60,7 @@ func _initRoutes() {
 	e.Post("/machine", newMachine)
 	e.Put("/machine/:id", saveMachine)
 	e.Delete("/machine/:id", deleteMachine)
+	e.Get("/machine/components/:id", queryMachineComponents)
 
 }
 
@@ -1167,4 +1168,27 @@ func deleteMachine(c *echo.Context) error {
 	sysLog(3, "Machine", "M", id, "Machine Deleted", c, claim)
 
 	return c.String(http.StatusOK, "Machine Deleted")
+}
+
+func queryMachineComponents(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readMachine")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var components []*DBcomponent
+	//		SQL(`select *,array(select concat(logdate,ip,descr) from user_log where user_id=users.id order by logdate desc) as logs from users`).
+
+	machineID := getID(c)
+	err = DB.Select("*").
+		From("component").
+		Where("machine_id = $1", machineID).
+		OrderBy("name desc").
+		QueryStructs(&components)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, components)
 }
