@@ -72,14 +72,14 @@
 
     <tbody>
       <tr class="data-table__selectable-row"
-      		ng-class="Sites.getClass(s)"
-      		ng-repeat="s in Sites.sites"
-      		ng-click="Sites.clickedRow(s)"> 
-            <td>{{s.Name}}</td>
-            <td>{{s.Address}}</td>
+      		ng-class="Sites.getClass(row)"
+      		ng-repeat="row in Sites.sites"
+      		ng-click="Sites.clickedRow(row)"> 
+            <td>{{row.Name}}</td>
+            <td>{{row.Address}}</td>
             <td>
             	<button class="btn btn--m btn--blue btn--icon" 
-            					ng-click="Sites.clickEdit(s); $event.stopPropagation()"
+            					ng-click="Sites.clickEdit(row); $event.stopPropagation()"
             					lx-ripple>
             						<i class="mdi mdi-plus"></i>
             	</button>

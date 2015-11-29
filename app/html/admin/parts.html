@@ -38,6 +38,7 @@
   <header class="data-table-header">
     <div class="data-table-header__label">
       <span class="fs-title">Parts List</span>
+      <lx-search-filter model="searchPart"></lx-search-filter>
     </div>
 
     <div class="data-table-header__actions">
@@ -61,8 +62,8 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th> Name</th>
         <th> StockCode</th>
+        <th> Description</th>
         <th> Qty Type</th>
         <th> Reorder Level</th>
         <th> Reorder Qty</th>
@@ -72,15 +73,23 @@
 
     <tbody>
       <tr class="data-table__selectable-row"
-      		ng-class="Skills.getClass(row)"
-      		ng-repeat="row in Skills.skills"
-      		ng-click="Skills.clickedRow(row)"> 
-            <td>{{row.Name}}</td>
+      		ng-class="Parts.getClass(row)"
+      		ng-repeat="row in Parts.parts | filter:searchPart"
+      		ng-click="Parts.clickedRow(row)"> 
             <td>{{row.StockCode}}</td>
+            <td>{{row.Descr | limitTo:32}}..</td>
             <td>{{row.QtyType}}</td>
             <td>{{row.ReorderStocklevel}}</td>
             <td>{{row.ReorderQty}}</td>
             <td>{{row.LatestPrice}}</td>
+            <td>
+              <button class="btn btn--m btn--blue btn--icon" 
+                      ng-click="Parts.clickEdit(row); $event.stopPropagation()"
+                      lx-ripple>
+                        <i class="mdi mdi-plus"></i>
+              </button>
+            </td>
+
       </tr>
     </tbody>
   </table>

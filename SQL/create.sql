@@ -104,14 +104,14 @@ create table machine (
 	id serial not null primary key,
 	site_id int not null,
 	name text not null,
-	descr text not null,
-	make text not null,
-	model text not null,
+	descr text not null default '',
+	make text not null default '',
+	model text not null default '',
 	serialnum text not null,
-	is_running boolean not null,
+	is_running boolean not null default false,
 	stopped_at timestamp,
 	started_at timestamp,
-	picture text not null
+	picture text not null default ''
 );
 
 drop table if exists component;
@@ -120,10 +120,11 @@ create table component (
 	id serial not null,
 	site_id int not null,
 	name text not null,
-	descr text not null,
-	make text not null,
-	model text not null,
-	picture text not null
+	descr text not null default '',
+	make text not null default '',
+	model text not null default '',
+	serialnum text not null default '',
+	picture text not null default ''
 );
 create unique index component_idx on component (machine_id,id);
 
@@ -138,14 +139,15 @@ drop table if exists part;
 create table part (
 	id serial not null primary key,
 	name text not null,
-	descr text not null,
+	descr text not null default '',
 	stock_code text not null,
 	reorder_stocklevel numeric(12,2) not null,
 	reorder_qty numeric(12,2) not null,
 	latest_price numeric(12,2) not null,
-	qty_type text not null,
-	picture text not null
+	qty_type text not null default 'ea',
+	picture text not null default ''
 );
+create unique index part_stock_code_idx on part (stock_code);
 
 drop table if exists part_vendor;
 create table part_vendor (

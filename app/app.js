@@ -261,43 +261,51 @@ var logClass = function(l) {
 			      	templateUrl: 'html/admin/site.new.html',
 			      	controller: 'adminNewSiteCtrl as newSite'
 			      })
-		      .state('admin.equip',{
-		      	url: '/equip',
+		      .state('admin.machines',{
+		      	url: '/machines',
 		      	acl: 'Admin',
 		      	cache: false,
-		      	templateUrl: 'html/admin/equip.html',
-		      	controller: 'adminEquipCtrl as Equip',
+		      	templateUrl: 'html/admin/machines.html',
+		      	controller: 'adminMachineCtrl as Machines',
 		      	resolve: {
-		      		equip: function(DBEquip) {
-		      			return DBEquip.query()
+		      		machines: function(DBMachine) {
+		      			return DBMachine.query()
 		      		},
 		      		logs: function(DBSysLog) {
-		      			return DBSysLog.query({RefType: 'E', Limit: 100})
+		      			return DBSysLog.query({RefType: 'M', Limit: 100})
 		      		}
 		      	}
 		      })
-			      .state('admin.editequip',{
-			      	url: '/equip/edit/:id',
+			      .state('admin.editmachine',{
+			      	url: '/machine/edit/:id',
 			      	acl: 'Admin',
-			      	templateUrl: 'html/admin/equip.edit.html',
-			      	controller: 'adminEditEquipCtrl as editEquip',
+			      	templateUrl: 'html/admin/machine.edit.html',
+			      	controller: 'adminEditMachineCtrl as editMachine',
 			      	resolve: {
-			      		equip: function(DBEquip,$stateParams) {
-			      			return DBEquip.get({id: $stateParams.id})
+			      		machine: function(DBMachine,$stateParams) {
+			      			return DBMachine.get({id: $stateParams.id})
+			      		},
+			      		sites: function(DBSites) {
+			      			return DBSites.query()
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
-			      				RefType: 'E', 
+			      				RefType: 'M', 
 			      				RefID: $stateParams.id,
 			      				Limit: 100})
 			      		}
 			      	}
 			      })
-			      .state('admin.newequip',{
-			      	url: '/newequip',
+			      .state('admin.newmachine',{
+			      	url: '/newmachine',
 			      	acl: 'Admin',
-			      	templateUrl: 'html/admin/equip.new.html',
-			      	controller: 'adminNewEquipCtrl as newEquip'
+			      	templateUrl: 'html/admin/machine.new.html',
+			      	controller: 'adminNewMachineCtrl as newMachine',
+			      	resolve: {
+			      		sites: function(DBSites) {
+			      			return DBSites.query()
+			      		}
+			      	}
 			      })
 		      .state('admin.parts',{
 		      	url: '/parts',
@@ -310,7 +318,7 @@ var logClass = function(l) {
 		      			return DBPart.query()
 		      		},
 		      		logs: function(DBSysLog) {
-		      			return DBSysLog.query({RefType: 'P', Limit: 100})
+		      			return DBSysLog.query({RefType: 'P', Limit: 1000})
 		      		}
 		      	}
 		      })

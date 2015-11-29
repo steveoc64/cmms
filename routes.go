@@ -55,11 +55,11 @@ func _initRoutes() {
 	e.Put("/parts/:id", savePart)
 	e.Delete("/parts/:id", deletePart)
 
-	e.Get("/equip", queryEquip)
-	e.Get("/equip/:id", getEquip)
-	e.Post("/equip", newEquip)
-	e.Put("/equip/:id", saveEquip)
-	e.Delete("/equip/:id", deleteEquip)
+	e.Get("/machine", queryMachine)
+	e.Get("/machine/:id", getMachine)
+	e.Post("/machine", newMachine)
+	e.Put("/machine/:id", saveMachine)
+	e.Delete("/machine/:id", deleteMachine)
 
 }
 
@@ -866,7 +866,7 @@ type DBpart struct {
 	Name              string  `db:"name"`
 	Descr             string  `db:"descr"`
 	StockCode         string  `db:"stock_code"`
-	ReorderStocklevel float64 `db:"reorder_stock_level"`
+	ReorderStocklevel float64 `db:"reorder_stocklevel"`
 	ReorderQty        float64 `db:"reorder_qty"`
 	LatestPrice       float64 `db:"latest_price"`
 	QtyType           string  `db:"qty_type"`
@@ -880,8 +880,11 @@ func queryParts(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
+	//search := c.Param("search")
+	//log.Println("Search:", search, c)
+
 	var record []*DBpart
-	err = DB.SQL(`select * from part order by lower(name)`).QueryStructs(&record)
+	err = DB.SQL(`select * from part order by lower(stock_code)`).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -919,7 +922,7 @@ func newPart(c *echo.Context) error {
 	}
 
 	err = DB.InsertInto("part").
-		Whitelist("name", "descr", "stock_code", "reorder_stock_level", "reorder_qty", "latest_price", "qty_type").
+		Whitelist("name", "descr", "stock_code", "reorder_stocklevel", "reorder_qty", "latest_price", "qty_type").
 		Record(record).
 		Returning("id").
 		QueryScalar(&record.ID)
@@ -985,7 +988,7 @@ func deletePart(c *echo.Context) error {
 }
 
 ///////////////////////////////////////////////////////////////////////
-// Equip Maintenance
+// Machine Maintenance
 /*
 
 create table machine (
@@ -1025,9 +1028,19 @@ type DBmachine struct {
 	Model     string       `db:"model"`
 	Serialnum string       `db:"serialnum"`
 	IsRunning bool         `db:"is_running"`
-	Stopped   dat.NullTime `db:"stopped"`
-	Started   dat.NullTime `db:"started"`
-	Picture   string       `db:"started"`
+	Stopped   dat.NullTime `db:"stopped_at"`
+	Started   dat.NullTime `db:"started_at"`
+	Picture   string       `db:"picture"`
+}
+
+type DBmachineReq struct {
+	ID        int    `db:"id"`
+	SiteId    int    `db:"site_id"`
+	Name      string `db:"name"`
+	Descr     string `db:"descr"`
+	Make      string `db:"make"`
+	Model     string `db:"model"`
+	Serialnum string `db:"serialnum"`
 }
 
 type DBcomponent struct {
@@ -1038,12 +1051,13 @@ type DBcomponent struct {
 	Descr     string `db:"descr"`
 	Make      string `db:"make"`
 	Model     string `db:"model"`
-	Picture   string `db:"started"`
+	Serialnum string `db:"serialnum"`
+	Picture   string `db:"picture"`
 }
 
-func queryEquip(c *echo.Context) error {
+func queryMachine(c *echo.Context) error {
 
-	_, err := securityCheck(c, "readEquip")
+	_, err := securityCheck(c, "readMachine")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
@@ -1057,9 +1071,9 @@ func queryEquip(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func getEquip(c *echo.Context) error {
+func getMachine(c *echo.Context) error {
 
-	_, err := securityCheck(c, "readEquip")
+	_, err := securityCheck(c, "readMachine")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
@@ -1074,21 +1088,23 @@ func getEquip(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func newEquip(c *echo.Context) error {
+func newMachine(c *echo.Context) error {
 
-	claim, err := securityCheck(c, "writeEquip")
+	claim, err := securityCheck(c, "writeMachine")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	record := &DBmachine{}
+	record := &DBmachineReq{}
 	if err := c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
+	log.Println("req machine update", record)
+
 	// Create a machine, default to 'Not Running'
-	err = DB.InsertInto("equip").
-		Whitelist("site_id", "name", "descr", "make", "model", "serialnum", "picture").
+	err = DB.InsertInto("machine").
+		Whitelist("site_id", "name", "descr", "make", "model", "serialnum").
 		Record(record).
 		Returning("id").
 		QueryScalar(&record.ID)
@@ -1098,49 +1114,49 @@ func newEquip(c *echo.Context) error {
 	}
 
 	// Now log the creation of the new site
-	sysLog(1, "Equip", "E", record.ID, "Equip Created", c, claim)
+	sysLog(1, "Machine", "M", record.ID, "Machine Created", c, claim)
 
 	// insert into DB, fill in the ID of the new user
 	return c.JSON(http.StatusCreated, record)
 }
 
-func saveEquip(c *echo.Context) error {
+func saveMachine(c *echo.Context) error {
 
-	claim, err := securityCheck(c, "writeEquip")
+	claim, err := securityCheck(c, "writeMachine")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	record := &DBmachine{}
+	record := &DBmachineReq{}
 	if err = c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	equipID := getID(c)
+	machineID := getID(c)
 
 	_, err = DB.Update("machine").
 		SetWhitelist(record, "site_id", "name", "descr", "make", "model", "serialnum", "picture").
-		Where("id = $1", equipID).
+		Where("id = $1", machineID).
 		Exec()
 
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sysLog(1, "Equip", "E", equipID, "Updated", c, claim)
-	return c.JSON(http.StatusOK, equipID)
+	sysLog(1, "Machine", "M", machineID, "Updated", c, claim)
+	return c.JSON(http.StatusOK, machineID)
 }
 
-func deleteEquip(c *echo.Context) error {
+func deleteMachine(c *echo.Context) error {
 
-	claim, err := securityCheck(c, "writeEquip")
+	claim, err := securityCheck(c, "writeMachine")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
 	id := getID(c)
 	_, err = DB.
-		DeleteFrom("eqiup").
+		DeleteFrom("machine").
 		Where("id = $1", id).
 		Exec()
 
@@ -1148,7 +1164,7 @@ func deleteEquip(c *echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	sysLog(3, "Equip", "E", id, "Equipment Deleted", c, claim)
+	sysLog(3, "Machine", "M", id, "Machine Deleted", c, claim)
 
-	return c.String(http.StatusOK, "Equipment Deleted")
+	return c.String(http.StatusOK, "Machine Deleted")
 }

@@ -74,7 +74,6 @@
 			formFields: getSkillForm(),
 			logClass: logClass,
 			submit: function() {
-				console.log('here with skill',this.skill)
 				if (this.form.$valid) {
 					this.skill.$insert(function(newRecord) {
 						$state.go(base+'.skills')
