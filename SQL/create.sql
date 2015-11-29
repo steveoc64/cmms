@@ -19,7 +19,8 @@ create table site (
 	address text not null default '',
 	phone text not null default '',
 	fax text not null default '',
-	image text not null default ''
+	image text not null default '',
+	parent_site int not null default 0
 );
 
 drop table if exists user_site;
