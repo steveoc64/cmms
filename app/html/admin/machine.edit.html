@@ -1,0 +1,70 @@
+<h3 class="main-section__title">Machine Details</h3>
+
+<form name="editMachine.form" ng-submit="editMachine.submit()">
+
+<formly-form model="editMachine.machine" fields="editMachine.formFields">
+
+<div flex-container="row" flex-align="end" item="1">
+    <div flex-item>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editMachine.abort()" lx-ripple>Back</button>
+    </div>
+    <div flex-item>
+      <button type="submit" 
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Save Details
+      </button>
+    </div>
+</div>
+
+</formly-form>
+</form>
+
+<div class="card">
+  <lx-tabs>
+    <lx-tab heading="Components">
+    </lx-tab>
+
+    <lx-tab heading="Notes">
+    </lx-tab>
+
+    <lx-tab heading="Documents">
+    </lx-tab>
+
+    <lx-tab heading="StockTake">
+    </lx-tab>
+
+    <lx-tab heading="WorkOrders">
+    </lx-tab>
+
+
+    <lx-tab heading="Activity Log">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Event</th>
+              <th> Date</th>
+              <th> Description</th>
+              <th> IP Address</th>
+              <th> By</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-class="editMachine.logClass(l)"           
+                ng-repeat="l in editMachine.logs">
+                  <td>{{l.Type}}</td>
+                  <td>{{l.Logdate}}</td>
+                  <td>{{l.Descr}}</td>
+                  <td>{{l.IP}}</td>
+                  <td>{{l.Username}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+  </lx-tabs>
+</div>
+

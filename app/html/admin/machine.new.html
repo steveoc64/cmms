@@ -1,0 +1,21 @@
+<h3 class="main-section__title">Add New Machine</h3>
+
+<form name="newMachine.form" ng-submit="newMachine.submit()">
+
+<formly-form model="newMachine.machine" fields="newMachine.formFields">
+
+<div flex-container="row" flex-align="end">
+    <div flex-item>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="newMachine.abort()" lx-ripple>Cancel</button>
+    </div>
+    <div flex-item>
+      <button type="submit" 
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Add New Machine
+      </button>
+    </div>
+</div>
+
+</formly-form>
+</form>
