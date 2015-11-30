@@ -117,6 +117,7 @@ create table machine (
 	status text not null default '',
 	stopped_at timestamp,
 	started_at timestamp,
+	alert_at timestamp,
 	picture text not null default '',
 	notes text not null default ''	
 );

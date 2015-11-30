@@ -1054,9 +1054,28 @@ type DBmachine struct {
 	Status    string       `db:"status"`
 	Stopped   dat.NullTime `db:"stopped_at"`
 	Started   dat.NullTime `db:"started_at"`
+	Alert     dat.NullTime `db:"alert_at"`
 	Picture   string       `db:"picture"`
 	SiteName  *string      `db:"site_name"`
 	Notes     string       `db:"notes"`
+}
+
+type DBmachineResponse struct {
+	ID        int     `db:"id"`
+	SiteId    int     `db:"site_id"`
+	Name      string  `db:"name"`
+	Descr     string  `db:"descr"`
+	Make      string  `db:"make"`
+	Model     string  `db:"model"`
+	Serialnum string  `db:"serialnum"`
+	IsRunning bool    `db:"is_running"`
+	Status    string  `db:"status"`
+	Stopped   *string `db:"stopped_at"`
+	Started   *string `db:"started_at"`
+	Alert     *string `db:"alert_at"`
+	Picture   string  `db:"picture"`
+	SiteName  *string `db:"site_name"`
+	Notes     string  `db:"notes"`
 }
 
 type DBmachineReq struct {
@@ -1137,11 +1156,16 @@ func getMachine(c *echo.Context) error {
 	}
 
 	id := getID(c)
-	var record DBmachine
-	err = DB.SQL(`select m.*,s.name as site_name
-	 from machine m 
-	 left join site s on (s.id=m.site_id)
-	 where m.id=$1`, id).QueryStruct(&record)
+	var record DBmachineResponse
+	err = DB.SQL(`select m.id,m.site_id,m.name,m.descr,m.make,m.model,m.serialnum,
+		m.is_running,m.status,m.picture,m.notes,
+		to_char(m.started_at,'DD Mon YYYY HH24:MI:SS pm') as started_at,
+		to_char(m.stopped_at,'DD Mon YYYY HH24:MI:SS pm') as stopped_at,
+		to_char(m.alert_at,'DD Mon YYYY HH24:MI:SS pm') as alert_at,
+		s.name as site_name
+	  from machine m 
+	  left join site s on (s.id=m.site_id)
+	  where m.id=$1`, id).QueryStruct(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -1193,6 +1217,10 @@ func saveMachine(c *echo.Context) error {
 
 	machineID := getID(c)
 
+	// get the existing status of the machine
+	var currentStatus string
+	DB.SQL(`select status from machine where id=$1`, machineID).QueryScalar(&currentStatus)
+
 	_, err = DB.Update("machine").
 		SetWhitelist(record, "site_id", "name", "descr", "make", "model", "serialnum", "picture", "status", "notes").
 		Where("id = $1", machineID).
@@ -1203,6 +1231,54 @@ func saveMachine(c *echo.Context) error {
 	}
 
 	sysLog(1, "Machine", "M", machineID, "Updated", c, claim)
+
+	// Calculate any deltas to the status
+	// And we should also create an event to record the state change
+	switch currentStatus {
+	default:
+		switch record.Status {
+		case "Running":
+			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+		case "Needs Attention", "Maintenance Pending":
+			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+		case "Stopped":
+			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
+		}
+	case "Running":
+		switch record.Status {
+		case "Needs Attention", "Maintenance Pending":
+			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+		case "Stopped":
+			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
+		}
+	case "Needs Attention", "Maintenance Pending":
+		switch record.Status {
+		case "Running":
+			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+		case "Stopped":
+			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
+		}
+	case "Stopped":
+		switch record.Status {
+		case "Running":
+			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+		case "Needs Attention", "Maintenance Pending":
+			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+		}
+	case "New":
+		switch record.Status {
+		case "Running":
+			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+		case "Needs Attention", "Maintenance Pending":
+			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+		case "Stopped":
+			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
+		}
+	}
+	if record.Status == "New" {
+		DB.SQL(`update machine set started_at=null,stopped_at=null,alert_at=null,is_running=false where id=$1`, machineID).Exec()
+	}
+
 	return c.JSON(http.StatusOK, machineID)
 }
 

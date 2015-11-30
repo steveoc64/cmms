@@ -152,6 +152,17 @@
 		var vm = this
 		$timeout(function() {
 			vm.machine.Site = vm.machine.SiteName
+
+			// Do some useful things with the timestamps posted across
+			if (!vm.machine.Started) {
+				vm.machine.Started = 'N/A'
+			}
+			if (!vm.machine.Stopped) {
+				vm.machine.Stopped = 'N/A'
+			}
+			if (!vm.machine.Alert) {
+				vm.machine.Alert = 'N/A'
+			}
 		}, 200);
 
 	}])

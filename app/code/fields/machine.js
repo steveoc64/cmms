@@ -100,10 +100,22 @@ getMachineFields = function() {
 		extends: 'lx-input',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
-			key: 'StartedAt',
+			key: 'Started',
 			templateOptions: {
 				type: 'text',
-				label: 'Started At',
+				label: 'Started',
+				disabled: true,
+			}
+		}	
+	},{
+		name: 'machine.AlertAt',
+		extends: 'lx-input',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'Alert',
+			templateOptions: {
+				type: 'text',
+				label: 'Alert',
 				disabled: true,
 			}
 		}	
@@ -112,10 +124,10 @@ getMachineFields = function() {
 		extends: 'lx-input',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
-			key: 'StoppedAt',
+			key: 'Stopped',
 			templateOptions: {
 				type: 'text',
-				label: 'Stopped At',
+				label: 'Stopped',
 				disabled: true,
 			}
 		}	
@@ -187,11 +199,12 @@ getMachineForm = function(sites) {
 	},{
 		type: 'lx-flex',
 		templateOptions: {
-			flex: {container: "row", item: "4"},
+			flex: {container: "row", item: "3"},
 			fields: [
 				{type: 'machine.IsRunning'},
-				{type: 'machine.StoppedAt'},
 				{type: 'machine.StartedAt'},
+				{type: 'machine.AlertAt'},
+				{type: 'machine.StoppedAt'},
 			]
 		}
 	}] // end fields
