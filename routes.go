@@ -244,11 +244,9 @@ func login(c *echo.Context) error {
 			"Username": res.Username,
 		}
 		sysLog(0, "Login", "U", res.ID, "Login OK", c, claim)
-		//		log.Println(res)
 
 		tokenString, err := generateToken(res.ID, res.Role, l.Username)
 		if err != nil {
-			log.Println(`Generating Token`, err.Error())
 			return c.String(http.StatusInternalServerError, err.Error())
 		}
 
@@ -295,6 +293,7 @@ type DBusers struct {
 	Role     string     `db:"role"`
 	Sites    []*DBsite  `db:"sites"`
 	Skills   []*DBskill `db:"skills"`
+	Notes    string     `db:"notes"`
 }
 
 type DBuserlog struct {
@@ -498,6 +497,7 @@ func saveUser(c *echo.Context) error {
 		Set("sms", record.SMS).
 		Set("role", record.Role).
 		Set("site_id", record.SiteId).
+		Set("notes", record.Notes).
 		Where("id = $1", userID).
 		Exec()
 
@@ -582,6 +582,7 @@ type DBsite struct {
 	Image          string  `db:"image"`
 	ParentSite     int     `db:"parent_site"`
 	ParentSiteName *string `db:"parent_site_name"`
+	Notes          string  `db:"notes"`
 }
 
 // Return a slice, that contains This SiteID, and all child SiteIDs that have this site as a parent
@@ -667,7 +668,6 @@ func newSite(c *echo.Context) error {
 	if err := c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
-	log.Println("Received site", record)
 
 	err = DB.InsertInto("site").
 		Whitelist("name", "address", "phone", "fax", "parent_site").
@@ -701,7 +701,7 @@ func saveSite(c *echo.Context) error {
 	siteID := getID(c)
 
 	_, err = DB.Update("site").
-		SetWhitelist(record, "name", "address", "phone", "fax", "image", "parent_site").
+		SetWhitelist(record, "name", "address", "phone", "fax", "image", "parent_site", "notes").
 		Where("id = $1", siteID).
 		Exec()
 
@@ -749,8 +749,9 @@ create table skill (
 */
 
 type DBskill struct {
-	ID   int    `db:"id"`
-	Name string `db:"name"`
+	ID    int    `db:"id"`
+	Name  string `db:"name"`
+	Notes string `db:"notes"`
 }
 
 func querySkills(c *echo.Context) error {
@@ -829,8 +830,8 @@ func saveSkill(c *echo.Context) error {
 
 	skillID := getID(c)
 
-	_, err = DB.Update("site").
-		SetWhitelist(record, "name").
+	_, err = DB.Update("skill").
+		SetWhitelist(record, "name", "notes").
 		Where("id = $1", skillID).
 		Exec()
 
@@ -895,6 +896,7 @@ type DBpart struct {
 	LatestPrice       float64 `db:"latest_price"`
 	QtyType           string  `db:"qty_type"`
 	Picture           string  `db:"picture"`
+	Notes             string  `db:"notes"`
 }
 
 func queryParts(c *echo.Context) error {
@@ -903,9 +905,6 @@ func queryParts(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
-
-	//search := c.Param("search")
-	//log.Println("Search:", search, c)
 
 	var record []*DBpart
 	err = DB.SQL(`select * from part order by lower(stock_code)`).QueryStructs(&record)
@@ -977,7 +976,7 @@ func savePart(c *echo.Context) error {
 	partID := getID(c)
 
 	_, err = DB.Update("part").
-		SetWhitelist(record, "name", "descr", "stock_code", "reorder_stock_level", "reorder_qty", "latest_price", "qty_type").
+		SetWhitelist(record, "name", "descr", "stock_code", "reorder_stock_level", "reorder_qty", "latest_price", "qty_type", "notes").
 		Where("id = $1", partID).
 		Exec()
 
@@ -1057,6 +1056,7 @@ type DBmachine struct {
 	Started   dat.NullTime `db:"started_at"`
 	Picture   string       `db:"picture"`
 	SiteName  *string      `db:"site_name"`
+	Notes     string       `db:"notes"`
 }
 
 type DBmachineReq struct {
@@ -1069,6 +1069,7 @@ type DBmachineReq struct {
 	Serialnum string `db:"serialnum"`
 	Status    string `db:"status"`
 	Picture   string `db:"picture"`
+	Notes     string `db:"notes"`
 }
 
 type DBcomponent struct {
@@ -1081,6 +1082,7 @@ type DBcomponent struct {
 	Model     string `db:"model"`
 	Serialnum string `db:"serialnum"`
 	Picture   string `db:"picture"`
+	Notes     string `db:"notes"`
 }
 
 func queryMachine(c *echo.Context) error {
@@ -1159,8 +1161,6 @@ func newMachine(c *echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	log.Println("req machine update", record)
-
 	// Create a machine, default to 'Not Running'
 	err = DB.InsertInto("machine").
 		Whitelist("site_id", "name", "descr", "make", "model", "serialnum", "status").
@@ -1194,7 +1194,7 @@ func saveMachine(c *echo.Context) error {
 	machineID := getID(c)
 
 	_, err = DB.Update("machine").
-		SetWhitelist(record, "site_id", "name", "descr", "make", "model", "serialnum", "picture", "status").
+		SetWhitelist(record, "site_id", "name", "descr", "make", "model", "serialnum", "picture", "status", "notes").
 		Where("id = $1", machineID).
 		Exec()
 

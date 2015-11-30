@@ -8,7 +8,8 @@ create table users (
 	email text not null default '',
 	sms text not null default '',
 	site_id int not null default 0,
-	role text not null default 'Public'
+	role text not null default 'Public',
+	notes text not null default ''
 );
 insert into users (id,username,passwd,name,role) values (1,'admin','admin','Admin Bootstrap User','Admin');
 
@@ -20,7 +21,8 @@ create table site (
 	phone text not null default '',
 	fax text not null default '',
 	image text not null default '',
-	parent_site int not null default 0
+	parent_site int not null default 0,
+	notes text not null default ''
 );
 
 drop table if exists user_site;
@@ -44,7 +46,8 @@ create unique index user_role_idx on user_role (user_id,site_id);
 drop table if exists skill;
 create table skill (
 	id serial not null primary key,
-	name text not null
+	name text not null,
+	notes text not null default ''
 );
 
 drop table if exists user_skill;
@@ -81,7 +84,8 @@ create table doc (
 	contractor boolean not null,
 	type char(3) not null,
 	ref_id int not null,	
-	doc_format int not null
+	doc_format int not null,
+	notes text not null default ''	
 );
 
 drop table if exists doc_type;
@@ -113,7 +117,8 @@ create table machine (
 	status text not null default '',
 	stopped_at timestamp,
 	started_at timestamp,
-	picture text not null default ''
+	picture text not null default '',
+	notes text not null default ''	
 );
 
 drop table if exists component;
@@ -126,7 +131,8 @@ create table component (
 	make text not null default '',
 	model text not null default '',
 	serialnum text not null default '',
-	picture text not null default ''
+	picture text not null default '',
+	notes text not null default ''	
 );
 create unique index component_idx on component (machine_id,id);
 
@@ -147,9 +153,25 @@ create table part (
 	reorder_qty numeric(12,2) not null,
 	latest_price numeric(12,2) not null,
 	qty_type text not null default 'ea',
-	picture text not null default ''
+	picture text not null default '',
+	notes text not null default ''	
 );
 create unique index part_stock_code_idx on part (stock_code);
+
+drop table if exists vendor;
+create table vendor (
+	id serial not null primary key,
+	name text not null,
+	descr text not null default '',
+	address text not null default '',
+	phone text not null default '',
+	fax text not null default '',
+	contact_name text not null default '',
+	contact_email text not null default '',
+	orders_email text not null default '',
+	rating text not null default '',
+	notes text not null default ''
+);
 
 drop table if exists part_vendor;
 create table part_vendor (
@@ -166,7 +188,8 @@ create table vendor_price (
 	vendor_id int not null,
 	datefrom timestamp not null,
 	price numeric(12,2) not null,
-	min_qty numeric(12,2) not null
+	min_qty numeric(12,2) not null,
+	notes text not null default ''	
 );
 create unique index vendor_price_idx on vendor_price (part_id,vendor_id,datefrom);
 
@@ -185,7 +208,8 @@ create table event (
 	completed timestamp,
 	labour_cost money not null,
 	material_cost money not null,
-	other_cost money not null
+	other_cost money not null,
+	notes text not null default ''	
 );
 create index event_site_idx on event (site_id,startdate);
 create index event_allocation_idx on event (allocated_to,id);
@@ -200,7 +224,7 @@ drop table if exists event_doc;
 create table event_doc (
 	event_id int not null,
 	doc_id int not null,
-	doc_rev_id int not null
+	doc_rev_id int not null	
 );
 create unique index event_doc_idx on event_doc (event_id,doc_id);
 
@@ -209,7 +233,8 @@ create table stock_level (
 	part_id serial not null primary key,
 	site_id int not null,
 	datefrom date not null default localtimestamp,
-	qty numeric(12,2) not null
+	qty numeric(12,2) not null,
+	notes text not null default ''	
 );
 create index stock_level_idx on stock_level (part_id,site_id);
 
