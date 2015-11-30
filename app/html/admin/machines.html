@@ -38,6 +38,7 @@
   <header class="data-table-header">
     <div class="data-table-header__label">
       <span class="fs-title">Machine List</span>
+      <lx-search-filter model="searchMachine"></lx-search-filter>
     </div>
 
     <div class="data-table-header__actions">
@@ -71,7 +72,7 @@
     <tbody>
       <tr class="data-table__selectable-row"
       		ng-class="Machines.getClass(row)"
-      		ng-repeat="row in Machines.machines"
+      		ng-repeat="row in Machines.machines | filter:searchMachine"
       		ng-click="Machines.clickedRow(row)"> 
             <td><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
             <td>{{row.Descr | limitTo:64}}</td>

@@ -58,7 +58,7 @@ getMachineFields = function() {
 			templateOptions: {
 				type: 'text',
 				label: 'Serial #',
-				required: true,
+				//required: true,
 			}
 		}	
 	},{
