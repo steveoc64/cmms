@@ -30,6 +30,10 @@
     "angular-formly": "~7.3.4",
     "angular-messages": "~1.4.8",
     "angular-aria": "~1.4.8",
-    "angular-formly-templates-lumx": "~2.0.5"
+    "angular-formly-templates-lumx": "~2.0.5",
+    "EpicEditor": "~0.2.3",
+    "angular-epiceditor": "e154/angular-epiceditor#~1.0.1",
+    "ng-ckeditor": "~0.2.1",
+    "ngWig": "ng-wig#~2.3.3"
   }
 }

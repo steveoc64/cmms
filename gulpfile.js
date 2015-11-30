@@ -43,6 +43,8 @@ var paths = {
   'bower_components/ngstorage/ngStorage.js',
   'bower_components/lumx/dist/lumx.js',
   'bower_components/angular-formly-templates-lumx/dist/formlyLumx.js',
+//  'bower_components/ng-ckeditor/libs/ckeditor/ckeditor.js',
+  'bower_components/ngWig/dist/ng-wig.js',
   ],
   // These files are for your app's JavaScript
   appJS: [
@@ -57,7 +59,7 @@ var paths = {
   	"bower_components/mdi/scss",
   	"bower_components/bourbon/app/assets/stylesheets",
   	"bower_components/neat/app/assets/stylesheets",
-  	"bower_components/bitters/app/assets/stylesheets",
+    "bower_components/bitters/app/assets/stylesheets",
   ],
 }
 
@@ -122,6 +124,11 @@ gulp.task('app:js', function() {
 		.pipe($.concat('app.js'))
 		.pipe(gulp.dest('./build/js'))
 		;
+});
+
+gulp.task('ckeditor', function() {
+  return gulp.src('bower_components/ng-ckeditor/libs/ckeditor/**/*.*')
+    .pipe(gulp.dest('./build/ckeditor'))
 });
 
 gulp.task('build', 

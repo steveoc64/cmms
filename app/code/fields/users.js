@@ -183,7 +183,7 @@ getUserForm = function(sites,skills) {
 	},{
 		type: 'lx-flex',
 		templateOptions: {
-			flex: {container: "row", item: "8"},
+			flex: {container: "row", item: "6"},
 			fields: [
 				{type: 'user.Address'},
 				{type: 'user.SMS'},

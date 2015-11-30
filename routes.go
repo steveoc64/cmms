@@ -584,12 +584,8 @@ type DBsite struct {
 func getRelatedSites(siteID int) []int {
 
 	var relatedSites []int
-	log.Println("Start off with related sites", relatedSites)
 	DB.SQL(`select id from site where parent_site=$1`, siteID).QuerySlice(&relatedSites)
-	log.Println("Total Related Sites =", relatedSites)
-
 	relatedSites = append(relatedSites, siteID)
-	log.Println("Full list of related sites including Parent Site ", siteID, "=", relatedSites)
 	return relatedSites
 }
 
