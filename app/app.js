@@ -250,6 +250,9 @@ var logClass = function(l) {
 			      		users: function(DBSiteUsers,$stateParams) {
 			      			return DBSiteUsers.query({id: $stateParams.id})
 			      		},
+			      		machines: function(DBSiteMachines, $stateParams) {
+			      			return DBSiteMachines.query({id: $stateParams.id})
+			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 'S', 

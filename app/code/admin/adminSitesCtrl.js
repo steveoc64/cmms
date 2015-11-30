@@ -94,8 +94,8 @@
 	}])
 
 	app.controller(base+'EditSiteCtrl', 
-		['$state','$stateParams','site','logs','Session','$window','users','sites','$timeout',
-		function($state,$stateParams,site,logs,Session,$window,users,sites,$timeout){
+		['$state','$stateParams','site','logs','Session','$window','users','sites','$timeout','machines',
+		function($state,$stateParams,site,logs,Session,$window,users,sites,$timeout,machines){
 	
 		angular.extend(this, {
 			session: Session,
@@ -103,6 +103,7 @@
 			sites: sites,
 			logs: logs,
 			users: users,
+			machines: machines,
 			logClass: logClass,
 			formFields: getSiteForm(sites),		
 			submit: function() {
@@ -121,6 +122,9 @@
 			},
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
+			},
+			goMachine: function(row) {
+				$state.go(base+'.editmachine', {id: row.ID})
 			}
 		})
 

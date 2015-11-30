@@ -56,6 +56,7 @@ func _initRoutes() {
 	e.Delete("/parts/:id", deletePart)
 
 	e.Get("/machine", queryMachine)
+	e.Get("/sitemachines/:id", querySiteMachines)
 	e.Get("/machine/:id", getMachine)
 	e.Post("/machine", newMachine)
 	e.Put("/machine/:id", saveMachine)
@@ -1078,6 +1079,26 @@ func queryMachine(c *echo.Context) error {
 		from machine m
 		left join site s on (s.id=m.site_id)
 		order by lower(m.name)`).QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func querySiteMachines(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readMachine")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	siteID := getID(c)
+	var record []*DBmachine
+	err = DB.SQL(`select *
+		from machine 
+		where site_id=$1
+		order by lower(name)`, siteID).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())

@@ -17,4 +17,10 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBSiteMachines', function($resource,ServerName,Session){
+		return $resource(ServerName+'/sitemachines/:id',{id: '@_id'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
 })();
