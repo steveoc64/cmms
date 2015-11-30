@@ -13,19 +13,24 @@
 			session: Session,
 			logs: logs,
 			logClass: logClass,
-			getClass: function(s) {
-				if (s.selected) {
+			getClass: function(row) {
+				if (row.selected) {
 					return "data-table__selectable-row--is-selected"
 				}
 			},
-			clickedRow: function(s) {
-				if (!angular.isDefined(s.selected)) {
-					s.selected = false
+			clickedRow: function(row) {
+				if (!angular.isDefined(row.selected)) {
+					row.selected = false
 				}
-				s.selected = !s.selected
+				row.selected = !row.selected
 			},
-			clickEdit: function(s) {
-				$state.go(base+'.editsite',{id: s.ID})
+			clickEdit: function(row) {
+				$state.go(base+'.editsite',{id: row.ID})
+			},
+			goParent: function(row) {
+				if (row.ParentSite != 0) {
+					$state.go(base+'.editsite',{id: row.ParentSite})
+				}
 			},
 			showLogs: function() {
 				LxDialogService.open('siteLogDialog')
@@ -124,7 +129,7 @@
 			vm.site.ParentSite = vm.site.ParentSiteName			
 			console.log('On timeout set',vm.sites)
 		}, 200);
-		
+
 	}])
 
 

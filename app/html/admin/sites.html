@@ -76,8 +76,8 @@
       		ng-class="Sites.getClass(row)"
       		ng-repeat="row in Sites.sites"
       		ng-click="Sites.clickedRow(row)"> 
-            <td>{{row.Name}}</td>
-            <td>{{row.ParentSiteName}}</td>
+            <td><a ng-click="Sites.clickEdit(row)">{{row.Name}}</a></td>
+            <td><a ng-click="Sites.goParent(row)">{{row.ParentSiteName}}</a></td>
             <td>{{row.Address}}</td>
             <td>
             	<button class="btn btn--m btn--blue btn--icon" 
