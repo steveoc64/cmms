@@ -248,6 +248,7 @@ func login(c *echo.Context) error {
 		}
 
 		res.Token = tokenString
+		log.Println("New Login:", l.Username)
 		return c.JSON(http.StatusOK, res)
 	}
 }
@@ -568,12 +569,14 @@ create table site (
 */
 
 type DBsite struct {
-	ID      int    `db:"id"`
-	Name    string `db:"name"`
-	Address string `db:"address"`
-	Phone   string `db:"phone"`
-	Fax     string `db:"fax"`
-	Image   string `db:"image"`
+	ID             int     `db:"id"`
+	Name           string  `db:"name"`
+	Address        string  `db:"address"`
+	Phone          string  `db:"phone"`
+	Fax            string  `db:"fax"`
+	Image          string  `db:"image"`
+	ParentSite     int     `db:"parent_site"`
+	ParentSiteName *string `db:"parent_site_name"`
 }
 
 func querySites(c *echo.Context) error {
@@ -584,7 +587,10 @@ func querySites(c *echo.Context) error {
 	}
 
 	var record []*DBsite
-	err = DB.SQL(`select * from site order by lower(name)`).QueryStructs(&record)
+	err = DB.SQL(`select s.*,p.name as parent_site_name
+		from site s
+		left join site p on (p.id=s.parent_site)
+		order by lower(s.name)`).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -625,7 +631,10 @@ func getSite(c *echo.Context) error {
 
 	id := getID(c)
 	var record DBsite
-	err = DB.SQL(`select * from site where id=$1`, id).QueryStruct(&record)
+	err = DB.SQL(`select s.*,p.name as parent_site_name
+		from site s 
+		left join site p on (p.id=s.parent_site)
+		where s.id=$1`, id).QueryStruct(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -647,7 +656,7 @@ func newSite(c *echo.Context) error {
 	log.Println("Received site", record)
 
 	err = DB.InsertInto("site").
-		Whitelist("name", "address", "phone", "fax").
+		Whitelist("name", "address", "phone", "fax", "parent_site").
 		Record(record).
 		Returning("id").
 		QueryScalar(&record.ID)
@@ -678,7 +687,7 @@ func saveSite(c *echo.Context) error {
 	siteID := getID(c)
 
 	_, err = DB.Update("site").
-		SetWhitelist(record, "name", "address", "phone", "fax", "image").
+		SetWhitelist(record, "name", "address", "phone", "fax", "image", "parent_site").
 		Where("id = $1", siteID).
 		Exec()
 

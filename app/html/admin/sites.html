@@ -65,6 +65,7 @@
     <thead>
       <tr>
         <th> Name</th>
+        <th> Parent</th>
         <th> Address</th>
         <th> Edit </th>
       </tr>
@@ -76,6 +77,7 @@
       		ng-repeat="row in Sites.sites"
       		ng-click="Sites.clickedRow(row)"> 
             <td>{{row.Name}}</td>
+            <td>{{row.ParentSiteName}}</td>
             <td>{{row.Address}}</td>
             <td>
             	<button class="btn btn--m btn--blue btn--icon" 

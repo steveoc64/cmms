@@ -244,6 +244,9 @@ var logClass = function(l) {
 			      		site: function(DBSites,$stateParams) {
 			      			return DBSites.get({id: $stateParams.id})
 			      		},
+			      		sites: function(DBSites) {
+			      			return DBSites.query()
+			      		},
 			      		users: function(DBSiteUsers,$stateParams) {
 			      			return DBSiteUsers.query({id: $stateParams.id})
 			      		},
@@ -259,7 +262,12 @@ var logClass = function(l) {
 			      	url: '/newsite',
 			      	acl: 'Admin',
 			      	templateUrl: 'html/admin/site.new.html',
-			      	controller: 'adminNewSiteCtrl as newSite'
+			      	controller: 'adminNewSiteCtrl as newSite',
+			      	resolve: {
+			      		sites: function(DBSites) {
+			      			return DBSites.query()
+			      		}
+			      	}
 			      })
 		      .state('admin.machines',{
 		      	url: '/machines',

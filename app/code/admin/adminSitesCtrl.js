@@ -65,13 +65,14 @@
 	}])
 
 	app.controller(base+'NewSiteCtrl', 
-		['$state','Session','DBSites','LxNotificationService','$window',
-		function($state,Session,DBSites,LxNotificationService,$window){
+		['$state','Session','DBSites','LxNotificationService','$window','sites',
+		function($state,Session,DBSites,LxNotificationService,$window,sites){
 	
 		angular.extend(this, {
 			session: Session,
 			site: new DBSites(),
-			formFields: getSiteForm(),
+			sites: sites,
+			formFields: getSiteForm(sites),
 			submit: function() {
 				if (this.form.$valid) {
 					this.site.$insert(function(newsite) {
@@ -88,18 +89,24 @@
 	}])
 
 	app.controller(base+'EditSiteCtrl', 
-		['$state','$stateParams','site','logs','Session','$window','users',
-		function($state,$stateParams,site,logs,Session,$window,users){
+		['$state','$stateParams','site','logs','Session','$window','users','sites','$timeout',
+		function($state,$stateParams,site,logs,Session,$window,users,sites,$timeout){
 	
 		angular.extend(this, {
 			session: Session,
 			site: site,
+			sites: sites,
 			logs: logs,
 			users: users,
 			logClass: logClass,
-			formFields: getSiteForm(),		
+			formFields: getSiteForm(sites),		
 			submit: function() {
 				this.site._id = $stateParams.id
+				if (angular.isDefined(this.site.ParentSite)) {
+					this.site.ParentSite = this.site.ParentSite.ID
+				} else {
+					this.site.ParentSite = 0
+				}
 				this.site.$update(function(newsite) {
 					$state.go(base+'.sites')
 				})					
@@ -110,8 +117,14 @@
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
 			}
-
 		})
+
+		var vm = this
+		$timeout(function() {
+			vm.site.ParentSite = vm.site.ParentSiteName			
+			console.log('On timeout set',vm.sites)
+		}, 200);
+		
 	}])
 
 

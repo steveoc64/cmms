@@ -66,11 +66,26 @@ getSiteFields = function() {
 				required: true,
 			}
 		}	
+	},{
+		name: 'site.ParentSite',
+		extends: 'lx-select',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'ParentSite',
+			templateOptions: {
+				type: 'select',
+				placeholder: 'Parent Site',
+				icon: 'factory',
+				selected: 'Name',
+				choice: 'Name',
+				allowClear: true,
+			}
+		}	
 	}] // end fields
 
 } // getUserFields
 
-getSiteForm = function() {
+getSiteForm = function(sites) {
 
 	return [{
 		type: 'lx-flex',
@@ -78,6 +93,10 @@ getSiteForm = function() {
 			flex: { container: "row", item: "6"},
 			fields: [
 				{type: 'site.Name'},
+				{
+					type: 'site.ParentSite',
+					templateOptions: {choices: sites, options: sites},
+				},
 			]
 		}
 	},{
