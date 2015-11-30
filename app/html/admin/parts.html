@@ -76,8 +76,8 @@
       		ng-class="Parts.getClass(row)"
       		ng-repeat="row in Parts.parts | filter:searchPart"
       		ng-click="Parts.clickedRow(row)"> 
-            <td>{{row.StockCode}}</td>
-            <td>{{row.Descr | limitTo:64}}</td>
+            <td><a ng-click="Parts.clickEdit(row)">{{row.StockCode}}</a></td>
+            <td><a ng-click="Parts.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
             <td>{{row.QtyType}}</td>
             <td>{{row.ReorderStocklevel}}</td>
             <td>{{row.ReorderQty}}</td>
