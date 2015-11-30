@@ -114,9 +114,13 @@ type SysLogRequest struct {
 func sysLog(status int, t string, reftype string, ref int, descr string, c *echo.Context, claim map[string]interface{}) {
 
 	req := c.Request()
-	ip := req.RemoteAddr
-	UserID := 0
+	ip := req.Header.Get("X-Real-Ip")
+	if len(ip) < 1 {
+		ip = req.RemoteAddr
+	}
+
 	Username := ""
+	UserID := 0
 	if claim != nil {
 		UserID, Username = getClaimedUser(claim)
 	}
