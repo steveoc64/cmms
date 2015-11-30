@@ -33,7 +33,7 @@
 				row.selected = !row.selected
 			},
 			clickEdit: function(row) {
-				$state.go(base+'.editsite',{id: row.Id})
+				$state.go(base+'.editsite',{id: row.ID})
 			},
 			goParent: function(row) {
 				if (row.ParentSite != 0) {
@@ -116,7 +116,7 @@
 			formFields: getSiteForm(sites),		
 			submit: function() {
 				this.site._id = $stateParams.id
-				if (angular.isDefined(this.site.ParentSite)) {
+				if (angular.isDefined(this.site.ParentSite) && this.site.ParentSite) {
 					this.site.ParentSite = this.site.ParentSite.ID
 				} else {
 					this.site.ParentSite = 0
