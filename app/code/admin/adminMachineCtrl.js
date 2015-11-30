@@ -82,6 +82,7 @@
 			logClass: logClass,
 			submit: function() {
 				if (this.form.$valid) {
+					this.machine.Status = 'New - to be Installed'
 					this.machine.$insert(function(newRecord) {
 						$state.go(base+'.machines')
 					})					
@@ -113,7 +114,6 @@
 				} else {
 					this.machine.SiteId = 0
 				}
-				this.machine.Status = 'New - to be Installed'
 				this.machine.$update(function(newmachine) {
 					$state.go(base+'.machines')
 				})					
