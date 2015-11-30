@@ -74,6 +74,17 @@ var logClass = function(l) {
 	    		templateUrl:'html/cmms.html',
 	    		controller: 'cmmsCtrl as cmmsCtrl',
 	    	})
+	    	.state('floor',{
+	    		url:'/floor',
+	    		acl: 'Floor',
+	    		templateUrl:'html/floor.html',
+	    		controller: 'floorCtrl as Floor',
+	    		resolve: {
+	    			machines: function(DBMachine) {
+	    				return DBMachine.query()
+	    			}
+	    		}
+	    	})
 	    	.state('login',{	// Special state with no template !!
 	    		url: '/login',
 	    		acl:'*',
@@ -543,6 +554,12 @@ var logClass = function(l) {
 				  			//LxNotificationService.warning('This page requires worker access')
 				  			//console.log('This page requires worker access !',Session.username,':',Session.role)
 		  					break
+		  			}
+		  			break
+		  		case 'Floor':
+		  			switch (Session.Role) {
+		  				case 'Floor':
+		  					allGood = true
 		  			}
 		  			break
 		  		case '*':

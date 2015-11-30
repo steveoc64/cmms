@@ -1,0 +1,32 @@
+<!-- Banner -->
+<div class="banner floor-main">
+    <h1 class="banner__subtitle">
+    	Floor Control {{Floor.Session.UserName}}
+    </h1>
+    <div class="banner__stripe"></div>
+
+    <div flex-container="row" flex-gutter="24" flex-wrap>
+      <div flex-item="3" ng-repeat="machine in Floor.machines" flex-item-align="center" style="margin-top: 40px">
+        <div class="card" style="height: 200px">
+          <div class="p+">
+            <strong class="fs-headline display-block">{{machine.Name}}</strong>
+            <span class="fs-subhead tc-black-2 display-block">{{machine.Serialnum}}</span>
+
+            <div class="paragraph fs-body-1 mt+">
+              <p>
+              {{machine.Descr}}
+              </p>
+            </div>
+          </div>
+
+          <div class="card__actions">
+            <button class="btn btn--m btn--orange btn--flat" lx-ripple>Stop</button>
+            <button class="btn btn--m btn--green btn--flat" lx-ripple>Alert</button>
+            <button class="btn btn--m btn--blue btn--flat" lx-ripple>Start</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+</div>

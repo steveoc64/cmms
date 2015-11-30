@@ -65,6 +65,15 @@ body {
   font-style: italic;
 }
 
+.floor-main {
+  background-color: $black-2;
+}
+
+.floor-card {
+  display: flex;
+  //height: 300px;
+}
+
 .data-table {
   th {
       height: 56px;

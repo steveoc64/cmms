@@ -21,6 +21,9 @@
 			case 'Service Contractor':
 				$state.go('svcContractor.dashboard')
 				break
+			case 'Floor':
+				$state.go('floor')
+				break
 			default:
 				console.log('Unknown Role',Session.Role)
 				Session.logout()
