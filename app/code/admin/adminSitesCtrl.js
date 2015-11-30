@@ -125,6 +125,9 @@
 			},
 			goMachine: function(row) {
 				$state.go(base+'.editmachine', {id: row.ID})
+			},
+			goSite: function(row) {
+				$state.go(base+'.editsite',{id: row.SiteId})
 			}
 		})
 

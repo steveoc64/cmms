@@ -580,6 +580,19 @@ type DBsite struct {
 	ParentSiteName *string `db:"parent_site_name"`
 }
 
+// Return a slice, that contains This SiteID, and all child SiteIDs that have this site as a parent
+func getRelatedSites(siteID int) []int {
+
+	var relatedSites []int
+	log.Println("Start off with related sites", relatedSites)
+	DB.SQL(`select id from site where parent_site=$1`, siteID).QuerySlice(&relatedSites)
+	log.Println("Total Related Sites =", relatedSites)
+
+	relatedSites = append(relatedSites, siteID)
+	log.Println("Full list of related sites including Parent Site ", siteID, "=", relatedSites)
+	return relatedSites
+}
+
 func querySites(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readSite")
@@ -1094,11 +1107,16 @@ func querySiteMachines(c *echo.Context) error {
 	}
 
 	siteID := getID(c)
+	siteIDs := getRelatedSites(siteID)
+
+	// Get a list of site_ids that are relevant for this site
+
 	var record []*DBmachine
-	err = DB.SQL(`select *
-		from machine 
-		where site_id=$1
-		order by lower(name)`, siteID).QueryStructs(&record)
+	err = DB.SQL(`select m.*,s.name as site_name
+		from machine m 
+		left join site s on (s.id=m.site_id) 
+		where m.site_id in $1
+		order by lower(m.name)`, siteIDs).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
