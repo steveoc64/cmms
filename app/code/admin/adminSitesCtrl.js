@@ -33,7 +33,7 @@
 				row.selected = !row.selected
 			},
 			clickEdit: function(row) {
-				$state.go(base+'.editsite',{id: row.ID})
+				$state.go(base+'.editsite',{id: row.Id})
 			},
 			goParent: function(row) {
 				if (row.ParentSite != 0) {
@@ -165,7 +165,6 @@
 		var vm = this
 		$timeout(function() {
 			vm.site.ParentSite = vm.site.ParentSiteName			
-			console.log('On timeout set',vm.sites)
 		}, 200);
 
 	}])
