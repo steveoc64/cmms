@@ -78,7 +78,7 @@
       		ng-class="Users.getClass(row)"
       		ng-repeat="row in Users.users"
       		ng-click="Users.clickedRow(row)"> 
-            <td>{{row.Username}}</td>
+            <td><a ng-click="Users.clickEdit(row)">{{row.Username}}</a></td>
             <td>{{row.Role}}</td>
             <td>{{row.Name}}</td>
             <td>{{row.Email | limitTo:16}}..</td> 
