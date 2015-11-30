@@ -1041,6 +1041,7 @@ type DBmachine struct {
 	Stopped   dat.NullTime `db:"stopped_at"`
 	Started   dat.NullTime `db:"started_at"`
 	Picture   string       `db:"picture"`
+	SiteName  *string      `db:"site_name"`
 }
 
 type DBmachineReq struct {
@@ -1073,7 +1074,10 @@ func queryMachine(c *echo.Context) error {
 	}
 
 	var record []*DBmachine
-	err = DB.SQL(`select * from machine order by lower(name)`).QueryStructs(&record)
+	err = DB.SQL(`select m.*,s.name as site_name
+		from machine m
+		left join site s on (s.id=m.site_id)
+		order by lower(m.name)`).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -1090,7 +1094,10 @@ func getMachine(c *echo.Context) error {
 
 	id := getID(c)
 	var record DBmachine
-	err = DB.SQL(`select * from machine where id=$1`, id).QueryStruct(&record)
+	err = DB.SQL(`select m.*,s.name as site_name
+	 from machine m 
+	 left join site s on (s.id=m.site_id)
+	 where m.id=$1`, id).QueryStruct(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())

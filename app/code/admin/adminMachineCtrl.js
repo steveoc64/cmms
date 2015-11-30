@@ -27,6 +27,11 @@
 			clickEdit: function(row) {
 				$state.go(base+'.editmachine',{id: row.ID})
 			},
+			goSite: function(row) {
+				if (row.SiteId != 0) {
+					$state.go(base+'.editsite',{id: row.SiteId})
+				}
+			},
 			showLogs: function() {
 				LxDialogService.open('machineLogDialog')
 			},
@@ -90,8 +95,8 @@
 	}])
 
 	app.controller(base+'EditMachineCtrl', 
-		['$state','$stateParams','machine','logs','Session','$window','sites','components',
-		function($state,$stateParams,machine,logs,Session,$window,sites,components){
+		['$state','$stateParams','machine','logs','Session','$window','sites','components','$timeout',
+		function($state,$stateParams,machine,logs,Session,$window,sites,components,$timeout){
 
 		angular.extend(this, {
 			session: Session,
@@ -103,7 +108,11 @@
 			logClass: logClass,
 			submit: function() {
 				this.machine._id = $stateParams.id				
-				this.machine.SiteId = this.machine.Site.ID
+				if (angular.isDefined(this.machine.Site)) {
+					this.machine.SiteId = this.machine.Site.ID
+				} else {
+					this.machine.SiteId = 0
+				}
 				this.machine.$update(function(newmachine) {
 					$state.go(base+'.machines')
 				})					
@@ -115,6 +124,12 @@
 				$state.go(base+'.editmachine',{id: row.ID})
 			},
 		})
+
+		var vm = this
+		$timeout(function() {
+			vm.machine.Site = vm.machine.SiteName
+		}, 200);
+
 	}])
 
 })();

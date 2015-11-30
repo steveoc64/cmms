@@ -73,10 +73,10 @@
       		ng-class="Machines.getClass(row)"
       		ng-repeat="row in Machines.machines"
       		ng-click="Machines.clickedRow(row)"> 
-            <td>{{row.Name}}</td>
+            <td><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
             <td>{{row.Descr | limitTo:64}}</td>
             <td>{{row.Serialnum}}</td>
-            <td>{{row.SiteId}}</td>
+            <td><a ng-click="Machines.goSite(row)">{{row.SiteName}}</a></td>
             <td>
               <button class="btn btn--m btn--blue btn--icon" 
                       ng-click="Machines.clickEdit(row); $event.stopPropagation()"

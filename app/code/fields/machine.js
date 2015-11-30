@@ -106,7 +106,7 @@ getMachineFields = function() {
 				placeholder: "Select Site",
 				space: true,
 				choice: "Name",
-				selected: "ID",
+				selected: "Name",
 				options: [],
 			}
 		}
