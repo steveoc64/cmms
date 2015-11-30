@@ -64,6 +64,7 @@
     <thead>
       <tr>
         <th> Name</th>
+        <th> Status</th>
         <th> Description</th>
         <th> Serial #</th>
         <th> Site</th>
@@ -76,6 +77,7 @@
       		ng-repeat="row in Machines.machines | filter:searchMachine"
       		ng-click="Machines.clickedRow(row)"> 
             <td><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
+            <td>{{row.Status}}</td>
             <td>{{row.Descr | limitTo:64}}</td>
             <td>{{row.Serialnum}}</td>
             <td><a ng-click="Machines.goSite(row)">{{row.SiteName}}</a></td>

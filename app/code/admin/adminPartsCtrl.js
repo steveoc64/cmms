@@ -105,7 +105,7 @@
 			submit: function() {
 				this.part._id = $stateParams.id
 				this.part.$update(function(newpart) {
-					$state.go(base+'.parts')
+					$window.history.go(-1)
 				})					
 			},
 			abort: function() {

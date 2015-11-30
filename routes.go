@@ -1067,6 +1067,8 @@ type DBmachineReq struct {
 	Make      string `db:"make"`
 	Model     string `db:"model"`
 	Serialnum string `db:"serialnum"`
+	Status    string `db:"status"`
+	Picture   string `db:"picture"`
 }
 
 type DBcomponent struct {
@@ -1161,7 +1163,7 @@ func newMachine(c *echo.Context) error {
 
 	// Create a machine, default to 'Not Running'
 	err = DB.InsertInto("machine").
-		Whitelist("site_id", "name", "descr", "make", "model", "serialnum").
+		Whitelist("site_id", "name", "descr", "make", "model", "serialnum", "status").
 		Record(record).
 		Returning("id").
 		QueryScalar(&record.ID)
@@ -1192,7 +1194,7 @@ func saveMachine(c *echo.Context) error {
 	machineID := getID(c)
 
 	_, err = DB.Update("machine").
-		SetWhitelist(record, "site_id", "name", "descr", "make", "model", "serialnum", "picture").
+		SetWhitelist(record, "site_id", "name", "descr", "make", "model", "serialnum", "picture", "status").
 		Where("id = $1", machineID).
 		Exec()
 

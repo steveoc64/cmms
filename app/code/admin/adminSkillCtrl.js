@@ -102,12 +102,11 @@
 			submit: function() {
 				this.skill._id = $stateParams.id
 				this.skill.$update(function(newskill) {
-					$state.go(base+'.skills')
+					$window.history.go(-1)
 				})					
 			},
 			abort: function() {
 				$window.history.go(-1)
-				//$state.go(base+'.skills')
 			},
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})

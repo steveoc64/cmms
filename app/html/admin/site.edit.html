@@ -39,12 +39,13 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-class="editSite.getMachineClass(row)"
                 ng-repeat="row in editSite.machines">
                   <td><a ng-click="editSite.goMachine(row)">{{row.Name}}</a></td>
                   <td>{{row.Serialnum}}</td>
                   <td><a ng-click="editSite.goSite(row)">{{row.SiteName}}</a></td>
                   <td>{{row.Descr}}</td>
-                  <td>{{row.IsRunning}}</td>
+                  <td>{{row.Status}}</td>
             </tr>
           </tbody>
         </table>

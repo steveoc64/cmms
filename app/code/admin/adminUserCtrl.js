@@ -110,7 +110,7 @@
 			submit: function() {
 				this.user._id = $stateParams.id
 				this.user.$update(function(newuser) {
-					$state.go(base+'.users')
+					$window.history.go(-1)
 				})					
 			},
 			abort: function() {

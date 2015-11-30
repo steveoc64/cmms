@@ -68,7 +68,7 @@ getMachineFields = function() {
 			key: 'Status',
 			templateOptions: {
 				placeholder: 'Status',
-				options: ['Running','Needs Attention','Stopped','Preventative Maintenance Pending','New - to be Installed'],
+				options: ['Running','Needs Attention','Stopped','Maintenance Pending','New'],
 				allowClear: false,
 			}
 		}	

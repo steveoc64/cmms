@@ -17,6 +17,23 @@
 				if (row.selected) {
 					return "data-table__selectable-row--is-selected"
 				}
+				switch (row.Status) {
+					case 'Running':
+						return "machine__running"
+						break
+					case 'Needs Attention':
+						return "machine__attention"
+						break
+					case 'Stopped':
+						return "machine__stopped"
+						break
+					case 'Maintenance Pending':
+						return "machine__pending"
+						break
+					case 'New':
+						return "machine__new"
+						break
+				}
 			},
 			clickedRow: function(row) {
 				if (!angular.isDefined(row.selected)) {
@@ -115,7 +132,7 @@
 					this.machine.SiteId = 0
 				}
 				this.machine.$update(function(newmachine) {
-					$state.go(base+'.machines')
+					$window.history.go(-1)
 				})					
 			},
 			abort: function() {

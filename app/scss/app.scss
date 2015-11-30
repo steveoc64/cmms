@@ -20,7 +20,8 @@ body {
   tr {
     a {
       color: $indigo-500;
-      cursor: context-menu;
+      //cursor: context-menu;
+      cursor: help;
     }
   }
 }
@@ -34,6 +35,31 @@ body {
   background-color: $yellow-50;   
   //background-color: $blue-grey-100; 
   //@include linear-gradient($palette_16, $palette_14);
+}
+
+.machine__running td {
+  // Default 
+}
+.machine__attention td {
+  background-color: $amber-200;
+  font-weight: bold;
+}
+.machine__stopped td {
+  background-color: $deep-orange-500;  
+  font-weight: bold;
+  font-size: 16px;
+}
+.machine__pending td {
+  background-color: $brown-200;
+  font-weight: bold;
+}
+.machine__new td {
+  background-color: $teal-500;
+  color: $white;
+  a {
+    color: $cyan-100;
+  }
+  font-style: italic;
 }
 
 .data-table {

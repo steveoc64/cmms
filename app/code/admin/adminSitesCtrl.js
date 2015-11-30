@@ -64,7 +64,7 @@
 							$state.reload()
 						}
 					})
-			}
+			},
 
 		})
 	}])
@@ -114,7 +114,7 @@
 					this.site.ParentSite = 0
 				}
 				this.site.$update(function(newsite) {
-					$state.go(base+'.sites')
+					$window.history.go(-1)
 				})					
 			},
 			abort: function() {
@@ -128,7 +128,30 @@
 			},
 			goSite: function(row) {
 				$state.go(base+'.editsite',{id: row.SiteId})
-			}
+			},
+			getMachineClass: function(row) {
+				if (row.selected) {
+					return "data-table__selectable-row--is-selected"
+				}
+				switch (row.Status) {
+					case 'Running':
+						return "machine__running"
+						break
+					case 'Needs Attention':
+						return "machine__attention"
+						break
+					case 'Stopped':
+						return "machine__stopped"
+						break
+					case 'Maintenance Pending':
+						return "machine__pending"
+						break
+					case 'New':
+						return "machine__new"
+						break
+				} // switch
+			},
+			
 		})
 
 		var vm = this
