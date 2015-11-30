@@ -71,7 +71,7 @@
       		ng-class="Skills.getClass(row)"
       		ng-repeat="row in Skills.skills"
       		ng-click="Skills.clickedRow(row)"> 
-            <td>{{row.Name}}</td>
+            <td><a ng-click="Skills.clickEdit(row)">{{row.Name}}</a></td>
             <td>
             	<button class="btn btn--m btn--blue btn--icon" 
             					ng-click="Skills.clickEdit(row); $event.stopPropagation()"
