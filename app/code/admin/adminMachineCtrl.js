@@ -113,6 +113,7 @@
 				} else {
 					this.machine.SiteId = 0
 				}
+				this.machine.Status = 'New - to be Installed'
 				this.machine.$update(function(newmachine) {
 					$state.go(base+'.machines')
 				})					

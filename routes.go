@@ -1052,7 +1052,7 @@ type DBmachine struct {
 	Model     string       `db:"model"`
 	Serialnum string       `db:"serialnum"`
 	IsRunning bool         `db:"is_running"`
-	Status    int          `db:"status"`
+	Status    string       `db:"status"`
 	Stopped   dat.NullTime `db:"stopped_at"`
 	Started   dat.NullTime `db:"started_at"`
 	Picture   string       `db:"picture"`

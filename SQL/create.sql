@@ -110,7 +110,7 @@ create table machine (
 	model text not null default '',
 	serialnum text not null,
 	is_running boolean not null default false,
-	status int not null default 0,
+	status text not null default '',
 	stopped_at timestamp,
 	started_at timestamp,
 	picture text not null default ''

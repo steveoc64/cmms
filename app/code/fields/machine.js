@@ -62,6 +62,28 @@ getMachineFields = function() {
 			}
 		}	
 	},{
+		name: 'machine.Status',
+		extends: 'lx-select',
+		defaultOptions: {
+			key: 'Status',
+			templateOptions: {
+				placeholder: 'Status',
+				options: ['Running','Needs Attention','Stopped','Preventative Maintenance Pending','New - to be Installed'],
+				allowClear: false,
+			}
+		}	
+	},{
+		name: 'machine.StatusImage',
+		extends: 'lx-input',
+		defaultOptions: {
+			key: 'StatusImage',
+			templateOptions: {
+				type: 'text',
+				placeholder: 'Add an image here to denote the status',
+				disabled: true,
+			}
+		}	
+	},{
 		name: 'machine.IsRunning',
 		extends: 'lx-input',
 		wrapper: 'lx-wrapper-errors',
@@ -134,6 +156,15 @@ getMachineForm = function(sites) {
 					type: 'machine.Site',
 					templateOptions: {options: sites},
 				},
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: {container: "row", item: "8"},
+			fields: [
+				{type: 'machine.Status'},
+				{type: 'machine.StatusImage'},
 			]
 		}
 	},{
