@@ -13,6 +13,14 @@
 			session: Session,
 			logs: logs,
 			logClass: logClass,
+			sortField: 'Name',
+			sortDir: false,
+			setSort: function(field) {
+				if (this.sortField == field) {
+					this.sortDir = !this.sortDir
+				}
+				this.sortField = field
+			},		
 			getClass: function(row) {
 				if (row.selected) {
 					return "data-table__selectable-row--is-selected"

@@ -63,18 +63,18 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th> Name</th>
-        <th> Status</th>
-        <th> Description</th>
-        <th> Serial #</th>
-        <th> Site</th>
+        <th><a ng-click="Machines.setSort('Name')"> Name</a></th>
+        <th><a ng-click="Machines.setSort('Status')"> Status</a></th>
+        <th><a ng-click="Machines.setSort('Descr')"> Description</a></th>
+        <th><a ng-click="Machines.setSort('Serialnum')"> Serial #</a></th>
+        <th><a ng-click="Machines.setSort('SiteName')"> Site</a></th>
       </tr>
     </thead>
 
     <tbody>
       <tr class="data-table__selectable-row"
       		ng-class="Machines.getClass(row)"
-      		ng-repeat="row in Machines.machines | filter:searchMachine"
+      		ng-repeat="row in Machines.machines | filter:searchMachine | orderBy:Machines.sortField:Machines.sortDir"
       		ng-click="Machines.clickedRow(row)"> 
             <td><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
             <td>{{row.Status}}</td>

@@ -65,9 +65,9 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th> Name</th>
-        <th> Parent</th>
-        <th> Address</th>
+        <th><a ng-click="Sites.setSort('Name')"> Name</a></th>
+        <th><a ng-click="Sites.setSort('ParentSiteName')"> Parent</a></th>
+        <th><a ng-click="Sites.setSort('Address')"> Address</a></th>
         <th> Edit </th>
       </tr>
     </thead>
@@ -75,7 +75,7 @@
     <tbody>
       <tr class="data-table__selectable-row"
       		ng-class="Sites.getClass(row)"
-      		ng-repeat="row in Sites.sites"
+      		ng-repeat="row in Sites.sites | orderBy:Sites.sortField:Sites.sortDir"
       		ng-click="Sites.clickedRow(row)"> 
             <td><a ng-click="Sites.clickEdit(row)">{{row.Name}}</a></td>
             <td><a ng-click="Sites.goParent(row)">{{row.ParentSiteName}}</a></td>

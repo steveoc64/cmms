@@ -14,6 +14,14 @@
 			logs: logs,
 			logClass: logClass,
 			search: '',
+			sortField: 'Name',
+			sortDir: false,
+			setSort: function(field) {
+				if (this.sortField == field) {
+					this.sortDir = !this.sortDir
+				}
+				this.sortField = field
+			},		
 			newSearch: function() {
 				console.log('New Search', this.search)
 			},

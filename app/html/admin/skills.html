@@ -62,7 +62,7 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th> Name</th>
+        <th><a ng-click="Skills.setSort('Name')"> Name</a></th>
         <th> Edit </th>
       </tr>
     </thead>
@@ -70,7 +70,7 @@
     <tbody>
       <tr class="data-table__selectable-row"
       		ng-class="Skills.getClass(row)"
-      		ng-repeat="row in Skills.skills"
+      		ng-repeat="row in Skills.skills | orderBy:Skills.sortField:Skills.sortDir"
       		ng-click="Skills.clickedRow(row)"> 
             <td><a ng-click="Skills.clickEdit(row)">{{row.Name}}</a></td>
             <td>

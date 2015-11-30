@@ -63,19 +63,20 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th> StockCode</th>
-        <th> Description</th>
-        <th> Qty Type</th>
-        <th> Reorder Level</th>
-        <th> Reorder Qty</th>
-        <th> Last Price</th>
+        <th><a ng-click="Parts.setSort('StockCode')"> StockCode</a></th>
+        <th><a ng-click="Parts.setSort('Descr')"> Description</a></th>
+        <th><a ng-click="Parts.setSort('QtyType')"> Qty Type</a></th>
+        <th><a ng-click="Parts.setSort('ReorderStocklevel')"> Reorder Level</a></th>
+        <th><a ng-click="Parts.setSort('ReorderQty')"> Reorder Qty</a></th>
+        <th><a ng-click="Parts.setSort('LatestPrice')"> Last Price</a></th>
       </tr>
     </thead>
 
     <tbody>
       <tr class="data-table__selectable-row"
       		ng-class="Parts.getClass(row)"
-      		ng-repeat="row in Parts.parts | filter:searchPart"
+      		ng-repeat="row in Parts.parts | filter:searchPart | orderBy:Parts.sortField:Parts.sortDir"
+
       		ng-click="Parts.clickedRow(row)"> 
             <td><a ng-click="Parts.clickEdit(row)">{{row.StockCode}}</a></td>
             <td><a ng-click="Parts.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
