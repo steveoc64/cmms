@@ -123,6 +123,12 @@
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
 			},
+			goMachine: function(row) {
+				$state.go(base+'.editmachine',{id: row.MachineID})
+			},
+			goSite: function(row) {
+				$state.go(base+'.editsite',{id: row.SiteID})
+			}
 		})
 	}])
 

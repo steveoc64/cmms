@@ -903,8 +903,13 @@ type DBpart struct {
 type DBpartComponents struct {
 	ComponentID int    `db:"component_id"`
 	PartID      int    `db:"part_id"`
+	Qty         int    `db:"qty"`
 	StockCode   string `db:"stock_code"` // component stock code and name
 	Name        string `db:"name"`
+	MachineName string `db:"machine_name"`
+	SiteName    string `db:"site_name"`
+	MachineID   int    `db:"machine_id"`
+	SiteID      int    `db:"site_id"`
 }
 
 func queryParts(c *echo.Context) error {
@@ -934,9 +939,13 @@ func queryPartComponents(c *echo.Context) error {
 
 	partID := getID(c)
 	err = DB.SQL(`select 
-		x.component_id,c.stock_code,c.name
+		x.component_id,x.qty,c.stock_code,c.name,
+		m.name as machine_name,m.id as machine_id,
+		s.name as site_name,s.id as site_id
 		from component_part x
 		left join component c on (c.id=x.component_id)
+		left join machine m on (m.id=c.machine_id)
+		left join site s on (s.id=c.site_id)
 		where x.part_id=$1`, partID).QueryStructs(&cp)
 
 	if err != nil {

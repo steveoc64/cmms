@@ -25,30 +25,36 @@
 
 <div class="card">
   <lx-tabs>
-    <lx-tab heading="Notes">
-      <div class="card">
-        <textarea ng-wig="editPart.part.Notes"></textarea>
-      </div>   
-    </lx-tab>
-
-    <lx-tab heading="Tools">
+    <lx-tab heading="Tool Usage">
       <div class="data-table-container">
         <table class="data-table">
           <thead>
             <tr>
-              <th> Tool #</th>
-              <th> Name</th>
+              <th> Used by Tool #</th>
+              <th> Tool Name</th>
+              <th> Machine</th>
+              <th> Site</th>
+              <th> Qty Used</th>
             </tr>
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-repeat="l in editPart.components">
-                  <td>{{l.StockCode}}</td>
-                  <td>{{l.Name}}</td>
+                ng-repeat="row in editPart.components">
+                  <td>{{row.StockCode}}</td>
+                  <td>{{row.Name}}</td>
+                  <td><a ng-click="editPart.goMachine(row)">{{row.MachineName}}</a></td>
+                  <td><a ng-click="editPart.goSite(row)">{{row.SiteName}}</td>
+                  <td>{{row.Qty}}</td>
             </tr>
           </tbody>
         </table>
       </div>
+    </lx-tab>
+
+    <lx-tab heading="Notes">
+      <div class="card">
+        <textarea ng-wig="editPart.part.Notes"></textarea>
+      </div>   
     </lx-tab>
 
     <lx-tab heading="Documents">

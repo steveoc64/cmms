@@ -57,7 +57,7 @@ getMachineFields = function() {
 			key: 'Serialnum',
 			templateOptions: {
 				type: 'text',
-				label: 'Serial #',
+				label: 'Machine #',
 				//required: true,
 			}
 		}	
