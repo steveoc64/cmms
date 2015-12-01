@@ -25,13 +25,13 @@
 
 <div class="card">
   <lx-tabs>
-    <lx-tab heading="Components">
+    <lx-tab heading="Tools">
       <div class="data-table-container">
         <table class="data-table">
           <thead>
             <tr>
               <th> Name</th>
-              <th> Serial #</th>
+              <th> Tool #</th>
               <th> Description</th>
               <th> Make</th>
               <th> Model</th>
@@ -41,7 +41,7 @@
             <tr class="data-table"
                 ng-repeat="row in editMachine.components">
                   <td>{{row.Name}}</td>
-                  <td>{{row.Serialnum}}</td>
+                  <td>{{row.StockCode}}</td>
                   <td>{{row.Descr | limitTo:32}}</td>
                   <td>{{row.Make}}</td>
                   <td>{{row.Model}}</td>

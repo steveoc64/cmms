@@ -361,6 +361,9 @@ var logClass = function(l) {
 			      				RefType: 'P', 
 			      				RefID: $stateParams.id,
 			      				Limit: 100})
+			      		},
+			      		components: function(DBPartComponent,$stateParams) {
+			      			return DBPartComponent.query({id: $stateParams.id})
 			      		}
 			      	}
 			      })

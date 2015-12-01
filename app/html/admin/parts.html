@@ -65,10 +65,7 @@
       <tr>
         <th><a ng-click="Parts.setSort('StockCode')"> StockCode</a></th>
         <th><a ng-click="Parts.setSort('Descr')"> Description</a></th>
-        <th><a ng-click="Parts.setSort('QtyType')"> Qty Type</a></th>
-        <th><a ng-click="Parts.setSort('ReorderStocklevel')"> Reorder Level</a></th>
-        <th><a ng-click="Parts.setSort('ReorderQty')"> Reorder Qty</a></th>
-        <th><a ng-click="Parts.setSort('LatestPrice')"> Last Price</a></th>
+        <th><a ng-click="Parts.setSort('ReorderStocklevel')"> Re Order Levels</a></th>
       </tr>
     </thead>
 
@@ -80,10 +77,7 @@
       		ng-click="Parts.clickedRow(row)"> 
             <td><a ng-click="Parts.clickEdit(row)">{{row.StockCode}}</a></td>
             <td><a ng-click="Parts.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
-            <td>{{row.QtyType}}</td>
-            <td>{{row.ReorderStocklevel}}</td>
-            <td>{{row.ReorderQty}}</td>
-            <td>{{row.LatestPrice}}</td>
+            <td>{{row.ReorderStocklevel}} / {{row.ReorderQty}} (@ ${{row.LatestPrice}} {{row.QtyType}})</td>
             <td>
               <button class="btn btn--m btn--blue btn--icon" 
                       ng-click="Parts.clickEdit(row); $event.stopPropagation()"

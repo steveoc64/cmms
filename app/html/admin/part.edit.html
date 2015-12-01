@@ -31,6 +31,26 @@
       </div>   
     </lx-tab>
 
+    <lx-tab heading="Tools">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Tool #</th>
+              <th> Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="l in editPart.components">
+                  <td>{{l.StockCode}}</td>
+                  <td>{{l.Name}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
     <lx-tab heading="Documents">
     </lx-tab>
 

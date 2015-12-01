@@ -50,6 +50,7 @@ func _initRoutes() {
 	e.Delete("/skills/:id", deleteSkill)
 
 	e.Get("/parts", queryParts)
+	e.Get("/partcomponents/:id", queryPartComponents)
 	e.Get("/parts/:id", getPart)
 	e.Post("/parts", newPart)
 	e.Put("/parts/:id", savePart)
@@ -899,6 +900,13 @@ type DBpart struct {
 	Notes             string  `db:"notes"`
 }
 
+type DBpartComponents struct {
+	ComponentID int    `db:"component_id"`
+	PartID      int    `db:"part_id"`
+	StockCode   string `db:"stock_code"` // component stock code and name
+	Name        string `db:"name"`
+}
+
 func queryParts(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
@@ -913,6 +921,28 @@ func queryParts(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 	return c.JSON(http.StatusOK, record)
+}
+
+func queryPartComponents(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readPart")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var cp []*DBpartComponents
+
+	partID := getID(c)
+	err = DB.SQL(`select 
+		x.component_id,c.stock_code,c.name
+		from component_part x
+		left join component c on (c.id=x.component_id)
+		where x.part_id=$1`, partID).QueryStructs(&cp)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, cp)
 }
 
 func getPart(c *echo.Context) error {
@@ -1099,6 +1129,8 @@ type DBcomponent struct {
 	Descr     string `db:"descr"`
 	Make      string `db:"make"`
 	Model     string `db:"model"`
+	Qty       int    `db:"qty"`
+	StockCode string `db:"stock_code"`
 	Serialnum string `db:"serialnum"`
 	Picture   string `db:"picture"`
 	Notes     string `db:"notes"`

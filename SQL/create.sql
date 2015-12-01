@@ -129,9 +129,11 @@ create table component (
 	site_id int not null,
 	name text not null,
 	descr text not null default '',
+	qty int not null default 1,
 	make text not null default '',
 	model text not null default '',
 	serialnum text not null default '',
+	stock_code text not null default '',
 	picture text not null default '',
 	notes text not null default ''	
 );
@@ -140,7 +142,8 @@ create unique index component_idx on component (machine_id,id);
 drop table if exists component_part;
 create table component_part (
 	component_id int not null,
-	part_id int not null
+	part_id int not null,
+	qty int not null default 1
 );
 create unique index component_part_idx on component_part (component_id,part_id);
 
@@ -150,9 +153,9 @@ create table part (
 	name text not null,
 	descr text not null default '',
 	stock_code text not null,
-	reorder_stocklevel numeric(12,2) not null,
-	reorder_qty numeric(12,2) not null,
-	latest_price numeric(12,2) not null,
+	reorder_stocklevel numeric(12,2) not null default 1,
+	reorder_qty numeric(12,2) not null default 1,
+	latest_price numeric(12,2) not null default 0,
 	qty_type text not null default 'ea',
 	picture text not null default '',
 	notes text not null default ''	

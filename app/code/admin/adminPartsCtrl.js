@@ -101,12 +101,13 @@
 	}])
 
 	app.controller(base+'EditPartCtrl', 
-		['$state','$stateParams','part','logs','Session','$window',
-		function($state,$stateParams,part,logs,Session,$window){
+		['$state','$stateParams','part','logs','Session','$window','components',
+		function($state,$stateParams,part,logs,Session,$window,components){
 
 		angular.extend(this, {
 			session: Session,
 			part: part,
+			components: components,
 			logs: logs,
 			formFields: getPartForm(),		
 			logClass: logClass,
