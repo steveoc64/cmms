@@ -64,6 +64,12 @@ func _initRoutes() {
 	e.Delete("/machine/:id", deleteMachine)
 	e.Get("/machine/components/:id", queryMachineComponents)
 
+	e.Get("/components", queryComponents)
+	e.Get("/component/:id", getComponent)
+	e.Post("/component", newComponent)
+	e.Put("/component/:id", saveComponent)
+	e.Delete("/component/:id", deleteComponent)
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1366,4 +1372,121 @@ func queryMachineComponents(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 	return c.JSON(http.StatusOK, components)
+}
+
+///////////////////////////////////////////////////////////////////////
+// Component Maintenance
+
+func queryComponent(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readPart")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var record []*DBcomponent
+	err = DB.SQL(`select * from component order by lower(name)`).QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func getComponent(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readPart")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var record DBcomponent
+	err = DB.SQL(`select * from component where id=$1`, id).QueryStruct(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func newComponent(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writePart")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	record := &DBcomponent{}
+	if err := c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	err = DB.InsertInto("component").
+		Whitelist("name").
+		Record(record).
+		Returning("id").
+		QueryScalar(&record.ID)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	// Now log the creation of the new site
+	sysLog(1, "Tools", "T", record.ID, "Tool Created", c, claim)
+
+	// insert into DB, fill in the ID of the new user
+	return c.JSON(http.StatusCreated, record)
+}
+
+func saveSkill(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writeSkill")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	record := &DBskill{}
+	if err = c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	skillID := getID(c)
+
+	_, err = DB.Update("skill").
+		SetWhitelist(record, "name", "notes").
+		Where("id = $1", skillID).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	sysLog(1, "Skills", "s", skillID, "Updated", c, claim)
+	return c.JSON(http.StatusOK, skillID)
+}
+
+func deleteSkill(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writeSkill")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	_, err = DB.
+		DeleteFrom("skill").
+		Where("id = $1", id).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	// Now delete the user_skill references
+	DB.DeleteFrom("user_skill").Where("skill_id=$1", id).Exec()
+
+	sysLog(3, "Skills", "s", id, "Skill Deleted", c, claim)
+
+	return c.String(http.StatusOK, "Skill Deleted")
 }

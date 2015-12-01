@@ -332,6 +332,44 @@ var logClass = function(l) {
 			      		}
 			      	}
 			      })
+		      .state('admin.tools',{
+		      	url: '/tools',
+		      	acl: 'Admin',
+		      	cache: false,
+		      	templateUrl: 'html/admin/tools.html',
+		      	controller: 'adminToolCtrl as Tools',
+		      	resolve: {
+		      		components: function(DBComponents) {
+		      			return DBComponents.query()
+		      		},
+		      		logs: function(DBSysLog) {
+		      			return DBSysLog.query({RefType: 'T', Limit: 100})
+		      		}
+		      	}
+		      })
+			      .state('admin.edittool',{
+			      	url: '/tool/edit/:id',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/tool.edit.html',
+			      	controller: 'adminEditToolCtrl as editTool',
+			      	resolve: {
+			      		component: function(DBComponents,$stateParams) {
+			      			return DBComponents.get({id: $stateParams.id})
+			      		},
+			      		logs: function(DBSysLog,$stateParams) {
+			      			return DBSysLog.query({
+			      				RefType: 'M', 
+			      				RefID: $stateParams.id,
+			      				Limit: 100})
+			      		}
+			      	}
+			      })
+			      .state('admin.newtool',{
+			      	url: '/newtool',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/tool.new.html',
+			      	controller: 'adminNewToolCtrl as newTool',
+			      })
 		      .state('admin.parts',{
 		      	url: '/parts',
 		      	acl: 'Admin',
