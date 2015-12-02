@@ -78,12 +78,12 @@
 	}])
 
 	app.controller(base+'NewSiteCtrl', 
-		['$state','Session','DBSites','LxNotificationService','$window','sites',
-		function($state,Session,DBSites,LxNotificationService,$window,sites){
+		['$state','Session','DBSite','LxNotificationService','$window','sites',
+		function($state,Session,DBSite,LxNotificationService,$window,sites){
 	
 		angular.extend(this, {
 			session: Session,
-			site: new DBSites(),
+			site: new DBSite(),
 			sites: sites,
 			formFields: getSiteForm(sites),
 			submit: function() {

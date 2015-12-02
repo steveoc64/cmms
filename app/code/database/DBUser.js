@@ -1,7 +1,7 @@
 ;(function(){
 	'use strict';
 
-	angular.module('cmms').factory('DBUsers', function($resource,ServerName,Session){
+	angular.module('cmms').factory('DBUser', function($resource,ServerName,Session){
 		return $resource(ServerName+'/users/:id',{id: '@_id'},{
 			'get':    {method:'GET'},
   		'update': {method:'PUT'},
@@ -11,7 +11,7 @@
 		})
 	})
 
-	angular.module('cmms').factory('DBUsersSkill', function($resource,ServerName,Session){
+	angular.module('cmms').factory('DBUserSkill', function($resource,ServerName,Session){
 		return $resource(ServerName+'/users_skill/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
 		})

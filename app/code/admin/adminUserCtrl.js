@@ -79,12 +79,12 @@
 	}])
 
 	app.controller(base+'NewUserCtrl', 
-		['$state','Session','DBUsers','LxNotificationService','sites','skills','$window',
-		function($state,Session,DBUsers,LxNotificationService,sites,skills,$window){
+		['$state','Session','DBUser','LxNotificationService','sites','skills','$window',
+		function($state,Session,DBUser,LxNotificationService,sites,skills,$window){
 	
 		angular.extend(this, {
 			session: Session,
-			user: new DBUsers(),
+			user: new DBUser(),
 			sites: sites,
 			skills: skills,
 			formFields: getUserForm(sites,skills),

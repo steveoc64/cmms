@@ -84,12 +84,16 @@
 	}])
 
 	app.controller(base+'NewToolCtrl', 
-		['$state','Session','DBPart','LxNotificationService','$window',
-		function($state,Session,DBPart,LxNotificationService,$window){
+		['$state','Session','DBComponent','LxNotificationService','$window','machines','sites',
+		function($state,Session,DBComponent,LxNotificationService,$window,machines,sites){
 	
+	console.log('NewToolCtrl',machines,sites)
+
 		angular.extend(this, {
 			session: Session,
-			part: new DBPart(),
+			machines: machines,
+			sites: sites,
+			component: new DBComponent(),
 			formFields: getComponentForm(),
 			logClass: logClass,
 			submit: function() {
@@ -107,13 +111,15 @@
 	}])
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','logs','Session','$window','component',
-		function($state,$stateParams,logs,Session,$window,component){
+		['$state','$stateParams','logs','Session','$window','component','$timeout','machines','sites',
+		function($state,$stateParams,logs,Session,$window,component,$timeout,machines,sites){
 
 		angular.extend(this, {
 			session: Session,
 			component: component,
 			logs: logs,
+			machines: machines,
+			sites: sites,
 			formFields: getComponentForm(),		
 			logClass: logClass,
 			submit: function() {
@@ -135,6 +141,7 @@
 				$state.go(base+'.editsite',{id: row.SiteID})
 			}
 		})
+
 	}])
 
 })();

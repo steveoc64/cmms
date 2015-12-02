@@ -11,7 +11,7 @@
 		})
 	})
 
-	angular.module('cmms').factory('DBComponents', function($resource,ServerName,Session){
+	angular.module('cmms').factory('DBComponent', function($resource,ServerName,Session){
 		return $resource(ServerName+'/component/:id',{id: '@_id'},{
 			'get':    {method:'GET'},
   		'update': {method:'PUT'},

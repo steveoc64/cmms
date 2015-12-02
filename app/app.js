@@ -145,8 +145,8 @@ var logClass = function(l) {
 		      	controller: 'adminUserCtrl as Users',
 		      	cache: false,
 		      	resolve: {
-		      		users: function(DBUsers) {
-		      			return DBUsers.query()
+		      		users: function(DBUser) {
+		      			return DBUser.query()
 		      		},
 		      		logs: function(DBSysLog) {
 		      			return DBSysLog.query({RefType: 'U', Limit: 100})
@@ -159,14 +159,14 @@ var logClass = function(l) {
 			      	templateUrl: 'html/admin/users.edit.html',
 			      	controller: 'adminEditUserCtrl as editUser',
 			      	resolve: {
-			      		user: function(DBUsers,$stateParams) {
-			      			return DBUsers.get({id: $stateParams.id})
+			      		user: function(DBUser,$stateParams) {
+			      			return DBUser.get({id: $stateParams.id})
 			      		},
-			      		sites: function(DBSites) {
-			      			return DBSites.query()
+			      		sites: function(DBSite) {
+			      			return DBSite.query()
 			      		},
-			      		skills: function(DBSkills) {
-			      			return DBSkills.query()
+			      		skills: function(DBSkill) {
+			      			return DBSkill.query()
 			      		},	      		
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
@@ -181,11 +181,11 @@ var logClass = function(l) {
 			      	templateUrl: 'html/admin/users.new.html',
 			      	controller: 'adminNewUserCtrl as newUser',
 			      	resolve: {
-			      		sites: function(DBSites) {
-			      			return DBSites.query()
+			      		sites: function(DBSite) {
+			      			return DBSite.query()
 			      		},
-			      		skills: function(DBSkills) {
-			      			return DBSkills.query()
+			      		skills: function(DBSkill) {
+			      			return DBSkill.query()
 			      		}		      		
 			      	}
 			      })
@@ -196,8 +196,8 @@ var logClass = function(l) {
 		      	templateUrl: 'html/admin/skills.html',
 		      	controller: 'adminSkillCtrl as Skills',
 		      	resolve: {
-		      		skills: function(DBSkills) {
-		      			return DBSkills.query()
+		      		skills: function(DBSkill) {
+		      			return DBSkill.query()
 		      		},
 		      		logs: function(DBSysLog) {
 		      			return DBSysLog.query({RefType: 's', Limit: 100})
@@ -210,11 +210,11 @@ var logClass = function(l) {
 			      	templateUrl: 'html/admin/skill.edit.html',
 			      	controller: 'adminEditSkillCtrl as editSkill',
 			      	resolve: {
-			      		skill: function(DBSkills,$stateParams) {
-			      			return DBSkills.get({id: $stateParams.id})
+			      		skill: function(DBSkill,$stateParams) {
+			      			return DBSkill.get({id: $stateParams.id})
 			      		},
-			      		users: function(DBUsersSkill,$stateParams) {
-			      			return DBUsersSkill.query({id: $stateParams.id})
+			      		users: function(DBUserSkill,$stateParams) {
+			      			return DBUserSkill.query({id: $stateParams.id})
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
@@ -238,8 +238,8 @@ var logClass = function(l) {
 		      	templateUrl: 'html/admin/sites.html',
 		      	controller: 'adminSitesCtrl as Sites',
 		      	resolve: {
-		      		sites: function(DBSites) {
-		      			return DBSites.query()
+		      		sites: function(DBSite) {
+		      			return DBSite.query()
 		      		},
 		      		logs: function(DBSysLog) {
 		      			return DBSysLog.query({RefType: 'S', Limit: 100})
@@ -252,11 +252,11 @@ var logClass = function(l) {
 			      	templateUrl: 'html/admin/site.edit.html',
 			      	controller: 'adminEditSiteCtrl as editSite',
 			      	resolve: {
-			      		site: function(DBSites,$stateParams) {
-			      			return DBSites.get({id: $stateParams.id})
+			      		site: function(DBSite,$stateParams) {
+			      			return DBSite.get({id: $stateParams.id})
 			      		},
-			      		sites: function(DBSites) {
-			      			return DBSites.query()
+			      		sites: function(DBSite) {
+			      			return DBSite.query()
 			      		},
 			      		users: function(DBSiteUsers,$stateParams) {
 			      			return DBSiteUsers.query({id: $stateParams.id})
@@ -278,8 +278,8 @@ var logClass = function(l) {
 			      	templateUrl: 'html/admin/site.new.html',
 			      	controller: 'adminNewSiteCtrl as newSite',
 			      	resolve: {
-			      		sites: function(DBSites) {
-			      			return DBSites.query()
+			      		sites: function(DBSite) {
+			      			return DBSite.query()
 			      		}
 			      	}
 			      })
@@ -307,8 +307,8 @@ var logClass = function(l) {
 			      		machine: function(DBMachine,$stateParams) {
 			      			return DBMachine.get({id: $stateParams.id})
 			      		},
-			      		sites: function(DBSites) {
-			      			return DBSites.query()
+			      		sites: function(DBSite) {
+			      			return DBSite.query()
 			      		},
 			      		components: function(DBMachineComponents,$stateParams) {
 			      			return DBMachineComponents.query({id: $stateParams.id})
@@ -327,8 +327,8 @@ var logClass = function(l) {
 			      	templateUrl: 'html/admin/machine.new.html',
 			      	controller: 'adminNewMachineCtrl as newMachine',
 			      	resolve: {
-			      		sites: function(DBSites) {
-			      			return DBSites.query()
+			      		sites: function(DBSite) {
+			      			return DBSite.query()
 			      		}
 			      	}
 			      })
@@ -339,8 +339,8 @@ var logClass = function(l) {
 		      	templateUrl: 'html/admin/tools.html',
 		      	controller: 'adminToolCtrl as Tools',
 		      	resolve: {
-		      		components: function(DBComponents) {
-		      			return DBComponents.query()
+		      		components: function(DBComponent) {
+		      			return DBComponent.query()
 		      		},
 		      		logs: function(DBSysLog) {
 		      			return DBSysLog.query({RefType: 'T', Limit: 100})
@@ -353,8 +353,14 @@ var logClass = function(l) {
 			      	templateUrl: 'html/admin/tool.edit.html',
 			      	controller: 'adminEditToolCtrl as editTool',
 			      	resolve: {
-			      		component: function(DBComponents,$stateParams) {
-			      			return DBComponents.get({id: $stateParams.id})
+			      		component: function(DBComponent,$stateParams) {
+			      			return DBComponent.get({id: $stateParams.id})
+			      		},
+			      		sites: function(DBSite) {
+			      			return DBSite.query()
+			      		},
+			      		machines: function(DBMachine) {
+			      			return DBMachine.query()
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
@@ -369,6 +375,14 @@ var logClass = function(l) {
 			      	acl: 'Admin',
 			      	templateUrl: 'html/admin/tool.new.html',
 			      	controller: 'adminNewToolCtrl as newTool',
+			      	resolve: {
+			      		/*machines: function(DBMachine) {
+			      			return DBmachine.query()
+			      		}, */
+			      		sites: function(DBSite) {
+			      			return DBSite.query()
+			      		}
+			      	}
 			      })
 		      .state('admin.parts',{
 		      	url: '/parts',
@@ -442,8 +456,8 @@ var logClass = function(l) {
 		      	templateUrl: 'html/sitemgr/users.html',
 		      	controller: 'sitemgrUserCtrl as sitemgrUser',
 		      	resolve: {
-		      		users: function(DBUsers) {
-		      			return DBUsers.query()
+		      		users: function(DBUser) {
+		      			return DBUser.query()
 		      		},
 		      		logs: function(DBUserlog) {
 		      			return DBUserlog.query()
@@ -456,8 +470,8 @@ var logClass = function(l) {
 		      	templateUrl: 'html/sitemgr/users.edit.html',
 		      	controller: 'sitemgrEditUserCtrl as editUser',
 		      	resolve: {
-		      		user: function(DBUsers,$stateParams) {
-		      			return DBUsers.get({id: $stateParams.id})
+		      		user: function(DBUser,$stateParams) {
+		      			return DBUser.get({id: $stateParams.id})
 		      		},
 		      		logs: function(DBUserlog,$stateParams) {
 		      			return DBUserlog.get({id: $stateParams.id})

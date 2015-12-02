@@ -73,12 +73,12 @@
 	}])
 
 	app.controller(base+'NewSkillCtrl', 
-		['$state','Session','DBSkills','LxNotificationService','$window',
-		function($state,Session,DBSkills,LxNotificationService,$window){
+		['$state','Session','DBSkill','LxNotificationService','$window',
+		function($state,Session,DBSkill,LxNotificationService,$window){
 	
 		angular.extend(this, {
 			session: Session,
-			skill: new DBSkills(),
+			skill: new DBSkill(),
 			formFields: getSkillForm(),
 			logClass: logClass,
 			submit: function() {

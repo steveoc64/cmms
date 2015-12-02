@@ -1,7 +1,7 @@
 ;(function(){
 	'use strict';
 
-	angular.module('cmms').factory('DBSkills', function($resource,ServerName,Session){
+	angular.module('cmms').factory('DBSkill', function($resource,ServerName,Session){
 		return $resource(ServerName+'/skills/:id',{id: '@_id'},{
 			'get':    {method:'GET'},
   		'update': {method:'PUT'},
