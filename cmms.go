@@ -13,6 +13,7 @@ var e *echo.Echo
 
 func main() {
 
+	_initSMT()
 	_loadConfig()
 	_initJWT()
 

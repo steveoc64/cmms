@@ -90,7 +90,7 @@
 		angular.extend(this, {
 			session: Session,
 			part: new DBPart(),
-			formFields: getPartForm(),
+			formFields: getComponentForm(),
 			logClass: logClass,
 			submit: function() {
 				if (this.form.$valid) {
@@ -114,7 +114,7 @@
 			session: Session,
 			component: component,
 			logs: logs,
-			formFields: getPartForm(),		
+			formFields: getComponentForm(),		
 			logClass: logClass,
 			submit: function() {
 				this.part._id = $stateParams.id

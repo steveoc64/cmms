@@ -120,8 +120,8 @@ getComponentForm = function(sites,machines) {
 		templateOptions: {
 			flex: { container: "row", item: "6"},
 			fields: [
-				{type: 'machine.StockCode'},
-				{type: 'machine.Serialnum'},
+				{type: 'component.StockCode'},
+				{type: 'component.Serialnum'},
 			]
 		}
 	},{
@@ -130,11 +130,11 @@ getComponentForm = function(sites,machines) {
 			flex: {container: "row", item: "6"},
 			fields: [
 				{
-					type: 'machine.Site',
+					type: 'component.Site',
 					templateOptions: {options: sites},
 				},
 				{
-					type: 'machine.Machine',
+					type: 'component.Machine',
 					templateOptions: {options: machines},
 				},
 			]
@@ -144,7 +144,7 @@ getComponentForm = function(sites,machines) {
 		templateOptions: {
 			flex: {container: "row", item: "8"},
 			fields: [
-				{type: 'machine.Name'},
+				{type: 'component.Name'},
 			]
 		}
 	},{
@@ -152,7 +152,7 @@ getComponentForm = function(sites,machines) {
 		templateOptions: {
 			flex: {container: "row", item: "12"},
 			fields: [
-				{type: 'machine.Descr'},
+				{type: 'component.Descr'},
 			]
 		}
 	},{
@@ -160,8 +160,8 @@ getComponentForm = function(sites,machines) {
 		templateOptions: {
 			flex: { container: "row", item: "6"},
 			fields: [
-				{type: 'machine.Make'},
-				{type: 'machine.Model'},
+				{type: 'component.Make'},
+				{type: 'component.Model'},
 			]
 		}
 	}] // end fields
