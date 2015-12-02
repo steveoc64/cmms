@@ -18,7 +18,7 @@ func _initSMT() {
 		useCores--
 	}
 
-	fmt.Println("CMMS server:", numCores, "Cores")
+	fmt.Println("CMMS server: - running on", useCores, "of", numCores, "CPU Cores")
 
 	runtime.GOMAXPROCS(useCores)
 
