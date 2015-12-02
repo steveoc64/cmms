@@ -19,6 +19,10 @@ body {
 
 // Now that everything is defined, provide last minute overrides for bits of CSS
 
+textarea ul {
+  list-style: disc;
+}
+
 .data-table {
   td {
     a {

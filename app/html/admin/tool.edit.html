@@ -1,15 +1,15 @@
 <div class="main-section__title">
-  <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-keg"></i>
-  Machine Details
+  <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-settings"></i>
+  Tool Details
 </div>
 
-<form name="editMachine.form" ng-submit="editMachine.submit()">
+<form name="editTool.form" ng-submit="editTool.submit()">
 
-<formly-form model="editMachine.machine" fields="editMachine.formFields">
+<formly-form model="editTool.component" fields="editTool.formFields">
 
 <div flex-container="row" flex-align="end" item="1">
     <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editMachine.abort()" lx-ripple>Back</button>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editTool.abort()" lx-ripple>Back</button>
     </div>
     <div flex-item>
       <button type="submit" 
@@ -25,27 +25,25 @@
 
 <div class="card">
   <lx-tabs>
-    <lx-tab heading="Tools">
+    <lx-tab heading="Tool Usage">
       <div class="data-table-container">
         <table class="data-table">
           <thead>
             <tr>
-              <th> Name</th>
-              <th> Tool #</th>
-              <th> Description</th>
-              <th> Make</th>
-              <th> Model</th>
-              <th> Qty</th>
+              <th> Used by Tool #</th>
+              <th> Tool Name</th>
+              <th> Machine</th>
+              <th> Site</th>
+              <th> Qty Used</th>
             </tr>
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-repeat="row in editMachine.components">
-                  <td><a ng-click="editMachine.goTool(row)">{{row.Name}}</a></td>
-                  <td><a ng-click="editMachine.goTool(row)">{{row.StockCode}}</a></td>
-                  <td>{{row.Descr | limitTo:32}}</td>
-                  <td>{{row.Make}}</td>
-                  <td>{{row.Model}}</td>
+                ng-repeat="row in editTool.components">
+                  <td><a ng-click="editTool.goTool(row)">{{row.StockCode}}</a></td>
+                  <td><a ng-click="editTool.goTool(row)">{{row.Name}}</a></td>
+                  <td><a ng-click="editTool.goMachine(row)">{{row.MachineName}}</a></td>
+                  <td><a ng-click="editTool.goSite(row)">{{row.SiteName}}</td>
                   <td>{{row.Qty}}</td>
             </tr>
           </tbody>
@@ -53,17 +51,21 @@
       </div>
     </lx-tab>
 
-    <lx-tab heading="WorkOrders">
-    </lx-tab>
-
     <lx-tab heading="Notes">
       <div class="card">
-        <textarea ng-wig="editMachine.machine.Notes"></textarea>
-      </div>    
+        <textarea ng-wig="editTool.component.Notes"></textarea>
+      </div>   
     </lx-tab>
 
     <lx-tab heading="Documents">
     </lx-tab>
+
+    <lx-tab heading="StockTake">
+    </lx-tab>
+
+    <lx-tab heading="WorkOrders">
+    </lx-tab>
+
 
     <lx-tab heading="Activity Log">
       <div class="data-table-container">
@@ -79,8 +81,8 @@
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-class="editMachine.logClass(l)"           
-                ng-repeat="l in editMachine.logs">
+                ng-class="editTool.logClass(l)"           
+                ng-repeat="l in editTool.logs">
                   <td>{{l.Type}}</td>
                   <td>{{l.Logdate}}</td>
                   <td>{{l.Descr}}</td>

@@ -39,6 +39,12 @@
 			clickEdit: function(row) {
 				$state.go(base+'.edittool',{id: row.ID})
 			},
+			goSite: function(row) {
+				$state.go(base+'.editsite',{id: row.SiteId})
+			},
+			goMachine: function(row) {
+				$state.go(base+'.editmachine',{id: row.MachineID})
+			},
 			showLogs: function() {
 				LxDialogService.open('toolLogDialog')
 			},
@@ -77,7 +83,7 @@
 
 	}])
 
-	app.controller(base+'NewPartCtrl', 
+	app.controller(base+'NewToolCtrl', 
 		['$state','Session','DBPart','LxNotificationService','$window',
 		function($state,Session,DBPart,LxNotificationService,$window){
 	
@@ -100,14 +106,13 @@
 		})
 	}])
 
-	app.controller(base+'EditPartCtrl', 
-		['$state','$stateParams','part','logs','Session','$window','components',
-		function($state,$stateParams,part,logs,Session,$window,components){
+	app.controller(base+'EditToolCtrl', 
+		['$state','$stateParams','logs','Session','$window','component',
+		function($state,$stateParams,logs,Session,$window,component){
 
 		angular.extend(this, {
 			session: Session,
-			part: part,
-			components: components,
+			component: component,
 			logs: logs,
 			formFields: getPartForm(),		
 			logClass: logClass,

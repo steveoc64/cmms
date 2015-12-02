@@ -64,7 +64,7 @@ func _initRoutes() {
 	e.Delete("/machine/:id", deleteMachine)
 	e.Get("/machine/components/:id", queryMachineComponents)
 
-	e.Get("/components", queryComponents)
+	e.Get("/component", queryComponents)
 	e.Get("/component/:id", getComponent)
 	e.Post("/component", newComponent)
 	e.Put("/component/:id", saveComponent)
@@ -1137,18 +1137,20 @@ type DBmachineReq struct {
 }
 
 type DBcomponent struct {
-	MachineID int    `db:"machine_id"`
-	ID        int    `db:"id"`
-	SiteId    int    `db:"site_id"`
-	Name      string `db:"name"`
-	Descr     string `db:"descr"`
-	Make      string `db:"make"`
-	Model     string `db:"model"`
-	Qty       int    `db:"qty"`
-	StockCode string `db:"stock_code"`
-	Serialnum string `db:"serialnum"`
-	Picture   string `db:"picture"`
-	Notes     string `db:"notes"`
+	MachineID   int    `db:"machine_id"`
+	ID          int    `db:"id"`
+	SiteId      int    `db:"site_id"`
+	Name        string `db:"name"`
+	Descr       string `db:"descr"`
+	Make        string `db:"make"`
+	Model       string `db:"model"`
+	Qty         int    `db:"qty"`
+	StockCode   string `db:"stock_code"`
+	Serialnum   string `db:"serialnum"`
+	Picture     string `db:"picture"`
+	Notes       string `db:"notes"`
+	SiteName    string `db:"site_name"`
+	MachineName string `db:"machine_name"`
 }
 
 func queryMachine(c *echo.Context) error {
@@ -1377,7 +1379,7 @@ func queryMachineComponents(c *echo.Context) error {
 ///////////////////////////////////////////////////////////////////////
 // Component Maintenance
 
-func queryComponent(c *echo.Context) error {
+func queryComponents(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
 	if err != nil {
@@ -1385,7 +1387,11 @@ func queryComponent(c *echo.Context) error {
 	}
 
 	var record []*DBcomponent
-	err = DB.SQL(`select * from component order by lower(name)`).QueryStructs(&record)
+	err = DB.SQL(`select c.*,s.name as site_name,m.name as machine_name
+		from component c
+		left join site s on (s.id=c.site_id)
+		left join machine m on (m.id=c.machine_id)
+		order by lower(c.name)`).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -1439,43 +1445,42 @@ func newComponent(c *echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
-func saveSkill(c *echo.Context) error {
+func saveComponent(c *echo.Context) error {
 
-	claim, err := securityCheck(c, "writeSkill")
+	claim, err := securityCheck(c, "writePart")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	record := &DBskill{}
+	record := &DBcomponent{}
 	if err = c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	skillID := getID(c)
-
-	_, err = DB.Update("skill").
-		SetWhitelist(record, "name", "notes").
-		Where("id = $1", skillID).
+	componentID := getID(c)
+	_, err = DB.Update("component").
+		SetWhitelist(record, "name", "notes", "site_id", "descr", "make", "model", "qty", "stock_code", "serialnum").
+		Where("id = $1", componentID).
 		Exec()
 
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sysLog(1, "Skills", "s", skillID, "Updated", c, claim)
-	return c.JSON(http.StatusOK, skillID)
+	sysLog(1, "Tools", "T", componentID, "Updated", c, claim)
+	return c.JSON(http.StatusOK, componentID)
 }
 
-func deleteSkill(c *echo.Context) error {
+func deleteComponent(c *echo.Context) error {
 
-	claim, err := securityCheck(c, "writeSkill")
+	claim, err := securityCheck(c, "writePart")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
 	id := getID(c)
 	_, err = DB.
-		DeleteFrom("skill").
+		DeleteFrom("component").
 		Where("id = $1", id).
 		Exec()
 
@@ -1483,10 +1488,10 @@ func deleteSkill(c *echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	// Now delete the user_skill references
-	DB.DeleteFrom("user_skill").Where("skill_id=$1", id).Exec()
+	// Now delete the part references
+	DB.DeleteFrom("component_part").Where("component_id=$1", id).Exec()
 
-	sysLog(3, "Skills", "s", id, "Skill Deleted", c, claim)
+	sysLog(3, "Tools", "T", id, "Tool Deleted", c, claim)
 
-	return c.String(http.StatusOK, "Skill Deleted")
+	return c.String(http.StatusOK, "Component Deleted")
 }

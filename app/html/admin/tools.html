@@ -67,19 +67,21 @@
         <th><a ng-click="Tools.setSort('Descr')"> Description</a></th>
         <th><a ng-click="Tools.setSort('SiteName')"> Site</a></th>
         <th><a ng-click="Tools.setSort('MachineName')"> Machine</a></th>
+        <th><a ng-click="Tools.setSort('Qty')"> Qty</a></th>
       </tr>
     </thead>
 
     <tbody>
       <tr class="data-table__selectable-row"
       		ng-class="Tools.getClass(row)"
-      		ng-repeat="row in Tools.parts | filter:searchTool | orderBy:Tools.sortField:Tools.sortDir"
+      		ng-repeat="row in Tools.components | filter:searchTool | orderBy:Tools.sortField:Tools.sortDir"
 
       		ng-click="Tools.clickedRow(row)"> 
             <td><a ng-click="Tools.clickEdit(row)">{{row.StockCode}}</a></td>
             <td><a ng-click="Tools.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
-            <td><a ng-click="Tools.clickEdit(row)">{{row.SiteName}}</a></td>
-            <td><a ng-click="Tools.clickEdit(row)">{{row.MachineName}}</a></td>
+            <td><a ng-click="Tools.goSite(row)">{{row.SiteName}}</a></td>
+            <td><a ng-click="Tools.goMachine(row)">{{row.MachineName}}</a></td>
+            <td>{{row.Qty}}</td>
             <td>
               <button class="btn btn--m btn--blue btn--icon" 
                       ng-click="Parts.clickEdit(row); $event.stopPropagation()"

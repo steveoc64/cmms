@@ -34,9 +34,9 @@ case "$1" in
         echo "Starting $name"
         cd "$dir"
         if [ -z "$user" ]; then
-            sudo $cmd >> "$stdout_log" 2>> "$stderr_log" &
+            sudo nohup $cmd >> "$stdout_log" 2>> "$stderr_log" &
         else
-            sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log" &
+            sudo -u "$user" nohup $cmd >> "$stdout_log" 2>> "$stderr_log" &
         fi
         echo $! > "$pid_file"
         if ! is_running; then
@@ -89,8 +89,18 @@ case "$1" in
         exit 1
     fi
     ;;
+    logs)
+    if is_running; then
+        echo "Running"
+        tail -f $stdout_log $stderr_log
+    else
+        echo "Stopped"
+        less $stdout_log $stderr_log
+        exit 1
+    fi
+    ;;
     *)
-    echo "Usage: $0 {start|stop|restart|status}"
+    echo "Usage: $0 {start|stop|restart|status|logs}"
     exit 1
     ;;
 esac

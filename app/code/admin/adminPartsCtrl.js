@@ -128,6 +128,9 @@
 			},
 			goSite: function(row) {
 				$state.go(base+'.editsite',{id: row.SiteID})
+			},
+			goTool: function(row) {
+				$state.go(base+".edittool",{id: row.ComponentID})
 			}
 		})
 	}])

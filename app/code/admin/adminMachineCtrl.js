@@ -147,6 +147,9 @@
 			goUser: function(row) {
 				$state.go(base+'.editmachine',{id: row.ID})
 			},
+			goTool: function(row) {
+				$state.go(base+'.edittool',{id: row.ID})
+			}
 		})
 
 		var vm = this

@@ -106,15 +106,7 @@
   box-sizing: border-box;
   border: none;
   margin: 0;
-  ul {
-    list-style: square outside none;
-  }
-}
-
-.nil {
-   ul {
-    list-style: square outside none;
-  } 
+  list-style: square outside none;
 }
 
 .nw-editor__src-container {
@@ -139,6 +131,14 @@
 .nw-editor--fixed .nw-editor__res {
   padding: 1px 8px;
   display:block;
+  li { 
+    display: list-type !important;
+  }
+}
+
+.buttonme {
+  background-color: red;
+  display: list-item !important;
 }
 
 .nw-invisible {

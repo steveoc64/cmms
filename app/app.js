@@ -310,8 +310,8 @@ var logClass = function(l) {
 			      		sites: function(DBSites) {
 			      			return DBSites.query()
 			      		},
-			      		components: function(DBComponents,$stateParams) {
-			      			return DBComponents.query({id: $stateParams.id})
+			      		components: function(DBMachineComponents,$stateParams) {
+			      			return DBMachineComponents.query({id: $stateParams.id})
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
