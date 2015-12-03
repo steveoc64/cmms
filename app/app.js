@@ -177,14 +177,6 @@ var logClass = function(l) {
 			      	acl: 'Admin',
 			      	templateUrl: 'html/admin/users.new.html',
 			      	controller: 'adminNewUserCtrl as newUser',
-			      	resolve: {
-			      		sites: function(DBSite) {
-			      			return DBSite.query()
-			      		},
-			      		skills: function(DBSkill) {
-			      			return DBSkill.query()
-			      		}		      		
-			      	}
 			      })
 		      .state('admin.skills',{
 		      	url: '/skills',
@@ -251,9 +243,6 @@ var logClass = function(l) {
 			      	resolve: {
 			      		site: function(DBSite,$stateParams) {
 			      			return DBSite.get({id: $stateParams.id})
-			      		},
-			      		sites: function(DBSite) {
-			      			return DBSite.query()
 			      		},
 			      		users: function(DBSiteUsers,$stateParams) {
 			      			return DBSiteUsers.query({id: $stateParams.id})

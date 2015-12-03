@@ -78,14 +78,13 @@
 	}])
 
 	app.controller(base+'NewSiteCtrl', 
-		['$state','Session','DBSite','LxNotificationService','$window','sites',
-		function($state,Session,DBSite,LxNotificationService,$window,sites){
+		['$state','Session','DBSite','LxNotificationService','$window',
+		function($state,Session,DBSite,LxNotificationService,$window){
 	
 		angular.extend(this, {
 			session: Session,
 			site: new DBSite(),
-			sites: sites,
-			formFields: getSiteForm(sites),
+			formFields: getSiteForm(),
 			submit: function() {
 				if (this.form.$valid) {
 					this.site.$insert(function(newsite) {
@@ -102,18 +101,17 @@
 	}])
 
 	app.controller(base+'EditSiteCtrl', 
-		['$state','$stateParams','site','logs','Session','$window','users','sites','$timeout','machines',
+		['$state','$stateParams','site','logs','Session','$window','users','$timeout','machines',
 		function($state,$stateParams,site,logs,Session,$window,users,sites,$timeout,machines){
 	
 		angular.extend(this, {
 			session: Session,
 			site: site,
-			sites: sites,
 			logs: logs,
 			users: users,
 			machines: machines,
 			logClass: logClass,
-			formFields: getSiteForm(sites),		
+			formFields: getSiteForm(),		
 			submit: function() {
 				this.site._id = $stateParams.id
 				if (angular.isDefined(this.site.ParentSite) && this.site.ParentSite) {
@@ -161,13 +159,13 @@
 			},
 			
 		})
-
+/*
 		var vm = this
 		$timeout(function() {
 			vm.site.ParentSite = vm.site.ParentSiteName			
 		}, 200);
+*/
 
 	}])
-
 
 })();

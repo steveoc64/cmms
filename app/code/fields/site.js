@@ -79,13 +79,17 @@ getSiteFields = function() {
 				selected: 'Name',
 				choice: 'Name',
 				allowClear: true,
+			},
+			controller: function($scope,DBSite) {
+				$scope.to.options = DBSite.query()
+				$scope.model.ParentSite = $scope.model.ParentSiteName
 			}
 		}	
 	}] // end fields
 
 } // getUserFields
 
-getSiteForm = function(sites) {
+getSiteForm = function() {
 
 	return [{
 		type: 'lx-flex',
@@ -93,10 +97,7 @@ getSiteForm = function(sites) {
 			flex: { container: "row", item: "6"},
 			fields: [
 				{type: 'site.Name'},
-				{
-					type: 'site.ParentSite',
-					templateOptions: {choices: sites, options: sites},
-				},
+				{type: 'site.ParentSite'},
 			]
 		}
 	},{
