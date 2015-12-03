@@ -84,15 +84,11 @@
 	}])
 
 	app.controller(base+'NewToolCtrl', 
-		['$state','Session','DBComponent','LxNotificationService','$window','machines','sites',
-		function($state,Session,DBComponent,LxNotificationService,$window,machines,sites){
+		['$state','Session','DBComponent','LxNotificationService','$window',
+		function($state,Session,DBComponent,LxNotificationService,$window){
 	
-	console.log('NewToolCtrl',machines,sites)
-
 		angular.extend(this, {
 			session: Session,
-			machines: machines,
-			sites: sites,
 			component: new DBComponent(),
 			formFields: getComponentForm(),
 			logClass: logClass,
@@ -111,15 +107,13 @@
 	}])
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','logs','Session','$window','component','$timeout','machines','sites',
-		function($state,$stateParams,logs,Session,$window,component,$timeout,machines,sites){
+		['$state','$stateParams','logs','Session','$window','component','$timeout',
+		function($state,$stateParams,logs,Session,$window,component,$timeout){
 
 		angular.extend(this, {
 			session: Session,
 			component: component,
 			logs: logs,
-			machines: machines,
-			sites: sites,
 			formFields: getComponentForm(),		
 			logClass: logClass,
 			submit: function() {

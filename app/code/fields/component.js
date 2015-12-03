@@ -94,6 +94,9 @@ getComponentFields = function() {
 				choice: "Name",
 				selected: "Name",
 				options: [],
+			},
+			controller: function($scope, DBSite) {
+				$scope.to.options = DBSite.query()
 			}
 		}
 	},{
@@ -105,15 +108,30 @@ getComponentFields = function() {
 				placeholder: "Select Machine",
 				space: true,
 				choice: "Name",
+				choice2: "SiteName",
 				selected: "Name",
 				options: [],
+			},
+			controller: function($scope, DBMachine) {
+				$scope.machines = DBMachine.query()
+				$scope.to.options = []
+
+				$scope.$watch('model.Site', function(newV, oldV, scopeV) {
+					$scope.to.options = []
+					angular.forEach($scope.machines, function(v,k){
+						if (v.SiteId == newV.ID) {
+							$scope.to.options.push(v)
+						}
+					})
+
+				})
 			}
 		}
 	}] // end fields
 
 } // getcomponentFields
 
-getComponentForm = function(sites,machines) {
+getComponentForm = function() {
 
 	return [{
 		type: 'lx-flex',
@@ -129,14 +147,8 @@ getComponentForm = function(sites,machines) {
 		templateOptions: {
 			flex: {container: "row", item: "6"},
 			fields: [
-				{
-					type: 'component.Site',
-					templateOptions: {options: sites},
-				},
-				{
-					type: 'component.Machine',
-					templateOptions: {options: machines},
-				},
+				{type: 'component.Site'},
+				{type: 'component.Machine'},
 			]
 		}
 	},{

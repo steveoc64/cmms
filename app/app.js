@@ -356,12 +356,6 @@ var logClass = function(l) {
 			      		component: function(DBComponent,$stateParams) {
 			      			return DBComponent.get({id: $stateParams.id})
 			      		},
-			      		sites: function(DBSite) {
-			      			return DBSite.query()
-			      		},
-			      		machines: function(DBMachine) {
-			      			return DBMachine.query()
-			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 'M', 
@@ -375,14 +369,6 @@ var logClass = function(l) {
 			      	acl: 'Admin',
 			      	templateUrl: 'html/admin/tool.new.html',
 			      	controller: 'adminNewToolCtrl as newTool',
-			      	resolve: {
-			      		/*machines: function(DBMachine) {
-			      			return DBmachine.query()
-			      		}, */
-			      		sites: function(DBSite) {
-			      			return DBSite.query()
-			      		}
-			      	}
 			      })
 		      .state('admin.parts',{
 		      	url: '/parts',
