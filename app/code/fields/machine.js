@@ -105,6 +105,11 @@ getMachineFields = function() {
 				type: 'text',
 				label: 'Started',
 				disabled: true,
+			},
+			controller: function($scope) {
+				if (!$scope.model.Started) {
+					$scope.model.Started = 'N/A'
+				}
 			}
 		}	
 	},{
@@ -117,6 +122,11 @@ getMachineFields = function() {
 				type: 'text',
 				label: 'Alert',
 				disabled: true,
+			},
+			controller: function($scope) {
+				if (!$scope.model.Alert) {
+					$scope.model.Alert = 'N/A'
+				}
 			}
 		}	
 	},{
@@ -129,6 +139,11 @@ getMachineFields = function() {
 				type: 'text',
 				label: 'Stopped',
 				disabled: true,
+			},
+			controller: function($scope) {
+				if (!$scope.model.Stopped) {
+					$scope.model.Stopped = 'N/A'
+				}
 			}
 		}	
 	},{
@@ -142,13 +157,17 @@ getMachineFields = function() {
 				choice: "Name",
 				selected: "Name",
 				options: [],
+			},
+			controller: function($scope,DBSite) {
+				$scope.to.options = DBSite.query()
+				$scope.model.Site = $scope.model.SiteName
 			}
 		}
 	}] // end fields
 
 } // getMachineFields
 
-getMachineForm = function(sites) {
+getMachineForm = function() {
 
 	return [{
 		type: 'lx-flex',
@@ -164,10 +183,7 @@ getMachineForm = function(sites) {
 		templateOptions: {
 			flex: {container: "row", item: "4"},
 			fields: [
-				{
-					type: 'machine.Site',
-					templateOptions: {options: sites},
-				},
+				{type: 'machine.Site'},
 			]
 		}
 	},{

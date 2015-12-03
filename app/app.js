@@ -288,9 +288,6 @@ var logClass = function(l) {
 			      		machine: function(DBMachine,$stateParams) {
 			      			return DBMachine.get({id: $stateParams.id})
 			      		},
-			      		sites: function(DBSite) {
-			      			return DBSite.query()
-			      		},
 			      		components: function(DBMachineComponents,$stateParams) {
 			      			return DBMachineComponents.query({id: $stateParams.id})
 			      		},
@@ -307,11 +304,6 @@ var logClass = function(l) {
 			      	acl: 'Admin',
 			      	templateUrl: 'html/admin/machine.new.html',
 			      	controller: 'adminNewMachineCtrl as newMachine',
-			      	resolve: {
-			      		sites: function(DBSite) {
-			      			return DBSite.query()
-			      		}
-			      	}
 			      })
 		      .state('admin.tools',{
 		      	url: '/tools',

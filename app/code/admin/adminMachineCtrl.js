@@ -96,14 +96,13 @@
 	}])
 
 	app.controller(base+'NewMachineCtrl', 
-		['$state','Session','DBMachine','LxNotificationService','$window','sites',
-		function($state,Session,DBMachine,LxNotificationService,$window,sites){
+		['$state','Session','DBMachine','LxNotificationService','$window',
+		function($state,Session,DBMachine,LxNotificationService,$window){
 	
 		angular.extend(this, {
 			session: Session,
 			machine: new DBMachine(),
-			sites: sites,
-			formFields: getMachineForm(sites),
+			formFields: getMachineForm(),
 			logClass: logClass,
 			submit: function() {
 				if (this.form.$valid) {
@@ -121,16 +120,15 @@
 	}])
 
 	app.controller(base+'EditMachineCtrl', 
-		['$state','$stateParams','machine','logs','Session','$window','sites','components','$timeout',
-		function($state,$stateParams,machine,logs,Session,$window,sites,components,$timeout){
+		['$state','$stateParams','machine','logs','Session','$window','components','$timeout',
+		function($state,$stateParams,machine,logs,Session,$window,components,$timeout){
 
 		angular.extend(this, {
 			session: Session,
 			machine: machine,
 			logs: logs,
-			sites: sites,
 			components: components,
-			formFields: getMachineForm(sites),		
+			formFields: getMachineForm(),		
 			logClass: logClass,
 			submit: function() {
 				this.machine._id = $stateParams.id				
@@ -151,22 +149,6 @@
 				$state.go(base+'.edittool',{id: row.ID})
 			}
 		})
-
-		var vm = this
-		$timeout(function() {
-			vm.machine.Site = vm.machine.SiteName
-
-			// Do some useful things with the timestamps posted across
-			if (!vm.machine.Started) {
-				vm.machine.Started = 'N/A'
-			}
-			if (!vm.machine.Stopped) {
-				vm.machine.Stopped = 'N/A'
-			}
-			if (!vm.machine.Alert) {
-				vm.machine.Alert = 'N/A'
-			}
-		}, 200);
 
 	}])
 
