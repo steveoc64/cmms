@@ -106,11 +106,11 @@ getMachineFields = function() {
 				label: 'Started',
 				disabled: true,
 			},
-			controller: function($scope) {
+			controller: ['$scope',function($scope) {
 				if (!$scope.model.Started) {
 					$scope.model.Started = 'N/A'
 				}
-			}
+			}]
 		}	
 	},{
 		name: 'machine.AlertAt',
@@ -123,11 +123,11 @@ getMachineFields = function() {
 				label: 'Alert',
 				disabled: true,
 			},
-			controller: function($scope) {
+			controller: ['$scope',function($scope) {
 				if (!$scope.model.Alert) {
 					$scope.model.Alert = 'N/A'
 				}
-			}
+			}]
 		}	
 	},{
 		name: 'machine.StoppedAt',
@@ -140,11 +140,11 @@ getMachineFields = function() {
 				label: 'Stopped',
 				disabled: true,
 			},
-			controller: function($scope) {
+			controller: ['$scope',function($scope) {
 				if (!$scope.model.Stopped) {
 					$scope.model.Stopped = 'N/A'
 				}
-			}
+			}]
 		}	
 	},{
 		name: 'machine.Site',
@@ -158,10 +158,10 @@ getMachineFields = function() {
 				selected: "Name",
 				options: [],
 			},
-			controller: function($scope,DBSite) {
+			controller: ['$scope','DBSite',function($scope,DBSite) {
 				$scope.to.options = DBSite.query()
 				$scope.model.Site = $scope.model.SiteName
-			}
+			}]
 		}
 	}] // end fields
 

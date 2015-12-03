@@ -95,9 +95,9 @@ getComponentFields = function() {
 				selected: "Name",
 				options: [],
 			},
-			controller: function($scope, DBSite) {
+			controller: ['$scope','DBSite',function($scope, DBSite) {
 				$scope.to.options = DBSite.query()
-			}
+			}]
 		}
 	},{
 		name: 'component.Machine',
@@ -112,7 +112,7 @@ getComponentFields = function() {
 				selected: "Name",
 				options: [],
 			},
-			controller: function($scope, DBMachine) {
+			controller: ['$scope','DBMachine',function($scope, DBMachine) {
 				$scope.machines = DBMachine.query()
 				$scope.to.options = []
 
@@ -125,7 +125,7 @@ getComponentFields = function() {
 					})
 
 				})
-			}
+			}]
 		}
 	}] // end fields
 

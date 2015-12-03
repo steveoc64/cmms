@@ -23,7 +23,7 @@ getUserFields = function() {
 			ngModelAttrs: {
 				maxlength: { attribute: "maxlength"}
 			},
-			controller: function($scope) {
+			controller: ['$scope',function($scope) {
 
 				angular.extend($scope, {
 					camelize:  function(str) {
@@ -42,7 +42,7 @@ getUserFields = function() {
 						}
 					})
 				}
-			}
+			}]
 		}	
 	},{
 		name: 'user.Password',
@@ -127,11 +127,11 @@ getUserFields = function() {
 				options: ['Public','Floor','Worker','Vendor','Service Contractor','Site Manager','Admin'],	
 				required: true,
 			},
-			controller: function($scope) {
+			controller: ['$scope',function($scope) {
 				if ($scope.to.autoGenUsername) {
 					$scope.model.Role = 'Worker'
 				}
-			}
+			}]
 		}
 	},{
 		name: 'user.Site',
@@ -146,9 +146,9 @@ getUserFields = function() {
 				selected: "Name",
 				options: [],
 			},
-			controller: function($scope,DBSite) {
+			controller: ['$scope','DBSite',function($scope,DBSite) {
 				$scope.to.options = DBSite.query()
-			}
+			}]
 		}
 	},{
 		name: 'user.RoleDisplay',
@@ -173,9 +173,9 @@ getUserFields = function() {
 				selected: "Name",
 				options: [],
 			},
-			controller: function($scope,DBSkill) {
+			controller: ['$scope','DBSkill',function($scope,DBSkill) {
 				$scope.to.options = DBSkill.query()
-			}
+			}]
 		}
 	},{
 		name: 'skill.Name',

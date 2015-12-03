@@ -80,10 +80,10 @@ getSiteFields = function() {
 				choice: 'Name',
 				allowClear: true,
 			},
-			controller: function($scope,DBSite) {
+			controller: ['$scope','DBSite',function($scope,DBSite) {
 				$scope.to.options = DBSite.query()
 				$scope.model.ParentSite = $scope.model.ParentSiteName
-			}
+			}]
 		}	
 	}] // end fields
 
