@@ -162,9 +162,6 @@ var logClass = function(l) {
 			      		user: function(DBUser,$stateParams) {
 			      			return DBUser.get({id: $stateParams.id})
 			      		},
-			      		sites: function(DBSite) {
-			      			return DBSite.query()
-			      		},
 			      		skills: function(DBSkill) {
 			      			return DBSkill.query()
 			      		},	      		

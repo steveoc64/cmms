@@ -79,15 +79,13 @@
 	}])
 
 	app.controller(base+'NewUserCtrl', 
-		['$state','Session','DBUser','LxNotificationService','sites','skills','$window',
-		function($state,Session,DBUser,LxNotificationService,sites,skills,$window){
+		['$state','Session','DBUser','LxNotificationService','$window',
+		function($state,Session,DBUser,LxNotificationService,$window){
 	
 		angular.extend(this, {
 			session: Session,
 			user: new DBUser(),
-			sites: sites,
-			skills: skills,
-			formFields: getUserForm(sites,skills),
+			formFields: getUserForm(),
 			logClass: logClass,
 			submit: function() {
 				if (this.form.$valid) {
@@ -107,16 +105,14 @@
 	}])
 
 	app.controller(base+'EditUserCtrl', 
-		['$state','$stateParams','user','logs','Session','sites','skills','$window',
-		function($state,$stateParams,user,logs,Session,sites,skills,$window){
+		['$state','$stateParams','user','logs','Session','$window',
+		function($state,$stateParams,user,logs,Session,$window){
 
 		angular.extend(this, {
 			session: Session,
 			user: user,
 			logs: logs,
-			sites: sites,
-			skills: skills,
-			formFields: getUserForm(sites,skills),		
+			formFields: getUserForm(),		
 			logClass: logClass,
 			submit: function() {
 				this.user._id = $stateParams.id

@@ -119,6 +119,9 @@ getUserFields = function() {
 				choice: "Name",
 				selected: "Name",
 				options: [],
+			},
+			controller: function($scope,DBSite) {
+				$scope.to.options = DBSite.query()
 			}
 		}
 	},{
@@ -143,6 +146,9 @@ getUserFields = function() {
 				choice: "Name",
 				selected: "Name",
 				options: [],
+			},
+			controller: function($scope,DBSkill) {
+				$scope.to.options = DBSkill.query()
 			}
 		}
 	},{
@@ -160,7 +166,7 @@ getUserFields = function() {
 
 } // getUserFields
 
-getUserForm = function(sites,skills) {
+getUserForm = function() {
 
 	return [{
 		type: 'lx-flex',
@@ -194,14 +200,8 @@ getUserForm = function(sites,skills) {
 		templateOptions: {
 			flex: { container: "row", item: "4"},
 			fields: [
-				{
-					type: 'user.Site',
-					templateOptions: {options: sites}
-				},
-				{
-					type: 'user.Skills',
-					templateOptions: {options: skills}
-				},
+				{type: 'user.Site'},
+				{type: 'user.Skills'},
 				{type: 'user.Role'},
 			]
 		}
