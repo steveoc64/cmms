@@ -70,6 +70,9 @@
 						}
 					})
 				})
+				if (l.length < 1) {
+					return vm.logs
+				}
 				// l now contains filtered logs
 				return l
 			},
