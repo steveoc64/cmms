@@ -25,25 +25,22 @@
 
 <div class="card">
   <lx-tabs>
-    <lx-tab heading="Tool Usage">
+    <lx-tab heading="Parts">
       <div class="data-table-container">
         <table class="data-table">
           <thead>
             <tr>
-              <th> Used by Tool #</th>
-              <th> Tool Name</th>
-              <th> Machine</th>
-              <th> Site</th>
-              <th> Qty Used</th>
+              <th> StockCode</th>
+              <th> Description</th>
+              <th> Re Order Levels</th>
             </tr>
           </thead>
           <tbody>
             <tr class="data-table"
                 ng-repeat="row in editTool.components">
-                  <td><a ng-click="editTool.goTool(row)">{{row.StockCode}}</a></td>
-                  <td><a ng-click="editTool.goTool(row)">{{row.Name}}</a></td>
-                  <td><a ng-click="editTool.goMachine(row)">{{row.MachineName}}</a></td>
-                  <td><a ng-click="editTool.goSite(row)">{{row.SiteName}}</td>
+                  <td><a ng-click="editTool.goPart(row)">{{row.StockCode}}</a></td>
+                  <td><a ng-click="editTool.goTool(row)">{{row.Descr}}</a></td>
+                  <td>{{row.ReorderStocklevel}} / {{row.ReorderQty}} (@ ${{row.LatestPrice}} {{row.QtyType}})</td>
                   <td>{{row.Qty}}</td>
             </tr>
           </tbody>

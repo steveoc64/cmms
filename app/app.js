@@ -329,6 +329,10 @@ var logClass = function(l) {
 			      		component: function(DBComponent,$stateParams) {
 			      			return DBComponent.get({id: $stateParams.id})
 			      		},
+			      		parts: function(DBComponentParts,$stateParams) {
+			      			console.log('resolving parts for component',$stateParams.id)
+			      			return DBComponentParts.query({id: $stateParams.id})
+			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 'M', 
@@ -373,8 +377,8 @@ var logClass = function(l) {
 			      				RefID: $stateParams.id,
 			      				Limit: 100})
 			      		},
-			      		components: function(DBPartComponent,$stateParams) {
-			      			return DBPartComponent.query({id: $stateParams.id})
+			      		components: function(DBPartComponents,$stateParams) {
+			      			return DBPartComponents.query({id: $stateParams.id})
 			      		}
 			      	}
 			      })

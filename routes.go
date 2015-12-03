@@ -51,6 +51,7 @@ func _initRoutes() {
 
 	e.Get("/parts", queryParts)
 	e.Get("/partcomponents/:id", queryPartComponents)
+	e.Get("/componentparts/:id", queryComponentParts)
 	e.Get("/parts/:id", getPart)
 	e.Post("/parts", newPart)
 	e.Put("/parts/:id", savePart)
@@ -960,6 +961,28 @@ func queryPartComponents(c *echo.Context) error {
 	return c.JSON(http.StatusOK, cp)
 }
 
+func queryComponentParts(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readPart")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var cp []*DBpartComponents
+
+	partID := getID(c)
+	err = DB.SQL(`select 
+		x.component_id,x.qty,p.stock_code,p.name
+		from component_part x
+		left join part p on (p.id=x.component_id)
+		where x.component_id=$1`, partID).QueryStructs(&cp)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, cp)
+}
+
 func getPart(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
@@ -1391,7 +1414,7 @@ func queryComponents(c *echo.Context) error {
 		from component c
 		left join site s on (s.id=c.site_id)
 		left join machine m on (m.id=c.machine_id)
-		order by lower(c.name)`).QueryStructs(&record)
+		order by lower(c.stock_code)`).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -1408,7 +1431,11 @@ func getComponent(c *echo.Context) error {
 
 	id := getID(c)
 	var record DBcomponent
-	err = DB.SQL(`select * from component where id=$1`, id).QueryStruct(&record)
+	err = DB.SQL(`select c.*,m.name as machine_name,s.name as site_name
+	 from component c
+	 left join site s on (s.id=c.site_id)
+	 left join machine m on (m.id=c.machine_id)
+	 where c.id=$1`, id).QueryStruct(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -1429,7 +1456,7 @@ func newComponent(c *echo.Context) error {
 	}
 
 	err = DB.InsertInto("component").
-		Whitelist("name").
+		Whitelist("machine_id", "site_id", "name", "descr", "make", "model", "stock_code", "serialnum").
 		Record(record).
 		Returning("id").
 		QueryScalar(&record.ID)

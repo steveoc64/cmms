@@ -94,9 +94,16 @@ getComponentFields = function() {
 				choice: "Name",
 				selected: "Name",
 				options: [],
+				required: true,
 			},
 			controller: ['$scope','DBSite',function($scope, DBSite) {
 				$scope.to.options = DBSite.query()
+				$scope.model.Site = $scope.model.SiteName
+				$scope.$watch('model.Site', function(newVal,oldVal,vm) {
+					if (angular.isDefined(newVal)) {
+						vm.model.SiteId = newVal.ID
+					}
+				})
 			}]
 		}
 	},{
@@ -111,15 +118,23 @@ getComponentFields = function() {
 				choice2: "SiteName",
 				selected: "Name",
 				options: [],
+				required: true,
 			},
 			controller: ['$scope','DBMachine',function($scope, DBMachine) {
 				$scope.machines = DBMachine.query()
+				$scope.model.Machine = $scope.model.MachineName
 				$scope.to.options = []
 
-				$scope.$watch('model.Site', function(newV, oldV, scopeV) {
+				$scope.$watch('model.Machine', function(newVal,oldVal,vm) {
+					if (angular.isDefined(newVal)) {
+						vm.model.MachineID = newVal.ID
+					}
+				})
+
+				$scope.$watch('model.Site', function(newVal, oldVal, scopeV) {
 					$scope.to.options = []
 					angular.forEach($scope.machines, function(v,k){
-						if (v.SiteId == newV.ID) {
+						if (v.SiteId == newVal.ID) {
 							$scope.to.options.push(v)
 						}
 					})
@@ -145,10 +160,11 @@ getComponentForm = function() {
 	},{
 		type: 'lx-flex',
 		templateOptions: {
-			flex: {container: "row", item: "6"},
+			flex: {container: "row", item: "4"},
 			fields: [
 				{type: 'component.Site'},
 				{type: 'component.Machine'},
+				{type: 'component.Qty'},
 			]
 		}
 	},{

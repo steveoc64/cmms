@@ -14,7 +14,7 @@
 			logs: logs,
 			logClass: logClass,
 			search: '',
-			sortField: 'Name',
+			sortField: 'StockCode',
 			sortDir: false,
 			setSort: function(field) {
 				if (this.sortField == field) {
@@ -97,31 +97,32 @@
 			logClass: logClass,
 			submit: function() {
 				if (this.form.$valid) {
-					this.part.$insert(function(newRecord) {
-						$state.go(base+'.parts')
+					this.component.$insert(function(newRecord) {
+						$state.go(base+'.tools')
 					})					
 				}
 			},
 			abort: function() {
-				LxNotificationService.warning('New Part - Cancelled')
+				LxNotificationService.warning('New Tool - Cancelled')
 				$window.history.go(-1)
 			}
 		})
 	}])
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','logs','Session','$window','component','$timeout',
-		function($state,$stateParams,logs,Session,$window,component,$timeout){
+		['$state','$stateParams','logs','Session','$window','component','$timeout','parts',
+		function($state,$stateParams,logs,Session,$window,component,$timeout,parts){
 
 		angular.extend(this, {
 			session: Session,
 			component: component,
+			parts: parts,
 			logs: logs,
 			formFields: getComponentForm(),		
 			logClass: logClass,
 			submit: function() {
-				this.part._id = $stateParams.id
-				this.part.$update(function(newpart) {
+				this.component._id = $stateParams.id
+				this.component.$update(function(newtool) {
 					$window.history.go(-1)
 				})					
 			},
@@ -131,12 +132,9 @@
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
 			},
-			goMachine: function(row) {
-				$state.go(base+'.editmachine',{id: row.MachineID})
+			goPart: function(row) {
+				$state.go(base+'.editpart',{id: row.MachineID})
 			},
-			goSite: function(row) {
-				$state.go(base+'.editsite',{id: row.SiteID})
-			}
 		})
 
 	}])

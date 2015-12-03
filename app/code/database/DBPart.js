@@ -11,8 +11,14 @@
 		})
 	})
 
-	angular.module('cmms').factory('DBPartComponent', function($resource,ServerName,Session){
+	angular.module('cmms').factory('DBPartComponents', function($resource,ServerName,Session){
 		return $resource(ServerName+'/partcomponents/:id',{id: '@_id'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
+	angular.module('cmms').factory('DBComponentParts', function($resource,ServerName,Session){
+		return $resource(ServerName+'/componentparts/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
 		})
 	})
