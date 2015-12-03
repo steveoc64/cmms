@@ -14,13 +14,34 @@ getUserFields = function() {
 			templateOptions: {
 				type: 'text',
 				label: 'Username',
-				icon: 'mdi-account',
+				icon: 'account',
 				minlength: 3,
 				maxlength: 16,
 				required: true,
+				autoGenUsername: false,
 			},
 			ngModelAttrs: {
 				maxlength: { attribute: "maxlength"}
+			},
+			controller: function($scope) {
+
+				angular.extend($scope, {
+					camelize:  function(str) {
+					  return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+					  	return match.toUpperCase()
+					  });
+					}
+				})
+
+				if ($scope.to.autoGenUsername) {
+					$scope.$watch('model.Username', function(newV,oldV,vm){
+						if (angular.isDefined(newV)) {
+							vm.model.Passwd = newV.replace('.','').substring(0,6) + '123'
+							vm.model.Email = newV.replace(' ','.')+'@sbsinternational.com.au'
+							vm.model.Name = $scope.camelize(newV.replace('.',' '))
+						}
+					})
+				}
 			}
 		}	
 	},{
@@ -105,6 +126,11 @@ getUserFields = function() {
 				placeholder: "Select Role",
 				options: ['Public','Floor','Worker','Vendor','Service Contractor','Site Manager','Admin'],	
 				required: true,
+			},
+			controller: function($scope) {
+				if ($scope.to.autoGenUsername) {
+					$scope.model.Role = 'Worker'
+				}
 			}
 		}
 	},{
@@ -166,14 +192,18 @@ getUserFields = function() {
 
 } // getUserFields
 
-getUserForm = function() {
+getUserForm = function(autoGenUsername) {
 
 	return [{
 		type: 'lx-flex',
 		templateOptions: {
 			flex: { container: "row", item: "6"},
 			fields: [
-				{type: 'user.Username'},
+				{type: 'user.Username', 
+				 templateOptions: {
+				 	autoGenUsername: autoGenUsername
+				 }
+				},
 				{type: 'user.Password'}
 			]
 		}

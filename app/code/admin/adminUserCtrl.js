@@ -85,7 +85,7 @@
 		angular.extend(this, {
 			session: Session,
 			user: new DBUser(),
-			formFields: getUserForm(),
+			formFields: getUserForm(true),
 			logClass: logClass,
 			submit: function() {
 				if (this.form.$valid) {
@@ -112,7 +112,7 @@
 			session: Session,
 			user: user,
 			logs: logs,
-			formFields: getUserForm(),		
+			formFields: getUserForm(false),		
 			logClass: logClass,
 			submit: function() {
 				this.user._id = $stateParams.id
