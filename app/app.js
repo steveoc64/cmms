@@ -263,11 +263,6 @@ var logClass = function(l) {
 			      	acl: 'Admin',
 			      	templateUrl: 'html/admin/site.new.html',
 			      	controller: 'adminNewSiteCtrl as newSite',
-			      	resolve: {
-			      		sites: function(DBSite) {
-			      			return DBSite.query()
-			      		}
-			      	}
 			      })
 		      .state('admin.machines',{
 		      	url: '/machines',
