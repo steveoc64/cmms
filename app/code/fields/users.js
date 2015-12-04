@@ -19,6 +19,7 @@ getUserFields = function() {
 				maxlength: 16,
 				required: true,
 				autoGenUsername: false,
+				autofocus: true
 			},
 			ngModelAttrs: {
 				maxlength: { attribute: "maxlength"}

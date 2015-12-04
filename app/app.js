@@ -141,7 +141,7 @@ var logClass = function(l) {
 		      .state('admin.users',{
 		      	url: '/users',
 		      	acl: 'Admin',
-		      	templateUrl: 'html/admin/users.html',
+		      	templateUrl: 'html/admin/user.list.html',
 		      	controller: 'adminUserCtrl as Users',
 		      	cache: false,
 		      	resolve: {
@@ -182,7 +182,7 @@ var logClass = function(l) {
 		      	url: '/skills',
 		      	acl: 'Admin',
 		      	cache: false,
-		      	templateUrl: 'html/admin/skills.html',
+		      	templateUrl: 'html/admin/skill.list.html',
 		      	controller: 'adminSkillCtrl as Skills',
 		      	resolve: {
 		      		skills: function(DBSkill) {
@@ -224,7 +224,7 @@ var logClass = function(l) {
 		      	url: '/sites',
 		      	acl: 'Admin',
 		      	cache: false,
-		      	templateUrl: 'html/admin/sites.html',
+		      	templateUrl: 'html/admin/site.list.html',
 		      	controller: 'adminSitesCtrl as Sites',
 		      	resolve: {
 		      		sites: function(DBSite) {
@@ -268,7 +268,7 @@ var logClass = function(l) {
 		      	url: '/machines',
 		      	acl: 'Admin',
 		      	cache: false,
-		      	templateUrl: 'html/admin/machines.html',
+		      	templateUrl: 'html/admin/machine.list.html',
 		      	controller: 'adminMachineCtrl as Machines',
 		      	resolve: {
 		      		machines: function(DBMachine) {
@@ -309,7 +309,7 @@ var logClass = function(l) {
 		      	url: '/tools',
 		      	acl: 'Admin',
 		      	cache: false,
-		      	templateUrl: 'html/admin/tools.html',
+		      	templateUrl: 'html/admin/tool.list.html',
 		      	controller: 'adminToolCtrl as Tools',
 		      	resolve: {
 		      		components: function(DBComponent) {
@@ -351,7 +351,7 @@ var logClass = function(l) {
 		      	url: '/parts',
 		      	acl: 'Admin',
 		      	cache: false,
-		      	templateUrl: 'html/admin/parts.html',
+		      	templateUrl: 'html/admin/part.list.html',
 		      	controller: 'adminPartsCtrl as Parts',
 		      	resolve: {
 		      		parts: function(DBPart) {
@@ -410,13 +410,13 @@ var logClass = function(l) {
 		      .state('sitemgr.workorders',{
 		      	url: '/workorders',		
 		      	acl: 'Site Manager',
-		      	templateUrl: 'html/sitemgr/workorders.html',
+		      	templateUrl: 'html/sitemgr/workorder.list.html',
 		      	controller: 'sitemgrWorkorderCtrl as sitemgrWorkorder',
 		      })
 		      .state('sitemgr.users',{
 		      	url: '/users',
 		      	acl: 'Site Manager',
-		      	templateUrl: 'html/sitemgr/users.html',
+		      	templateUrl: 'html/sitemgr/user.list.html',
 		      	controller: 'sitemgrUserCtrl as sitemgrUser',
 		      	resolve: {
 		      		users: function(DBUser) {
@@ -450,7 +450,7 @@ var logClass = function(l) {
 		      .state('sitemgr.parts',{
 		      	url: '/parts',
 		      	acl: 'Site Manager',
-		      	templateUrl: 'html/sitemgr/parts.html',
+		      	templateUrl: 'html/sitemgr/part.list.html',
 		      	controller: 'sitemgrPartsCtrl as sitemgrParts',
 		      })
 		      .state('sitemgr.reports',{
