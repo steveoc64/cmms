@@ -129,7 +129,7 @@ var logClass = function(l) {
 	      	url: '/admin',
 	      	acl: 'Admin',
 	      	abstract: true,
-	      	templateUrl: 'html/admin/admin.html',
+	      	templateUrl: 'html/admin/admin.menu.html',
 	      	controller: 'adminCtrl as admin'
 	      })
 		      .state('admin.dashboard',{
