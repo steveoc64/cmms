@@ -1161,6 +1161,7 @@ type DBmachineReq struct {
 
 type DBcomponent struct {
 	MachineID   int    `db:"machine_id"`
+	Position    int    `db:"position"`
 	ID          int    `db:"id"`
 	SiteId      int    `db:"site_id"`
 	Name        string `db:"name"`
@@ -1390,7 +1391,7 @@ func queryMachineComponents(c *echo.Context) error {
 	err = DB.Select("*").
 		From("component").
 		Where("machine_id = $1", machineID).
-		OrderBy("lower(name)").
+		OrderBy("position,lower(name)").
 		QueryStructs(&components)
 
 	if err != nil {

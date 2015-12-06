@@ -84,6 +84,16 @@ getComponentFields = function() {
 			}
 		}	
 	},{
+		name: 'component.Position',
+		extends: 'lx-number',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'Position',
+			templateOptions: {
+				label: 'Position',
+			}
+		}	
+	},{
 		name: 'component.Site',
 		extends: 'lx-select',
 		defaultOptions: {
@@ -160,10 +170,11 @@ getComponentForm = function() {
 	},{
 		type: 'lx-flex',
 		templateOptions: {
-			flex: {container: "row", item: "4"},
+			flex: {container: "row", item: "3"},
 			fields: [
 				{type: 'component.Site'},
 				{type: 'component.Machine'},
+				{type: 'component.Position'},
 				{type: 'component.Qty'},
 			]
 		}

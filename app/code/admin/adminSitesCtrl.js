@@ -108,8 +108,9 @@
 
 	app.controller(base+'EditSiteCtrl', 
 		['$state','$stateParams','site','logs','Session','$window','users','$timeout','machines',
-		function($state,$stateParams,site,logs,Session,$window,users,sites,$timeout,machines){
+		function($state,$stateParams,site,logs,Session,$window,users,$timeout,machines){
 	
+	console.log("machines = ",machines)
 		angular.extend(this, {
 			session: Session,
 			site: site,

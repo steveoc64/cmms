@@ -62,7 +62,7 @@ func newComponent(c *echo.Context) error {
 	}
 
 	err = DB.InsertInto("component").
-		Whitelist("machine_id", "site_id", "name", "descr", "make", "model", "stock_code", "serialnum").
+		Whitelist("machine_id", "position", "site_id", "name", "descr", "make", "model", "stock_code", "serialnum").
 		Record(record).
 		Returning("id").
 		QueryScalar(&record.ID)
@@ -92,7 +92,7 @@ func saveComponent(c *echo.Context) error {
 
 	componentID := getID(c)
 	_, err = DB.Update("component").
-		SetWhitelist(record, "name", "notes", "site_id", "descr", "make", "model", "qty", "stock_code", "serialnum").
+		SetWhitelist(record, "name", "position", "site_id", "descr", "make", "model", "qty", "stock_code", "serialnum").
 		Where("id = $1", componentID).
 		Exec()
 

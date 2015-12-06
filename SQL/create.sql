@@ -125,6 +125,7 @@ create table machine (
 drop table if exists component;
 create table component (
 	machine_id int not null,
+	position int not null default 1,
 	id serial not null,
 	site_id int not null,
 	name text not null,
@@ -138,6 +139,7 @@ create table component (
 	notes text not null default ''	
 );
 create unique index component_idx on component (machine_id,id);
+create index component_position_idx on component (machine_id,position);
 
 drop table if exists component_part;
 create table component_part (
