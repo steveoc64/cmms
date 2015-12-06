@@ -76,6 +76,9 @@
 						}
 					})
 			},
+			getMapURI: function(m) {
+        return "https://www.google.com/maps?q="+encodeURIComponent(m)
+      },
 
 		})
 	}])
@@ -138,6 +141,9 @@
 			goSite: function(row) {
 				$state.go(base+'.editsite',{id: row.SiteId})
 			},
+			getMapURI: function(m) {
+        return "https://www.google.com/maps?q="+encodeURIComponent(m)
+      },
 			getMachineClass: function(row) {
 				if (row.selected) {
 					return "data-table__selectable-row--is-selected"

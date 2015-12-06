@@ -79,7 +79,10 @@
       		ng-click="Sites.clickedRow(row)"> 
             <td><a ng-click="Sites.clickEdit(row)">{{row.Name}}</a></td>
             <td><a ng-click="Sites.goParent(row)">{{row.ParentSiteName}}</a></td>
-            <td>{{row.Address}}</td>
+            <td><a ng-if="row.Address != ''" href="{{Sites.getMapURI(row.Address)}}" target="googlemaps">
+              <i class="mdi mdi-map"></i><p>
+              {{row.Address}}
+            </a></td>
             <td>
             	<button class="btn btn--m btn--blue btn--icon" 
             					ng-click="Sites.clickEdit(row); $event.stopPropagation()"
