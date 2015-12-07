@@ -108,11 +108,8 @@ getComponentFields = function() {
 			},
 			controller: ['$scope','DBSite',function($scope, DBSite) {
 				$scope.to.options = DBSite.query()
-				$scope.model.Site = $scope.model.SiteName
-				$scope.$watch('model.Site', function(newVal,oldVal,vm) {
-					if (angular.isDefined(newVal)) {
-						vm.model.SiteId = newVal.ID
-					}
+				$scope.model.$promise.then(function(){
+					$scope.model.Site = $scope.model.SiteName					
 				})
 			}]
 		}
@@ -132,7 +129,9 @@ getComponentFields = function() {
 			},
 			controller: ['$scope','DBMachine',function($scope, DBMachine) {
 				$scope.machines = DBMachine.query()
-				$scope.model.Machine = $scope.model.MachineName
+				$scope.model.$promise.then(function() {
+					$scope.model.Machine = $scope.model.MachineName					
+				})
 				$scope.to.options = []
 
 				$scope.$watch('model.Machine', function(newVal,oldVal,vm) {

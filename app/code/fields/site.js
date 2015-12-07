@@ -82,7 +82,9 @@ getSiteFields = function() {
 			},
 			controller: ['$scope','DBSite',function($scope,DBSite) {
 				$scope.to.options = DBSite.query()
-				$scope.model.ParentSite = $scope.model.ParentSiteName
+				$scope.model.$promise.then(function() {
+					$scope.model.ParentSite = $scope.model.ParentSiteName					
+				})
 			}]
 		}	
 	}] // end fields

@@ -160,7 +160,9 @@ getMachineFields = function() {
 			},
 			controller: ['$scope','DBSite',function($scope,DBSite) {
 				$scope.to.options = DBSite.query()
-				$scope.model.Site = $scope.model.SiteName
+				$scope.model.$promise.then(function() {
+					$scope.model.Site = $scope.model.SiteName
+				})
 			}]
 		}
 	}] // end fields

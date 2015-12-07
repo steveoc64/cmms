@@ -330,7 +330,6 @@ var logClass = function(l) {
 			      			return DBComponent.get({id: $stateParams.id})
 			      		},
 			      		parts: function(DBComponentParts,$stateParams) {
-			      			console.log('resolving parts for component',$stateParams.id)
 			      			return DBComponentParts.query({id: $stateParams.id})
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
