@@ -393,6 +393,44 @@ var logClass = function(l) {
 		      	templateUrl: 'html/admin/reports.html',
 		      	controller: 'adminReportsCtrl as Reports',
 		      })
+          .state('admin.vendors',{
+            url: '/vendors',
+            acl: 'Admin',
+            cache: false,
+            templateUrl: 'html/admin/vendor.list.html',
+            controller: 'adminVendorCtrl as Vendor',            
+            resolve: {
+              vendors: function(DBVendor) {
+                return DBVendor.query()
+              },
+              logs: function(DBSysLog) {
+                return DBSysLog.query({RefType: 'V', Limit: 100}) 
+              }
+            }
+          })
+            .state('admin.editvendor',{
+              url: '/vendor/edit/:id',
+              acl: 'Admin',
+              templateUrl: 'html/admin/vendor.edit.html',
+              controller: 'adminEditVendorCtrl as editVendor',
+              resolve: {
+                vendor: function(DBVendor,$stateParams) {
+                  return DBVendor.get({id: $stateParams.id})
+                },
+                logs: function(DBSysLog,$stateParams) {
+                  return DBSysLog.query({
+                    RefType: 'V',  
+                    RefID: $stateParams.id,
+                    Limit: 100})
+                }
+              }
+            })
+            .state('admin.newvendor',{
+              url: '/newvendor',
+              acl: 'Admin',
+              templateUrl: 'html/admin/vendor.new.html',
+              controller: 'adminNewVendorCtrl as newVendor',
+            })
 	      .state('sitemgr',{
 	      	url: '/sitemgr',
 	      	acl: 'Site Manager',

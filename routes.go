@@ -71,6 +71,12 @@ func _initRoutes() {
 	e.Put("/component/:id", saveComponent)
 	e.Delete("/component/:id", deleteComponent)
 
+	e.Get("/vendor", queryVendor)
+	e.Get("/vendor/:id", getVendor)
+	e.Post("/vendor", newVendor)
+	e.Put("/vendor/:id", saveVendor)
+	e.Delete("/vendor/:id", deleteVendor)
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

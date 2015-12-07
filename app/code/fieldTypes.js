@@ -31,6 +31,10 @@ loadFieldDefinitions = function(formlyConfig) {
 		formlyConfig.setType(v)
 	})
 
+	angular.forEach(getVendorFields(), function(v,k) {
+		formlyConfig.setType(v)
+	})
+
 } // loadFieldDefintions
 
 
