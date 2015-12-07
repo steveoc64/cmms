@@ -67,7 +67,6 @@
         <th><a ng-click="Tools.setSort('Descr')"> Description</a></th>
         <th><a ng-click="Tools.setSort('SiteName')"> Site</a></th>
         <th><a ng-click="Tools.setSort('MachineName')"> Machine</a></th>
-        <th><a ng-click="Tools.setSort('Position')"> Position</a></th>
         <th><a ng-click="Tools.setSort('Qty')"> Qty</a></th>
       </tr>
     </thead>
@@ -81,8 +80,7 @@
             <td><a ng-click="Tools.clickEdit(row)">{{row.StockCode}}</a></td>
             <td><a ng-click="Tools.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
             <td><a ng-click="Tools.goSite(row)">{{row.SiteName}}</a></td>
-            <td><a ng-click="Tools.goMachine(row)">{{row.MachineName}}</a></td>
-            <td>{{row.Position}}</td>
+            <td><a ng-click="Tools.goMachine(row)">#{{row.Position}}<br>{{row.MachineName}}</a></td>
             <td>{{row.Qty}}</td>
             <td>
               <button class="btn btn--m btn--blue btn--icon" 

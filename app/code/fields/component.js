@@ -108,9 +108,20 @@ getComponentFields = function() {
 			},
 			controller: ['$scope','DBSite',function($scope, DBSite) {
 				$scope.to.options = DBSite.query()
-				$scope.model.$promise.then(function(){
-					$scope.model.Site = $scope.model.SiteName					
+
+				if (angular.isDefined($scope.model.$promise)) {
+					$scope.model.$promise.then(function(){
+						$scope.model.Site = $scope.model.SiteName					
+					})
+				}
+
+				$scope.$watch('model.Site', function(newVal,oldVal,vm) {
+					console.log('new site val set to',newVal,'and siteid is',vm.model.SiteId)
+					if (angular.isDefined(newVal) && angular.isDefined(newVal.ID)) {
+						vm.model.SiteId = newVal.ID
+					}
 				})
+
 			}]
 		}
 	},{
@@ -129,25 +140,28 @@ getComponentFields = function() {
 			},
 			controller: ['$scope','DBMachine',function($scope, DBMachine) {
 				$scope.machines = DBMachine.query()
-				$scope.model.$promise.then(function() {
-					$scope.model.Machine = $scope.model.MachineName					
-				})
+				if (angular.isDefined($scope.model.$promise)) {
+					$scope.model.$promise.then(function() {
+						$scope.model.Machine = $scope.model.MachineName					
+					})					
+				}
 				$scope.to.options = []
 
 				$scope.$watch('model.Machine', function(newVal,oldVal,vm) {
-					if (angular.isDefined(newVal)) {
+					if (angular.isDefined(newVal) && angular.isDefined(newVal.ID)) {
 						vm.model.MachineID = newVal.ID
 					}
 				})
 
 				$scope.$watch('model.Site', function(newVal, oldVal, scopeV) {
-					$scope.to.options = []
-					angular.forEach($scope.machines, function(v,k){
-						if (v.SiteId == newVal.ID) {
-							$scope.to.options.push(v)
-						}
-					})
-
+					if (angular.isDefined(newVal)) {
+						$scope.to.options = []
+						angular.forEach($scope.machines, function(v,k){
+							if (v.SiteId == newVal.ID) {
+								$scope.to.options.push(v)
+							}
+						})						
+					}
 				})
 			}]
 		}
