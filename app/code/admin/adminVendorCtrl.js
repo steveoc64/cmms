@@ -8,7 +8,7 @@
 		['$state','vendors','Session','LxDialogService','logs','LxNotificationService',
 		function($state, vendors, Session, LxDialogService, logs,LxNotificationService){
 	
-	console.log('Loading vendor controller')
+	console.log('Loading vendor controller', vendors)
 		angular.extend(this, {
 			vendors: vendors,
 			session: Session,

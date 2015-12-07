@@ -398,7 +398,7 @@ var logClass = function(l) {
             acl: 'Admin',
             cache: false,
             templateUrl: 'html/admin/vendor.list.html',
-            controller: 'adminVendorCtrl as Vendor',            
+            controller: 'adminVendorCtrl as Vendors',            
             resolve: {
               vendors: function(DBVendor) {
                 return DBVendor.query()
