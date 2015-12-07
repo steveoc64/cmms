@@ -87,6 +87,27 @@ getSiteFields = function() {
 				})
 			}]
 		}	
+	},{
+		name: 'site.StockSite',
+		extends: 'lx-select',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'StockSite',
+			templateOptions: {
+				type: 'select',
+				placeholder: 'Stock Provider Site',
+				icon: 'factory',
+				selected: 'Name',
+				choice: 'Name',
+				allowClear: true,
+			},
+			controller: ['$scope','DBSite',function($scope,DBSite) {
+				$scope.to.options = DBSite.query()
+				$scope.model.$promise.then(function() {
+					$scope.model.StockSite = $scope.model.StockSiteName					
+				})
+			}]
+		}	
 	}] // end fields
 
 } // getUserFields
@@ -96,10 +117,11 @@ getSiteForm = function() {
 	return [{
 		type: 'lx-flex',
 		templateOptions: {
-			flex: { container: "row", item: "6"},
+			flex: { container: "row", item: "4"},
 			fields: [
 				{type: 'site.Name'},
 				{type: 'site.ParentSite'},
+				{type: 'site.StockSite'},
 			]
 		}
 	},{

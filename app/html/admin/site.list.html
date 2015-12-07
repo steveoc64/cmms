@@ -77,7 +77,7 @@
       		ng-class="Sites.getClass(row)"
       		ng-repeat="row in Sites.sites | orderBy:Sites.sortField:Sites.sortDir"
       		ng-click="Sites.clickedRow(row)"> 
-            <td><a ng-click="Sites.clickEdit(row)">{{row.Name}}</a></td>
+            <td><p><a ng-click="Sites.clickEdit(row)">{{row.Name}}</a></td>
             <td><a ng-click="Sites.goParent(row)">{{row.ParentSiteName}}</a></td>
             <td><a ng-if="row.Address != ''" href="{{Sites.getMapURI(row.Address)}}" target="googlemaps">
               <i class="mdi mdi-map"></i><p>

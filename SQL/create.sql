@@ -22,6 +22,7 @@ create table site (
 	fax text not null default '',
 	image text not null default '',
 	parent_site int not null default 0,
+	stock_site int not null default 0,
 	notes text not null default ''
 );
 

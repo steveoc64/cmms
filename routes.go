@@ -590,6 +590,8 @@ type DBsite struct {
 	Image          string  `db:"image"`
 	ParentSite     int     `db:"parent_site"`
 	ParentSiteName *string `db:"parent_site_name"`
+	StockSite      int     `db:"stock_site"`
+	StockSiteName  *string `db:"stock_site_name"`
 	Notes          string  `db:"notes"`
 }
 
@@ -610,9 +612,10 @@ func querySites(c *echo.Context) error {
 	}
 
 	var record []*DBsite
-	err = DB.SQL(`select s.*,p.name as parent_site_name
+	err = DB.SQL(`select s.*,p.name as parent_site_name,t.name as stock_site_name
 		from site s
 		left join site p on (p.id=s.parent_site)
+		left join site t on (t.id=s.stock_site)
 		order by lower(s.name)`).QueryStructs(&record)
 
 	if err != nil {
@@ -654,9 +657,10 @@ func getSite(c *echo.Context) error {
 
 	id := getID(c)
 	var record DBsite
-	err = DB.SQL(`select s.*,p.name as parent_site_name
+	err = DB.SQL(`select s.*,p.name as parent_site_name,t.name as stock_site_name
 		from site s 
 		left join site p on (p.id=s.parent_site)
+		left join site t on (t.id=s.stock_site)
 		where s.id=$1`, id).QueryStruct(&record)
 
 	if err != nil {
@@ -678,7 +682,7 @@ func newSite(c *echo.Context) error {
 	}
 
 	err = DB.InsertInto("site").
-		Whitelist("name", "address", "phone", "fax", "parent_site").
+		Whitelist("name", "address", "phone", "fax", "parent_site", "stock_site").
 		Record(record).
 		Returning("id").
 		QueryScalar(&record.ID)
@@ -709,7 +713,7 @@ func saveSite(c *echo.Context) error {
 	siteID := getID(c)
 
 	_, err = DB.Update("site").
-		SetWhitelist(record, "name", "address", "phone", "fax", "image", "parent_site", "notes").
+		SetWhitelist(record, "name", "address", "phone", "fax", "image", "parent_site", "stock_site", "notes").
 		Where("id = $1", siteID).
 		Exec()
 

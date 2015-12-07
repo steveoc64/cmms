@@ -76,7 +76,7 @@
       		ng-class="Machines.getClass(row)"
       		ng-repeat="row in Machines.machines | filter:searchMachine | orderBy:Machines.sortField:Machines.sortDir"
       		ng-click="Machines.clickedRow(row)"> 
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
+            <td><p><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
             <td>{{row.Status}}</td>
             <td>{{row.Descr | limitTo:64}}</td>
             <td>{{row.Serialnum}}</td>

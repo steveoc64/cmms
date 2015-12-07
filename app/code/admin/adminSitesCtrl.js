@@ -125,6 +125,11 @@
 				} else {
 					this.site.ParentSite = 0
 				}
+				if (angular.isDefined(this.site.StockSite) && this.site.StockSite) {
+					this.site.StockSite = this.site.StockSite.ID
+				} else {
+					this.site.StockSite = 0
+				}
 				this.site.$update(function(newsite) {
 					$window.history.go(-1)
 				})					

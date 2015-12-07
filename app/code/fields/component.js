@@ -116,7 +116,7 @@ getComponentFields = function() {
 				}
 
 				$scope.$watch('model.Site', function(newVal,oldVal,vm) {
-					console.log('new site val set to',newVal,'and siteid is',vm.model.SiteId)
+					//console.log('new site val set to',newVal,'and siteid is',vm.model.SiteId)
 					if (angular.isDefined(newVal) && angular.isDefined(newVal.ID)) {
 						vm.model.SiteId = newVal.ID
 					}

@@ -77,7 +77,7 @@
       		ng-repeat="row in Tools.components | filter:searchTool | orderBy:Tools.sortField:Tools.sortDir"
 
       		ng-click="Tools.clickedRow(row)"> 
-            <td><a ng-click="Tools.clickEdit(row)">{{row.StockCode}}</a></td>
+            <td><p><a ng-click="Tools.clickEdit(row)">{{row.StockCode}}</a></td>
             <td><a ng-click="Tools.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
             <td><a ng-click="Tools.goSite(row)">{{row.SiteName}}</a></td>
             <td><a ng-click="Tools.goMachine(row)">#{{row.Position}}<br>{{row.MachineName}}</a></td>
