@@ -23,4 +23,10 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBSiteSupplies', function($resource,ServerName,Session){
+		return $resource(ServerName+'/sitesupplies/:id',{id: '@_id'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
 })();

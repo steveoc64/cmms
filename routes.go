@@ -39,6 +39,7 @@ func _initRoutes() {
 
 	e.Get("/sites", querySites)
 	e.Get("/sites/:id", getSite)
+	e.Get("/sitesupplies/:id", querySiteSupplies)
 	e.Get("/siteusers/:id", querySiteUsers)
 	e.Post("/sites", newSite)
 	e.Put("/sites/:id", saveSite)

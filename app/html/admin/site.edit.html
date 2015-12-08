@@ -84,6 +84,35 @@
     <lx-tab heading="WorkOrders">
     </lx-tab>
 
+    <lx-tab heading="Supplies">      
+      <h4 ng-if="editSite.supplies.length > 0">List of other Sites that are supplied from this Site</h4>
+      <h4 ng-if="editSite.supplies.length == 0">This Site does not supply any other Sites</h4>
+      <div class="data-table-container" ng-if="editSite.supplies.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Parent Site</th>
+              <th> Address</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editSite.supplies"
+                ng-click="editSite.clickedSite(row)"> 
+                  <td>{{row.Name}}</td>
+                  <td>{{row.ParentSiteName}}</td>
+                  <td><a ng-if="row.Address != ''" href="{{editSite.getMapURI(row.Address)}}" target="googlemaps">
+                    <i class="mdi mdi-map"></i><p>
+                    {{row.Address}}
+                  </a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
     <lx-tab heading="Users">
       <div class="data-table-container">
         <table class="data-table">

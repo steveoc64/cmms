@@ -80,9 +80,9 @@
 						}
 					})
 			},
-			getMapURI: function(m) {
-        return "https://www.google.com/maps?q="+encodeURIComponent(m)
-      },
+			getMapURI: function(addr) {
+			  return "https://www.google.com/maps?q="+encodeURIComponent(addr)
+			},
 
 		})
 	}])
@@ -111,8 +111,8 @@
 	}])
 
 	app.controller(base+'EditSiteCtrl', 
-		['$state','$stateParams','site','logs','Session','$window','users','$timeout','machines','LxDialogService',
-		function($state,$stateParams,site,logs,Session,$window,users,$timeout,machines,LxDialogService){
+		['$state','$stateParams','site','logs','Session','$window','users','$timeout','machines','LxDialogService','supplies',
+		function($state,$stateParams,site,logs,Session,$window,users,$timeout,machines,LxDialogService,supplies){
 	
 		angular.extend(this, {
 			session: Session,
@@ -120,6 +120,7 @@
 			logs: logs,
 			users: users,
 			machines: machines,
+			supplies: supplies,
 			logClass: logClass,
 			formFields: getSiteForm(),		
 			submit: function() {
@@ -150,9 +151,6 @@
 			goSite: function(row) {
 				$state.go(base+'.editsite',{id: row.SiteId})
 			},
-			getMapURI: function(m) {
-        return "https://www.google.com/maps?q="+encodeURIComponent(m)
-      },
       showChange: function(c) {
       	this.Audit = c
       	this.Before = c.Before.split('\n')
@@ -180,6 +178,9 @@
 						return "machine__new"
 						break
 				} // switch
+			},
+			getMapURI: function(addr) {
+			  return "https://www.google.com/maps?q="+encodeURIComponent(addr)
 			},
 			
 		})

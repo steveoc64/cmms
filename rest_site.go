@@ -41,6 +41,7 @@ func getRelatedSites(siteID int) []int {
 	return relatedSites
 }
 
+// Get a list of all sites
 func querySites(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readSite")
@@ -61,6 +62,30 @@ func querySites(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+// Get a list of sites that this site supplies
+func querySiteSupplies(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	siteID := getID(c)
+
+	var record []*DBsite
+	err = DB.SQL(`select s.*,p.name as parent_site_name,t.name as stock_site_name
+		from site s
+		left join site p on (p.id=s.parent_site)
+		left join site t on (t.id=s.stock_site)
+		where s.stock_site=$1
+		order by lower(s.name)`, siteID).QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
 func querySiteUsers(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readUser")
@@ -68,10 +93,11 @@ func querySiteUsers(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
+	siteID := getID(c)
+
 	var users []*DBusers
 	//		SQL(`select *,array(select concat(logdate,ip,descr) from user_log where user_id=users.id order by logdate desc) as logs from users`).
 
-	siteID := getID(c)
 	err = DB.SQL(`select 
 		u.* from user_site s
 		left join users u on u.id = s.user_id

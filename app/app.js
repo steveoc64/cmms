@@ -14,6 +14,10 @@ var logClass = function(l) {
 			return ''
 		}
 
+var getMapURI = function(addr) {
+  return "https://www.google.com/maps?q="+encodeURIComponent(addr)
+}
+
 ;(function() {
 	'use strict';
 
@@ -243,6 +247,9 @@ var logClass = function(l) {
 			      	resolve: {
 			      		site: function(DBSite,$stateParams) {
 			      			return DBSite.get({id: $stateParams.id})
+			      		},
+			      		supplies: function(DBSiteSupplies,$stateParams) {
+			      			return DBSiteSupplies.query({id: $stateParams.id})
 			      		},
 			      		users: function(DBSiteUsers,$stateParams) {
 			      			return DBSiteUsers.query({id: $stateParams.id})
