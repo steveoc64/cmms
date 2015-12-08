@@ -23,6 +23,7 @@
         <tbody>
           <tr class="data-table"
               ng-class="Users.logClass(l)"        
+              ng-click="Users.goAudit(l)"
               ng-repeat="l in Users.getSelectedLogs() track by $index">
                 <td>{{l.Type}}</td>
                 <td>{{l.Username}}</td>

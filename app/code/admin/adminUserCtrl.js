@@ -36,6 +36,33 @@
 			clickEdit: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
 			},
+			goAudit: function(row) {
+				LxDialogService.close('userLogDialog')
+				switch(row.Type) {
+					case 'Vendor':
+						$state.go(base+'.editvendor',{id: row.RefID})
+						break
+					case 'Machine':
+						$state.go(base+'.editmachine',{id: row.RefID})
+						break
+					case 'Parts':
+						$state.go(base+'.editpart',{id: row.RefID})
+						break
+					case 'Tool':
+					case 'Tools':
+						$state.go(base+'.edittool',{id: row.RefID})
+						break
+					case 'Sites':
+						$state.go(base+'.editsite',{id: row.RefID})
+						break
+					case 'Skills':
+						$state.go(base+'.editskill',{id: row.RefID})
+						break
+					default:
+						$state.go(base+'.edituser',{id: row.UserID})
+						break
+				}
+			},
 			goSite: function(row) {
 				$state.go(base+'.editsite',{id: row.SiteId})
 			},
@@ -105,8 +132,8 @@
 	}])
 
 	app.controller(base+'EditUserCtrl', 
-		['$state','$stateParams','user','logs','Session','$window',
-		function($state,$stateParams,user,logs,Session,$window){
+		['$state','$stateParams','user','logs','Session','$window','LxDialogService',
+		function($state,$stateParams,user,logs,Session,$window,LxDialogService){
 
 		angular.extend(this, {
 			session: Session,
@@ -114,6 +141,12 @@
 			logs: logs,
 			formFields: getUserForm(false),		
 			logClass: logClass,
+      showChange: function(c) {
+      	this.Audit = c
+      	this.Before = c.Before.split('\n')
+      	this.After = c.After.split('\n')
+				LxDialogService.open('changeDialog')
+      },			
 			submit: function() {
 				this.user._id = $stateParams.id
 				this.user.$update(function(newuser) {

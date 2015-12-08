@@ -69,7 +69,9 @@ create table sys_log (
 	ip text not null,
 	descr text not null,
 	user_id int not null,
-	username text not null default ''
+	username text not null default '',
+	before text not null default '',
+	after text not null default ''
 );
 create unique index sys_log_idx on sys_log (logdate,id);
 insert into sys_log (id,status,type,ref_type,ref_id,ip,descr,user_id,username)

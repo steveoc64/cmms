@@ -39,6 +39,10 @@
 			clickEdit: function(row) {
 				$state.go(base+'.editpart',{id: row.ID})
 			},
+			goAudit: function(row) {
+				LxDialogService.close('partLogDialog')
+				$state.go(base+'.editpart',{id: row.RefID})
+			},
 			showLogs: function() {
 				LxDialogService.open('partLogDialog')
 			},
@@ -104,8 +108,8 @@
 	}])
 
 	app.controller(base+'EditPartCtrl', 
-		['$state','$stateParams','part','logs','Session','$window','components',
-		function($state,$stateParams,part,logs,Session,$window,components){
+		['$state','$stateParams','part','logs','Session','$window','components','LxDialogService',
+		function($state,$stateParams,part,logs,Session,$window,components,LxDialogService){
 
 		angular.extend(this, {
 			session: Session,
@@ -123,6 +127,12 @@
 			abort: function() {
 				$window.history.go(-1)
 			},
+      showChange: function(c) {
+      	this.Audit = c
+      	this.Before = c.Before.split('\n')
+      	this.After = c.After.split('\n')
+				LxDialogService.open('changeDialog')
+      },									
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
 			},

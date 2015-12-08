@@ -35,6 +35,10 @@
 			clickEdit: function(row) {
 				$state.go(base+'.editsite',{id: row.ID})
 			},
+			goAudit: function(row) {
+				LxDialogService.close('siteLogDialog')
+				$state.go(base+'.editsite',{id: row.RefID})
+			},
 			goParent: function(row) {
 				if (row.ParentSite != 0) {
 					$state.go(base+'.editsite',{id: row.ParentSite})
@@ -107,8 +111,8 @@
 	}])
 
 	app.controller(base+'EditSiteCtrl', 
-		['$state','$stateParams','site','logs','Session','$window','users','$timeout','machines',
-		function($state,$stateParams,site,logs,Session,$window,users,$timeout,machines){
+		['$state','$stateParams','site','logs','Session','$window','users','$timeout','machines','LxDialogService',
+		function($state,$stateParams,site,logs,Session,$window,users,$timeout,machines,LxDialogService){
 	
 		angular.extend(this, {
 			session: Session,
@@ -148,6 +152,12 @@
 			},
 			getMapURI: function(m) {
         return "https://www.google.com/maps?q="+encodeURIComponent(m)
+      },
+      showChange: function(c) {
+      	this.Audit = c
+      	this.Before = c.Before.split('\n')
+      	this.After = c.After.split('\n')
+				LxDialogService.open('changeDialog')
       },
 			getMachineClass: function(row) {
 				if (row.selected) {

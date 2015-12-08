@@ -8,6 +8,24 @@ import (
 ///////////////////////////////////////////////////////////////////////
 // Component Maintenance
 
+type DBcomponent struct {
+	MachineID   int    `db:"machine_id"`
+	Position    int    `db:"position"`
+	ID          int    `db:"id"`
+	SiteId      int    `db:"site_id"`
+	Name        string `db:"name"`
+	Descr       string `db:"descr"`
+	Make        string `db:"make"`
+	Model       string `db:"model"`
+	Qty         int    `db:"qty"`
+	StockCode   string `db:"stock_code"`
+	Serialnum   string `db:"serialnum"`
+	Picture     string `db:"picture"`
+	Notes       string `db:"notes"`
+	SiteName    string `db:"site_name"`
+	MachineName string `db:"machine_name"`
+}
+
 func queryComponents(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
@@ -85,12 +103,24 @@ func saveComponent(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
+	componentID := getID(c)
+
+	preRecord := &DBcomponent{}
+
+	DB.SQL(`
+		select 
+		c.id,c.name,c.position,c.site_id,c.descr,c.make,c.model,c.qty,c.stock_code,c.serialnum,c.machine_id,s.name as site_name,m.name as machine_name
+		from component c
+		left join machine m on (m.id=c.machine_id)
+		left join site s on (s.id=c.site_id)
+		where c.id=$1`, componentID).
+		QueryStruct(preRecord)
+
 	record := &DBcomponent{}
 	if err = c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	componentID := getID(c)
 	_, err = DB.Update("component").
 		SetWhitelist(record, "name", "position", "site_id", "descr", "make", "model", "qty", "stock_code", "serialnum").
 		Where("id = $1", componentID).
@@ -100,7 +130,7 @@ func saveComponent(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sysLog(1, "Tools", "T", componentID, "Updated", c, claim)
+	sysLogUpdate(1, "Tools", "T", componentID, "Updated", c, claim, *preRecord, *record)
 	return c.JSON(http.StatusOK, componentID)
 }
 

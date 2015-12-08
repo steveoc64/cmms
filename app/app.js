@@ -149,7 +149,7 @@ var logClass = function(l) {
 		      			return DBUser.query()
 		      		},
 		      		logs: function(DBSysLog) {
-		      			return DBSysLog.query({RefType: 'U', Limit: 100})
+		      			return DBSysLog.query({Limit: 500})  // Get the last 500 events for all
 		      		}
 		      	}
 		      })
@@ -334,7 +334,7 @@ var logClass = function(l) {
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
-			      				RefType: 'M', 
+			      				RefType: 'T', 
 			      				RefID: $stateParams.id,
 			      				Limit: 100})
 			      		}

@@ -22,7 +22,8 @@
         </thead>
         <tbody>
           <tr class="data-table"
-              ng-class="Vendors.logClass(l)"        
+              ng-class="Vendors.logClass(l)"  
+              ng-click="Vendors.goAudit(l)"                   
               ng-repeat="l in Vendors.getSelectedLogs()">
                 <td>{{l.Type}}</td>
                 <td>{{l.Logdate}}</td>

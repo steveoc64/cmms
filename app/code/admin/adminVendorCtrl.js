@@ -36,6 +36,10 @@
 			clickEdit: function(row) {
 				$state.go(base+'.editvendor',{id: row.ID})
 			},
+			goAudit: function(row) {
+				LxDialogService.close('vendorLogDialog')
+				$state.go(base+'.editvendor',{id: row.RefID})
+			},
 			showLogs: function() {
 				LxDialogService.open('vendorLogDialog')
 			},
@@ -100,8 +104,8 @@
 	}])
 
 	app.controller(base+'EditVendorCtrl', 
-		['$state','$stateParams','vendor','logs','Session','$window',
-		function($state,$stateParams,vendor,logs,Session,$window){
+		['$state','$stateParams','vendor','logs','Session','$window','LxDialogService',
+		function($state,$stateParams,vendor,logs,Session,$window,LxDialogService){
 
 		angular.extend(this, {
 			session: Session,
@@ -109,6 +113,12 @@
 			logs: logs,
 			formFields: getVendorForm(),		
 			logClass: logClass,
+      showChange: function(c) {
+      	this.Audit = c
+      	this.Before = c.Before.split('\n')
+      	this.After = c.After.split('\n')
+				LxDialogService.open('changeDialog')
+      },						
 			submit: function() {
 				this.vendor._id = $stateParams.id
 				this.vendor.$update(function(newvendor) {

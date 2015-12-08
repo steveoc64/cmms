@@ -52,6 +52,10 @@
 			clickEdit: function(row) {
 				$state.go(base+'.editmachine',{id: row.ID})
 			},
+			goAudit: function(row) {
+				LxDialogService.close('machineLogDialog')
+				$state.go(base+'.editmachine',{id: row.RefID})
+			},
 			goSite: function(row) {
 				if (row.SiteId != 0) {
 					$state.go(base+'.editsite',{id: row.SiteId})
@@ -123,8 +127,8 @@
 	}])
 
 	app.controller(base+'EditMachineCtrl', 
-		['$state','$stateParams','machine','logs','Session','$window','components','$timeout',
-		function($state,$stateParams,machine,logs,Session,$window,components,$timeout){
+		['$state','$stateParams','machine','logs','Session','$window','components','$timeout','LxDialogService',
+		function($state,$stateParams,machine,logs,Session,$window,components,$timeout,LxDialogService){
 
 		angular.extend(this, {
 			session: Session,
@@ -142,6 +146,12 @@
 					$window.history.go(-1)
 				})					
 			},
+      showChange: function(c) {
+      	this.Audit = c
+      	this.Before = c.Before.split('\n')
+      	this.After = c.After.split('\n')
+				LxDialogService.open('changeDialog')
+      },									
 			abort: function() {
 				$window.history.go(-1)
 			},

@@ -39,6 +39,10 @@
 			clickEdit: function(row) {
 				$state.go(base+'.edittool',{id: row.ID})
 			},
+			goAudit: function(row) {
+				LxDialogService.close('toolLogDialog')
+				$state.go(base+'.edittool',{id:row.RefID})
+			},
 			goSite: function(row) {
 				$state.go(base+'.editsite',{id: row.SiteId})
 			},
@@ -110,8 +114,8 @@
 	}])
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','logs','Session','$window','component','$timeout','parts',
-		function($state,$stateParams,logs,Session,$window,component,$timeout,parts){
+		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService',
+		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService){
 
 		angular.extend(this, {
 			session: Session,
@@ -120,6 +124,12 @@
 			logs: logs,
 			formFields: getComponentForm(),		
 			logClass: logClass,
+      showChange: function(c) {
+      	this.Audit = c
+      	this.Before = c.Before.split('\n')
+      	this.After = c.After.split('\n')
+				LxDialogService.open('changeDialog')
+      },									
 			submit: function() {
 				this.component._id = $stateParams.id
 				this.component.$update(function(newtool) {

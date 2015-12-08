@@ -35,6 +35,10 @@
 			clickEdit: function(row) {
 				$state.go(base+'.editskill',{id: row.ID})
 			},
+			goAudit: function(row) {
+				LxDialogService.close('skillLogDialog')
+				$state.go(base+'.editskill',{id: row.RefID})
+			},
 			showLogs: function() {
 				LxDialogService.open('skillLogDialog')
 			},
@@ -100,8 +104,8 @@
 	}])
 
 	app.controller(base+'EditSkillCtrl', 
-		['$state','$stateParams','skill','logs','Session','users','$window',
-		function($state,$stateParams,skill,logs,Session,users,$window){
+		['$state','$stateParams','skill','logs','Session','users','$window','LxDialogService',
+		function($state,$stateParams,skill,logs,Session,users,$window,LxDialogService){
 
 		angular.extend(this, {
 			session: Session,
@@ -110,6 +114,12 @@
 			logs: logs,
 			formFields: getSkillForm(),		
 			logClass: logClass,
+      showChange: function(c) {
+      	this.Audit = c
+      	this.Before = c.Before.split('\n')
+      	this.After = c.After.split('\n')
+				LxDialogService.open('changeDialog')
+      },						
 			submit: function() {
 				this.skill._id = $stateParams.id
 				this.skill.$update(function(newskill) {

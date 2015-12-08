@@ -99,12 +99,19 @@ func saveVendor(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
+	id := getID(c)
+
+	preRecord := &DBvendor{}
+	DB.Select("id", "name", "descr", "address", "phone", "fax", "contact_name", "contact_email", "orders_email", "rating", "notes").
+		From("vendor").
+		Where("id=$1", id).
+		QueryStruct(preRecord)
+
 	record := &DBvendor{}
 	if err = c.Bind(record); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	id := getID(c)
 	_, err = DB.Update("vendor").
 		SetWhitelist(record, "name", "descr", "address", "phone", "fax", "contact_name", "contact_email", "orders_email", "rating", "notes").
 		Where("id = $1", id).
@@ -114,7 +121,7 @@ func saveVendor(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sysLog(1, "Vendor", "V", id, "Updated", c, claim)
+	sysLogUpdate(1, "Vendor", "V", id, "Updated", c, claim, *preRecord, *record)
 	return c.JSON(http.StatusOK, id)
 }
 
