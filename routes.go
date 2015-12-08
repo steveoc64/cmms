@@ -66,6 +66,7 @@ func _initRoutes() {
 	e.Put("/machine/:id", saveMachine)
 	e.Delete("/machine/:id", deleteMachine)
 	e.Get("/machine/components/:id", queryMachineComponents)
+	e.Get("/machine/parts/:id", queryMachineParts)
 
 	e.Get("/component", queryComponents)
 	e.Get("/component/:id", getComponent)

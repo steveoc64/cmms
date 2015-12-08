@@ -76,6 +76,33 @@
       </div>
     </lx-tab>
 
+    <lx-tab heading="Parts">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Stock Code</th>
+              <th> Name</th>
+              <th> Tool</th>
+              <th> Qty</th>
+              <th> Re-Order Levels</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editMachine.parts">
+                  <td><a ng-click="editMachine.goPart(row)">{{row.StockCode}}</a></td>
+                  <td><a ng-click="editMachine.goPart(row)">{{row.Name}}</a></td>
+                  <td><a ng-click="editMachine.goPart(row)">{{row.ToolCode}} / {{row.ToolName}}</a></td>
+                  <td>{{row.Qty}}</td>
+                  <td>{{row.ReorderStocklevel}} / {{row.ReorderQty}} (@ ${{row.LatestPrice}} {{row.QtyType}})</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
     <lx-tab heading="WorkOrders">
     </lx-tab>
 

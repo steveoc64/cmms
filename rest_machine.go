@@ -299,6 +299,7 @@ func deleteMachine(c *echo.Context) error {
 	return c.String(http.StatusOK, "Machine Deleted")
 }
 
+// Get a list of all tools / components for the given machine
 func queryMachineComponents(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readMachine")
@@ -320,4 +321,47 @@ func queryMachineComponents(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 	return c.JSON(http.StatusOK, components)
+}
+
+type DBmachinePart struct {
+	ID                int     `db:"id"`
+	Name              string  `db:"name"`
+	Descr             string  `db:"descr"`
+	StockCode         string  `db:"stock_code"`
+	ReorderStocklevel float64 `db:"reorder_stocklevel"`
+	ReorderQty        float64 `db:"reorder_qty"`
+	LatestPrice       float64 `db:"latest_price"`
+	QtyType           string  `db:"qty_type"`
+	Picture           string  `db:"picture"`
+	Notes             string  `db:"notes"`
+	Qty               int     `db:"qty"`
+	ToolName          string  `db:"tool_name"`
+	ToolCode          string  `db:"tool_code"`
+}
+
+// Get a list of all parts for the given machine
+func queryMachineParts(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readMachine")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var parts []*DBmachinePart
+
+	machineID := getID(c)
+	err = DB.SQL(`
+		select p.*,sum(xp.qty) as qty,c.name as tool_name,c.stock_code as tool_code
+			from component c
+			left join component_part xp on (xp.component_id=c.id)
+			left join part p on (p.id=xp.part_id)
+		where c.machine_id=$1
+		group by p.id,c.name,c.stock_code`,
+		machineID).
+		QueryStructs(&parts)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, parts)
 }

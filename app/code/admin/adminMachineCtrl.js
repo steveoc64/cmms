@@ -127,13 +127,14 @@
 	}])
 
 	app.controller(base+'EditMachineCtrl', 
-		['$state','$stateParams','machine','logs','Session','$window','components','$timeout','LxDialogService',
-		function($state,$stateParams,machine,logs,Session,$window,components,$timeout,LxDialogService){
+		['$state','$stateParams','machine','logs','Session','$window','components','$timeout','LxDialogService','parts',
+		function($state,$stateParams,machine,logs,Session,$window,components,$timeout,LxDialogService,parts){
 
 		angular.extend(this, {
 			session: Session,
 			machine: machine,
 			logs: logs,
+			parts: parts,
 			components: components,
 			formFields: getMachineForm(),		
 			logClass: logClass,
@@ -160,6 +161,9 @@
 			},
 			goTool: function(row) {
 				$state.go(base+'.edittool',{id: row.ID})
+			},
+			goPart: function(row) {
+				$state.go(base+'.editpart',{id: row.ID})
 			}
 		})
 

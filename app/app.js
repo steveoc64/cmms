@@ -298,6 +298,9 @@ var getMapURI = function(addr) {
 			      		components: function(DBMachineComponents,$stateParams) {
 			      			return DBMachineComponents.query({id: $stateParams.id})
 			      		},
+			      		parts: function(DBMachineParts,$stateParams) {
+			      			return DBMachineParts.query({id: $stateParams.id})
+			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 'M', 
