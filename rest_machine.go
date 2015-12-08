@@ -355,9 +355,9 @@ func queryMachineParts(c *echo.Context) error {
 			from component c
 			left join component_part xp on (xp.component_id=c.id)
 			left join part p on (p.id=xp.part_id)
-		where c.machine_id=$1
+		where c.machine_id=$1 and p.id is not null
 		group by p.id,c.name,c.stock_code,c.position
-		order by c.position`,
+		order by c.position,p.stock_code`,
 		machineID).
 		QueryStructs(&parts)
 
