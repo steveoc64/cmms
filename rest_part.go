@@ -35,7 +35,6 @@ type DBpart struct {
 	QtyType           string  `db:"qty_type"`
 	Picture           string  `db:"picture"`
 	Notes             string  `db:"notes"`
-	Qty               int     `db:"qty"`
 }
 
 type DBpartComponents struct {
