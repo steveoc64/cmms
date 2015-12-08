@@ -55,15 +55,14 @@
             <tr>
               <th> StockCode</th>
               <th> Description</th>
-              <th> Re Order Levels</th>
+              <th> Qty</th>
             </tr>
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-repeat="row in editTool.components">
+                ng-repeat="row in editTool.parts">
                   <td><a ng-click="editTool.goPart(row)">{{row.StockCode}}</a></td>
-                  <td><a ng-click="editTool.goTool(row)">{{row.Descr}}</a></td>
-                  <td>{{row.ReorderStocklevel}} / {{row.ReorderQty}} (@ ${{row.LatestPrice}} {{row.QtyType}})</td>
+                  <td><a ng-click="editTool.goPart(row)">{{row.Name}}</a></td>
                   <td>{{row.Qty}}</td>
             </tr>
           </tbody>

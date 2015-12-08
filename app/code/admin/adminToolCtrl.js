@@ -143,7 +143,8 @@
 				$state.go(base+'.edituser',{id: row.ID})
 			},
 			goPart: function(row) {
-				$state.go(base+'.editpart',{id: row.MachineID})
+				console.log('go admin.editpart',row.PartID)
+				$state.go(base+'.editpart',{id: row.PartID})
 			},
 		})
 
