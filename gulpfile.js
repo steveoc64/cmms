@@ -50,8 +50,6 @@ var paths = {
   appJS: [
   	'app/app.js',
     'app/code/**/*.*',
-    'app/database/**/*.*',
-    'app/code/**/*.*',
   ],
   // Include Paths for Sass
   sassPaths: [

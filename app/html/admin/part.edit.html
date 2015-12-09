@@ -83,6 +83,32 @@
     <lx-tab heading="Documents">
     </lx-tab>
 
+    <lx-tab heading="Suppliers">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Supplier</th>
+              <th> Address</th>
+              <th> Supplier Part #</th>
+              <th> Latest Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-click="editPart.goVendor(row)"
+                ng-repeat="row in editPart.parts">
+                  <td>{{row.Name}}</td>
+                  <td>{{row.Descr}}</td>
+                  <td>{{row.VendorCode}}</td>
+                  <td>{{row.LatestPrice}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+
     <lx-tab heading="StockTake">
     </lx-tab>
 

@@ -12,15 +12,16 @@
 	})
 
 	angular.module('cmms').factory('DBPartComponents', function($resource,ServerName,Session){
-		return $resource(ServerName+'/partcomponents/:id',{id: '@_id'},{
+		return $resource(ServerName+'/part/components/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
 		})
 	})
 
-	angular.module('cmms').factory('DBComponentParts', function($resource,ServerName,Session){
-		return $resource(ServerName+'/componentparts/:id',{id: '@_id'},{
+	angular.module('cmms').factory('DBPartVendors', function($resource,ServerName,Session){
+		return $resource(ServerName+'/part/vendors/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
 		})
 	})
+
 
 })();

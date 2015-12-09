@@ -12,7 +12,7 @@
 	})
 
 	angular.module('cmms').factory('DBUserSkill', function($resource,ServerName,Session){
-		return $resource(ServerName+'/users_skill/:id',{id: '@_id'},{
+		return $resource(ServerName+'/users/skill/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
 		})
 	})

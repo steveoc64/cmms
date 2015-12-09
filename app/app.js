@@ -386,6 +386,9 @@ var getMapURI = function(addr) {
 			      				RefID: $stateParams.id,
 			      				Limit: 100})
 			      		},
+			      		vendors: function(DBPartVendors,$stateParams) {
+			      			return DBPartVendors.query({id: $stateParams.id})
+			      		},
 			      		components: function(DBPartComponents,$stateParams) {
 			      			return DBPartComponents.query({id: $stateParams.id})
 			      		}
@@ -426,6 +429,9 @@ var getMapURI = function(addr) {
               resolve: {
                 vendor: function(DBVendor,$stateParams) {
                   return DBVendor.get({id: $stateParams.id})
+                },
+                parts: function(DBVendorPart,$stateParams) {
+                	return DBVendorPart.query({id: $stateParams.id})
                 },
                 logs: function(DBSysLog,$stateParams) {
                   return DBSysLog.query({

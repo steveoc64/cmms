@@ -49,6 +49,16 @@ type DBpartComponents struct {
 	SiteID      int     `db:"site_id"`
 }
 
+type DBpartVendors struct {
+	VendorId    int     `db:"vendor_id"`
+	Name        string  `db:"name"`
+	Descr       string  `db:"descr"`
+	Address     string  `db:"address"`
+	VendorCode  string  `db:"vendor_code"`
+	LatestPrice float64 `db:"latest_price"`
+}
+
+// Get a list of all parts
 func queryParts(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
@@ -65,6 +75,7 @@ func queryParts(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+// Get a list of components / tools that use this part
 func queryPartComponents(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
@@ -91,28 +102,35 @@ func queryPartComponents(c *echo.Context) error {
 	return c.JSON(http.StatusOK, cp)
 }
 
-func queryComponentParts(c *echo.Context) error {
+// Get a list of vendors that supply this part
+func queryPartVendors(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	var cp []*DBpartComponents
+	var records []*DBpartVendors
 
 	partID := getID(c)
-	err = DB.SQL(`select 
-		x.component_id,x.qty,p.stock_code,p.name,p.id as part_id
-		from component_part x
-		left join part p on (p.id=x.part_id)
-		where x.component_id=$1`, partID).QueryStructs(&cp)
+	err = DB.SQL(`
+		select
+		v.id as vendor_id, v.name as name, v.descr as descr, v.address as address,
+		x.latest_price as latest_price, 
+		x.vendor_code as vendor_code
+		from part_vendor x
+		left join vendor v on (v.id=x.vendor_id)
+		where x.part_id=$1`,
+		partID).
+		QueryStructs(&records)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}
-	return c.JSON(http.StatusOK, cp)
+	return c.JSON(http.StatusOK, records)
 }
 
+// Get a specific part
 func getPart(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
@@ -130,6 +148,7 @@ func getPart(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+// Create a new part
 func newPart(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
@@ -159,6 +178,7 @@ func newPart(c *echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
+// Update an existing part
 func savePart(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
@@ -192,6 +212,7 @@ func savePart(c *echo.Context) error {
 	return c.JSON(http.StatusOK, partID)
 }
 
+// Delete an existing part
 func deletePart(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
@@ -208,6 +229,12 @@ func deletePart(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
+
+	// Clean up vendor parts, comp parts
+	DB.SQL(`delete from component_part where part_id=$1`, id).Exec()
+	DB.SQL(`delete from part_vendor where part_id=$1`, id).Exec()
+	DB.SQL(`delete from vendor_price where part_id=$1`, id).Exec()
+	DB.SQL(`delete from stock_level where part_id=$1`, id).Exec()
 
 	sysLog(3, "Parts", "P", id, "Part Deleted", c, claim)
 

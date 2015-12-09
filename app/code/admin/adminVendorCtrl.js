@@ -5,15 +5,15 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'VendorCtrl', 
-		['$state','vendors','Session','LxDialogService','logs','LxNotificationService',
-		function($state, vendors, Session, LxDialogService, logs,LxNotificationService){
+		['$state','vendors','Session','LxDialogService','logs','LxNotificationService','parts',
+		function($state, vendors, Session, LxDialogService, logs,LxNotificationService,parts){
 	
-	console.log('Loading vendor controller', vendors)
 		angular.extend(this, {
 			vendors: vendors,
 			session: Session,
 			logs: logs,
 			logClass: logClass,
+			parts: parts,
 			sortField: 'Name',
 			sortDir: false,
 			setSort: function(field) {

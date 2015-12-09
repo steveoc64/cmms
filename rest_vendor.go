@@ -23,6 +23,23 @@ type DBvendor struct {
 	Notes        string `db:"notes"`
 }
 
+type DBpartVendor struct {
+	PartId      int     `db:"part_id"`
+	VendorId    int     `db:"vendor_id"`
+	VendorCode  string  `db:"vendor_code"`
+	LatestPrice float64 `db:"latest_price"`
+}
+
+type DBvendorPrice struct {
+	PartId   int     `db:"part_id"`
+	VendorId int     `db:"vendor_id"`
+	Datefrom string  `db:"datefrom"`
+	Price    float64 `db:"price"`
+	MinQty   float64 `db:"min_qty"`
+	Notes    string  `db:"notes"`
+}
+
+// Get a list of vendors
 func queryVendor(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readVendor")
@@ -42,6 +59,44 @@ func queryVendor(c *echo.Context) error {
 	return c.JSON(http.StatusOK, records)
 }
 
+type DBvendorParts struct {
+	PartId      int     `db:"part_id"`
+	Name        string  `db:"name"`
+	Descr       string  `db:"descr"`
+	StockCode   string  `db:"stock_code"`
+	QtyType     string  `db:"qty_type"`
+	VendorCode  string  `db:"vendor_code"`
+	LatestPrice float64 `db:"latest_price"`
+}
+
+// Get a list of parts provided by this vendor
+func queryVendorParts(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readVendor")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var records []*DBvendorParts
+	err = DB.SQL(`
+		select
+		p.id as part_id, p.name as name, p.descr as descr, p.stock_code as stock_code,
+		x.latest_price as latest_price, p.qty_type as qty_type, 
+		x.vendor_code as vendor_code
+		from part_vendor x
+		left join part p on (p.id=x.part_id)
+		where x.vendor_id=$1`,
+		id).
+		QueryStructs(&records)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, records)
+}
+
+// Get a specific vendor
 func getVendor(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readVendor")
@@ -63,6 +118,7 @@ func getVendor(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+// Create a new vendor
 func newVendor(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writeVendor")
@@ -92,6 +148,7 @@ func newVendor(c *echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
+// Update an existing vendor
 func saveVendor(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writeVendor")
@@ -125,6 +182,7 @@ func saveVendor(c *echo.Context) error {
 	return c.JSON(http.StatusOK, id)
 }
 
+// Delete an existing vendor
 func deleteVendor(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writeVendor")
@@ -142,10 +200,10 @@ func deleteVendor(c *echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	// TODO delete the part references
-	// DB.DeleteFrom("linked_table").Where("vendor_id=$1", id).Exec()
+	DB.SQL(`delete from part_vendor where vendor_id=$1`, id)
+	DB.SQL(`delete from vendor_price where vendor_id=$1`, id)
 
 	sysLog(3, "Vendor", "V", id, "Vendor Deleted", c, claim)
 
-	return c.String(http.StatusOK, "Component Deleted")
+	return c.String(http.StatusOK, "Vendor Deleted")
 }

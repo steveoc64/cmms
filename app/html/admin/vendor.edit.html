@@ -49,9 +49,34 @@
 </formly-form>
 </form>
 
-
 <div class="card">
   <lx-tabs>
+    <lx-tab heading="Parts">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Part#</th>
+              <th> Name</th>
+              <th> Vendor#</th>
+              <th> Qty Type</th>
+              <th> Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editVendor.parts">
+                  <td>{{row.StockCode}}</td>
+                  <td>{{row.Name}}</td>
+                  <td>{{row.VendorCode}}</td>
+                  <td>{{row.QtyType}}</td>
+                  <td>{{row.LatestPrice}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
     <lx-tab heading="Notes">
       <div class="card">
         <textarea ng-wig="editVendor.vendor.Notes"></textarea>
@@ -61,7 +86,7 @@
     <lx-tab heading="Documents">
     </lx-tab>
 
-		<!-- TODO: Add any more tabs you want in here -->
+    <!-- TODO: Add any more tabs you want in here -->
 
     <lx-tab heading="Activity Log">
       <div class="data-table-container">

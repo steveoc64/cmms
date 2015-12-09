@@ -26,6 +26,7 @@ type DBcomponent struct {
 	MachineName string `db:"machine_name"`
 }
 
+// Get a list of all tools
 func queryComponents(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
@@ -46,6 +47,30 @@ func queryComponents(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+// Get a list of parts used by this tool
+func queryComponentParts(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readPart")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var cp []*DBpartComponents
+
+	partID := getID(c)
+	err = DB.SQL(`select 
+		x.component_id,x.qty,p.stock_code,p.name,p.id as part_id
+		from component_part x
+		left join part p on (p.id=x.part_id)
+		where x.component_id=$1`, partID).QueryStructs(&cp)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, cp)
+}
+
+// Get a specific tool
 func getComponent(c *echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
@@ -67,6 +92,7 @@ func getComponent(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+// create a new tool
 func newComponent(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
@@ -96,6 +122,7 @@ func newComponent(c *echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
+// Update an existing tool
 func saveComponent(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
@@ -134,6 +161,7 @@ func saveComponent(c *echo.Context) error {
 	return c.JSON(http.StatusOK, componentID)
 }
 
+// Delete and existing tool
 func deleteComponent(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")

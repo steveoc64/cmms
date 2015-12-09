@@ -12,19 +12,19 @@
 	})
 
 	angular.module('cmms').factory('DBSiteUsers', function($resource,ServerName,Session){
-		return $resource(ServerName+'/siteusers/:id',{id: '@_id'},{
+		return $resource(ServerName+'/site/users/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
 		})
 	})
 
 	angular.module('cmms').factory('DBSiteMachines', function($resource,ServerName,Session){
-		return $resource(ServerName+'/sitemachines/:id',{id: '@_id'},{
+		return $resource(ServerName+'/site/machines/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
 		})
 	})
 
 	angular.module('cmms').factory('DBSiteSupplies', function($resource,ServerName,Session){
-		return $resource(ServerName+'/sitesupplies/:id',{id: '@_id'},{
+		return $resource(ServerName+'/site/supplies/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
 		})
 	})
