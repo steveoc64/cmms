@@ -28,8 +28,8 @@
     <tbody>
       <tr class="data-table"
           ng-repeat="row in editVendorPrice.parts">
-            <td>{{row.StockCode}}</td>
-            <td>{{row.Name}}</td>
+            <td><a ng-href="/#!/admin/part/edit/{{row.ID}}" target="cmmsparts">{{row.StockCode}}</a></td>
+            <td><a ng-href="/#!/admin/part/edit/{{row.ID}}" target="cmmsparts">{{row.Name}}</a></td>
             <td>{{row.LatestPrice}}</td>
             <td>{{row.QtyType}}</td>
             <td>

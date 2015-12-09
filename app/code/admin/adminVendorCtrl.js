@@ -128,6 +128,10 @@
 			abort: function() {
 				$window.history.go(-1)
 			},
+			goPart: function(row) {
+				console.log('clicked on row', row)
+				$state.go(base+'.editpart',{id: row.PartId})
+			},
 			editPriceList: function() {
 				$state.go(base+'.editvendorprice',{id: $stateParams.id})
 			},

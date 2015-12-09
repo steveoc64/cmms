@@ -87,7 +87,7 @@ getPartFields = function() {
 			templateOptions: {
 				label: 'Latest Price',
 				step: 'any',
-				required: true,
+				disabled: true,
 			}
 		}	
 	},{
@@ -138,7 +138,7 @@ getPartForm = function() {
 			flex: {container: "row", item: "4"},
 			fields: [
 				{type: 'part.QtyType'},
-				{type: 'part.LatestPrice', templateOptions: {disabled: true}},  // Cannot directly edit this field - has to be through Vendor pricing
+				{type: 'part.LatestPrice'},
 			]
 		}
 	},{
