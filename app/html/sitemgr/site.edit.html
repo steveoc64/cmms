@@ -1,0 +1,119 @@
+<div class="main-section__title">
+  <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-factory"></i>
+  Site Details
+</div>
+
+<form name="editSite.form" ng-submit="editSite.submit()">
+
+<formly-form model="editSite.site" fields="editSite.formFields">
+
+<div flex-container="row" flex-align="end">
+    <div flex-item>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editSite.abort()" lx-ripple>Back</button>
+    </div>
+    <div ng-if="editSite.canEdit()" flex-item>
+      <button type="submit" 
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Save Details
+      </button>
+    </div>   
+</div>
+
+</formly-form>
+</form>
+
+<div class="card">
+  <lx-tabs>
+    <lx-tab heading="Machines">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Serial #</th>
+              <th> Site</th>
+              <th> Description</th>
+              <th> Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-class="editSite.getMachineClass(row)"
+                ng-repeat="row in editSite.machines">
+                  <td><a ng-click="editSite.goMachine(row)">{{row.Name}}</a></td>
+                  <td>{{row.Serialnum}}</td>
+                  <td><a ng-click="editSite.goSite(row)">{{row.SiteName}}</a></td>
+                  <td>{{row.Descr}}</td>
+                  <td>{{row.Status}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="Notes">
+      <div class="card">
+        <textarea ng-wig="editSite.site.Notes"></textarea>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="WorkOrders">
+    </lx-tab>
+
+    <lx-tab heading="Supplies">      
+      <h4 ng-if="editSite.supplies.length > 0">List of other Sites that are supplied from this Site</h4>
+      <h4 ng-if="editSite.supplies.length == 0">This Site does not supply any other Sites</h4>
+      <div class="data-table-container" ng-if="editSite.supplies.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Parent Site</th>
+              <th> Address</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editSite.supplies"
+                ng-click="editSite.clickedSite(row)"> 
+                  <td>{{row.Name}}</td>
+                  <td>{{row.ParentSiteName}}</td>
+                  <td><a ng-if="row.Address != ''" href="{{editSite.getMapURI(row.Address)}}" target="googlemaps">
+                    <i class="mdi mdi-map"></i><p>
+                    {{row.Address}}
+                  </a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="Users">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Email</th>
+              <th> SMS</th>
+              <th> Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="u in editSite.users">
+                  <td><a ng-click="editSite.goUser(u)">{{u.Name}}</a></td>
+                  <td>{{u.Email}}</td>
+                  <td>{{u.SMS}}</td>
+                  <td>{{u.Role}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+  </lx-tabs>
+</div>
+

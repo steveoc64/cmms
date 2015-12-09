@@ -1,0 +1,44 @@
+<div class="data-table-container">
+  <header class="data-table-header">
+    <div class="data-table-header__label">
+      <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-account"></i>
+      <span class="fs-title">Users List</span>
+    </div>
+  </header>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th class="data-table__sortable-cell data-table__sortable-cell--desc">
+          <a ng-click="Users.setSort('UserName')"><i class="mdi mdi-account"></i></a></th>
+        <th><a ng-click="Users.setSort('Role')"> Role</a</th>
+        <th><a ng-click="Users.setSort('Name')"> Name</a></th>
+        <th><a ng-click="Users.setSort('Email')"> <i class="mdi mdi-email"></i>Email</a></th>
+        <th><a ng-click="Users.setSort('SiteName')"> <i class="mdi mdi-factory"></i>Site</a></th>
+        <th> Edit </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr class="data-table"
+      		ng-repeat="row in Users.users | orderBy:Users.sortField:Users.sortDir"
+      		ng-click="Users.clickEdit(row)"> 
+            <td><a ng-click="Users.clickEdit(row)">{{row.Username}}</a></td>
+            <td>{{row.Role}}</td>
+            <td>{{row.Name}}</td>
+            <td>{{row.Email | limitTo:16}}..</td> 
+
+
+            <!-- <td>{{u.SMS}}</td> -->
+            <td><a ng-click="Users.goSite(row); $event.stopPropagation()"lx-ripple> {{row.SiteName}}</a>
+            <td>
+            	<button class="btn btn--m btn--blue btn--icon" 
+            					ng-click="Users.clickEdit(row); $event.stopPropagation()"
+            					lx-ripple>
+            						<i class="mdi mdi-plus"></i>
+            	</button>
+            </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

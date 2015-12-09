@@ -369,12 +369,8 @@ func getAllowedSites(userID int, role string) []int {
 	query := DB.SQL(`select id from site`)
 
 	switch role {
-	case "Admin":
-	case "Site Manager":
-	case "Worker":
-	case "Floor":
-	case "Service Contractor":
-		query = DB.SQL(`select site_id from user_sites where user_id=$1`, userID)
+	case "Site Manager", "Worker", "Floor", "Service Contractor":
+		query = DB.SQL(`select site_id from user_site where user_id=$1`, userID)
 	}
 
 	err := query.QuerySlice(&Sites)
@@ -383,7 +379,7 @@ func getAllowedSites(userID int, role string) []int {
 		log.Println("Getting user sites", err.Error())
 		return nil
 	}
+	log.Println("Allowed sites =", Sites)
 
-	log.Println("Sites allowed = ", Sites)
 	return Sites
 }

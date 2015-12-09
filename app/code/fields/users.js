@@ -239,6 +239,47 @@ getUserForm = function(autoGenUsername) {
 	}]
 } // getUserForm
 
+getUserViewForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "6"},
+			fields: [
+				{type: 'user.Username'},
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "6"},
+			fields: [
+				{type: 'user.Name'},
+				{type: 'user.Email'}
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: {container: "row", item: "6"},
+			fields: [
+				{type: 'user.Address'},
+				{type: 'user.SMS'},
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "4"},
+			fields: [
+				{type: 'user.Site'},
+				{type: 'user.Skills'},
+				{type: 'user.Role'},
+			]
+		}
+	}]
+} // getUserViewForm
+
 getSkillForm = function(fixedLabels) {
 
 	return [{

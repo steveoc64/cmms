@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/labstack/echo"
 	"gopkg.in/mgutz/dat.v1"
-	"log"
 	"net/http"
 )
 
@@ -66,13 +65,12 @@ func queryMachine(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	log.Println("Sites allowed = ", claim)
-
 	var record []*DBmachine
 	err = DB.SQL(`select m.*,s.name as site_name
 		from machine m
 		left join site s on (s.id=m.site_id)
-		order by lower(m.name)`).QueryStructs(&record)
+		where site_id in ($1)
+		order by lower(m.name)`, claim["Sites"]).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())

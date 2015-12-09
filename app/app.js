@@ -465,7 +465,7 @@ var getMapURI = function(addr) {
 	      	url: '/sitemgr',
 	      	acl: 'Site Manager',
 	      	abstract: true,
-	      	templateUrl: 'html/sitemgr/sitemgr.html',
+	      	templateUrl: 'html/sitemgr/sitemgr.menu.html',
 	      	controller: 'sitemgrCtrl as sitemgr'
 	      })
 		      .state('sitemgr.dashboard',{
@@ -474,6 +474,38 @@ var getMapURI = function(addr) {
 		      	templateUrl: 'html/sitemgr/dashboard.html',
 		      	controller: 'sitemgrDashCtrl as Dashboard',
 		      })
+		      .state('sitemgr.sites',{
+		      	url: '/sites',
+		      	acl: 'Site Manager',
+		      	cache: false,
+		      	templateUrl: 'html/sitemgr/site.list.html',
+		      	controller: 'sitemgrSitesCtrl as Sites',
+		      	resolve: {
+		      		sites: function(DBSite) {
+		      			return DBSite.query()
+		      		}
+		      	}
+		      })
+			      .state('sitemgr.editsite',{
+			      	url: '/site/edit/:id',
+			      	acl: 'Site Manager',
+			      	templateUrl: 'html/sitemgr/site.edit.html',
+			      	controller: 'sitemgrEditSiteCtrl as editSite',
+			      	resolve: {
+			      		site: function(DBSite,$stateParams) {
+			      			return DBSite.get({id: $stateParams.id})
+			      		},
+			      		supplies: function(DBSiteSupplies,$stateParams) {
+			      			return DBSiteSupplies.query({id: $stateParams.id})
+			      		},
+			      		users: function(DBSiteUsers,$stateParams) {
+			      			return DBSiteUsers.query({id: $stateParams.id})
+			      		},
+			      		machines: function(DBSiteMachines, $stateParams) {
+			      			return DBSiteMachines.query({id: $stateParams.id})
+			      		}
+			      	}
+			      })
 		      .state('sitemgr.workorders',{
 		      	url: '/workorders',		
 		      	acl: 'Site Manager',
@@ -484,30 +516,28 @@ var getMapURI = function(addr) {
 		      	url: '/users',
 		      	acl: 'Site Manager',
 		      	templateUrl: 'html/sitemgr/user.list.html',
-		      	controller: 'sitemgrUserCtrl as sitemgrUser',
+		      	controller: 'sitemgrUserCtrl as Users',
+		      	cache: false,
 		      	resolve: {
 		      		users: function(DBUser) {
 		      			return DBUser.query()
-		      		},
-		      		logs: function(DBUserlog) {
-		      			return DBUserlog.query()
 		      		}
 		      	}
 		      })
-		      .state('sitemgr.edituser',{
-		      	url: '/user/edit/:id',
-		      	acl: 'Site Manager',
-		      	templateUrl: 'html/sitemgr/users.edit.html',
-		      	controller: 'sitemgrEditUserCtrl as editUser',
-		      	resolve: {
-		      		user: function(DBUser,$stateParams) {
-		      			return DBUser.get({id: $stateParams.id})
-		      		},
-		      		logs: function(DBUserlog,$stateParams) {
-		      			return DBUserlog.get({id: $stateParams.id})
-		      		}
-		      	}
-		      })
+			      .state('sitemgr.edituser',{
+			      	url: '/user/edit/:id',
+			      	acl: 'Site Manager',
+			      	templateUrl: 'html/sitemgr/users.edit.html',
+			      	controller: 'sitemgrEditUserCtrl as editUser',
+			      	resolve: {
+			      		user: function(DBUser,$stateParams) {
+			      			return DBUser.get({id: $stateParams.id})
+			      		},
+			      		skills: function(DBSkill) {
+			      			return DBSkill.query()
+			      		}
+			      	}
+			      })
 		      .state('sitemgr.equip',{
 		      	url: '/equip',
 		      	acl: 'Site Manager',

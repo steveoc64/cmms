@@ -1,87 +1,93 @@
 ;(function() {
 	'use strict';
 
+	var base = 'sitemgr'
 	var app = angular.module('cmms')
 
-	app.controller('sitemgrSitesCtrl', function($state, sites, Session, LxDialogService, logs){
+	app.controller(base+'SitesCtrl', 
+		['$state','sites','Session','LxDialogService','LxNotificationService',
+		function($state, sites, Session, LxDialogService, LxNotificationService){
 	
 		angular.extend(this, {
 			sites: sites,
 			session: Session,
-			logs: logs,
-			logClass: logClass,
-			getClass: function(s) {
-				if (s.selected) {
-					return "data-table__selectable-row--is-selected"
+			sortField: 'Name',
+			sortDir: false,
+			setSort: function(field) {
+				if (this.sortField == field) {
+					this.sortDir = !this.sortDir
+				}
+				this.sortField = field
+			},		
+			clickEdit: function(row) {
+				$state.go(base+'.editsite',{id: row.ID})
+			},
+			goParent: function(row) {
+				if (row.ParentSite != 0) {
+					$state.go(base+'.editsite',{id: row.ParentSite})
 				}
 			},
-			clickedRow: function(s) {
-				if (!angular.isDefined(s.selected)) {
-					s.selected = false
-				}
-				s.selected = !s.selected
+			getMapURI: function(addr) {
+			  return "https://www.google.com/maps?q="+encodeURIComponent(addr)
 			},
-			clickEdit: function(s) {
-				$state.go('sitemgr.editsite',{id: s.ID})
-			},
-			showLogs: function() {
-				LxDialogService.open('siteLogDialog')
-			},
-			getSelectedLogs: function() {
-				var l = []
-				var vm = this
-				angular.forEach (vm.logs, function(v,k){
-					angular.forEach(vm.sites, function(vv,kk){
-						if (vv.selected && v.RefID == vv.ID) {
-							l.push(v)
-						}
-					})
-				})
-				// l now contains filtered logs
-				return l
-			}
-		})
-	})
 
-	app.controller('sitemgrNewSiteCtrl', function($state,Session,DBSites,LxNotificationService){
-	
-		angular.extend(this, {
-			session: Session,
-			site: new DBSites(),
-			formFields: getSiteForm(),
-			addSite: function() {
-				if (this.form.$valid) {
-					this.site.$insert(function(newsite) {
-						$state.go('sitemgr.sites')
-					})					
-				}
-			},
-			abort: function() {
-				LxNotificationService.warning('New Site - Cancelled')
-				$state.go('sitemgr.sites')
-			}
 		})
-	})
+	}])
 
-	app.controller('sitemgrEditSiteCtrl', function($state,$stateParams,site,logs,Session){
+	app.controller(base+'EditSiteCtrl', 
+		['$state','$stateParams','site','Session','$window','users','$timeout','machines','LxDialogService','supplies',
+		function($state,$stateParams,site,Session,$window,users,$timeout,machines,LxDialogService,supplies){
 	
 		angular.extend(this, {
 			session: Session,
 			site: site,
-			logs: logs,
-			logClass: logClass,
+			users: users,
+			machines: machines,
+			supplies: supplies,
 			formFields: getSiteForm(),		
-			submit: function() {
-				this.site._id = $stateParams.id
-				this.site.$update(function(newsite) {
-					$state.go('sitemgr.sites')
-				})					
+			canEdit: function() {
+				return false
 			},
 			abort: function() {
-				$state.go('sitemgr.sites')
-			}
+				$window.history.go(-1)
+			},
+			goUser: function(row) {
+				$state.go(base+'.edituser',{id: row.ID})
+			},
+			goMachine: function(row) {
+				$state.go(base+'.editmachine', {id: row.ID})
+			},
+			goSite: function(row) {
+				$state.go(base+'.editsite',{id: row.SiteId})
+			},
+			getMachineClass: function(row) {
+				if (row.selected) {
+					return "data-table__selectable-row--is-selected"
+				}
+				switch (row.Status) {
+					case 'Running':
+						return "machine__running"
+						break
+					case 'Needs Attention':
+						return "machine__attention"
+						break
+					case 'Stopped':
+						return "machine__stopped"
+						break
+					case 'Maintenance Pending':
+						return "machine__pending"
+						break
+					case 'New':
+						return "machine__new"
+						break
+				} // switch
+			},
+			getMapURI: function(addr) {
+			  return "https://www.google.com/maps?q="+encodeURIComponent(addr)
+			},
+			
 		})
-	})
 
+	}])
 
 })();

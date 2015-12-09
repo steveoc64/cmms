@@ -1,91 +1,57 @@
 ;(function() {
 	'use strict';
 
+	var base = 'sitemgr'
 	var app = angular.module('cmms')
 
-	app.controller('sitemgrUserCtrl', function($state, users, Session, LxDialogService, logs){
+	app.controller(base+'UserCtrl', 
+		['$state','users','Session','LxDialogService','LxNotificationService',
+		function($state, users, Session, LxDialogService,  LxNotificationService){
 	
 		angular.extend(this, {
 			users: users,
 			session: Session,
-			logs: logs,
-			logClass: logClass,
-			getClass: function(u) {
-				if (u.selected) {
-					return "data-table__selectable-row--is-selected"
+			sortField: 'UserName',
+			sortDir: false,
+			setSort: function(field) {
+				if (this.sortField == field) {
+					this.sortDir = !this.sortDir
 				}
+				this.sortField = field
+			},					
+			clickEdit: function(row) {
+				$state.go(base+'.edituser',{id: row.ID})
 			},
-			clickedRow: function(u) {
-				//console.log('Clicked on',u.ID, '=',u)
-				if (!angular.isDefined(u.selected)) {
-					u.selected = false
-				}
-				u.selected = !u.selected
+			goSite: function(row) {
+				$state.go(base+'.editsite',{id: row.SiteId})
 			},
-			clickEdit: function(u) {
-				$state.go('sitemgr.edituser',{id: u.ID})
-			},
-			showLogs: function() {
-				LxDialogService.open('userLogDialog')
-			},
-			getSelectedLogs: function() {
-				var l = []
-				var vm = this
-				angular.forEach (vm.logs, function(v,k){
-					angular.forEach(vm.users, function(vv,kk){
-						if (vv.selected && v.Ref == vv.ID) {
-							l.push(v)
-						}
-					})
-				})
-				// l now contains filtered logs
-				return l
-			}
 		})
-	})
+	}])
 
-	app.controller('sitemgrNewUserCtrl', function($state,Session,DBUsers,LxNotificationService){
-	
-		console.log('.. sitemgrNewUserCtrl')
 
-		angular.extend(this, {
-			session: Session,
-			user: new DBUsers(),
-			formFields: getUserForm(),
-			addUser: function() {
-				if (this.form.$valid) {
-					this.user.$insert(function(newuser) {
-						$state.go('sitemgr.users')
-					})					
-				}
-			},
-			abort: function() {
-				LxNotificationService.warning('New User - Cancelled')
-				$state.go('sitemgr.users')
-			}
-		})
-	})
-
-	app.controller('sitemgrEditUserCtrl', function($state,$stateParams,user,logs,Session){
-	
-		console.log('.. sitemgrEditUserCtrl', user, $stateParams,$stateParams.id)
+	app.controller(base+'EditUserCtrl', 
+		['$state','$stateParams','user','Session','$window','LxDialogService',
+		function($state,$stateParams,user,Session,$window,LxDialogService){
 
 		angular.extend(this, {
 			session: Session,
 			user: user,
-			logs: logs,
-			logClass: logClass,
-			formFields: getUserForm(),		
+			formFields: getUserViewForm(),		
+			canEdit: function() {
+				return false
+			},
 			submit: function() {
 				this.user._id = $stateParams.id
 				this.user.$update(function(newuser) {
-					$state.go('sitemgr.users')
+					$window.history.go(-1)
 				})					
 			},
 			abort: function() {
-				$state.go('sitemgr.users')
+				$window.history.go(-1)
+//				$state.go(base+'.users')
 			}
 		})
-	})
+
+	}])
 
 })();
