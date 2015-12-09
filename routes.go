@@ -311,13 +311,13 @@ func login(c *echo.Context) error {
 		log.Println("BAD_REQUEST:", err.Error())
 	}
 
-	var res loginResponse
+	res := &loginResponse{}
 	err = DB.
 		Select("u.id,u.username,u.name,u.role,u.site_id,s.name as sitename").
 		From(`users u
 			left join site s on (s.id = u.site_id)`).
 		Where("u.username = $1 and passwd = $2", l.Username, l.Passwd).
-		QueryStruct(&res)
+		QueryStruct(res)
 
 	if err != nil {
 		log.Println("Login Failed:", err.Error())
@@ -328,9 +328,12 @@ func login(c *echo.Context) error {
 			"ID":       float64(res.ID),
 			"Username": res.Username,
 		}
+
 		sysLog(0, "Login", "U", res.ID, "Login OK", c, claim)
 
-		tokenString, err := generateToken(res.ID, res.Role, l.Username)
+		Sites := getAllowedSites(res.ID, res.Role)
+
+		tokenString, err := generateToken(res.ID, res.Role, l.Username, Sites)
 		if err != nil {
 			return c.String(http.StatusInternalServerError, err.Error())
 		}
@@ -352,4 +355,35 @@ func logout(c *echo.Context) error {
 	log.Println("Logout:", UserID, Username)
 	sysLog(0, "Logout", "U", UserID, "Logout", c, claim)
 	return c.String(http.StatusOK, "bye")
+}
+
+type DBuser_site struct {
+	UserId int    `db:"user_id"`
+	SiteId int    `db:"site_id"`
+	Role   string `db:"role"`
+}
+
+func getAllowedSites(userID int, role string) []int {
+
+	var Sites []int
+	query := DB.SQL(`select id from site`)
+
+	switch role {
+	case "Admin":
+	case "Site Manager":
+	case "Worker":
+	case "Floor":
+	case "Service Contractor":
+		query = DB.SQL(`select site_id from user_sites where user_id=$1`, userID)
+	}
+
+	err := query.QuerySlice(&Sites)
+
+	if err != nil {
+		log.Println("Getting user sites", err.Error())
+		return nil
+	}
+
+	log.Println("Sites allowed = ", Sites)
+	return Sites
 }

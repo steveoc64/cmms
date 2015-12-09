@@ -3,40 +3,12 @@ package main
 import (
 	"github.com/labstack/echo"
 	"gopkg.in/mgutz/dat.v1"
+	"log"
 	"net/http"
 )
 
 ///////////////////////////////////////////////////////////////////////
 // Machine Maintenance
-/*
-
-create table machine (
-	id serial not null primary key,
-	site_id int not null,
-	name text not null,
-	descr text not null,
-	make text not null,
-	model text not null,
-	serialnum text not null,
-	is_running boolean not null,
-	stopped_at timestamp,
-	started_at timestamp,
-	picture text not null
-);
-
-drop table if exists component;
-create table component (
-	machine_id int not null,
-	id serial not null,
-	site_id int not null,
-	name text not null,
-	descr text not null,
-	make text not null,
-	model text not null,
-	picture text not null
-);
-
-*/
 
 type DBmachine struct {
 	ID        int          `db:"id"`
@@ -89,10 +61,12 @@ type DBmachineReq struct {
 
 func queryMachine(c *echo.Context) error {
 
-	_, err := securityCheck(c, "readMachine")
+	claim, err := securityCheck(c, "readMachine")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
+
+	log.Println("Sites allowed = ", claim)
 
 	var record []*DBmachine
 	err = DB.SQL(`select m.*,s.name as site_name
