@@ -441,6 +441,20 @@ var getMapURI = function(addr) {
                 }
               }
             })
+            .state('admin.editvendorprice',{
+              url: '/vendor/editprice/:id',
+              acl: 'Admin',
+              templateUrl: 'html/admin/vendor.edit.price.html',
+              controller: 'adminEditVendorPriceCtrl as editVendorPrice',
+              resolve: {
+                vendor: function(DBVendor,$stateParams) {
+                  return DBVendor.get({id: $stateParams.id})
+                },
+                parts: function(DBPart,$stateParams) {
+                	return DBPart.query()
+                },
+              }
+            })
             .state('admin.newvendor',{
               url: '/newvendor',
               acl: 'Admin',

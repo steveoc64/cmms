@@ -27,8 +27,6 @@
   Vendor Details
 </div>
 
-<h3 class="main-section__title">Vendor Details</h3>
-
 <form name="editVendor.form" ng-submit="editVendor.submit()">
 
 <formly-form model="editVendor.vendor" fields="editVendor.formFields">
@@ -53,6 +51,12 @@
   <lx-tabs>
     <lx-tab heading="Parts">
       <div class="data-table-container">
+        <button type="button" 
+                class="btn btn--l btn--teal btn--raised" 
+                ng-click="editVendor.editPriceList()"
+                lx-ripple>
+                  Bulk Edit PriceList
+        </button>
         <table class="data-table">
           <thead>
             <tr>

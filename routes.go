@@ -79,6 +79,7 @@ func _initRoutes() {
 	e.Get("/vendor/part/:id", queryVendorParts)
 	e.Get("/vendor/:id", getVendor)
 	e.Post("/vendor", newVendor)
+	e.Post("/vendor/prices/:id", newVendorPrices)
 	e.Put("/vendor/:id", saveVendor)
 	e.Delete("/vendor/:id", deleteVendor)
 

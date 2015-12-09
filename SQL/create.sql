@@ -195,7 +195,7 @@ drop table if exists vendor_price;
 create table vendor_price (
 	part_id int not null,
 	vendor_id int not null,
-	datefrom timestamp not null,
+	datefrom timestamp not null default localtimestamp,
 	price numeric(12,2) not null,
 	min_qty numeric(12,2) not null,
 	notes text not null default ''	

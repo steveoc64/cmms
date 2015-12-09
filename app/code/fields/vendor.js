@@ -160,4 +160,37 @@ getVendorForm = function(isNew) {
   }]
 } // getVendorForm
 
+getVendorPriceForm = function(isNew) {
+
+  return [{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "6"},
+      fields: [
+        {type: 'vendor.Name', templateOptions: {disabled: true}},
+        {type: 'vendor.Rating', templateOptions: {disabled: true}},
+      ]
+    }
+  },{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "6"},
+      fields: [
+        {type: 'vendor.Phone', templateOptions: {disabled: true}},
+        {type: 'vendor.Fax', templateOptions: {disabled: true}},
+      ]
+    }
+  },{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "4"},
+      fields: [
+        {type: 'vendor.ContactName', templateOptions: {disabled: true}},
+        {type: 'vendor.ContactEmail', templateOptions: {disabled: true}},
+        {type: 'vendor.OrdersEmail', templateOptions: {disabled: true}},
+      ]
+    }
+  }]
+} // getVendorPriceForm
+
 })();

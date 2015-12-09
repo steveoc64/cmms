@@ -5,15 +5,14 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'VendorCtrl', 
-		['$state','vendors','Session','LxDialogService','logs','LxNotificationService','parts',
-		function($state, vendors, Session, LxDialogService, logs,LxNotificationService,parts){
+		['$state','vendors','Session','LxDialogService','logs','LxNotificationService',
+		function($state, vendors, Session, LxDialogService, logs,LxNotificationService){
 	
 		angular.extend(this, {
 			vendors: vendors,
 			session: Session,
 			logs: logs,
 			logClass: logClass,
-			parts: parts,
 			sortField: 'Name',
 			sortDir: false,
 			setSort: function(field) {
@@ -104,13 +103,14 @@
 	}])
 
 	app.controller(base+'EditVendorCtrl', 
-		['$state','$stateParams','vendor','logs','Session','$window','LxDialogService',
-		function($state,$stateParams,vendor,logs,Session,$window,LxDialogService){
+		['$state','$stateParams','vendor','logs','Session','$window','LxDialogService','parts',
+		function($state,$stateParams,vendor,logs,Session,$window,LxDialogService,parts){
 
 		angular.extend(this, {
 			session: Session,
 			vendor: vendor,
 			logs: logs,
+			parts: parts,
 			formFields: getVendorForm(),		
 			logClass: logClass,
       showChange: function(c) {
@@ -127,6 +127,9 @@
 			},
 			abort: function() {
 				$window.history.go(-1)
+			},
+			editPriceList: function() {
+				$state.go(base+'.editvendorprice',{id: $stateParams.id})
 			},
 		})
 	}])

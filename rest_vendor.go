@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/labstack/echo"
+	"log"
 	"net/http"
 )
 
@@ -116,6 +118,86 @@ func getVendor(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 	return c.JSON(http.StatusOK, record)
+}
+
+type NewItemPrice struct {
+	PartID     int
+	NewPrice   float64
+	MinQty     float64
+	VendorCode string
+}
+
+type NewPriceList struct {
+	VendorID      int
+	NewPriceArray []NewItemPrice
+}
+
+// Receive a new PriceList from the front end, and dynamically
+// Create the XRef records from vendor to part
+func newVendorPrices(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "writeVendor")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	log.Println("State param of", id)
+
+	// Bind the input params to our structure
+	record := &NewPriceList{}
+	if err := c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	// place
+	partVendor := &DBpartVendor{}
+	vendorPrice := &DBvendorPrice{}
+
+	for k, v := range record.NewPriceArray {
+		log.Println("Item", k, "Part ID:", v.PartID, "Price:", v.NewPrice, "Qty:", v.MinQty, "Code:", v.VendorCode)
+
+		// Update or Insert part_vendor
+		partVendor.PartId = v.PartID
+		partVendor.VendorId = id
+		partVendor.VendorCode = v.VendorCode
+		partVendor.LatestPrice = v.NewPrice
+		_, err := DB.
+			Upsert("part_vendor").
+			Columns("part_id", "vendor_id", "vendor_code", "latest_price").
+			Record(partVendor).
+			Where("part_id=$1 and vendor_id=$2", v.PartID, id).
+			Exec()
+		if err != nil {
+			log.Println("PartVendor:", err.Error())
+		}
+
+		// Create a new vendor_price record
+		vendorPrice.VendorId = id
+		vendorPrice.PartId = v.PartID
+		vendorPrice.Price = v.NewPrice
+		vendorPrice.MinQty = v.MinQty
+		_, err = DB.
+			InsertInto("vendor_price").
+			Whitelist("vendor_id", "part_id", "price", "min_qty").
+			Record(vendorPrice).
+			Exec()
+
+		if err != nil {
+			log.Println("VendorPrice:", err.Error())
+		}
+
+		// Update the part to have a new 'latest price'
+		_, err = DB.SQL(`update part set latest_price=$1 where id=$2`, v.NewPrice, v.PartID).Exec()
+		if err != nil {
+			log.Println("Part:", err.Error())
+		}
+
+		// Now log the creation of the new price
+		sysLog(1, "Vendor", "p", id, fmt.Sprintf("New Price $%0.2f for part %d", v.NewPrice, v.PartID), c, claim)
+	}
+
+	return c.String(http.StatusCreated, "Added Prices")
 }
 
 // Create a new vendor

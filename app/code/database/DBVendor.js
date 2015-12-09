@@ -17,6 +17,11 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBVendorPrices', function($resource,ServerName,Session){
+		return $resource(ServerName+'/vendor/prices/:id',{id: '@_id'},{
+  		'insert':  {method:'POST'}
+		})
+	})
 
 
 })();
