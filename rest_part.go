@@ -78,10 +78,12 @@ func queryParts(c *echo.Context) error {
 // Get a list of components / tools that use this part
 func queryPartComponents(c *echo.Context) error {
 
-	_, err := securityCheck(c, "readPart")
+	claim, err := securityCheck(c, "readPart")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
+
+	Sites := getClaimedSites(claim)
 
 	var cp []*DBpartComponents
 
@@ -94,7 +96,9 @@ func queryPartComponents(c *echo.Context) error {
 		left join component c on (c.id=x.component_id)
 		left join machine m on (m.id=c.machine_id)
 		left join site s on (s.id=c.site_id)
-		where x.part_id=$1`, partID).QueryStructs(&cp)
+		where x.part_id=$1
+		and c.site_id in $2`,
+		partID, Sites).QueryStructs(&cp)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())

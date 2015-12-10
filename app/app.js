@@ -598,12 +598,6 @@ var getMapURI = function(addr) {
 			      		}
 			      	}
 			      })
-		      .state('sitemgr.parts',{
-		      	url: '/parts',
-		      	acl: 'Site Manager',
-		      	templateUrl: 'html/sitemgr/part.list.html',
-		      	controller: 'sitemgrPartsCtrl as sitemgrParts',
-		      })
 		      .state('sitemgr.reports',{
 		      	url: '/reports',
 		      	acl: 'Site Manager',

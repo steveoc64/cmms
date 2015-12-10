@@ -12,7 +12,7 @@
         <th><a ng-click="Sites.setSort('Name')"> Name</a></th>
         <th><a ng-click="Sites.setSort('ParentSiteName')"> Parent</a></th>
         <th><a ng-click="Sites.setSort('Address')"> Address</a></th>
-        <th> Edit </th>
+        <th><a ng-click="Sites.setSort('Phone')"> Phone/Fax</a></th>
       </tr>
     </thead>
 
@@ -27,13 +27,7 @@
               <i class="mdi mdi-map"></i><p>
               {{row.Address}}
             </a></td>
-            <td>
-            	<button class="btn btn--m btn--blue btn--icon" 
-            					ng-click="Sites.clickEdit(row); $event.stopPropagation()"
-            					lx-ripple>
-            						<i class="mdi mdi-plus"></i>
-            	</button>
-            </td>
+            <td>{{row.Phone}}<br>{{row.Fax}}</td>
       </tr>
     </tbody>
   </table>
