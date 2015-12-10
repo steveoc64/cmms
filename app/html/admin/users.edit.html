@@ -57,6 +57,19 @@
     </lx-tab>
 
     <lx-tab heading="Documents">
+      <div flex-container="row" flex-gutter="24">
+          <div flex-item="10">
+            <lx-file-input label="Upload New Document ..." change="editUser.upload(e)"></lx-file-input>
+          </div>
+          <div flex-item="2">
+            <div id="upload-progress">{{editUser.uploadProgress}}</div>          
+          </div>
+      </div>
+<!--
+    <div class="button" ngf-select="editUser.upload($file)">
+      <i class="mdi mdi-upload">Upload New Document</i><div id="upload-progress"> {{editUser.uploadProgress}}</div>
+    </div>
+    -->
     </lx-tab>
 
     <lx-tab heading="WorkOrders">

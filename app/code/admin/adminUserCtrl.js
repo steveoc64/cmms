@@ -132,13 +132,14 @@
 	}])
 
 	app.controller(base+'EditUserCtrl', 
-		['$state','$stateParams','user','logs','Session','$window','LxDialogService',
-		function($state,$stateParams,user,logs,Session,$window,LxDialogService){
+		['$state','$stateParams','user','logs','Session','$window','LxDialogService','Upload','LxProgressService',
+		function($state,$stateParams,user,logs,Session,$window,LxDialogService,Upload,LxProgressService){
 
 		angular.extend(this, {
 			session: Session,
 			user: user,
 			logs: logs,
+			uploadProgress: '',
 			formFields: getUserForm(false),		
 			logClass: logClass,
       showChange: function(c) {
@@ -156,7 +157,32 @@
 			abort: function() {
 				$window.history.go(-1)
 //				$state.go(base+'.users')
-			}
+			},
+   // upload on file select or drop
+    	upload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+    		console.log("Uploading '",file,"'")
+        Upload.upload({
+            url: 'upload',
+            data: {file: file}
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Done !'
+        	}
+        }, function (resp) {
+            console.log('Error status: ' + resp.status);
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+            /*
+            if (evt.config.data.file) {
+            	console.log(this.uploadProgress + ' ' + evt.config.data.file.name);
+          	}
+          	*/
+        })
+      },
 		})
 
 	}])

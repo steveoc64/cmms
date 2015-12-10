@@ -34,6 +34,7 @@
     "EpicEditor": "~0.2.3",
     "angular-epiceditor": "e154/angular-epiceditor#~1.0.1",
     "ng-ckeditor": "~0.2.1",
-    "ngWig": "ng-wig#~2.3.3"
+    "ngWig": "ng-wig#~2.3.3",
+    "ng-file-upload": "~10.1.9"
   }
 }

@@ -22,7 +22,7 @@ var getMapURI = function(addr) {
 	'use strict';
 
 	//console.log('Init app')
-	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage','ngWig'])
+	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage','ngWig','ngFileUpload'])
 		.service('Session', session)
     .constant('ServerName', '')
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	

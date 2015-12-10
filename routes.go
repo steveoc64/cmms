@@ -7,8 +7,10 @@ import (
 	"github.com/thoas/stats"
 	//	"gopkg.in/mgutz/dat.v1"
 	"errors"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -30,6 +32,7 @@ func _initRoutes() {
 	e.Get("/logout", logout)
 
 	e.Post("/syslog", querySyslog)
+	e.Post("/upload", uploadDocument)
 
 	e.Get("/users", queryUsers)
 	e.Get("/users/skill/:id", queryUsersWithSkill)
@@ -384,4 +387,54 @@ func getAllowedSites(userID int, role string) []int {
 	log.Println("Allowed sites =", Sites)
 
 	return Sites
+}
+
+func uploadDocument(c *echo.Context) error {
+	req := c.Request()
+	req.ParseMultipartForm(16 << 20) // Max memory 16 MiB
+
+	// Read files
+	files := req.MultipartForm.File["file"]
+	path := ""
+	//log.Println("files =", files)
+	for _, f := range files {
+		// Source file
+		//log.Println("f is", f)
+		src, err := f.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
+
+		// While filename exists, append a version number to it
+		path = "uploads/" + f.Filename
+		gotFile := false
+		tryagain := 1
+
+		for !gotFile {
+			log.Println("Try with path=", path)
+			dst, err := os.OpenFile(path, os.O_EXCL|os.O_RDWR|os.O_CREATE, 0666)
+			if err != nil {
+				if os.IsExist(err) {
+					log.Println(path, "already exists")
+					path = fmt.Sprintf("uploads/%s.%d", f.Filename, tryagain)
+					tryagain++
+					if tryagain > 99 {
+						log.Println("Tryagain count exceeded, terminating")
+						return c.String(http.StatusBadRequest, path)
+					}
+				}
+			} else {
+				log.Println("Created file", path)
+				gotFile = true
+				defer dst.Close()
+
+				if _, err = io.Copy(dst, src); err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	return c.String(http.StatusOK, path)
 }
