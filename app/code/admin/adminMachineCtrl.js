@@ -164,6 +164,22 @@
 			},
 			goPart: function(row) {
 				$state.go(base+'.editpart',{id: row.ID})
+			},
+			toolWidth: function() {
+				if (components.length > 0) {
+					var percentage = 100 / (components.length + 1)
+					return "" + percentage + "%"
+				}
+				return "0"
+			},
+			// Note that offsets are in reverse, as we run from right to left in the display
+			toolOffset: function(index) {				
+				if (components.length > 0) {
+					var useIndex = components.length - index -1
+					var percentage = useIndex * (100 / components.length)
+					return "" + percentage + "%"
+				}
+				return "0"
 			}
 		})
 

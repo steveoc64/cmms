@@ -145,6 +145,23 @@
 			goPart: function(row) {
 				$state.go(base+'.editpart',{id: row.PartID})
 			},
+			partWidth: function() {
+				if (parts.length > 0) {
+					var percentage = 100 / (parts.length + 1)
+					return "" + percentage + "%"
+				}
+				return "0"
+			},
+			// Note that offsets are in reverse, as we run from right to left in the display
+			partOffset: function(index) {				
+				if (parts.length > 0) {
+					var useIndex = parts.length - index -1
+					var percentage = useIndex * (100 / parts.length)
+					return "" + percentage + "%"
+				}
+				return "0"
+			}
+
 		})
 
 	}])

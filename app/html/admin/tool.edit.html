@@ -23,8 +23,20 @@
 
 <div class="main-section__title">
   <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-settings"></i>
-  Tool Details
+  Tool Details - {{editTool.component.Name}} {{editTool.component.StockCode}}
 </div>
+
+<!-- Component SVG representation -->
+<div>
+  <svg class="svg-panel">
+    <svg ng-repeat="row in editTool.parts" ng-attr-x="{{editTool.partOffset($index)}}" ng-click="editTool.goPart(row)">
+      <rect class="part-svg" ng-attr-width="{{editTool.partWidth()}}"/>
+      <text class="label-svg" transform="translate(20) rotate(40 0,0) translate(0 20)">{{row.StockCode}}<tspan x="16" y="16">{{row.Name}}</tspan></text>
+    </svg>
+  </svg>
+</div>
+
+<!-- End Component SVG representation -->
 
 <form name="editTool.form" ng-submit="editTool.submit()">
 
