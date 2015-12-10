@@ -165,6 +165,15 @@
 			goPart: function(row) {
 				$state.go(base+'.editpart',{id: row.ID})
 			},
+			getToolArray: function(row) {
+				// dynamically create an array of the same tool
+				var tools = []
+				tools.push(row)
+				for (var i = 2; i < row.Qty; i++) {
+					tools.push(angular.copy(row))
+				}
+				return tools
+			},
 			toolWidth: function() {
 				if (components.length > 0) {
 					var percentage = 100 / (components.length + 1)

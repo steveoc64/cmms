@@ -30,9 +30,15 @@
 <div>
   <svg class="svg-panel">
     <rect class="machine-svg"/>  
-    <svg ng-repeat="row in editMachine.components" ng-attr-x="{{editMachine.toolOffset($index)}}" ng-click="editMachine.goTool(row)">
-      <rect class="tool-svg" ng-attr-width="{{editMachine.toolWidth()}}"/>
-      <text class="label-svg" transform="translate(20) rotate(40 0,0) translate(0 20)">{{row.StockCode}}<tspan x="16" y="16">{{row.Name}}</tspan></text>
+    <svg ng-repeat="row in editMachine.components" 
+         ng-attr-x="{{editMachine.toolOffset($index)}}" 
+         ng-click="editMachine.goTool(row)">
+      <rect class="tool-svg" 
+            ng-attr-width="{{editMachine.toolWidth()}}" />
+      <text ng-if="row.Qty > 1" transform="translate(40 140)">x{{row.Qty}}</text>
+      <text class="label-svg" 
+            transform="translate(20) rotate(40 0,0) translate(0 20)">{{row.StockCode}}<tspan x="16" y="16">{{row.Name}}</tspan>
+      </text>
     </svg>
   </svg>
 </div>
