@@ -538,12 +538,66 @@ var getMapURI = function(addr) {
 			      		}
 			      	}
 			      })
-		      .state('sitemgr.equip',{
-		      	url: '/equip',
+		      .state('sitemgr.machines',{
+		      	url: '/machines',
 		      	acl: 'Site Manager',
-		      	templateUrl: 'html/sitemgr/equip.html',
-		      	controller: 'sitemgrEquipCtrl as sitemgrEquip',
+		      	cache: false,
+		      	templateUrl: 'html/sitemgr/machine.list.html',
+		      	controller: 'sitemgrMachineCtrl as Machines',
+		      	resolve: {
+		      		machines: function(DBMachine) {
+		      			return DBMachine.query()
+		      		},
+		      	}
 		      })
+			      .state('sitemgr.editmachine',{
+			      	url: '/machine/edit/:id',
+			      	acl: 'Site Manager',
+			      	templateUrl: 'html/sitemgr/machine.edit.html',
+			      	controller: 'sitemgrEditMachineCtrl as editMachine',
+			      	resolve: {
+			      		machine: function(DBMachine,$stateParams) {
+			      			return DBMachine.get({id: $stateParams.id})
+			      		},
+			      		components: function(DBMachineComponents,$stateParams) {
+			      			return DBMachineComponents.query({id: $stateParams.id})
+			      		},
+			      		parts: function(DBMachineParts,$stateParams) {
+			      			return DBMachineParts.query({id: $stateParams.id})
+			      		},
+			      	}
+			      })
+			      .state('sitemgr.edittool',{
+			      	url: '/tool/edit/:id',
+			      	acl: 'Site Manager',
+			      	templateUrl: 'html/sitemgr/tool.edit.html',
+			      	controller: 'sitemgrEditToolCtrl as editTool',
+			      	resolve: {
+			      		component: function(DBComponent,$stateParams) {
+			      			return DBComponent.get({id: $stateParams.id})
+			      		},
+			      		parts: function(DBComponentParts,$stateParams) {
+			      			return DBComponentParts.query({id: $stateParams.id})
+			      		}
+			      	}
+			      })
+			      .state('sitemgr.editpart',{
+			      	url: '/part/edit/:id',
+			      	acl: 'Site Manager',
+			      	templateUrl: 'html/sitemgr/part.edit.html',
+			      	controller: 'sitemgrEditPartCtrl as editPart',
+			      	resolve: {
+			      		part: function(DBPart,$stateParams) {
+			      			return DBPart.get({id: $stateParams.id})
+			      		},
+			      		vendors: function(DBPartVendors,$stateParams) {
+			      			return DBPartVendors.query({id: $stateParams.id})
+			      		},
+			      		components: function(DBPartComponents,$stateParams) {
+			      			return DBPartComponents.query({id: $stateParams.id})
+			      		}
+			      	}
+			      })
 		      .state('sitemgr.parts',{
 		      	url: '/parts',
 		      	acl: 'Site Manager',

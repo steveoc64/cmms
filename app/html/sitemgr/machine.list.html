@@ -1,0 +1,42 @@
+<div class="data-table-container">
+  <header class="data-table-header">
+    <div class="data-table-header__label">
+      <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-keg"></i>
+      <span class="fs-title">Machine List</span>
+      <lx-search-filter model="searchMachine"></lx-search-filter>
+    </div>
+  </header>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th><a ng-click="Machines.setSort('Name')"> Name</a></th>
+        <th><a ng-click="Machines.setSort('Status')"> Status</a></th>
+        <th><a ng-click="Machines.setSort('Descr')"> Description</a></th>
+        <th><a ng-click="Machines.setSort('Serialnum')"> Serial #</a></th>
+        <th><a ng-click="Machines.setSort('SiteName')"> Site</a></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr class="data-table"
+      		ng-class="Machines.getClass(row)"
+      		ng-repeat="row in Machines.machines | filter:searchMachine | orderBy:Machines.sortField:Machines.sortDir"
+      		ng-click="Machines.clickedRow(row)"> 
+            <td><p><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
+            <td>{{row.Status}}</td>
+            <td><a ng-click="Machines.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
+            <td><a ng-click="Machines.clickEdit(row)">{{row.Serialnum}}</a></td>
+            <td><a ng-click="Machines.goSite(row)">{{row.SiteName}}</a></td>
+            <td>
+              <button class="btn btn--m btn--blue btn--icon" 
+                      ng-click="Machines.clickEdit(row); $event.stopPropagation()"
+                      lx-ripple>
+                        <i class="mdi mdi-plus"></i>
+              </button>
+            </td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
