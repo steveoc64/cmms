@@ -174,6 +174,7 @@
         	}
         }, function (resp) {
             console.log('Error status: ' + resp.status);
+		    		vm.uploadProgress = 'Error !' + resp.status
         }, function (evt) {
             vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
             /*
