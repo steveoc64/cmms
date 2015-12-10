@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/thoas/stats"
 	//	"gopkg.in/mgutz/dat.v1"
+	"errors"
 	"log"
 	"net/http"
 	"reflect"
@@ -366,14 +367,15 @@ type DBuser_site struct {
 func getAllowedSites(userID int, role string) []int {
 
 	var Sites []int
-	query := DB.SQL(`select id from site`)
+
+	err := errors.New("Sites")
 
 	switch role {
+	case "Admin":
+		err = DB.SQL(`select id from site`).QuerySlice(&Sites)
 	case "Site Manager", "Worker", "Floor", "Service Contractor":
-		query = DB.SQL(`select site_id from user_site where user_id=$1`, userID)
+		err = DB.SQL(`select site_id from user_site where user_id=$1`, userID).QuerySlice(&Sites)
 	}
-
-	err := query.QuerySlice(&Sites)
 
 	if err != nil {
 		log.Println("Getting user sites", err.Error())

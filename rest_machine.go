@@ -65,12 +65,14 @@ func queryMachine(c *echo.Context) error {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
+	sites := getClaimedSites(claim)
+
 	var record []*DBmachine
 	err = DB.SQL(`select m.*,s.name as site_name
 		from machine m
 		left join site s on (s.id=m.site_id)
-		where site_id in ($1)
-		order by lower(m.name)`, claim["Sites"]).QueryStructs(&record)
+		where site_id in $1
+		order by lower(m.name)`, sites).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
