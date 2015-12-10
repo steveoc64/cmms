@@ -135,6 +135,8 @@
 		['$state','$stateParams','user','logs','Session','$window','LxDialogService','Upload','LxProgressService',
 		function($state,$stateParams,user,logs,Session,$window,LxDialogService,Upload,LxProgressService){
 
+ 		LxProgressService.circular.hide()
+
 		angular.extend(this, {
 			session: Session,
 			user: user,
@@ -173,10 +175,10 @@
 		    		vm.uploadProgress = 'Done !'
         	}
         }, function (resp) {
-            console.log('Error status: ' + resp.status);
-		    		vm.uploadProgress = 'Error !' + resp.status
+            console.log('Error status: ' + resp.status + ' ' + resp.data);
+		    		vm.uploadProgress = 'Error ! ' + resp.data
 		    		LxProgressService.circular.hide()
-		    		
+
         }, function (evt) {
             vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
             /*
