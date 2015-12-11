@@ -611,15 +611,77 @@ var getMapURI = function(addr) {
 	      .state('worker',{
 	      	url: '/worker',
 	      	acl: 'Worker',
-	      	template: 'You are now in the worker area<br><a ui-sref="home">Home</a><br><a ui-sref="worker.timesheet">TimeSheets</a><hr><ui-view>Summary of Worker Details Here</ui-view>',
-	      	controller: 'workerCtrl as worker',
+	      	abstract: true,
+	      	templateUrl: 'html/worker/worker.menu.html',
+	      	controller: 'workerCtrl as worker'
 	      })
-		      .state('worker.timesheet',{
-		      	url: '/timesheet',
+		      .state('worker.machines',{
+		      	url: '/machines',
 		      	acl: 'Worker',
-		      	template: 'Lil bit of timesheet stuff here, in place of where the worker details were <a ui-sref="worker">Close</a>',
-		      	controller: 'workerCtrl as worker',
+		      	cache: false,
+		      	templateUrl: 'html/worker/machine.list.html',
+		      	controller: 'workerMachineCtrl as Machines',
+		      	resolve: {
+		      		machines: function(DBMachine) {
+		      			return DBMachine.query()
+		      		},
+		      	}
 		      })
+			      .state('worker.editmachine',{
+			      	url: '/machine/edit/:id',
+			      	acl: 'Worker',
+			      	templateUrl: 'html/worker/machine.edit.html',
+			      	controller: 'workerEditMachineCtrl as editMachine',
+			      	resolve: {
+			      		machine: function(DBMachine,$stateParams) {
+			      			return DBMachine.get({id: $stateParams.id})
+			      		},
+			      		components: function(DBMachineComponents,$stateParams) {
+			      			return DBMachineComponents.query({id: $stateParams.id})
+			      		},
+			      		parts: function(DBMachineParts,$stateParams) {
+			      			return DBMachineParts.query({id: $stateParams.id})
+			      		},
+			      	}
+			      })
+			      .state('worker.edittool',{
+			      	url: '/tool/edit/:id',
+			      	acl: 'Worker',
+			      	templateUrl: 'html/worker/tool.edit.html',
+			      	controller: 'workerEditToolCtrl as editTool',
+			      	resolve: {
+			      		component: function(DBComponent,$stateParams) {
+			      			return DBComponent.get({id: $stateParams.id})
+			      		},
+			      		parts: function(DBComponentParts,$stateParams) {
+			      			return DBComponentParts.query({id: $stateParams.id})
+			      		}
+			      	}
+			      })
+			      .state('worker.editpart',{
+			      	url: '/part/edit/:id',
+			      	acl: 'Worker',
+			      	templateUrl: 'html/worker/part.edit.html',
+			      	controller: 'workerEditPartCtrl as editPart',
+			      	resolve: {
+			      		part: function(DBPart,$stateParams) {
+			      			return DBPart.get({id: $stateParams.id})
+			      		},
+			      		vendors: function(DBPartVendors,$stateParams) {
+			      			return DBPartVendors.query({id: $stateParams.id})
+			      		},
+			      		components: function(DBPartComponents,$stateParams) {
+			      			return DBPartComponents.query({id: $stateParams.id})
+			      		}
+			      	}
+			      })
+		      .state('worker.reports',{
+		      	url: '/reports',
+		      	acl: 'Worker',
+		      	templateUrl: 'html/worker/reports.html',
+		      	controller: 'workerReportsCtrl as workerReports',
+		      })
+
 	  }
 
 	  function session() {

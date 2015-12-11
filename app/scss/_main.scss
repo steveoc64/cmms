@@ -11,6 +11,13 @@
 
 
 // Main section
+.main-section-full {
+	@include media-query(lap-and-up) {
+		margin: 0 0 0 0;
+  	@include linear-gradient(#ffffff, $palette_16);
+	}
+}
+
 .main-section {
 	@include media-query(lap-and-up) {
 		margin: 0 0 0 $sidebar_margin;

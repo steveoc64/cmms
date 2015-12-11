@@ -1,0 +1,79 @@
+<div class="main-section__title">
+  <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-settings"></i>
+  Tool Details - {{editTool.component.Name}} {{editTool.component.StockCode}}
+</div>
+
+<!-- Component SVG representation -->
+<div>
+  <svg class="svg-panel">
+    <svg ng-repeat="row in editTool.parts" ng-attr-x="{{editTool.partOffset($index)}}" ng-click="editTool.goPart(row)">
+      <rect class="part-svg" ng-attr-width="{{editTool.partWidth()}}"/>
+      <text class="label-svg" transform="translate(20) rotate(40 0,0) translate(0 20)">{{row.StockCode}}<tspan x="16" y="16">{{row.Name}}</tspan></text>
+    </svg>
+  </svg>
+</div>
+
+<!-- End Component SVG representation -->
+
+<form name="editTool.form" ng-submit="editTool.submit()">
+
+<formly-form model="editTool.component" fields="editTool.formFields">
+
+<div flex-container="row" flex-align="end" item="1">
+    <div flex-item>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editTool.abort()" lx-ripple>Back</button>
+    </div>
+    <div flex-item ng-if="editTool.canEdit()">
+      <button type="submit" 
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Save Details
+      </button>
+    </div>
+</div>
+
+</formly-form>
+</form>
+
+<div class="card">
+  <lx-tabs>
+    <lx-tab heading="Parts">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> StockCode</th>
+              <th> Description</th>
+              <th> Qty</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editTool.parts">
+                  <td><a ng-click="editTool.goPart(row)">{{row.StockCode}}</a></td>
+                  <td><a ng-click="editTool.goPart(row)">{{row.Name}}</a></td>
+                  <td>{{row.Qty}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="Notes">
+      <div class="card">
+        <textarea ng-wig="editTool.component.Notes"></textarea>
+      </div>   
+    </lx-tab>
+
+    <lx-tab heading="Documents">
+    </lx-tab>
+
+    <lx-tab heading="StockTake">
+    </lx-tab>
+
+    <lx-tab heading="WorkOrders">
+    </lx-tab>
+
+  </lx-tabs>
+</div>
+

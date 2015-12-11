@@ -13,7 +13,7 @@
 				$state.go('sitemgr.dashboard')
 				break
 			case 'Worker':
-				$state.go('worker.dashboard')
+				$state.go('worker.machines')
 				break
 			case 'Vendor':
 				$state.go('vendor.dashboard')

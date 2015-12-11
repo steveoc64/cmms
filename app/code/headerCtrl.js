@@ -13,6 +13,12 @@
 					$state.go('home')
 					delete $localStorage.token
 					delete $localStorage.session
+				},
+				goHome: function() {
+					console.log('clicked on header bar')
+					if (Session.loggedIn) {
+						$state.go('landing')
+					}
 				}
 					  			
 

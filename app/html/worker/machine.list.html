@@ -1,0 +1,62 @@
+<div class="data-table-container">
+  <header class="data-table-header">
+    <div class="data-table-header__label">
+      <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-keg"></i>
+      <span class="fs-title">Machine List</span>
+      <lx-search-filter model="searchMachine"></lx-search-filter>
+    </div>
+  </header>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th><a ng-click="Machines.setSort('Name')"> Name</a></th>
+        <th><a ng-click="Machines.setSort('Status')"> Status</a></th>
+        <th><a ng-click="Machines.setSort('Descr')"> Description</a></th>
+        <th><a ng-click="Machines.setSort('Serialnum')"> Serial #</a></th>
+        <th><a ng-click="Machines.setSort('SiteName')"> Site</a></th>
+        <th> Details</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr class="data-table"
+      		ng-class="Machines.getClass(row)"
+      		ng-repeat="row in Machines.machines | filter:searchMachine | orderBy:Machines.sortField:Machines.sortDir"
+      		ng-click="Machines.clickedRow(row)"> 
+<!-- Machine SVG representation -->
+<!--
+<td colspan="5">
+  <svg class="svg-panel">
+    <rect class="machine-svg"/>  
+    <svg ng-repeat="row in editMachine.components" 
+         ng-attr-x="{{editMachine.toolOffset($index)}}" 
+         ng-click="editMachine.goTool(row)">
+      <rect class="tool-svg" 
+            ng-attr-width="{{editMachine.toolWidth()}}" />
+      <text ng-if="row.Qty > 1" transform="translate(40 140)">x{{row.Qty}}</text>
+      <text class="label-svg" 
+            transform="translate(20) rotate(40 0,0) translate(0 20)">{{row.StockCode}}<tspan x="16" y="16">{{row.Name}}</tspan>
+      </text>
+    </svg>
+  </svg>
+</td></tr><tr>
+-->
+<!-- End machine SVG representation -->
+            <td><p><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
+            <td>{{row.Status}}</td>
+            <td><a ng-click="Machines.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
+            <td><a ng-click="Machines.clickEdit(row)">{{row.Serialnum}}</a></td>
+            <td>{{row.SiteName}}</td>
+            <td>
+              <button class="btn btn--m btn--blue btn--icon" 
+                      ng-click="Machines.clickEdit(row); $event.stopPropagation()"
+                      lx-ripple>
+                        <i class="mdi mdi-plus"></i>
+              </button>
+            </td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>

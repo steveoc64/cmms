@@ -577,6 +577,6 @@ func serveDoc(c *echo.Context) error {
 		return c.String(http.StatusNotFound, "no file")
 	} else {
 		log.Println("Sending file", doc.Path, "as", doc.Filename)
-		return c.File(doc.Path, doc.Filename, true)
+		return c.File(doc.Path, doc.Filename, false)
 	}
 }
