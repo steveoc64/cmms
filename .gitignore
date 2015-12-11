@@ -15,6 +15,7 @@ build
 .sass-cache
 keys
 uploads
+generated
 
 # Architecture specific extensions/prefixes
 *.[568vq]
