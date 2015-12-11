@@ -132,8 +132,8 @@
 	}])
 
 	app.controller(base+'EditUserCtrl', 
-		['$state','$stateParams','user','logs','Session','$window','LxDialogService','Upload','LxProgressService',
-		function($state,$stateParams,user,logs,Session,$window,LxDialogService,Upload,LxProgressService){
+		['$state','$stateParams','user','logs','Session','$window','LxDialogService','Upload','LxProgressService','docs','DBDocServer',
+		function($state,$stateParams,user,logs,Session,$window,LxDialogService,Upload,LxProgressService,docs,DBDocServer){
 
  		LxProgressService.circular.hide()
 
@@ -142,6 +142,8 @@
 			user: user,
 			logs: logs,
 			uploadProgress: '',
+			docs: docs,
+			doc: '',
 			formFields: getUserForm(false),		
 			logClass: logClass,
       showChange: function(c) {
@@ -158,21 +160,32 @@
 			},
 			abort: function() {
 				$window.history.go(-1)
-//				$state.go(base+'.users')
 			},
-   // upload on file select or drop
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+				console.log('adoc = ',adoc)
+			},
     	upload: function (file) {
     		LxProgressService.circular.show('green','#upload-progress')
     		var vm = this
-    		console.log("Uploading '",file,"'")
         Upload.upload({
             url: 'upload',
-            data: {file: file}
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "user",
+            	ref_id: $stateParams.id,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
         }).then(function (resp) {
         	if (resp.config.data.file) {
             console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
 		    		LxProgressService.circular.hide()
-		    		vm.uploadProgress = 'Done !'
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
         	}
         }, function (resp) {
             console.log('Error status: ' + resp.status + ' ' + resp.data);

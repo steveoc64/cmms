@@ -82,18 +82,24 @@ create table doc (
 	id serial not null primary key,
 	name text not null,
 	filename text not null,
+	path text not null,
 	worker boolean not null,
 	sitemgr boolean not null,
 	contractor boolean not null,
-	type char(3) not null,
+	type text not null,
 	ref_id int not null,	
-	doc_format int not null,
-	notes text not null default ''	
+	doc_format int not null default 0,
+	notes text not null default '',	
+	user_id int not null default 0,
+	filesize int not null default 0,
+	latest_rev int not null default 0,
+	created timestamp not null default localtimestamp
 );
+create unique index doc_path_idx on doc (path);
 
 drop table if exists doc_type;
 create table doc_type (
-	id char(3) not null primary key,
+	id text not null primary key,
 	name text not null
 );
 
@@ -103,7 +109,10 @@ create table doc_rev (
 	id serial not null,
 	revdate timestamp not null default localtimestamp,
 	descr text not null,
-	filename text not null
+	filename text not null,
+	path text not null,
+	filesize int not null default 0,
+	user_id int not null default 0
 );
 create unique index doc_rev_idx on doc_rev (doc_id,id);
 

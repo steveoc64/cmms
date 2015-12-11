@@ -187,6 +187,7 @@ func _initSecurityRules() {
 	SecurityRules["write"] = []string{"Admin", "Site Manager"}
 	SecurityRules["new"] = []string{"Admin", "Site Manager"}
 	SecurityRules["delete"] = "Admin"
+	SecurityRules["upload"] = []string{"Admin", "Site Manager", "Service Contractor"}
 
 	SecurityRules["readUser"] = []string{"Admin", "Worker", "Site Manager"}
 	SecurityRules["writeUser"] = []string{"Admin", "Site Manager"}

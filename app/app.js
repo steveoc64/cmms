@@ -168,7 +168,10 @@ var getMapURI = function(addr) {
 			      		},
 			      		skills: function(DBSkill) {
 			      			return DBSkill.query()
-			      		},	      		
+			      		},	    
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'user', id: $stateParams.id})
+			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				UserID: $stateParams.id
