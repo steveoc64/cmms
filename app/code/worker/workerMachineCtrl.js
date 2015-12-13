@@ -63,6 +63,8 @@
 			parts: parts,
 			components: components,
 			formFields: getMachineForm(),	
+			haltFields: getMachineHaltForm(),
+			alertFields: getMachineAlertForm(),			
 			canEdit: function() {
 				return false
 			},
@@ -102,6 +104,17 @@
 					return "" + percentage + "%"
 				}
 				return "0"
+			},
+			raiseIssue: function() {
+				LxDialogService.open('raiseIssueDialog')
+			},
+			submitAlert: function() {
+				console.log('Submitting an Alert on the machine', this.alert)
+				LxDialogService.close('raiseIssueDialog')
+			},
+			submitHalt: function() {
+				console.log('Submitting a Halt on the machine', this.halt)
+				LxDialogService.close('raiseIssueDialog')
 			}
 		})
 

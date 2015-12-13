@@ -28,6 +28,28 @@ getComponentFields = function() {
 			}
 		}	
 	},{
+		name: 'component.AlertDescr',
+		extends: 'lx-input',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'Descr',
+			templateOptions: {
+				type: 'text',
+				label: 'Condition of the Tool that needs attention',
+			}
+		}	
+	},{
+		name: 'component.HaltDescr',
+		extends: 'lx-input',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'Descr',
+			templateOptions: {
+				type: 'text',
+				label: 'Reason for Halting the machine because of this tool',
+			}
+		}	
+	},{
 		name: 'component.Qty',
 		extends: 'lx-number',
 		wrapper: 'lx-wrapper-errors',
@@ -214,6 +236,32 @@ getComponentForm = function() {
 			fields: [
 				{type: 'component.Make'},
 				{type: 'component.Model'},
+			]
+		}
+	}] // end fields
+}
+
+getComponentAlertForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "12"},
+			fields: [
+				{type: 'component.AlertDescr'},
+			]
+		}
+	}] // end fields
+}
+
+getComponentHaltForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "12"},
+			fields: [
+				{type: 'component.HaltDescr'},
 			]
 		}
 	}] // end fields

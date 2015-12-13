@@ -1,3 +1,41 @@
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='raiseIssueDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Raise Issue with Tool
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+    </div>
+    <div class="dialog__content">   
+      <lx-tabs links-tc="light" links-bgc="blue-500" indicator="yellow-500" no-divider="true" layout="inline">
+        <lx-tab heading="Needs Attention">
+          <div class="p++">
+            <form name="editTool.alertForm" ng-submit="editTool.submitAlert()">          
+              <formly-form model="editTool.alert" fields="editTool.alertFields"></formly-form>
+              <div class="dialog__actions">
+                <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+                <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Alert</button>
+              </div>    
+          </form>
+          </div>
+        </lx-tab>
+        <lx-tab heading="Halt">
+          <div class="p++">
+            <form name="editTool.haltForm" ng-submit="editTool.submitHalt()">          
+              <formly-form model="editTool.halt" fields="editTool.haltFields"></formly-form>
+              <div class="dialog__actions">
+                <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+                <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Halt</button>
+              </div>    
+              </form>
+          </div>
+        </lx-tab>
+      </lx-tabs>
+    </div>
+</lx-dialog>
+
+
 <div class="main-section__title">
   <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-settings"></i>
   Tool Details - {{editTool.component.Name}} {{editTool.component.StockCode}}
@@ -17,7 +55,6 @@
 
 <form name="editTool.form" ng-submit="editTool.submit()">
 
-<formly-form model="editTool.component" fields="editTool.formFields">
 
 <div flex-container="row" flex-align="end" item="1">
     <div flex-item>
@@ -30,8 +67,17 @@
                 Save Details
       </button>
     </div>
+    <div flex-item>
+      <button type="button" 
+              class="btn btn--l btn--orange btn--raised" 
+              ng-click="editTool.raiseIssue()"
+              lx-ripple>
+                Raise Issue for this Tool
+      </button>
+    </div>    
 </div>
 
+<formly-form model="editTool.component" fields="editTool.formFields">
 </formly-form>
 </form>
 

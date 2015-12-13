@@ -13,6 +13,8 @@
 			component: component,
 			parts: parts,
 			formFields: getComponentForm(),		
+			alertFields: getComponentAlertForm(),
+			haltFields: getComponentHaltForm(),
 			canEdit: function() {
 				return false
 			},
@@ -46,7 +48,19 @@
 					return "" + percentage + "%"
 				}
 				return "0"
+			},
+			raiseIssue: function() {
+				LxDialogService.open('raiseIssueDialog')
+			},
+			submitAlert: function() {
+				console.log('Submitting an Alert on the tool', this.alert)
+				LxDialogService.close('raiseIssueDialog')
+			},
+			submitHalt: function() {
+				console.log('Submitting a Halt on the tool', this.halt)
+				LxDialogService.close('raiseIssueDialog')
 			}
+
 
 		})
 

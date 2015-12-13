@@ -28,6 +28,28 @@ getMachineFields = function() {
 			}
 		}	
 	},{
+		name: 'machine.AlertDescr',
+		extends: 'lx-input',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'AlertDescr',
+			templateOptions: {
+				type: 'text',
+				label: 'Description of Alert',
+			}
+		}	
+	},{
+		name: 'machine.HaltDescr',
+		extends: 'lx-input',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'HaltDescr',
+			templateOptions: {
+				type: 'text',
+				label: 'Reason for Halting the Machine',
+			}
+		}	
+	},{
 		name: 'machine.Make',
 		extends: 'lx-input',
 		wrapper: 'lx-wrapper-errors',
@@ -223,6 +245,52 @@ getMachineForm = function() {
 				{type: 'machine.StartedAt'},
 				{type: 'machine.AlertAt'},
 				{type: 'machine.StoppedAt'},
+			]
+		}
+	}] // end fields
+
+}
+
+getMachineAlertForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "12"},
+			fields: [
+				{type: 'machine.AlertDescr'},
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "6"},
+			fields: [
+				{type: 'machine.Make'},
+				{type: 'machine.Model'},
+			]
+		}
+	}] // end fields
+
+}
+
+getMachineHaltForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "12"},
+			fields: [
+				{type: 'machine.HaltDescr'},
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "6"},
+			fields: [
+				{type: 'machine.Make'},
+				{type: 'machine.Model'},
 			]
 		}
 	}] // end fields

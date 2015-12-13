@@ -215,18 +215,18 @@ drop table if exists event;
 create table event (
 	id serial not null primary key,
 	site_id int not null,
-	type char(3) not null,
+	type text not null,
 	ref_id int not null,
 	priority int not null,
 	startdate timestamp not null default localtimestamp,
-	parent_event int not null,
+	parent_event int not null default 0,
 	created_by int not null,
-	allocated_by int not null,
-	allocated_to int not null,
+	allocated_by int not null default 0,
+	allocated_to int not null default 0,
 	completed timestamp,
-	labour_cost money not null,
-	material_cost money not null,
-	other_cost money not null,
+	labour_cost money not null default 0.0,
+	material_cost money not null default 0.0,
+	other_cost money not null default 0.0,
 	notes text not null default ''	
 );
 create index event_site_idx on event (site_id,startdate);
