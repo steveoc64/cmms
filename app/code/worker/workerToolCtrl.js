@@ -5,16 +5,17 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','Session','$window','component','$timeout','parts','LxDialogService',
-		function($state,$stateParams,Session,$window,component,$timeout,parts,LxDialogService){
+		['$state','$stateParams','Session','$window','component','$timeout','parts','LxDialogService','DBRaiseToolEvent',
+		function($state,$stateParams,Session,$window,component,$timeout,parts,LxDialogService,DBRaiseToolEvent){
 
 		angular.extend(this, {
 			session: Session,
 			component: component,
 			parts: parts,
-			formFields: getComponentForm(),		
+			formFields: getComponentWorkerForm(),		
 			alertFields: getComponentAlertForm(),
 			haltFields: getComponentHaltForm(),
+			eventHandler: DBRaiseToolEvent,		
 			canEdit: function() {
 				return false
 			},
@@ -53,11 +54,27 @@
 				LxDialogService.open('raiseIssueDialog')
 			},
 			submitAlert: function() {
+				console.log('Submitting an Alert on the tool', this.alertEvent)
+				this.eventHandler.raise({
+					tool: $stateParams.id,
+					action: 'Alert',
+					descr: this.eventFields.AlertDescr
+				})
+				LxDialogService.close('raiseIssueDialog')
+
 				console.log('Submitting an Alert on the tool', this.alert)
 				LxDialogService.close('raiseIssueDialog')
 			},
 			submitHalt: function() {
-				console.log('Submitting a Halt on the tool', this.halt)
+				console.log('Submitting an Alert on the tool', this.alertEvent)
+				this.eventHandler.raise({
+					tool: $stateParams.id,
+					action: 'Halt',
+					descr: this.eventFields.HaltDescr
+				})
+				LxDialogService.close('raiseIssueDialog')
+
+				console.log('Submitting an Alert on the tool', this.alert)
 				LxDialogService.close('raiseIssueDialog')
 			}
 

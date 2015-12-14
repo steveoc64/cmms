@@ -32,7 +32,7 @@ getComponentFields = function() {
 		extends: 'lx-input',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
-			key: 'Descr',
+			key: 'AlertDescr',
 			templateOptions: {
 				type: 'text',
 				label: 'Condition of the Tool that needs attention',
@@ -43,7 +43,7 @@ getComponentFields = function() {
 		extends: 'lx-input',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
-			key: 'Descr',
+			key: 'HaltDescr',
 			templateOptions: {
 				type: 'text',
 				label: 'Reason for Halting the machine because of this tool',
@@ -236,6 +236,29 @@ getComponentForm = function() {
 			fields: [
 				{type: 'component.Make'},
 				{type: 'component.Model'},
+			]
+		}
+	}] // end fields
+}
+
+getComponentWorkerForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: {container: "row", item: "3"},
+			fields: [
+				{type: 'component.Machine'},
+				{type: 'component.Position'},
+				{type: 'component.Qty'},
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: {container: "row", item: "8"},
+			fields: [
+				{type: 'component.Name'},
 			]
 		}
 	}] // end fields

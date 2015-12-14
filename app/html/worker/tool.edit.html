@@ -12,7 +12,7 @@
         <lx-tab heading="Needs Attention">
           <div class="p++">
             <form name="editTool.alertForm" ng-submit="editTool.submitAlert()">          
-              <formly-form model="editTool.alert" fields="editTool.alertFields"></formly-form>
+              <formly-form model="editTool.eventFields" fields="editTool.alertFields"></formly-form>
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
                 <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Alert</button>
@@ -23,7 +23,7 @@
         <lx-tab heading="Halt">
           <div class="p++">
             <form name="editTool.haltForm" ng-submit="editTool.submitHalt()">          
-              <formly-form model="editTool.halt" fields="editTool.haltFields"></formly-form>
+              <formly-form model="editTool.eventFields" fields="editTool.haltFields"></formly-form>
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
                 <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Halt</button>

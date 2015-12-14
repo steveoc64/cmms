@@ -12,7 +12,7 @@
         <lx-tab heading="Needs Attention">
           <div class="p++">
             <form name="editMachine.alertForm" ng-submit="editMachine.submitAlert()">          
-              <formly-form model="editMachine.alert" fields="editMachine.alertFields"></formly-form>
+              <formly-form model="editMachine.eventFields" fields="editMachine.alertFields"></formly-form>
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
                 <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Alert</button>
@@ -23,7 +23,7 @@
         <lx-tab heading="Halt">
           <div class="p++">
             <form name="editMachine.haltForm" ng-submit="editMachine.submitHalt()">          
-              <formly-form model="editMachine.halt" fields="editMachine.haltFields"></formly-form>
+              <formly-form model="editMachine.eventFields" fields="editMachine.haltFields"></formly-form>
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
                 <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Halt</button>
@@ -73,7 +73,7 @@
                 Save Details
       </button>
     </div>
-    <div flex-item>
+    <div flex-item ng-if="editMachine.machine.IsRunning">
       <button type="button" 
               class="btn btn--l btn--orange btn--raised" 
               ng-click="editMachine.raiseIssue()"

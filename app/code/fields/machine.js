@@ -251,6 +251,39 @@ getMachineForm = function() {
 
 }
 
+getMachineWorkerForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "6"},
+			fields: [
+				{type: 'machine.Name'},
+				{type: 'machine.Site'},			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: {container: "row", item: "8"},
+			fields: [
+				{type: 'machine.Status'},
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: {container: "row", item: "3"},
+			fields: [
+				{type: 'machine.IsRunning'},
+				{type: 'machine.StartedAt'},
+				{type: 'machine.AlertAt'},
+				{type: 'machine.StoppedAt'},
+			]
+		}
+	}] // end fields
+
+}
+
 getMachineAlertForm = function() {
 
 	return [{
@@ -259,15 +292,6 @@ getMachineAlertForm = function() {
 			flex: { container: "row", item: "12"},
 			fields: [
 				{type: 'machine.AlertDescr'},
-			]
-		}
-	},{
-		type: 'lx-flex',
-		templateOptions: {
-			flex: { container: "row", item: "6"},
-			fields: [
-				{type: 'machine.Make'},
-				{type: 'machine.Model'},
 			]
 		}
 	}] // end fields
@@ -282,15 +306,6 @@ getMachineHaltForm = function() {
 			flex: { container: "row", item: "12"},
 			fields: [
 				{type: 'machine.HaltDescr'},
-			]
-		}
-	},{
-		type: 'lx-flex',
-		templateOptions: {
-			flex: { container: "row", item: "6"},
-			fields: [
-				{type: 'machine.Make'},
-				{type: 'machine.Model'},
 			]
 		}
 	}] // end fields

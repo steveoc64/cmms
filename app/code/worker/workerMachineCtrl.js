@@ -54,17 +54,18 @@
 	}])
 
 	app.controller(base+'EditMachineCtrl', 
-		['$state','$stateParams','machine','Session','$window','components','$timeout','LxDialogService','parts',
-		function($state,$stateParams,machine,Session,$window,components,$timeout,LxDialogService,parts){
+		['$state','$stateParams','machine','Session','$window','components','$timeout','LxDialogService','parts','DBRaiseMachineEvent',
+		function($state,$stateParams,machine,Session,$window,components,$timeout,LxDialogService,parts,DBRaiseMachineEvent){
 
 		angular.extend(this, {
 			session: Session,
 			machine: machine,
 			parts: parts,
 			components: components,
-			formFields: getMachineForm(),	
+			formFields: getMachineWorkerForm(),	
 			haltFields: getMachineHaltForm(),
-			alertFields: getMachineAlertForm(),			
+			alertFields: getMachineAlertForm(),	
+			eventHandler: DBRaiseMachineEvent,		
 			canEdit: function() {
 				return false
 			},
@@ -109,11 +110,21 @@
 				LxDialogService.open('raiseIssueDialog')
 			},
 			submitAlert: function() {
-				console.log('Submitting an Alert on the machine', this.alert)
+				console.log('Submitting an Alert on the machine', this.alertEvent)
+				this.eventHandler.raise({
+					machine: $stateParams.id,
+					action: 'Alert',
+					descr: this.eventFields.AlertDescr
+				})
 				LxDialogService.close('raiseIssueDialog')
 			},
 			submitHalt: function() {
-				console.log('Submitting a Halt on the machine', this.halt)
+				console.log('Submitting a Halt on the machine', this.haltEvent)
+				this.eventHandler.raise({
+					machine: $stateParams.id,
+					action: 'Halt',
+					descr: this.eventFields.HaltDescr
+				})
 				LxDialogService.close('raiseIssueDialog')
 			}
 		})

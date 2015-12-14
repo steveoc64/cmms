@@ -89,6 +89,8 @@ func _initRoutes() {
 	e.Put("/vendor/:id", saveVendor)
 	e.Delete("/vendor/:id", deleteVendor)
 
+	e.Post("/event/raise/machine", raiseEventMachine)
+	e.Post("/event/raise/tool", raiseEventTool)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

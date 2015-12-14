@@ -234,7 +234,7 @@ create index event_allocation_idx on event (allocated_to,id);
 
 drop table if exists event_type;
 create table event_type (
-	id char(3) not null primary key,
+	id text not null primary key,
 	name text not null
 );
 
