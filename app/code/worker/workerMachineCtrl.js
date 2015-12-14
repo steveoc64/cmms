@@ -9,6 +9,9 @@
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine){
 
 			var vm = this
+			// Subscribe to machine state changes
+			socket.ws.Subscribe
+
 			socket.ws.onMessage(function(msg){
 				console.log("Rx Msg",msg)
 				if (msg.data == "machine") {

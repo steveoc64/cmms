@@ -154,7 +154,7 @@ func raiseEventTool(c *echo.Context) error {
 
 	UID, Username := getClaimedUser(claim)
 
-	// Create 2 event records
+	// Create 2 event records - one for the tool, and one for the machine (with the tool event as the parent)
 	evt := &DBevent{
 		SiteId:    siteId,
 		Type:      fmt.Sprintf("Tool: %s", req.Action),
@@ -172,8 +172,9 @@ func raiseEventTool(c *echo.Context) error {
 	evt.RefId = machineId
 	evt.Type = fmt.Sprintf("Machine: %s", req.Action)
 	evt.Notes = fmt.Sprintf("%s on Tool %s", req.Action, toolName)
+	evt.ParentEvent = evt.ID
 	DB.InsertInto("event").
-		Whitelist("site_id", "type", "ref_id", "priority", "created_by", "notes").
+		Whitelist("site_id", "type", "ref_id", "priority", "created_by", "notes", "parent_event").
 		Record(evt).
 		Returning("id").
 		QueryScalar(&evt.ID)

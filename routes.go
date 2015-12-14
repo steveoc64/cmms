@@ -102,12 +102,23 @@ func _initRoutes() {
 
 var subscribers []*websocket.Conn
 
+func showSubscriberPool(header string) {
+
+	fmt.Println("==================================")
+	fmt.Println(header)
+	for i, ws := range subscribers {
+		fmt.Printf("  %d:", i+1)
+		fmt.Println(ws.Request().RemoteAddr)
+	}
+	fmt.Println("==================================")
+}
+
 func webSocket(c *echo.Context) error {
 
 	ws := c.Socket()
 	msg := ""
 	subscribers = append(subscribers, ws)
-	fmt.Println("Subscriber pool grows to = ", subscribers)
+	showSubscriberPool("Pool Grows To:")
 	for {
 		if err := websocket.Message.Receive(ws, &msg); err != nil {
 			return c.String(http.StatusOK, "Rx ws")
@@ -117,10 +128,16 @@ func webSocket(c *echo.Context) error {
 }
 
 func publishAll(msg string) {
-	fmt.Println("*** msg", msg, "to all subs ***")
-	fmt.Println("There are ", len(subscribers), "subs to be spoken to")
-	for _, wss := range subscribers {
-		websocket.Message.Send(wss, msg)
+	//fmt.Println("*** msg", msg, "to all subs ***")
+	//fmt.Println("There are ", len(subscribers), "subs to be spoken to")
+	for i, wss := range subscribers {
+		err := websocket.Message.Send(wss, msg)
+		if err != nil {
+			//log.Println("Writing to connection", wss, "got error", err.Error(), "Removing connection from pool")
+			// remove this connection from the ppool
+			subscribers = append(subscribers[:i], subscribers[i+1:]...)
+			showSubscriberPool("Pool Shrinks To:")
+		}
 	}
 }
 
@@ -235,6 +252,11 @@ func sysLogUpdate(status int, t string, reftype string, ref int, descr string, c
 		fa := afterValues.Field(i).Interface()
 		switch reflect.TypeOf(fb).Kind() {
 		case reflect.String, reflect.Int, reflect.Float64:
+			if fa != fb {
+				BeforeString += fmt.Sprintln(tt.Name, ":", fb)
+				AfterString += fmt.Sprintln(tt.Name, ":", fa)
+			}
+		case reflect.Bool:
 			if fa != fb {
 				BeforeString += fmt.Sprintln(tt.Name, ":", fb)
 				AfterString += fmt.Sprintln(tt.Name, ":", fa)

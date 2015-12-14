@@ -2,11 +2,11 @@
 	'use strict';
 
 	angular.module('cmms').controller('workerCtrl',
-	 function(){
-	
+	 ['socket',function(socket){
+
+		// This gets us subscribed to the socket service	
 		return {
-			someVar: 123
 		}	
-	})
+	}])
 
 })();

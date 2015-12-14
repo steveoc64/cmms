@@ -44,14 +44,14 @@ var getMapURI = function(addr) {
 			    }
 			  };
 			})
-
-
-		angular.module('cmms').factory('socket', function ($websocket) {
-			var dataStream = $websocket('ws://localhost:8066/ws')
-			return {
-				ws: dataStream
+			.service('socket', ['$websocket','$location',function($websocket,$location) {
+				var uri = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
+				var dataStream = $websocket(uri)
+				return {
+					ws: dataStream
+				}
 			}
-		})
+			])
 
   	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $localStorageProvider) {
 

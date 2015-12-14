@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('cmms').controller('adminCtrl', 
-		['Session',
-		function(Session){
+		['Session','socket',
+		function(Session,socket){
 	
 		angular.extend(this, {
 			session: Session
