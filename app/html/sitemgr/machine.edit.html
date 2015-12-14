@@ -6,7 +6,7 @@
 <!-- Machine SVG representation -->
 <div>
   <svg class="svg-panel">
-    <rect class="machine-svg"/>  
+    <rect ng-class="editMachine.getSVGClass()"/>  
     <svg ng-repeat="row in editMachine.components" 
          ng-attr-x="{{editMachine.toolOffset($index)}}" 
          ng-click="editMachine.goTool(row)">

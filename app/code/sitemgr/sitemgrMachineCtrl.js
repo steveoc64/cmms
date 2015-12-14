@@ -63,6 +63,18 @@
 			parts: parts,
 			components: components,
 			formFields: getMachineForm(),	
+			getSVGClass: function() {
+				switch (machine.Status) {
+					case 'Stopped':
+						return "machine-svg-stopped"
+					case 'Needs Attention':
+						return "machine-svg-attn"
+					case 'Maintenance Pending':
+						return "machine-svg-pending"
+					default: 
+						return "machine-svg"
+				}
+			},			
 			canEdit: function() {
 				return false
 			},

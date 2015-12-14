@@ -138,6 +138,18 @@
 			components: components,
 			formFields: getMachineForm(),		
 			logClass: logClass,
+			getSVGClass: function() {
+				switch (machine.Status) {
+					case 'Stopped':
+						return "machine-svg-stopped"
+					case 'Needs Attention':
+						return "machine-svg-attn"
+					case 'Maintenance Pending':
+						return "machine-svg-pending"
+					default: 
+						return "machine-svg"
+				}
+			},
 			submit: function() {
 				this.machine._id = $stateParams.id				
 				if (angular.isDefined(this.machine.Site) && angular.isDefined(this.machine.Site.ID)) {

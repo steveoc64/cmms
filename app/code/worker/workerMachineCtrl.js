@@ -66,6 +66,18 @@
 			haltFields: getMachineHaltForm(),
 			alertFields: getMachineAlertForm(),	
 			eventHandler: DBRaiseMachineEvent,		
+			getSVGClass: function() {
+				switch (machine.Status) {
+					case 'Stopped':
+						return "machine-svg-stopped"
+					case 'Needs Attention':
+						return "machine-svg-attn"
+					case 'Maintenance Pending':
+						return "machine-svg-pending"
+					default: 
+						return "machine-svg"
+				}
+			},			
 			canEdit: function() {
 				return false
 			},
@@ -110,7 +122,6 @@
 				LxDialogService.open('raiseIssueDialog')
 			},
 			submitAlert: function() {
-				console.log('Submitting an Alert on the machine', this.alertEvent)
 				this.eventHandler.raise({
 					machine: $stateParams.id,
 					action: 'Alert',
@@ -119,7 +130,6 @@
 				LxDialogService.close('raiseIssueDialog')
 			},
 			submitHalt: function() {
-				console.log('Submitting a Halt on the machine', this.haltEvent)
 				this.eventHandler.raise({
 					machine: $stateParams.id,
 					action: 'Halt',

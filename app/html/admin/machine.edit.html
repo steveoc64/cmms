@@ -29,7 +29,7 @@
 <!-- Machine SVG representation -->
 <div>
   <svg class="svg-panel" xmlns="http://www.w3.org/2000/svg">
-    <rect class="machine-svg"/>  
+    <rect ng-class="editMachine.getSVGClass()"/>  
     <svg ng-repeat="row in editMachine.components" 
          ng-attr-x="{{editMachine.toolOffset($index)}}" 
          ng-click="editMachine.goTool(row)">

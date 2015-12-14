@@ -169,6 +169,16 @@ getMachineFields = function() {
 			}]
 		}	
 	},{
+		name: 'machine.SiteName',
+		extends: 'lx-input',
+		defaultOptions: {
+			key: 'SiteName',
+			templateOptions: {
+				type: 'text',
+				disabled: true
+			}
+		}
+	},{
 		name: 'machine.Site',
 		extends: 'lx-select',
 		defaultOptions: {
@@ -259,7 +269,8 @@ getMachineWorkerForm = function() {
 			flex: { container: "row", item: "6"},
 			fields: [
 				{type: 'machine.Name'},
-				{type: 'machine.Site'},			]
+				{type: 'machine.SiteName'},			
+			]
 		}
 	},{
 		type: 'lx-flex',
