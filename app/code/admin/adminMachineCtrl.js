@@ -5,9 +5,17 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'MachineCtrl', 
-		['$scope','$state','machines','Session','LxDialogService','logs','LxNotificationService',
-		function($scope,$state, machines, Session, LxDialogService, logs,LxNotificationService){
+		['$scope','$state','machines','Session','LxDialogService','logs','LxNotificationService','socket','DBMachine',
+		function($scope,$state, machines, Session, LxDialogService, logs,LxNotificationService,socket,DBMachine){
 	
+			var vm = this
+			socket.ws.onMessage(function(msg){
+				console.log("Rx Msg",msg)
+				if (msg.data == "machine") {
+					vm.machines = DBMachine.query()					
+				}
+			})
+
 		angular.extend(this, {
 			machines: machines,
 			session: Session,

@@ -7,6 +7,7 @@ import (
 	"github.com/thoas/stats"
 	//	"gopkg.in/mgutz/dat.v1"
 	"errors"
+	"golang.org/x/net/websocket"
 	"io"
 	"log"
 	"net/http"
@@ -91,6 +92,36 @@ func _initRoutes() {
 
 	e.Post("/event/raise/machine", raiseEventMachine)
 	e.Post("/event/raise/tool", raiseEventTool)
+
+	// Add a websocket handler
+	e.WebSocket("/ws", webSocket)
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// WebSocket handler
+
+var subscribers []*websocket.Conn
+
+func webSocket(c *echo.Context) error {
+
+	ws := c.Socket()
+	msg := ""
+	subscribers = append(subscribers, ws)
+	fmt.Println("Subscriber pool grows to = ", subscribers)
+	for {
+		if err := websocket.Message.Receive(ws, &msg); err != nil {
+			return c.String(http.StatusOK, "Rx ws")
+		}
+		fmt.Println(msg)
+	}
+}
+
+func publishAll(msg string) {
+	fmt.Println("*** msg", msg, "to all subs ***")
+	fmt.Println("There are ", len(subscribers), "subs to be spoken to")
+	for _, wss := range subscribers {
+		websocket.Message.Send(wss, msg)
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

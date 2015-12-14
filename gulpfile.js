@@ -28,6 +28,7 @@ var paths = {
   'bower_components/ng-file-upload/ng-file-upload.min.js',
   'bower_components/lumx/dist/lumx.min.js',
   'bower_components/angular-formly-templates-lumx/dist/formlyLumx.js',
+  'bower_components/angular-websocket/dist/angular-websocket.min.js',
   ],
   lumX_JS: [
  	'bower_components/jquery/dist/jquery.js',
@@ -46,6 +47,7 @@ var paths = {
   'bower_components/lumx/dist/lumx.js',
   'bower_components/angular-formly-templates-lumx/dist/formlyLumx.js',
 //  'bower_components/ng-ckeditor/libs/ckeditor/ckeditor.js',
+  'bower_components/angular-websocket/dist/angular-websocket.js',
   'bower_components/ngWig/dist/ng-wig.js',
   ],
   // These files are for your app's JavaScript

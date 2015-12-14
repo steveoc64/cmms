@@ -22,7 +22,7 @@ var getMapURI = function(addr) {
 	'use strict';
 
 	//console.log('Init app')
-	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage','ngWig','ngFileUpload'])
+	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage','ngWig','ngFileUpload','ngWebSocket'])
 		.service('Session', session)
     .constant('ServerName', '')
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	
@@ -36,14 +36,22 @@ var getMapURI = function(addr) {
 			      ngModel.$parsers.push(function(value) {
 			      	console.log('from number',value,'to string',''+value)
 			        return '' + value;
-			      });
+			      })
 			      ngModel.$formatters.push(function(value) {
 			      	console.log('from string',value,'to number')
 			        return parseFloat(value, 10);
-			      });
+			      })
 			    }
 			  };
 			})
+
+
+		angular.module('cmms').factory('socket', function ($websocket) {
+			var dataStream = $websocket('ws://localhost:8066/ws')
+			return {
+				ws: dataStream
+			}
+		})
 
   	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $localStorageProvider) {
 

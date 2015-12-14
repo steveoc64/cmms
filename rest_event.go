@@ -112,6 +112,7 @@ func raiseEventMachine(c *echo.Context) error {
 	}
 
 	log.Println("Raising Event", evt.ID, evt, "User:", Username)
+	publishAll("machine")
 	return c.String(http.StatusOK, "Event Raised on the Machine")
 }
 
@@ -200,5 +201,7 @@ func raiseEventTool(c *echo.Context) error {
 	}
 
 	log.Println("Raising Tool Event", evt.ID, evt, "User:", Username)
+	publishAll("tool")
+
 	return c.String(http.StatusOK, "Event Raised on the Tool & Machine")
 }
