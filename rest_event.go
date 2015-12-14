@@ -201,7 +201,7 @@ func raiseEventTool(c *echo.Context) error {
 	}
 
 	log.Println("Raising Tool Event", evt.ID, evt, "User:", Username)
-	publishAll("tool")
+	publishAll("machine")
 
 	return c.String(http.StatusOK, "Event Raised on the Tool & Machine")
 }
