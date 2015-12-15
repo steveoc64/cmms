@@ -120,6 +120,8 @@ func queryToolEvents(c *echo.Context) error {
 		and ref_id=$1
 		order by startdate desc`, id).QueryStructs(&record)
 
+	log.Println("Completed tool event query", len(record))
+
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}

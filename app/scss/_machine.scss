@@ -5,23 +5,31 @@
   border: 2px;
   stroke: $black;
 }
-.svg-panel-attn {
+
+.svg-tool-panel {
   height: 160px;
-  width: 100%;
+  //width: 100%;
+  background-color: $grey-50;
+  border: 2px;
+  stroke: $black;
+}
+.svg-tool-panel-attn {
+  height: 160px;
+  //width: 100%;
   background-color: $orange-500;
   border: 2px;
   stroke: $black;
 }
-.svg-panel-stopped {
+.svg-tool-panel-stopped {
   height: 160px;
-  width: 100%;
+  //width: 100%;
   background-color: $red-500;
   border: 2px;
   stroke: $black;
 }
-.svg-panel-pending {
+.svg-tool-panel-pending {
   height: 160px;
-  width: 100%;
+  //width: 100%;
   background-color: $brown-500;
   border: 2px;
   stroke: $black;

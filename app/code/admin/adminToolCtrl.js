@@ -129,13 +129,13 @@
 			getPanelClass: function() {
 				switch(this.machine.Status) {
 					case 'Needs Attention':
-						return 'svg-panel-attn'
+						return 'svg-tool-panel-attn'
 					case 'Stopped':
-						return 'svg-panel-stopped'
+						return 'svg-tool-panel-stopped'
 					case 'Maintenance Pending':
-						return 'svg-panel-pending'
+						return 'svg-tool-panel-pending'
 					default:
-						return ''
+						return 'svg-tool-panel'
 				}
 			},
       showChange: function(c) {
