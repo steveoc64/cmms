@@ -92,6 +92,27 @@ func getComponent(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+// Get the machine associated with this tool
+func getComponentMachine(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readMachine")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var record DBmachine
+	err = DB.SQL(`select m.*	 
+	 from component c
+	 left join machine m on (m.id=c.machine_id)
+	 where c.id=$1`, id).QueryStruct(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
 // create a new tool
 func newComponent(c *echo.Context) error {
 

@@ -114,16 +114,20 @@
 	}])
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService',
-		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService){
+		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService','events',
+		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService,events){
 
 		angular.extend(this, {
 			session: Session,
 			component: component,
 			parts: parts,
 			logs: logs,
+			events: events,
 			formFields: getComponentForm(),		
 			logClass: logClass,
+			getPanelClass: function() {
+
+			},
       showChange: function(c) {
       	this.Audit = c
       	this.Before = c.Before.split('\n')

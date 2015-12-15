@@ -37,6 +37,30 @@
 
 <div class="card">
   <lx-tabs>
+    <lx-tab heading="Events">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Date</th>
+              <th> Event</th>
+              <th> User</th>
+              <th> Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editTool.events">
+                  <td>{{row.StartDate}}</td>
+                  <td>{{row.Type}}</td>
+                  <td>{{row.Username}}</td>
+                  <td>{{row.Notes}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+  
     <lx-tab heading="Parts">
       <div class="data-table-container">
         <table class="data-table">

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/labstack/echo"
 	"gopkg.in/mgutz/dat.v1"
 	"net/http"
@@ -114,15 +115,29 @@ func getMachine(c *echo.Context) error {
 
 	id := getID(c)
 	var record DBmachineResponse
+
+	/*
+		err = DB.SelectDoc("id", "site_id", "name", "descr", "make", "model", "serialnum",
+			"is_running", "status", "picture", "notes",
+			"to_char(started_at,'DD Mon YYYY HH24:MI:SS pm') as started_at",
+			"to_char(stopped_at,'DD Mon YYYY HH24:MI:SS pm') as stopped_at",
+			"to_char(alert_at,'DD Mon YYYY HH24:MI:SS pm') as alert_at").
+			Many("events", `select type,ref_id,created_by,notes from event where type like 'Machine%' and ref_id=machine.id and completed is null`).
+			One("site_name", `select name from site where id=machine.site_id`).
+			From("machine").
+			Where("id=$1", id).
+			QueryStruct(&record)
+	*/
+
 	err = DB.SQL(`select m.id,m.site_id,m.name,m.descr,m.make,m.model,m.serialnum,
-		m.is_running,m.status,m.picture,m.notes,
-		to_char(m.started_at,'DD Mon YYYY HH24:MI:SS pm') as started_at,
-		to_char(m.stopped_at,'DD Mon YYYY HH24:MI:SS pm') as stopped_at,
-		to_char(m.alert_at,'DD Mon YYYY HH24:MI:SS pm') as alert_at,
-		s.name as site_name
-	  from machine m 
-	  left join site s on (s.id=m.site_id)
-	  where m.id=$1`, id).QueryStruct(&record)
+			m.is_running,m.status,m.picture,m.notes,
+			to_char(m.started_at,'DD Mon YYYY HH24:MI:SS pm') as started_at,
+			to_char(m.stopped_at,'DD Mon YYYY HH24:MI:SS pm') as stopped_at,
+			to_char(m.alert_at,'DD Mon YYYY HH24:MI:SS pm') as alert_at,
+			s.name as site_name		
+		  from machine m
+		  left join site s on (s.id=m.site_id)
+		  where m.id=$1`, id).QueryStruct(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -195,6 +210,18 @@ func saveMachine(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
+	UID, Username := getClaimedUser(claim)
+	evt := &DBevent{
+		SiteId:    record.SiteId,
+		Type:      fmt.Sprintf("Machine: %s", record.Status),
+		RefId:     machineID,
+		Priority:  1,
+		CreatedBy: UID,
+		Notes:     fmt.Sprintf("Manually Updated by %s", Username),
+	}
+
+	addEvent := false
+
 	// Calculate any deltas to the status
 	// And we should also create an event to record the state change
 	switch currentStatus {
@@ -202,44 +229,65 @@ func saveMachine(c *echo.Context) error {
 		switch record.Status {
 		case "Running":
 			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			addEvent = true
 		case "Needs Attention", "Maintenance Pending":
 			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			addEvent = true
 		case "Stopped":
 			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
+			addEvent = true
 		}
 	case "Running":
 		switch record.Status {
 		case "Needs Attention", "Maintenance Pending":
 			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			addEvent = true
 		case "Stopped":
 			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
+			addEvent = true
 		}
 	case "Needs Attention", "Maintenance Pending":
 		switch record.Status {
 		case "Running":
 			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			addEvent = true
 		case "Stopped":
 			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
+			addEvent = true
 		}
 	case "Stopped":
 		switch record.Status {
 		case "Running":
 			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			addEvent = true
 		case "Needs Attention", "Maintenance Pending":
 			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			addEvent = true
 		}
 	case "New":
 		switch record.Status {
 		case "Running":
 			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			addEvent = true
 		case "Needs Attention", "Maintenance Pending":
 			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			addEvent = true
 		case "Stopped":
 			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
+			addEvent = true
 		}
 	}
 	if record.Status == "New" {
 		DB.SQL(`update machine set started_at=null,stopped_at=null,alert_at=null,is_running=false where id=$1`, machineID).Exec()
+		addEvent = true
+	}
+
+	if addEvent {
+		DB.InsertInto("event").
+			Whitelist("site_id", "type", "ref_id", "priority", "created_by", "notes").
+			Record(evt).
+			Returning("id").
+			QueryScalar(&evt.ID)
 	}
 
 	DB.Select("id", "site_id", "name", "descr", "make", "model", "serialnum", "picture", "status", "notes").

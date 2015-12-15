@@ -5,6 +5,20 @@
   border: 2px;
   stroke: $black;
 }
+.svg-panel-attention {
+  height: 160px;
+  width: 100%;
+  background-color: $orange-500;
+  border: 2px;
+  stroke: $black;
+}
+.svg-panel-stopped {
+  height: 160px;
+  width: 100%;
+  background-color: $red-500;
+  border: 2px;
+  stroke: $black;
+}
 
 .machine-svg {
 	y: 100px;

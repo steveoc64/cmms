@@ -25,7 +25,7 @@
       		ng-repeat="row in Machines.machines | filter:searchMachine | orderBy:Machines.sortField:Machines.sortDir"
       		ng-click="Machines.clickedRow(row)"> 
 <!-- Machine SVG representation -->
-<!--
+<!-- 
 <td colspan="5">
   <svg class="svg-panel">
     <rect class="machine-svg"/>  
@@ -44,7 +44,10 @@
 -->
 <!-- End machine SVG representation -->
             <td><p><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
-            <td>{{row.Status}}</td>
+            <td>
+              {{row.Status}}<br>
+              {{row.StatusDescription}}
+            </td>
             <td><a ng-click="Machines.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
             <td><a ng-click="Machines.clickEdit(row)">{{row.Serialnum}}</a></td>
             <td>{{row.SiteName}}</td>
@@ -55,7 +58,6 @@
                         <i class="mdi mdi-plus"></i>
               </button>
             </td>
-
       </tr>
     </tbody>
   </table>

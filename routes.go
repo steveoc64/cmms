@@ -82,6 +82,7 @@ func _initRoutes() {
 	e.Put("/component/:id", saveComponent)
 	e.Delete("/component/:id", deleteComponent)
 	e.Get("/component/parts/:id", queryComponentParts)
+	e.Get("/component/machine/:id", getComponentMachine)
 
 	e.Get("/vendor", queryVendor)
 	e.Get("/vendor/part/:id", queryVendorParts)
@@ -93,6 +94,8 @@ func _initRoutes() {
 
 	e.Post("/event/raise/machine", raiseEventMachine)
 	e.Post("/event/raise/tool", raiseEventTool)
+	e.Get("/machine/events/:id", queryMachineEvents)
+	e.Get("/tool/events/:id", queryToolEvents)
 
 	// Add a websocket handler
 	e.WebSocket("/ws", webSocket)

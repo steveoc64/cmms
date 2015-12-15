@@ -317,6 +317,12 @@ var getMapURI = function(addr) {
 			      		parts: function(DBMachineParts,$stateParams) {
 			      			return DBMachineParts.query({id: $stateParams.id})
 			      		},
+			      		events: function(DBMachineEvents,$stateParams) {
+			      			return DBMachineEvents.query({id: $stateParams.id})		      			
+			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'machine', id: $stateParams.id})
+			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 'M', 
@@ -355,8 +361,17 @@ var getMapURI = function(addr) {
 			      		component: function(DBComponent,$stateParams) {
 			      			return DBComponent.get({id: $stateParams.id})
 			      		},
+			      		machine: function(DBComponentMachine,$stateParams) {
+			      			return DBComponentMachine.get({id: $stateParams.id})
+			      		},
+			      		events: function(DBComponentEvents,$stateParams) {
+			      			return DBComponentEvents.query({id: $stateParams.id})
+			      		},
 			      		parts: function(DBComponentParts,$stateParams) {
 			      			return DBComponentParts.query({id: $stateParams.id})
+			      		},
+			      		parts: function(DBComponentEvents,$stateParams) {
+			      			return DBComponentEvents.query({id: $stateParams.id})
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
@@ -578,6 +593,12 @@ var getMapURI = function(addr) {
 			      		components: function(DBMachineComponents,$stateParams) {
 			      			return DBMachineComponents.query({id: $stateParams.id})
 			      		},
+			      		events: function(DBMachineEvents,$stateParams) {
+			      			return DBMachineEvents.query({id: $stateParams.id})		      			
+			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'machine', id: $stateParams.id})
+			      		},
 			      		parts: function(DBMachineParts,$stateParams) {
 			      			return DBMachineParts.query({id: $stateParams.id})
 			      		},
@@ -591,6 +612,12 @@ var getMapURI = function(addr) {
 			      	resolve: {
 			      		component: function(DBComponent,$stateParams) {
 			      			return DBComponent.get({id: $stateParams.id})
+			      		},
+			      		machine: function(DBComponentMachine,$stateParams) {
+			      			return DBComponentMachine.get({id: $stateParams.id})
+			      		},
+			      		events: function(DBComponentEvents,$stateParams) {
+			      			return DBComponentEvents.query({id: $stateParams.id})
 			      		},
 			      		parts: function(DBComponentParts,$stateParams) {
 			      			return DBComponentParts.query({id: $stateParams.id})
@@ -652,6 +679,12 @@ var getMapURI = function(addr) {
 			      		components: function(DBMachineComponents,$stateParams) {
 			      			return DBMachineComponents.query({id: $stateParams.id})
 			      		},
+			      		events: function(DBMachineEvents,$stateParams) {
+			      			return DBMachineEvents.query({id: $stateParams.id})		      			
+			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'machine', id: $stateParams.id})
+			      		},
 			      		parts: function(DBMachineParts,$stateParams) {
 			      			return DBMachineParts.query({id: $stateParams.id})
 			      		},
@@ -665,6 +698,12 @@ var getMapURI = function(addr) {
 			      	resolve: {
 			      		component: function(DBComponent,$stateParams) {
 			      			return DBComponent.get({id: $stateParams.id})
+			      		},
+			      		machine: function(DBComponentMachine,$stateParams) {
+			      			return DBComponentMachine.get({id: $stateParams.id})
+			      		},
+			      		events: function(DBComponentEvents,$stateParams) {
+			      			return DBComponentEvents.query({id: $stateParams.id})		      			
 			      		},
 			      		parts: function(DBComponentParts,$stateParams) {
 			      			return DBComponentParts.query({id: $stateParams.id})

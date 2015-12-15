@@ -26,8 +26,13 @@
   		'query':  {method:'GET', isArray:true},
 		})
 	})
-	
 
+	angular.module('cmms').factory('DBComponentMachine', function($resource,ServerName,Session){
+		return $resource(ServerName+'/component/machine/:id',{id: '@_id'},{
+  		'get':  {method:'GET'},
+		})
+	})
+		
 	angular.module('cmms').factory('DBMachineComponents', function($resource,ServerName,Session){
 		return $resource(ServerName+'/machine/components/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},

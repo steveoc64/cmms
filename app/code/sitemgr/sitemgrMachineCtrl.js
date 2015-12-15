@@ -8,12 +8,11 @@
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket,DBMachine){
 	
+			// Subscribe to machine state changes
 			var vm = this
-			socket.ws.onMessage(function(msg){
-				console.log("Rx Msg",msg)
-				if (msg.data == "machine") {
-					vm.machines = DBMachine.query()					
-				}
+			socket.on("machine", function(data){
+				console.log("Rx Msg",data, socket)
+				vm.machines = DBMachine.query()					
 			})
 
 		angular.extend(this, {
@@ -63,12 +62,16 @@
 
 	app.controller(base+'EditMachineCtrl', 
 		['$state','$stateParams','machine','Session','$window','components','$timeout','LxDialogService','parts',
-		function($state,$stateParams,machine,Session,$window,components,$timeout,LxDialogService,parts){
+		'docs','DBDocServer','Upload','LxProgressService','events',
+		function($state,$stateParams,machine,Session,$window,components,$timeout,LxDialogService,parts,
+			docs,DBDocServer,Upload,LxProgressService, events){
 
 		angular.extend(this, {
 			session: Session,
 			machine: machine,
 			parts: parts,
+			docs: docs,
+			events: events,
 			components: components,
 			formFields: getMachineForm(),	
 			getSVGClass: function() {
@@ -122,7 +125,49 @@
 					return "" + percentage + "%"
 				}
 				return "0"
-			}
+			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+				console.log('adoc = ',adoc)
+			},			
+    	upload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+        Upload.upload({
+            url: 'upload',
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "machine",
+            	ref_id: $stateParams.id,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
+        	}
+        }, function (resp) {
+            console.log('Error status: ' + resp.status + ' ' + resp.data);
+		    		vm.uploadProgress = 'Error ! ' + resp.data
+		    		LxProgressService.circular.hide()
+
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+            /*
+            if (evt.config.data.file) {
+            	console.log(this.uploadProgress + ' ' + evt.config.data.file.name);
+          	}
+          	*/
+        })
+      },			
+
+			
 		})
 
 	}])

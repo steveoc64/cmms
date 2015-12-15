@@ -66,6 +66,7 @@
     <div flex-item>
       <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editMachine.abort()" lx-ripple>Back</button>
     </div>
+<!--    
     <div ng-if="editMachine.canEdit()" flex-item>
       <button type="submit" 
               class="btn btn--l btn--blue btn--raised" 
@@ -73,6 +74,8 @@
                 Save Details
       </button>
     </div>
+-->    
+<!--    
     <div flex-item ng-if="editMachine.machine.IsRunning">
       <button type="button" 
               class="btn btn--l btn--orange btn--raised" 
@@ -81,6 +84,7 @@
                 Raise Issue for this Machine
       </button>
     </div>
+-->    
 </div>
 
 <formly-form model="editMachine.machine" fields="editMachine.formFields">
@@ -89,6 +93,30 @@
 
 <div class="card">
   <lx-tabs>
+    <lx-tab heading="Events">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Date</th>
+              <th> Event</th>
+              <th> User</th>
+              <th> Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editMachine.events">
+                  <td>{{row.StartDate}}</td>
+                  <td>{{row.Type}}</td>
+                  <td>{{row.Username}}</td>
+                  <td>{{row.Notes}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
     <lx-tab heading="Tools">
       <div class="data-table-container">
         <table class="data-table">
@@ -144,9 +172,6 @@
       </div>
     </lx-tab>
 
-    <lx-tab heading="WorkOrders">
-    </lx-tab>
-
     <lx-tab heading="Notes">
       <div class="card">
         <textarea ng-wig="editMachine.machine.Notes"></textarea>
@@ -154,6 +179,42 @@
     </lx-tab>
 
     <lx-tab heading="Documents">
+    <form>
+      <div flex-container="row" flex-gutter="24">
+        <div flex-item="5">
+          <lx-text-field label="Description" >
+            <input type="text" ng-model="editMachine.doc">
+          </lx-text-field>
+        </div>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> File</th>
+              <th> Size</th>
+              <th> Uploaded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editMachine.docs">
+                  <td>{{row.Name}}</td>
+                  <td>
+                    <a ng-href="doc/{{row.ID}}" 
+                       target="_self" 
+                       download="{{row.Filename}}">
+                      {{row.Filename}}
+                    </a>
+                  </td>
+                  <td>{{row.Filesize}}</td>
+                  <td>{{row.Created}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
     </lx-tab>
 
   </lx-tabs>

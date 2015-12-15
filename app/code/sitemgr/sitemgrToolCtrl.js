@@ -5,13 +5,14 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','Session','$window','component','$timeout','parts','LxDialogService',
-		function($state,$stateParams,Session,$window,component,$timeout,parts,LxDialogService){
+		['$state','$stateParams','Session','$window','component','$timeout','parts','LxDialogService','events',
+		function($state,$stateParams,Session,$window,component,$timeout,parts,LxDialogService,events){
 
 		angular.extend(this, {
 			session: Session,
 			component: component,
 			parts: parts,
+			events: events,
 			formFields: getComponentForm(),		
 			canEdit: function() {
 				return false

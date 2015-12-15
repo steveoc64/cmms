@@ -64,12 +64,16 @@
 
 	app.controller(base+'EditMachineCtrl', 
 		['$state','$stateParams','machine','Session','$window','components','$timeout','LxDialogService','parts','DBRaiseMachineEvent',
-		function($state,$stateParams,machine,Session,$window,components,$timeout,LxDialogService,parts,DBRaiseMachineEvent){
+		'docs','DBDocServer','LxProgressService','Upload','events',
+		function($state,$stateParams,machine,Session,$window,components,$timeout,LxDialogService,parts,DBRaiseMachineEvent,
+			docs,DBDocServer,LxProgressService,Upload,events){
 
 		angular.extend(this, {
 			session: Session,
 			machine: machine,
 			parts: parts,
+			docs: docs,
+			events: events,
 			components: components,
 			formFields: getMachineWorkerForm(),	
 			haltFields: getMachineHaltForm(),
@@ -145,7 +149,13 @@
 					descr: this.eventFields.HaltDescr
 				})
 				LxDialogService.close('raiseIssueDialog')
-			}
+			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+				console.log('adoc = ',adoc)
+			},			
+			
 		})
 
 	}])

@@ -5,19 +5,24 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','Session','$window','component','$timeout','parts','LxDialogService','DBRaiseToolEvent',
-		function($state,$stateParams,Session,$window,component,$timeout,parts,LxDialogService,DBRaiseToolEvent){
+		['$state','$stateParams','Session','$window','component','machine','$timeout','parts','LxDialogService','DBRaiseToolEvent','events',
+		function($state,$stateParams,Session,$window,component,machine,$timeout,parts,LxDialogService,DBRaiseToolEvent,events){
 
 		angular.extend(this, {
 			session: Session,
 			component: component,
 			parts: parts,
+			machine: machine,
+			events: events,
 			formFields: getComponentWorkerForm(),		
 			alertFields: getComponentAlertForm(),
 			haltFields: getComponentHaltForm(),
 			eventHandler: DBRaiseToolEvent,		
 			canEdit: function() {
 				return false
+			},
+			canStop: function() {
+				return this.machine.IsRunning
 			},
 			submit: function() {
 				this.component._id = $stateParams.id

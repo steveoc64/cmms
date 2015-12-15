@@ -19,7 +19,7 @@ type DBevent struct {
 	Type         string       `db:"type"`
 	RefId        int          `db:"ref_id"`
 	Priority     int          `db:"priority"`
-	Startdate    dat.NullTime `db:"startdate"`
+	StartDate    dat.NullTime `db:"startdate"`
 	ParentEvent  int          `db:"parent_event"`
 	CreatedBy    int          `db:"created_by"`
 	AllocatedBy  int          `db:"allocated_by"`
@@ -29,6 +29,27 @@ type DBevent struct {
 	MaterialCost float64      `db:"material_cost"`
 	OtherCost    float64      `db:"other_cost"`
 	Notes        string       `db:"notes"`
+}
+
+type DBeventResponse struct {
+	ID              int     `db:"id"`
+	SiteId          int     `db:"site_id"`
+	Type            string  `db:"type"`
+	RefId           int     `db:"ref_id"`
+	Priority        int     `db:"priority"`
+	StartDate       string  `db:"startdate"`
+	ParentEvent     int     `db:"parent_event"`
+	CreatedBy       int     `db:"created_by"`
+	Username        string  `db:"username"`
+	AllocatedBy     int     `db:"allocated_by"`
+	AllocatedByUser *string `db:"allocated_by_user"`
+	AllocatedTo     int     `db:"allocated_to"`
+	AllocatedToUser *string `db:"allocated_to_user"`
+	Completed       string  `db:"completed"`
+	LabourCost      string  `db:"labour_cost"`
+	MaterialCost    string  `db:"material_cost"`
+	OtherCost       string  `db:"other_cost"`
+	Notes           string  `db:"notes"`
 }
 
 type MachineEventRequest struct {
@@ -41,6 +62,68 @@ type ToolEventRequest struct {
 	Tool   string `json:"tool"`
 	Descr  string `json:"descr"`
 	Action string `json:"action"`
+}
+
+func queryMachineEvents(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var record []*DBeventResponse
+	err = DB.SQL(`select 
+		e.site_id,e.type,e.ref_id,e.notes,
+		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
+		e.labour_cost, e.material_cost,e.other_cost,
+		u1.username as username, 
+		u2.username as allocated_by_user, 
+		u3.username as allocated_to_user 
+		from event e
+		left join users u1 on (u1.id=e.created_by) 
+		left join users u2 on (u2.id=e.allocated_by) 
+		left join users u3 on (u3.id=e.allocated_to) 
+		where type like 'Machine%'
+		and ref_id=$1
+		order by startdate desc`, id).QueryStructs(&record)
+
+	log.Println("Completed machine event query", len(record))
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func queryToolEvents(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var record []*DBeventResponse
+	err = DB.SQL(`select 
+		e.site_id,e.type,e.ref_id,e.notes,
+		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
+		e.labour_cost, e.material_cost,e.other_cost,
+		u1.username as username, 
+		u2.username as allocated_by_user, 
+		u3.username as allocated_to_user 
+		from event e
+		left join users u1 on (u1.id=e.created_by) 
+		left join users u2 on (u2.id=e.allocated_by) 
+		left join users u3 on (u3.id=e.allocated_to) 
+		where type like 'Tool%'
+		and ref_id=$1
+		order by startdate desc`, id).QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
 }
 
 func raiseEventMachine(c *echo.Context) error {
