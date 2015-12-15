@@ -114,19 +114,29 @@
 	}])
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService','events',
-		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService,events){
+		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService','events','machine',
+		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService,events,machine){
 
 		angular.extend(this, {
 			session: Session,
 			component: component,
+			machine: machine,
 			parts: parts,
 			logs: logs,
 			events: events,
 			formFields: getComponentForm(),		
 			logClass: logClass,
 			getPanelClass: function() {
-
+				switch(this.machine.Status) {
+					case 'Needs Attention':
+						return 'svg-panel-attn'
+					case 'Stopped':
+						return 'svg-panel-stopped'
+					case 'Maintenance Pending':
+						return 'svg-panel-pending'
+					default:
+						return ''
+				}
 			},
       showChange: function(c) {
       	this.Audit = c

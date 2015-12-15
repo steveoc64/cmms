@@ -38,15 +38,6 @@
 		['$state','$stateParams','site','Session','$window','users','$timeout','machines','LxDialogService','supplies','socket','DBSiteMachines',
 		function($state,$stateParams,site,Session,$window,users,$timeout,machines,LxDialogService,supplies,socket,DBSiteMachines){
 	
-
-			var vm = this
-			socket.ws.onMessage(function(msg){
-				console.log("Rx Msg",msg)
-				if (msg.data == "machine") {
-					vm.machines = DBSiteMachines.query({id: $stateParams.id})					
-				}
-			})
-
 		angular.extend(this, {
 			session: Session,
 			site: site,

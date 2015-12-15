@@ -225,6 +225,9 @@ var getMapURI = function(addr) {
 			      		users: function(DBUserSkill,$stateParams) {
 			      			return DBUserSkill.query({id: $stateParams.id})
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'skill', id: $stateParams.id})
+			      		},		      					      		
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 's',
@@ -273,6 +276,9 @@ var getMapURI = function(addr) {
 			      		machines: function(DBSiteMachines, $stateParams) {
 			      			return DBSiteMachines.query({id: $stateParams.id})
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'site', id: $stateParams.id})
+			      		},		      					      		
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 'S', 
@@ -370,9 +376,9 @@ var getMapURI = function(addr) {
 			      		parts: function(DBComponentParts,$stateParams) {
 			      			return DBComponentParts.query({id: $stateParams.id})
 			      		},
-			      		parts: function(DBComponentEvents,$stateParams) {
-			      			return DBComponentEvents.query({id: $stateParams.id})
-			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'tool', id: $stateParams.id})
+			      		},		      		
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
 			      				RefType: 'T', 
@@ -420,6 +426,9 @@ var getMapURI = function(addr) {
 			      		vendors: function(DBPartVendors,$stateParams) {
 			      			return DBPartVendors.query({id: $stateParams.id})
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'part', id: $stateParams.id})
+			      		},		      		
 			      		components: function(DBPartComponents,$stateParams) {
 			      			return DBPartComponents.query({id: $stateParams.id})
 			      		}
@@ -464,6 +473,9 @@ var getMapURI = function(addr) {
                 parts: function(DBVendorPart,$stateParams) {
                 	return DBVendorPart.query({id: $stateParams.id})
                 },
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'vendor', id: $stateParams.id})
+			      		},		      		
                 logs: function(DBSysLog,$stateParams) {
                   return DBSysLog.query({
                     RefType: 'V',  
@@ -532,6 +544,9 @@ var getMapURI = function(addr) {
 			      		users: function(DBSiteUsers,$stateParams) {
 			      			return DBSiteUsers.query({id: $stateParams.id})
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'site', id: $stateParams.id})
+			      		},		      		
 			      		machines: function(DBSiteMachines, $stateParams) {
 			      			return DBSiteMachines.query({id: $stateParams.id})
 			      		}
@@ -564,6 +579,9 @@ var getMapURI = function(addr) {
 			      		user: function(DBUser,$stateParams) {
 			      			return DBUser.get({id: $stateParams.id})
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'user', id: $stateParams.id})
+			      		},		      					      		
 			      		skills: function(DBSkill) {
 			      			return DBSkill.query()
 			      		}
@@ -619,6 +637,9 @@ var getMapURI = function(addr) {
 			      		events: function(DBComponentEvents,$stateParams) {
 			      			return DBComponentEvents.query({id: $stateParams.id})
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'tool', id: $stateParams.id})
+			      		},		      					      		
 			      		parts: function(DBComponentParts,$stateParams) {
 			      			return DBComponentParts.query({id: $stateParams.id})
 			      		}
@@ -636,6 +657,9 @@ var getMapURI = function(addr) {
 			      		vendors: function(DBPartVendors,$stateParams) {
 			      			return DBPartVendors.query({id: $stateParams.id})
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'part', id: $stateParams.id})
+			      		},		      					      		
 			      		components: function(DBPartComponents,$stateParams) {
 			      			return DBPartComponents.query({id: $stateParams.id})
 			      		}
@@ -705,6 +729,9 @@ var getMapURI = function(addr) {
 			      		events: function(DBComponentEvents,$stateParams) {
 			      			return DBComponentEvents.query({id: $stateParams.id})		      			
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'tool', id: $stateParams.id})
+			      		},		      					      		
 			      		parts: function(DBComponentParts,$stateParams) {
 			      			return DBComponentParts.query({id: $stateParams.id})
 			      		}
@@ -722,6 +749,9 @@ var getMapURI = function(addr) {
 			      		vendors: function(DBPartVendors,$stateParams) {
 			      			return DBPartVendors.query({id: $stateParams.id})
 			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'part', id: $stateParams.id})
+			      		},		      					      		
 			      		components: function(DBPartComponents,$stateParams) {
 			      			return DBPartComponents.query({id: $stateParams.id})
 			      		}
