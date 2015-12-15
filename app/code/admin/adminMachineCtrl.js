@@ -7,13 +7,12 @@
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','logs','LxNotificationService','socket','DBMachine',
 		function($scope,$state, machines, Session, LxDialogService, logs,LxNotificationService,socket,DBMachine){
-	
+
+			// Subscribe to changes in the machine list	
 			var vm = this
-			socket.ws.onMessage(function(msg){
+			socket.on("machine",function(msg){
 				console.log("Rx Msg",msg)
-				if (msg.data == "machine") {
-					vm.machines = DBMachine.query()					
-				}
+				vm.machines = DBMachine.query()					
 			})
 
 		angular.extend(this, {

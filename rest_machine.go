@@ -155,7 +155,7 @@ func newMachine(c *echo.Context) error {
 
 	// Now log the creation of the new site
 	sysLog(1, "Machine", "M", record.ID, "Machine Created", c, claim)
-	publishAll("machine")
+	publishSocket("machine", record.ID)
 
 	// insert into DB, fill in the ID of the new user
 	return c.JSON(http.StatusCreated, record)
@@ -248,7 +248,7 @@ func saveMachine(c *echo.Context) error {
 		QueryStruct(postRecord)
 
 	sysLogUpdate(1, "Machine", "M", machineID, "Updated", c, claim, *preRecord, *postRecord)
-	publishAll("machine")
+	publishSocket("machine", machineID)
 	return c.JSON(http.StatusOK, machineID)
 }
 
@@ -270,7 +270,7 @@ func deleteMachine(c *echo.Context) error {
 	}
 
 	sysLog(3, "Machine", "M", id, "Machine Deleted", c, claim)
-	publishAll("machine")
+	publishSocket("machine", id)
 
 	return c.String(http.StatusOK, "Machine Deleted")
 }

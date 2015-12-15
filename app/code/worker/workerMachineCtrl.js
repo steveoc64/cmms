@@ -8,15 +8,11 @@
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine){
 
-			var vm = this
 			// Subscribe to machine state changes
-			socket.ws.Subscribe
-
-			socket.ws.onMessage(function(msg){
-				console.log("Rx Msg",msg)
-				if (msg.data == "machine") {
-					vm.machines = DBMachine.query()					
-				}
+			var vm = this
+			socket.on("machine", function(data){
+				console.log("Rx Msg",data, socket)
+				vm.machines = DBMachine.query()					
 			})
 
 		angular.extend(this, {

@@ -22,7 +22,7 @@ var getMapURI = function(addr) {
 	'use strict';
 
 	//console.log('Init app')
-	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage','ngWig','ngFileUpload','ngWebSocket'])
+	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage','ngWig','ngFileUpload','ngWebsocket'])
 		.service('Session', session)
     .constant('ServerName', '')
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	
@@ -44,14 +44,19 @@ var getMapURI = function(addr) {
 			    }
 			  };
 			})
-			.service('socket', ['$websocket','$location',function($websocket,$location) {
-				var uri = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
-				var dataStream = $websocket(uri)
-				return {
-					ws: dataStream
+		.service('socket',function($websocket,$location){
+			var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
+			var ws = $websocket.$get(socketUrl)
+			ws.$open() // open connection if not already done
+			return {
+				url: socketUrl,
+				ws: ws,
+				on: function(msg, callback) {
+					ws.$un(msg)	// unsub 
+					ws.$on(msg, callback)
 				}
 			}
-			])
+		})
 
   	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $localStorageProvider) {
 
@@ -716,8 +721,22 @@ var getMapURI = function(addr) {
 	  	}
 	  }
 
-	function run($rootScope, $state, LxDialogService, LxNotificationService, Session, formlyConfig, $localStorage) {
+	function run($rootScope, $state, LxDialogService, LxNotificationService, Session, formlyConfig, $localStorage, $websocket, $location) {
 	  FastClick.attach(document.body);
+
+	  // Setup the websocket
+		var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
+	  var ws = $websocket.$new({
+	  	url: socketUrl,
+	  	reconnect: true,
+	  	enqueue: true,
+	  })
+
+	  ws.$on('$open', function() {
+	  	console.log('Established socket connection')
+	  }).$on('$close', function() {
+	  	console.log('Closed socket connection')
+	  })
 
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		  	var acl = toState.acl

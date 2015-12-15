@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/thoas/stats"
 	//	"gopkg.in/mgutz/dat.v1"
+	"encoding/json"
 	"errors"
 	"golang.org/x/net/websocket"
 	"io"
@@ -127,17 +128,38 @@ func webSocket(c *echo.Context) error {
 	}
 }
 
-func publishAll(msg string) {
-	//fmt.Println("*** msg", msg, "to all subs ***")
-	//fmt.Println("There are ", len(subscribers), "subs to be spoken to")
-	for i, wss := range subscribers {
-		err := websocket.Message.Send(wss, msg)
+type socketMsg struct {
+	Event string      `json:"event"`
+	Data  interface{} `json:"data"`
+}
+
+func publishSocket(event string, data interface{}) {
+	var myEvent = &socketMsg{
+		Event: event,
+		Data:  data,
+	}
+	sendData, err := json.Marshal(myEvent)
+	if err != nil {
+		log.Println("Error constructing socket data", err.Error())
+		return
+	}
+
+	gotKills := false
+	var newSubs []*websocket.Conn
+	fmt.Println("Publish event", event, data)
+	for _, wss := range subscribers {
+		err := websocket.Message.Send(wss, string(sendData))
 		if err != nil {
-			//log.Println("Writing to connection", wss, "got error", err.Error(), "Removing connection from pool")
+			log.Println("Writing to connection", wss, "got error", err.Error(), "Removing connection from pool")
 			// remove this connection from the ppool
-			subscribers = append(subscribers[:i], subscribers[i+1:]...)
-			showSubscriberPool("Pool Shrinks To:")
+			gotKills = true
+		} else {
+			newSubs = append(newSubs, wss)
 		}
+	}
+	if gotKills {
+		subscribers = newSubs
+		showSubscriberPool("Pool Shrinks To:")
 	}
 }
 
