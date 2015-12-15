@@ -36,6 +36,7 @@
     "ng-ckeditor": "~0.2.1",
     "ngWig": "ng-wig#~2.3.3",
     "ng-file-upload": "~10.1.9",
-    "angular-websocket": "~1.0.14"
+    "angular-websocket": "~1.0.14",
+    "ng-websocket": "~0.2.1"
   }
 }
