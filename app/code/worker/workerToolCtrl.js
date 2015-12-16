@@ -59,6 +59,7 @@
 				LxDialogService.open('raiseIssueDialog')
 			},
 			submitAlert: function(opt) {
+				console.log('eventFields=',this.eventFields)
 				if (this.eventFields.AlertDescr.length > 0) {
 					var vm = this
 					this.eventHandler.raise({

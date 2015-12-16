@@ -105,7 +105,9 @@
 
 	app.controller(base+'EditSkillCtrl', 
 		['$state','$stateParams','skill','logs','Session','users','$window','LxDialogService',
-		function($state,$stateParams,skill,logs,Session,users,$window,LxDialogService){
+		'LxProgressService','Upload','DBDocs',
+		function($state,$stateParams,skill,logs,Session,users,$window,LxDialogService,
+			LxProgressService,Upload,DBDocs){
 
 		angular.extend(this, {
 			session: Session,
@@ -134,7 +136,47 @@
 			},
 			goSite: function(row) {
 				$state.go(base+'.editsite',{id: row.SiteId})				
-			}
+			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+			},
+    	upload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+        Upload.upload({
+            url: 'upload',
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "skill",
+            	ref_id: $stateParams.id,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
+     				vm.docs = DBDocs.query({type: 'skill', id: $stateParams.id})		    		
+        	}
+        }, function (resp) {
+            console.log('Error status: ' + resp.status + ' ' + resp.data);
+		    		vm.uploadProgress = 'Error ! ' + resp.data
+		    		LxProgressService.circular.hide()
+
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+            /*
+            if (evt.config.data.file) {
+            	console.log(this.uploadProgress + ' ' + evt.config.data.file.name);
+          	}
+          	*/
+        })
+      },			
 		})
 	}])
 

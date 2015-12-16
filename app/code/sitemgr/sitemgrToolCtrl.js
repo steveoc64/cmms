@@ -24,7 +24,7 @@
 				})					
 			},
 			abort: function() {
-				$window.history.go(-1)
+				$state.go(base+".editmachine",{id: this.component.MachineID})
 			},
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})

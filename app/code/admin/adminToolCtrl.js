@@ -114,8 +114,10 @@
 	}])
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService','events','machine',
-		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService,events,machine){
+		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService',
+		'events','machine','Upload','LxProgressService','docs',
+		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService,
+			events,machine,Upload,LxProgressService,docs){
 
 		angular.extend(this, {
 			session: Session,
@@ -123,6 +125,7 @@
 			machine: machine,
 			parts: parts,
 			logs: logs,
+			docs: docs,
 			events: events,
 			formFields: getComponentForm(),		
 			logClass: logClass,
@@ -174,7 +177,39 @@
 					return "" + percentage + "%"
 				}
 				return "0"
-			}
+			},
+    	upload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+        Upload.upload({
+            url: 'upload',
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "tool",
+            	ref_id: $stateParams.id,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
+     				vm.docs = DBDocs.query({type: 'tool', id: $stateParams.id})
+        	}
+        }, function (resp) {
+            console.log('Error status: ' + resp.status + ' ' + resp.data);
+		    		vm.uploadProgress = 'Error ! ' + resp.data
+		    		LxProgressService.circular.hide()
+
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+        })
+      },			
+
 
 		})
 

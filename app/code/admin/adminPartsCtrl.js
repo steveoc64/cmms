@@ -109,13 +109,16 @@
 
 	app.controller(base+'EditPartCtrl', 
 		['$state','$stateParams','part','logs','Session','$window','components','LxDialogService','vendors',
-		function($state,$stateParams,part,logs,Session,$window,components,LxDialogService,vendors){
+		'Upload','LxProgressService','docs','DBDocServer','DBDocs',
+		function($state,$stateParams,part,logs,Session,$window,components,LxDialogService,vendors,
+			Upload,LxProgressService,docs,DBDocServer,DBDocs){
 
 		angular.extend(this, {
 			session: Session,
 			part: part,
 			components: components,
 			logs: logs,
+			docs: docs,
 			vendors: vendors,
 			formFields: getPartForm(),		
 			logClass: logClass,
@@ -145,7 +148,44 @@
 			},
 			goTool: function(row) {
 				$state.go(base+".edittool",{id: row.ComponentID})
-			}
+			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+				console.log('adoc = ',adoc)
+			},
+    	upload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+        Upload.upload({
+            url: 'upload',
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "part",
+            	ref_id: $stateParams.id,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
+     				vm.docs = DBDocs.query({type: 'part', id: $stateParams.id})
+        	}
+        }, function (resp) {
+            console.log('Error status: ' + resp.status + ' ' + resp.data);
+		    		vm.uploadProgress = 'Error ! ' + resp.data
+		    		LxProgressService.circular.hide()
+
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+        })
+      },
+
 		})
 	}])
 

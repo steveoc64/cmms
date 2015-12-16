@@ -135,10 +135,10 @@
 
 	app.controller(base+'EditMachineCtrl', 
 		['$state','$stateParams','machine','logs','Session','$window','components','$timeout','LxDialogService','parts','events','docs',
-		'DBDocServer','LxProgressService','Upload','socket',
+		'DBDocServer','LxProgressService','Upload','socket','DBDocs',
 		'DBMachine','DBMachineComponents','DBMachineParts','DBMachineEvents','DBSysLog',
 		function($state,$stateParams,machine,logs,Session,$window,components,$timeout,LxDialogService,parts,events,docs,
-			DBDocServer,LxProgressService,Upload,socket,
+			DBDocServer,LxProgressService,Upload,socket,DBDocs,
 			DBMachine,DBMachineComponents,DBMachineParts,DBMachineEvents,DBSysLog){
 
 		// Subscribe to changes for just this machine
@@ -273,6 +273,7 @@
 		    		LxProgressService.circular.hide()
 		    		vm.uploadProgress = 'Success !'
 		    		vm.doc = ''
+     				vm.docs = DBDocs.query({type: 'machine', id: $stateParams.id})
         	}
         }, function (resp) {
             console.log('Error status: ' + resp.status + ' ' + resp.data);
@@ -281,11 +282,6 @@
 
         }, function (evt) {
             vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
-            /*
-            if (evt.config.data.file) {
-            	console.log(this.uploadProgress + ' ' + evt.config.data.file.name);
-          	}
-          	*/
         })
       },			
 		})
