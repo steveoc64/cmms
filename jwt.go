@@ -167,10 +167,13 @@ func getClaimedUser(claim map[string]interface{}) (int, string) {
 // Decode the JSON format 'Sites' slice out of floats and back into real ints
 func getClaimedSites(claim map[string]interface{}) []int {
 
-	s := claim["Sites"].([]interface{})
+	temp := claim["Sites"]
 	sites := []int{}
-	for _, v := range s {
-		sites = append(sites, int(v.(float64)))
+	if temp != nil {
+		s := claim["Sites"].([]interface{})
+		for _, v := range s {
+			sites = append(sites, int(v.(float64)))
+		}
 	}
 	return sites
 }
