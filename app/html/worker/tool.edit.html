@@ -14,7 +14,10 @@
             <form name="editTool.alertForm" ng-submit="editTool.submitAlert(opt)">          
               <formly-form model="editTool.eventFields" fields="editTool.alertFields"></formly-form>
               <div class="dialog__actions">
-                <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+                <button class="btn btn--m btn--black btn--flat" 
+                        lx-ripple 
+                        ng-click="editTool.eventFields.AlertDescr = ''"
+                        lx-dialog-close>Cancel</button>
                 <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Alert</button>
               </div>    
           </form>
@@ -25,7 +28,9 @@
             <form name="editTool.haltForm" ng-submit="editTool.submitHalt(opt)">          
               <formly-form model="editTool.eventFields" fields="editTool.haltFields"></formly-form>
               <div class="dialog__actions">
-                <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+                <button class="btn btn--m btn--black btn--flat" 
+                        ng-click="editTool.eventFields.AlertDescr = ''"                
+                        lx-ripple lx-dialog-close>Cancel</button>
                 <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Halt</button>
               </div>    
               </form>
@@ -68,7 +73,9 @@
 <div flex-container="row">
   <div class="toolbar">
     <div class="toolbar__left">
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editTool.abort()" lx-ripple>Back</button>      
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editTool.abort()" lx-ripple>
+        <i class="mdi mdi-chevron-left"> Back</i>
+      </button>      
     </div>
     <div class="toolbar__right">
       <button type="submit" ng-if="editTool.canEdit()"

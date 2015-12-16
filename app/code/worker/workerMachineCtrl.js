@@ -128,7 +128,7 @@
 				return false
 			},
 			abort: function() {
-				$window.history.go(-1)
+				$state.go(base+'.machines')
 			},
 			goUser: function(row) {
 				$state.go(base+'.editmachine',{id: row.ID})

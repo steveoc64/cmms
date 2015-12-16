@@ -31,7 +31,7 @@
 				})					
 			},
 			abort: function() {
-				$window.history.go(-1)
+				$state.go(base+'.editmachine',{id: this.machine.ID})
 			},
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
@@ -59,31 +59,38 @@
 				LxDialogService.open('raiseIssueDialog')
 			},
 			submitAlert: function(opt) {
-				console.log('submit alert with opt',opt)
-				var vm = this
-				this.eventHandler.raise({
-					tool: $stateParams.id,
-					action: 'Alert',
-					descr: this.eventFields.AlertDescr
-				})
-				LxDialogService.close('raiseIssueDialog')
-				LxNotificationService.info('New Issue Raised')
-				$timeout(function(){
-					$state.go(base+'.editmachine',{id: vm.component.MachineID})					
-				}, 600)
+				if (this.eventFields.AlertDescr.length > 0) {
+					var vm = this
+					this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Alert',
+						descr: this.eventFields.AlertDescr
+					})
+					LxDialogService.close('raiseIssueDialog')
+					LxNotificationService.info('New Issue Raised')
+					$timeout(function(){
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					}, 600)					
+				} else {
+					LxDialogService.close('raiseIssueDialog')
+				}
 			},
 			submitHalt: function() {
-				var vm = this
-				this.eventHandler.raise({
-					tool: $stateParams.id,
-					action: 'Halt',
-					descr: this.eventFields.HaltDescr
-				})
-				LxDialogService.close('raiseIssueDialog')
-				LxNotificationService.error('Machine Halted')
-				$timeout(function(){
-					$state.go(base+'.editmachine',{id: vm.component.MachineID})					
-				}, 600)
+				if (this.eventFields.HaltDescr.length > 0) {
+					var vm = this
+					this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Halt',
+						descr: this.eventFields.HaltDescr
+					})
+					LxDialogService.close('raiseIssueDialog')
+					LxNotificationService.error('Machine Halted')
+					$timeout(function(){
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					}, 600)					
+				} else {
+					LxDialogService.close('raiseIssueDialog')					
+				}
 			}
 
 
