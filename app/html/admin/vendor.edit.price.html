@@ -51,17 +51,20 @@
     </tbody>
   </table>
 </div>
-<div flex-container="row" flex-align="end" item="1">
-    <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editVendor.abort()" lx-ripple>Cancel</button>
+
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editVendorPrice.abort()" lx-ripple>Back</button>      
     </div>
-    <div flex-item>
-      <button type="submit" 
+    <div class="toolbar__right">
+      <button type="submit"
               class="btn btn--l btn--blue btn--raised" 
               lx-ripple>
                 Save & Update PriceList
-      </button>
+      </button>      
     </div>
+  </div>
 </div>
 
 </form>

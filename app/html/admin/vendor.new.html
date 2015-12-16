@@ -7,17 +7,19 @@
 <form name="newVendor.form" ng-submit="newVendor.submit()">
 <formly-form model="newVendor.vendor" fields="newVendor.formFields">
 
-<div flex-container="row" flex-align="end">
-    <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="newVendor.abort()" lx-ripple>Cancel</button>
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="newVendor.abort()" lx-ripple>Back</button>      
     </div>
-    <div flex-item>
-      <button type="submit" 
+    <div class="toolbar__right">
+      <button type="submit"
               class="btn btn--l btn--blue btn--raised" 
               lx-ripple>
                 Add New Vendor
-      </button>
+      </button>      
     </div>
+  </div>
 </div>
 
 </formly-form>

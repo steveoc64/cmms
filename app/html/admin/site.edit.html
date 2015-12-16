@@ -30,17 +30,19 @@
 
 <formly-form model="editSite.site" fields="editSite.formFields">
 
-<div flex-container="row" flex-align="end">
-    <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editSite.abort()" lx-ripple>Back</button>
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editSite.abort()" lx-ripple>Back</button>      
     </div>
-    <div flex-item>
-      <button type="submit" 
+    <div class="toolbar__right">
+      <button type="submit"
               class="btn btn--l btn--blue btn--raised" 
               lx-ripple>
                 Save Details
-      </button>
+      </button>      
     </div>
+  </div>
 </div>
 
 </formly-form>
