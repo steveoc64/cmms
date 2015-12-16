@@ -200,6 +200,8 @@ func raiseEventMachine(c *echo.Context) error {
 	publishSocket("machine", machineId)
 	publishSocket("event", evt.ID)
 	return c.String(http.StatusOK, "Event Raised on the Machine")
+
+	// TODO - add a mega amount of auditing to the machine and event records
 }
 
 func raiseEventTool(c *echo.Context) error {

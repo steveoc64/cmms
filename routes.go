@@ -154,7 +154,7 @@ func publishSocket(event string, data interface{}) {
 	for _, wss := range subscribers {
 		err := websocket.Message.Send(wss, string(sendData))
 		if err != nil {
-			log.Println("Writing to connection", wss, "got error", err.Error(), "Removing connection from pool")
+			//			log.Println("Writing to connection", wss, "got error", err.Error(), "Removing connection from pool")
 			// remove this connection from the ppool
 			gotKills = true
 		} else {
