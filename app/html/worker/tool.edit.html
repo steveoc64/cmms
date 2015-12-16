@@ -11,7 +11,7 @@
       <lx-tabs links-tc="light" links-bgc="blue-500" indicator="yellow-500" no-divider="true" layout="inline">
         <lx-tab heading="Needs Attention">
           <div class="p++">
-            <form name="editTool.alertForm" ng-submit="editTool.submitAlert()">          
+            <form name="editTool.alertForm" ng-submit="editTool.submitAlert(opt)">          
               <formly-form model="editTool.eventFields" fields="editTool.alertFields"></formly-form>
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
@@ -22,7 +22,7 @@
         </lx-tab>
         <lx-tab heading="Halt">
           <div class="p++">
-            <form name="editTool.haltForm" ng-submit="editTool.submitHalt()">          
+            <form name="editTool.haltForm" ng-submit="editTool.submitHalt(opt)">          
               <formly-form model="editTool.eventFields" fields="editTool.haltFields"></formly-form>
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
@@ -65,34 +65,31 @@
 
 <form name="editTool.form" ng-submit="editTool.submit()">
 
-
-<div flex-container="row" flex-align="end" item="1">
-    <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editTool.abort()" lx-ripple>Back</button>
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editTool.abort()" lx-ripple>Back</button>      
     </div>
-    <div flex-item ng-if="editTool.canEdit()">
-      <button type="submit" 
+    <div class="toolbar__right">
+      <button type="submit" ng-if="editTool.canEdit()"
               class="btn btn--l btn--blue btn--raised" 
               lx-ripple>
                 Save Details
-      </button>
-    </div>
-    <div flex-item ng-if="editTool.canStop()">
-      <button type="button" 
+      </button>      
+      <button type="button" ng-if="editTool.canStop()"
               class="btn btn--l btn--orange btn--raised" 
               ng-click="editTool.raiseIssue()"
               lx-ripple>
                 Raise Issue for this Tool
-      </button>
-    </div>    
-    <div flex-item ng-if="!editTool.canStop()">
-      <button type="button" 
+      </button>      
+      <button type="button" ng-if="!editTool.canStop()"
               class="btn btn--l btn--orange btn--raised" 
               disabled="true" 
               lx-ripple>
                 Machine already Stopped
-      </button>
-    </div>    
+      </button>      
+    </div>
+  </div>
 </div>
 
 <formly-form model="editTool.component" fields="editTool.formFields">

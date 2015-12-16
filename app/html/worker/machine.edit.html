@@ -61,30 +61,12 @@
 
 <form name="editMachine.form" ng-submit="editMachine.submit()">
 
-
-<div flex-container="row" flex-align="end" item="1">
-    <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editMachine.abort()" lx-ripple>Back</button>
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editMachine.abort()" lx-ripple>Back</button>      
     </div>
-<!--    
-    <div ng-if="editMachine.canEdit()" flex-item>
-      <button type="submit" 
-              class="btn btn--l btn--blue btn--raised" 
-              lx-ripple>
-                Save Details
-      </button>
-    </div>
--->    
-<!--    
-    <div flex-item ng-if="editMachine.machine.IsRunning">
-      <button type="button" 
-              class="btn btn--l btn--orange btn--raised" 
-              ng-click="editMachine.raiseIssue()"
-              lx-ripple>
-                Raise Issue for this Machine
-      </button>
-    </div>
--->    
+  </div>
 </div>
 
 <formly-form model="editMachine.machine" fields="editMachine.formFields">
