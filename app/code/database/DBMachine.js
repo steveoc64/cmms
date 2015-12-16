@@ -7,7 +7,8 @@
   		'update': {method:'PUT'},
   		'insert': {method:'POST'},
   		'query':  {method:'GET', isArray:true},
-		  'delete': {method:'DELETE'}
+		  'delete': {method:'DELETE'},
+  		'clear': {method:'GET', url: ServerName+'/machine/clear/:id'},		  
 		})
 	})
 

@@ -10,7 +10,7 @@
     <svg ng-repeat="row in editMachine.components" 
          ng-attr-x="{{editMachine.toolOffset($index)}}" 
          ng-click="editMachine.goTool(row)">
-      <rect class="tool-svg" 
+      <rect ng-class="editMachine.getToolClass(row)" 
             ng-attr-width="{{editMachine.toolWidth()}}" />
       <text ng-if="row.Qty > 1" transform="translate(40 140)">x{{row.Qty}}</text>
       <text class="label-svg" 
@@ -24,12 +24,18 @@
 
 <form name="editMachine.form" ng-submit="editMachine.submit()">
 
-<formly-form model="editMachine.machine" fields="editMachine.formFields">
-
 <div flex-container="row" flex-align="end" item="1">
     <div flex-item>
       <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editMachine.abort()" lx-ripple>Back</button>
     </div>
+    <div ng-if="editMachine.canClear()" flex-item>
+      <button type="button" 
+              class="btn btn--l btn--green btn--raised" 
+              ng-click="editMachine.Clear()"
+              lx-ripple>
+                Reset / Clear all Issues
+      </button>
+    </div>    
     <div ng-if="editMachine.canEdit()" flex-item>
       <button type="submit" 
               class="btn btn--l btn--blue btn--raised" 
@@ -39,6 +45,7 @@
     </div>
 </div>
 
+<formly-form model="editMachine.machine" fields="editMachine.formFields">
 </formly-form>
 </form>
 

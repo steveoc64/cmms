@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/labstack/echo"
 	"gopkg.in/mgutz/dat.v1"
+	"log"
 	"net/http"
+	"strconv"
 )
 
 ///////////////////////////////////////////////////////////////////////
@@ -229,6 +231,8 @@ func saveMachine(c *echo.Context) error {
 		switch record.Status {
 		case "Running":
 			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			// Set all components to running as well
+			DB.SQL(`update component set status='Running',is_running=true where machine_id=$1`, machineID).Exec()
 			addEvent = true
 		case "Needs Attention", "Maintenance Pending":
 			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
@@ -250,6 +254,8 @@ func saveMachine(c *echo.Context) error {
 		switch record.Status {
 		case "Running":
 			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			// Set all components to running as well
+			DB.SQL(`update component set status='Running',is_running=true where machine_id=$1`, machineID).Exec()
 			addEvent = true
 		case "Stopped":
 			DB.SQL(`update machine set stopped_at=localtimestamp,is_running=false where id=$1`, machineID).Exec()
@@ -259,6 +265,8 @@ func saveMachine(c *echo.Context) error {
 		switch record.Status {
 		case "Running":
 			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			// Set all components to running as well
+			DB.SQL(`update component set status='Running',is_running=true where machine_id=$1`, machineID).Exec()
 			addEvent = true
 		case "Needs Attention", "Maintenance Pending":
 			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
@@ -268,6 +276,8 @@ func saveMachine(c *echo.Context) error {
 		switch record.Status {
 		case "Running":
 			DB.SQL(`update machine set started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+			// Set all components to running as well
+			DB.SQL(`update component set status='Running',is_running=true where machine_id=$1`, machineID).Exec()
 			addEvent = true
 		case "Needs Attention", "Maintenance Pending":
 			DB.SQL(`update machine set alert_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
@@ -389,4 +399,19 @@ func queryMachineParts(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 	return c.JSON(http.StatusOK, parts)
+}
+
+// Clear the machine - temp measure to use during testing
+// TODO - remove this function later, when the actual workflow allows for the tool to be
+// cleared through regular channels
+func clearMachine(c *echo.Context) error {
+
+	machineID, _ := strconv.Atoi(c.Param("id"))
+	log.Println("Asked to clear machine !", machineID)
+
+	DB.SQL(`update machine set status='Running',started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
+	DB.SQL(`update component set status='Running',is_running=true where machine_id=$1`, machineID).Exec()
+
+	publishSocket("machine", machineID)
+	return c.String(http.StatusOK, "Machine Cleared")
 }

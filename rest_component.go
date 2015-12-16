@@ -24,6 +24,8 @@ type DBcomponent struct {
 	Notes       string `db:"notes"`
 	SiteName    string `db:"site_name"`
 	MachineName string `db:"machine_name"`
+	Status      string `db:"status"`
+	IsRunning   bool   `db:"is_running"`
 }
 
 // Get a list of all tools

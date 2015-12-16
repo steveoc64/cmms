@@ -8,12 +8,12 @@
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket,DBMachine){
 	
-			// Subscribe to machine state changes
-			var vm = this
-			socket.on("machine", function(data){
-				console.log("Rx Msg",data, socket)
-				vm.machines = DBMachine.query()					
-			})
+		// Subscribe to changes in the machine list	
+		var vm = this
+		socket.on("machine",function(msg){
+			console.log("Machine event - reload full list",msg)
+			vm.machines = DBMachine.query()					
+		})
 
 		angular.extend(this, {
 			machines: machines,
@@ -62,9 +62,32 @@
 
 	app.controller(base+'EditMachineCtrl', 
 		['$state','$stateParams','machine','Session','$window','components','$timeout','LxDialogService','parts',
-		'docs','DBDocServer','Upload','LxProgressService','events',
+		'docs','DBDocServer','Upload','LxProgressService','events','socket',
+		'DBMachine','DBMachineComponents','DBMachineParts','DBMachineEvents','DBSysLog',		
 		function($state,$stateParams,machine,Session,$window,components,$timeout,LxDialogService,parts,
-			docs,DBDocServer,Upload,LxProgressService, events){
+			docs,DBDocServer,Upload,LxProgressService, events,socket,
+			DBMachine,DBMachineComponents,DBMachineParts,DBMachineEvents,DBSysLog){
+
+
+		// Subscribe to changes for just this machine
+		{
+			var vm = this
+			var machineID = $stateParams.id
+			socket.on("machine",function(id){
+				if (id == machineID) {
+					console.log("Machine event for ",machineID,"reload details")
+					vm.machine = DBMachine.get({id: machineID})
+					vm.components = DBMachineComponents.query({id: machineID})
+					vm.parts = DBMachineParts.query({id: machineID})
+					vm.events = DBMachineEvents.query({id: machineID})
+					vm.logs = DBSysLog.query({
+						RefType: 'M',
+						RefID: machineID,
+						Limit: 100
+					})
+				} // message matches this machine
+			}) // socket.on
+		}
 
 		angular.extend(this, {
 			session: Session,
@@ -75,7 +98,7 @@
 			components: components,
 			formFields: getMachineForm(),	
 			getSVGClass: function() {
-				switch (machine.Status) {
+				switch (this.machine.Status) {
 					case 'Stopped':
 						return "machine-svg-stopped"
 					case 'Needs Attention':
@@ -88,6 +111,20 @@
 			},			
 			canEdit: function() {
 				return false
+			},
+			canClear: function() {
+				switch (this.machine.Status) {
+					case 'Stopped':
+					case 'Needs Attention':
+					case 'Maintenance Pending':
+						return true
+					default: 
+						return false
+				}
+			},
+			Clear: function() {
+				console.log('Clearing machine ....',$stateParams.id)
+				DBMachine.clear({id: $stateParams.id})
 			},
 			abort: function() {
 				$window.history.go(-1)
@@ -126,6 +163,18 @@
 				}
 				return "0"
 			},
+			getToolClass: function(row) {
+				switch(row.Status) {
+					case 'Needs Attention':
+						return 'tool-svg-attention'
+					case 'Maintenance Pending':
+						return 'tool-svg-pending'
+					case 'Stopped':
+						return 'tool-svg-stopped'
+					default:
+						return 'tool-svg'
+				}
+			},			
 			getDoc: function(row) {
 				console.log('Get document',row.ID)
 				var adoc = DBDocServer.get({id: row.ID})

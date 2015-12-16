@@ -33,7 +33,7 @@
     <svg ng-repeat="row in editMachine.components" 
          ng-attr-x="{{editMachine.toolOffset($index)}}" 
          ng-click="editMachine.goTool(row)">
-      <rect class="tool-svg" 
+      <rect ng-class="editMachine.getToolClass(row)" 
             ng-attr-width="{{editMachine.toolWidth()}}" />
       <text ng-if="row.Qty > 1" transform="translate(40 140)">x{{row.Qty}}</text>
       <text class="label-svg" 

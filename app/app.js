@@ -52,6 +52,7 @@ var getMapURI = function(addr) {
 				url: socketUrl,
 				ws: ws,
 				on: function(msg, callback) {
+					console.log('Subscribe to socket events on',msg)
 					ws.$un(msg)	// unsub 
 					ws.$on(msg, callback)
 				}

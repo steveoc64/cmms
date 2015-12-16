@@ -79,9 +79,36 @@
 
 
 .tool-svg {
+  y: 90px;
+  height: 60px;
+  fill: $green-50;
+  fill-opacity: 0.9;
+  stroke-width: 4;
+  stroke: $black;
+  stroke-opacity: 0.9;
+}
+.tool-svg-attention {
+  y: 90px;
+  height: 60px;
+  fill: $orange-600;
+  fill-opacity: 0.9;
+  stroke-width: 4;
+  stroke: $black;
+  stroke-opacity: 0.9;
+}
+.tool-svg-pending {
+  y: 90px;
+  height: 60px;
+  fill: $brown-600;
+  fill-opacity: 0.9;
+  stroke-width: 4;
+  stroke: $black;
+  stroke-opacity: 0.9;
+}
+.tool-svg-stopped {
 	y: 90px;
 	height: 60px;
-	fill: $yellow-600;
+	fill: $red-600;
 	fill-opacity: 0.9;
 	stroke-width: 4;
 	stroke: $black;
@@ -102,3 +129,34 @@
 	font-size: 10px;
 	fill: $blue-grey-800;
 }
+
+.machine__running td {
+  // Default 
+}
+.machine__attention td {
+  background-color: $amber-200;
+  font-weight: bold;
+}
+.machine__attention:hover {
+  background-color: $amber-500;
+}
+
+.machine__stopped td {
+  background-color: $deep-orange-500;  
+  font-weight: bold;
+  font-size: 16px;
+}
+.machine__pending td {
+  background-color: $brown-200;
+  font-weight: bold;
+}
+.machine__new td {
+  background-color: $teal-500;
+  color: $white;
+  a {
+    color: $cyan-100;
+  }
+  font-style: italic;
+}
+
+

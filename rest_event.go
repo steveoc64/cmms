@@ -265,7 +265,7 @@ func raiseEventTool(c *echo.Context) error {
 		Returning("id").
 		QueryScalar(&evt.ID)
 
-	// Update the machine record
+	// Update the machine record and the tool record
 	switch req.Action {
 	case "Alert":
 		_, err = DB.SQL(`update machine 
@@ -274,12 +274,21 @@ func raiseEventTool(c *echo.Context) error {
 			machineId,
 			`Needs Attention`).
 			Exec()
+
+		_, err = DB.SQL(`update component
+			set status='Needs Attention'
+			where id=$1`, toolId).
+			Exec()
 	case "Halt":
 		_, err = DB.SQL(`update machine 
 			set stopped_at=localtimestamp, status=$2, is_running=false
 			where id=$1`,
 			machineId,
 			`Stopped`).
+			Exec()
+		_, err = DB.SQL(`update component
+			set status='Stopped', is_running=false
+			where id=$1`, toolId).
 			Exec()
 	}
 
@@ -291,6 +300,8 @@ func raiseEventTool(c *echo.Context) error {
 	publishSocket("machine", machineId)
 	publishSocket("tool", toolId)
 	publishSocket("event", evt.ID)
+
+	// TODO - audit records for both the machine and tool
 
 	return c.String(http.StatusOK, "Event Raised on the Tool & Machine")
 }

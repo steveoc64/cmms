@@ -8,12 +8,12 @@
 		['$scope','$state','machines','Session','LxDialogService','logs','LxNotificationService','socket','DBMachine',
 		function($scope,$state, machines, Session, LxDialogService, logs,LxNotificationService,socket,DBMachine){
 
-			// Subscribe to changes in the machine list	
-			var vm = this
-			socket.on("machine",function(msg){
-				console.log("Rx Msg",msg)
-				vm.machines = DBMachine.query()					
-			})
+		// Subscribe to changes in the machine list	
+		var vm = this
+		socket.on("machine",function(msg){
+			console.log("Machine event - reload full list",msg)
+			vm.machines = DBMachine.query()					
+		})
 
 		angular.extend(this, {
 			machines: machines,
@@ -135,9 +135,31 @@
 
 	app.controller(base+'EditMachineCtrl', 
 		['$state','$stateParams','machine','logs','Session','$window','components','$timeout','LxDialogService','parts','events','docs',
-		'DBDocServer','LxProgressService','Upload',
+		'DBDocServer','LxProgressService','Upload','socket',
+		'DBMachine','DBMachineComponents','DBMachineParts','DBMachineEvents','DBSysLog',
 		function($state,$stateParams,machine,logs,Session,$window,components,$timeout,LxDialogService,parts,events,docs,
-			DBDocServer,LxProgressService,Upload){
+			DBDocServer,LxProgressService,Upload,socket,
+			DBMachine,DBMachineComponents,DBMachineParts,DBMachineEvents,DBSysLog){
+
+		// Subscribe to changes for just this machine
+		{
+			var vm = this
+			var machineID = $stateParams.id
+			socket.on("machine",function(id){
+				if (id == machineID) {
+					console.log("Machine event for ",machineID,"reload details")
+					vm.machine = DBMachine.get({id: machineID})
+					vm.components = DBMachineComponents.query({id: machineID})
+					vm.parts = DBMachineParts.query({id: machineID})
+					vm.events = DBMachineEvents.query({id: machineID})
+					vm.logs = DBSysLog.query({
+						RefType: 'M',
+						RefID: machineID,
+						Limit: 100
+					})
+				} // message matches this machine
+			}) // socket.on
+		}
 
 		angular.extend(this, {
 			session: Session,
@@ -151,7 +173,7 @@
 			formFields: getMachineForm(),		
 			logClass: logClass,
 			getSVGClass: function() {
-				switch (machine.Status) {
+				switch (this.machine.Status) {
 					case 'Stopped':
 						return "machine-svg-stopped"
 					case 'Needs Attention':
@@ -202,6 +224,18 @@
 					tools.push(angular.copy(row))
 				}
 				return tools
+			},
+			getToolClass: function(row) {
+				switch(row.Status) {
+					case 'Needs Attention':
+						return 'tool-svg-attention'
+					case 'Maintenance Pending':
+						return 'tool-svg-pending'
+					case 'Stopped':
+						return 'tool-svg-stopped'
+					default:
+						return 'tool-svg'
+				}
 			},
 			toolWidth: function() {
 				if (components.length > 0) {

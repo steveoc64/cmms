@@ -148,7 +148,9 @@ create table component (
 	serialnum text not null default '',
 	stock_code text not null default '',
 	picture text not null default '',
-	notes text not null default ''	
+	notes text not null default '',
+	status text not null default 'Running',
+	is_running bool not null default true
 );
 create unique index component_idx on component (machine_id,id);
 create index component_position_idx on component (machine_id,position);

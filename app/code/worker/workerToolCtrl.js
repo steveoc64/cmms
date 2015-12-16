@@ -59,28 +59,28 @@
 				LxDialogService.open('raiseIssueDialog')
 			},
 			submitAlert: function() {
-				console.log('Submitting an Alert on the tool', this.alertEvent)
+				var vm = this
 				this.eventHandler.raise({
 					tool: $stateParams.id,
 					action: 'Alert',
 					descr: this.eventFields.AlertDescr
 				})
 				LxDialogService.close('raiseIssueDialog')
-
-				console.log('Submitting an Alert on the tool', this.alert)
-				LxDialogService.close('raiseIssueDialog')
+				$timeout(function(){
+					$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+				}, 600)
 			},
 			submitHalt: function() {
-				console.log('Submitting an Alert on the tool', this.alertEvent)
+				var vm = this
 				this.eventHandler.raise({
 					tool: $stateParams.id,
 					action: 'Halt',
 					descr: this.eventFields.HaltDescr
 				})
 				LxDialogService.close('raiseIssueDialog')
-
-				console.log('Submitting an Alert on the tool', this.alert)
-				LxDialogService.close('raiseIssueDialog')
+				$timeout(function(){
+					$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+				}, 600)
 			}
 
 
