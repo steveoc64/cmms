@@ -29,17 +29,19 @@
 
 <formly-form model="editTool.component" fields="editTool.formFields">
 
-<div flex-container="row" flex-align="end" item="1">
-    <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editTool.abort()" lx-ripple>Back</button>
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editTool.abort()" lx-ripple>Back</button>      
     </div>
-    <div flex-item ng-if="editTool.canEdit()">
-      <button type="submit" 
+    <div class="toolbar__right">
+      <button type="submit" ng-if="editTool.canEdit()"
               class="btn btn--l btn--blue btn--raised" 
               lx-ripple>
                 Save Details
-      </button>
+      </button>      
     </div>
+  </div>
 </div>
 
 </formly-form>

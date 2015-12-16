@@ -24,25 +24,25 @@
 
 <form name="editMachine.form" ng-submit="editMachine.submit()">
 
-<div flex-container="row" flex-align="end" item="1">
-    <div flex-item>
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editMachine.abort()" lx-ripple>Back</button>
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editMachine.abort()" lx-ripple>Back</button>      
     </div>
-    <div ng-if="editMachine.canClear()" flex-item>
-      <button type="button" 
-              class="btn btn--l btn--green btn--raised" 
-              ng-click="editMachine.Clear()"
-              lx-ripple>
-                Reset / Clear all Issues
-      </button>
-    </div>    
-    <div ng-if="editMachine.canEdit()" flex-item>
-      <button type="submit" 
+    <div class="toolbar__right">
+      <button type="submit" ng-if="editMachine.canEdit()"
               class="btn btn--l btn--blue btn--raised" 
               lx-ripple>
                 Save Details
-      </button>
+      </button>      
+      <button type="button" ng-if="editMachine.canClear()"
+              class="btn btn--l btn--orange btn--raised" 
+              ng-click="editMachine.Clear()"
+              lx-ripple>
+                Reset / Clear all Issues
+      </button>      
     </div>
+  </div>
 </div>
 
 <formly-form model="editMachine.machine" fields="editMachine.formFields">
