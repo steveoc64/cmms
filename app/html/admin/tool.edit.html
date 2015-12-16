@@ -29,6 +29,16 @@
 <!-- Component SVG representation -->
 <div>
   <svg ng-class="editTool.getPanelClass()">
+    <text class="label-svg-header" 
+          ng-if="editTool.parts.length > 0" 
+          transform="translate(20,155)">
+          Parts used in this Tool
+    </text>
+    <text class="label-svg-header" 
+          ng-if="editTool.parts.length == 0" 
+          transform="translate(20,20)">
+          There are NO Parts defined for this Tool
+    </text>
     <svg ng-repeat="row in editTool.parts" ng-attr-x="{{editTool.partOffset($index)}}" ng-click="editTool.goPart(row)">
       <rect class="part-svg" ng-attr-width="{{editTool.partWidth()}}"/>
       <text class="label-svg" transform="translate(20) rotate(40 0,0) translate(0 20)">{{row.StockCode}}<tspan x="16" y="16">{{row.Name}}</tspan></text>

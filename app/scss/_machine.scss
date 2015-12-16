@@ -126,8 +126,12 @@
 }
 
 .label-svg {
-	font-size: 10px;
-	fill: $blue-grey-800;
+  font-size: 10px;
+  fill: $blue-grey-800;
+}
+.label-svg-header {
+	font-size: 14px;
+	fill: $blue;
 }
 
 .machine__running td {
