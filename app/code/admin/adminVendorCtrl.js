@@ -103,13 +103,14 @@
 	}])
 
 	app.controller(base+'EditVendorCtrl', 
-		['$state','$stateParams','vendor','logs','Session','$window','LxDialogService','parts',
-		function($state,$stateParams,vendor,logs,Session,$window,LxDialogService,parts){
+		['$state','$stateParams','vendor','logs','Session','$window','LxDialogService','parts','Upload','LxProgressService','docs','DBDocs',
+		function($state,$stateParams,vendor,logs,Session,$window,LxDialogService,parts,Upload,LxProgressService,docs,DBDocs){
 
 		angular.extend(this, {
 			session: Session,
 			vendor: vendor,
 			logs: logs,
+			docs: docs,
 			parts: parts,
 			formFields: getVendorForm(),		
 			logClass: logClass,
@@ -135,6 +136,47 @@
 			editPriceList: function() {
 				$state.go(base+'.editvendorprice',{id: $stateParams.id})
 			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+			},
+    	upload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+        Upload.upload({
+            url: 'upload',
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "vendor",
+            	ref_id: $stateParams.id,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
+     				vm.docs = DBDocs.query({type: 'vendor', id: $stateParams.id})		    		
+        	}
+        }, function (resp) {
+            console.log('Error status: ' + resp.status + ' ' + resp.data);
+		    		vm.uploadProgress = 'Error ! ' + resp.data
+		    		LxProgressService.circular.hide()
+
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+            /*
+            if (evt.config.data.file) {
+            	console.log(this.uploadProgress + ' ' + evt.config.data.file.name);
+          	}
+          	*/
+        })
+      },			
+
 		})
 	}])
 
