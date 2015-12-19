@@ -65,7 +65,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="data-table"
+            <tr class="data-table"              
                 ng-repeat="row in editMachine.events">
                   <td>{{row.StartDate}}</td>
                   <td>{{row.Type}}</td>
@@ -92,9 +92,10 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-click="editMachine.goTool(row)"
                 ng-repeat="row in editMachine.components">
-                  <td><a ng-click="editMachine.goTool(row)"># {{row.Position}}:<br>{{row.Name}}</a></td>
-                  <td><a ng-click="editMachine.goTool(row)">{{row.StockCode}}</a></td>
+                  <td><a># {{row.Position}}:<br>{{row.Name}}</a></td>
+                  <td><a>{{row.StockCode}}</a></td>
                   <td>{{row.Descr | limitTo:32}}</td>
                   <td>{{row.Make}}</td>
                   <td>{{row.Model}}</td>
@@ -119,13 +120,13 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-click="editMachine.goPart(row)"
                 ng-repeat="row in editMachine.parts">
-                  <td><a ng-click="editMachine.goPart(row)">{{row.StockCode}}</a></td>
-                  <td><a ng-click="editMachine.goPart(row)">{{row.Name}}</a></td>
-                  <td><a ng-click="editMachine.goPart(row)">{{row.ToolCode}} / {{row.ToolName}}</a></td>
+                  <td><a>{{row.StockCode}}</a></td>
+                  <td><a>{{row.Name}}</a></td>
+                  <td><a>{{row.ToolCode}} / {{row.ToolName}}</a></td>
                   <td>{{row.Qty}}</td>
                   <td>{{row.ReorderStocklevel}} / {{row.ReorderQty}} (@ ${{row.LatestPrice}} {{row.QtyType}})</td>
-
             </tr>
           </tbody>
         </table>
@@ -166,7 +167,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="data-table"
+            <tr class="data-table"                
                 ng-repeat="row in editMachine.docs">
                   <td>{{row.Name}}</td>
                   <td>

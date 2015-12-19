@@ -43,9 +43,10 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-click="editPart.goTool(row)"
                 ng-repeat="row in editPart.components">
-                  <td><a ng-click="editPart.goTool(row)">{{row.StockCode}}</a></td>
-                  <td><a ng-click="editPart.goTool(row)">{{row.Name}}</a></td>
+                  <td><a>{{row.StockCode}}</a></td>
+                  <td><a>{{row.Name}}</a></td>
                   <td><a ng-click="editPart.goMachine(row)">{{row.MachineName}}</a></td>
                   <td>{{row.SiteName}}</td>
                   <td>{{row.Qty}}</td>

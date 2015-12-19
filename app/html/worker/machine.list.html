@@ -15,7 +15,6 @@
         <th><a ng-click="Machines.setSort('Descr')"> Description</a></th>
         <th><a ng-click="Machines.setSort('Serialnum')"> Serial #</a></th>
         <th><a ng-click="Machines.setSort('SiteName')"> Site</a></th>
-        <th> Details</th>
       </tr>
     </thead>
 
@@ -43,22 +42,15 @@
 </td></tr><tr>
 -->
 <!-- End machine SVG representation -->
-            <td><p><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
-            <td><a ng-click="Machines.clickEdit(row)">
+            <td><p><a>{{row.Name}}</a></td>
+            <td><a>
               {{row.Status}}<br>
               {{row.StatusDescription}}
               </a>
             </td>
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Serialnum}}</a></td>
+            <td><a>{{row.Descr | limitTo:64}}</a></td>
+            <td><a>{{row.Serialnum}}</a></td>
             <td>{{row.SiteName}}</td>
-            <td>
-              <button class="btn btn--m btn--blue btn--icon" 
-                      ng-click="Machines.clickEdit(row); $event.stopPropagation()"
-                      lx-ripple>
-                        <i class="mdi mdi-plus"></i>
-              </button>
-            </td>
       </tr>
     </tbody>
   </table>

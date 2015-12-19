@@ -15,7 +15,6 @@
         <th><a ng-click="Machines.setSort('Descr')"> Description</a></th>
         <th><a ng-click="Machines.setSort('Serialnum')"> Serial #</a></th>
         <th><a ng-click="Machines.setSort('SiteName')"> Site</a></th>
-        <th> Details</th>
       </tr>
     </thead>
 
@@ -24,19 +23,11 @@
       		ng-class="Machines.getClass(row)"
       		ng-repeat="row in Machines.machines | filter:searchMachine | orderBy:Machines.sortField:Machines.sortDir"
       		ng-click="Machines.clickEdit(row)"> 
-            <td><p><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Status}}</a></td>
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Serialnum}}</a></td>
+            <td><a>{{row.Name}}</a></td>
+            <td><a>{{row.Status}}</a></td>
+            <td><a>{{row.Descr | limitTo:64}}</a></td>
+            <td><a>{{row.Serialnum}}</a></td>
             <td><a ng-click="Machines.goSite(row)">{{row.SiteName}}</a></td>
-            <td>
-              <button class="btn btn--m btn--blue btn--icon" 
-                      ng-click="Machines.clickEdit(row); $event.stopPropagation()"
-                      lx-ripple>
-                        <i class="mdi mdi-plus"></i>
-              </button>
-            </td>
-
       </tr>
     </tbody>
   </table>
