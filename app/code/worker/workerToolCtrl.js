@@ -68,7 +68,7 @@
 						tool: $stateParams.id,
 						action: 'Alert',
 						descr: this.eventFields.AlertDescr
-					}).then(function(){
+					}).$promise.then(function(){
 						LxDialogService.close('raiseIssueDialog')
 						LxNotificationService.info('New Issue Raised')
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
@@ -84,7 +84,7 @@
 						tool: $stateParams.id,
 						action: 'Halt',
 						descr: this.eventFields.HaltDescr
-					}).then(function(){
+					}).$promise.then(function(){
 						LxDialogService.close('raiseIssueDialog')
 						LxNotificationService.error('Machine Halted')						
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					

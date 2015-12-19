@@ -6,9 +6,9 @@
 
 	app.controller(base+'EditToolCtrl', 
 		['$state','$stateParams','Session','$window','component','$timeout','parts','LxDialogService','events',
-		'Upload','DBDocs','DBDocServer','docs','LxProgressService',
+		'Upload','DBDocs','DBDocServer','docs','LxProgressService','DBRaiseToolEvent','machine','LxNotificationService',
 		function($state,$stateParams,Session,$window,component,$timeout,parts,LxDialogService,events,
-			Upload,DBDocs,DBDocServer,docs,LxProgressService){
+			Upload,DBDocs,DBDocServer,docs,LxProgressService,DBRaiseToolEvent,machine,LxNotificationService){
 
 		angular.extend(this, {
 			session: Session,
@@ -16,9 +16,16 @@
 			parts: parts,
 			events: events,
 			docs: docs,
+			machine: machine,
 			formFields: getComponentForm(),		
+			alertFields: getComponentAlertForm(),
+			haltFields: getComponentHaltForm(),
+			eventHandler: DBRaiseToolEvent,					
 			canEdit: function() {
 				return false
+			},
+			canStop: function() {
+				return this.machine.IsRunning
 			},
 			submit: function() {
 				this.component._id = $stateParams.id
@@ -51,6 +58,41 @@
 				}
 				return "0"
 			},
+			raiseIssue: function() {
+				LxDialogService.open('raiseIssueDialog')
+			},
+			submitAlert: function() {
+				if (this.eventFields.AlertDescr.length > 0) {
+					var vm = this
+					var q = this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Alert',
+						descr: this.eventFields.AlertDescr
+					}).$promise.then(function(){
+						LxDialogService.close('raiseIssueDialog')
+						LxNotificationService.info('New Issue Raised')
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					})
+				} else {
+					LxDialogService.close('raiseIssueDialog')
+				}
+			},
+			submitHalt: function() {
+				if (this.eventFields.HaltDescr.length > 0) {
+					var vm = this
+					this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Halt',
+						descr: this.eventFields.HaltDescr
+					}).$promise.then(function(){
+						LxDialogService.close('raiseIssueDialog')
+						LxNotificationService.error('Machine Halted')						
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					})
+				} else {
+					LxDialogService.close('raiseIssueDialog')					
+				}
+			},			
 			getDoc: function(row) {
 				console.log('Get document',row.ID)
 				var adoc = DBDocServer.get({id: row.ID})
