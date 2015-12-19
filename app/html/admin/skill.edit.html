@@ -123,8 +123,9 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-click="editSkill.goUser(u)"
                 ng-repeat="u in editSkill.users">
-                  <td><a ng-click="editSkill.goUser(u)">{{u.Name}}</a></td>
+                  <td><a>{{u.Name}}</a></td>
                   <td>{{u.Email}}</td>
                   <td>{{u.SMS}}</td>
                   <td><a ng-click="editSkill.goSite(u)">{{u.SiteName}}</a></td>

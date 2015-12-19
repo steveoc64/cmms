@@ -64,6 +64,7 @@
   <table class="data-table">
     <thead>
       <tr>
+        <th><i class="icon icon--m mdi mdi-check"></i></th>      
         <th><a ng-click="Machines.setSort('Name')"> Name</a></th>
         <th><a ng-click="Machines.setSort('Status')"> Status</a></th>
         <th><a ng-click="Machines.setSort('Descr')"> Description</a></th>
@@ -76,21 +77,14 @@
       <tr class="data-table__selectable-row"
       		ng-class="Machines.getClass(row)"
       		ng-repeat="row in Machines.machines | filter:searchMachine | orderBy:Machines.sortField:Machines.sortDir"
-      		ng-click="Machines.clickedRow(row)"> 
-            <td><p><a ng-click="Machines.clickEdit(row)">{{row.Name}}</a></td>
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Status}}</a></td>
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
-            <td><a ng-click="Machines.clickEdit(row)">{{row.Serialnum}}</a></td>
+      		ng-click="Machines.clickEdit(row)"> 
+            <td ng-click="Machines.clickedRow(row); $event.stopPropagation()"></td>
+            <td><a>{{row.Name}}</a></td>
+            <td><a>{{row.Status}}</a></td>
+            <td><a>{{row.Descr | limitTo:64}}</a></td>
+            <td><a>{{row.Serialnum}}</a></td>
             <td><a ng-click="Machines.goSite(row)">{{row.SiteName}}</a></td>
-            <td>
-              <button class="btn btn--m btn--blue btn--icon" 
-                      ng-click="Machines.clickEdit(row); $event.stopPropagation()"
-                      lx-ripple>
-                        <i class="mdi mdi-plus"></i>
-              </button>
-            </td>
-
-      </tr>
+      </tr>      
     </tbody>
   </table>
 </div>

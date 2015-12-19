@@ -111,9 +111,10 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-click="editMachine.goTool(row)"
                 ng-repeat="row in editMachine.components">
-                  <td><a ng-click="editMachine.goTool(row)"># {{row.Position}}:<br>{{row.Name}}</a></td>
-                  <td><a ng-click="editMachine.goTool(row)">{{row.StockCode}}</a></td>
+                  <td><a># {{row.Position}}:<br>{{row.Name}}</a></td>
+                  <td><a>{{row.StockCode}}</a></td>
                   <td>{{row.Descr | limitTo:32}}</td>
                   <td>{{row.Make}}</td>
                   <td>{{row.Model}}</td>
@@ -138,10 +139,11 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-click="editMachine.goPart(row)"
                 ng-repeat="row in editMachine.parts">
-                  <td><a ng-click="editMachine.goPart(row)">{{row.StockCode}}</a></td>
-                  <td><a ng-click="editMachine.goPart(row)">{{row.Name}}</a></td>
-                  <td><a ng-click="editMachine.goPart(row)">{{row.ToolCode}} / {{row.ToolName}}</a></td>
+                  <td><a>{{row.StockCode}}</a></td>
+                  <td><a>{{row.Name}}</a></td>
+                  <td><a>{{row.ToolCode}} / {{row.ToolName}}</a></td>
                   <td>{{row.Qty}}</td>
                   <td>{{row.ReorderStocklevel}} / {{row.ReorderQty}} (@ ${{row.LatestPrice}} {{row.QtyType}})</td>
 
@@ -190,8 +192,7 @@
                   <td>{{row.Name}}</td>
                   <td>
                     <a ng-href="doc/{{row.ID}}" 
-                       target="_self" 
-                       download="{{row.Filename}}">
+                       target="_self">
                       {{row.Filename}}
                     </a>
                   </td>
@@ -220,6 +221,7 @@
           <tbody>
             <tr class="data-table"
                 ng-class="editMachine.logClass(l)"           
+                ng-click="editMachine.showChange(l); $event.stopPropagation()"
                 ng-repeat="l in editMachine.logs">
                   <td>{{l.Type}}</td>
                   <td>{{l.Logdate}}</td>

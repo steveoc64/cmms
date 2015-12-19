@@ -64,6 +64,7 @@
   <table class="data-table">
     <thead>
       <tr>
+        <th><i class="icon icon--m mdi mdi-check"></i></th>
         <th><a ng-click="Parts.setSort('StockCode')"> StockCode</a></th>
         <th><a ng-click="Parts.setSort('Descr')"> Description</a></th>
         <th><a ng-click="Parts.setSort('ReorderStocklevel')"> Re Order Levels</a></th>
@@ -74,19 +75,11 @@
       <tr class="data-table__selectable-row"
       		ng-class="Parts.getClass(row)"
       		ng-repeat="row in Parts.parts | filter:searchPart | orderBy:Parts.sortField:Parts.sortDir"
-
-      		ng-click="Parts.clickedRow(row)"> 
-            <td><p><a ng-click="Parts.clickEdit(row)">{{row.StockCode}}</a></td>
-            <td><a ng-click="Parts.clickEdit(row)">{{row.Descr | limitTo:64}}</a></td>
+      		ng-click="Parts.clickEdit(row)"> 
+            <td ng-click="Parts.clickedRow(row); $event.stopPropagation()"></td>          
+            <td><a>{{row.StockCode}}</a></td>
+            <td><a>{{row.Descr | limitTo:64}}</a></td>
             <td>{{row.ReorderStocklevel}} / {{row.ReorderQty}} (@ ${{row.LatestPrice}} {{row.QtyType}})</td>
-            <td>
-              <button class="btn btn--m btn--blue btn--icon" 
-                      ng-click="Parts.clickEdit(row); $event.stopPropagation()"
-                      lx-ripple>
-                        <i class="mdi mdi-plus"></i>
-              </button>
-            </td>
-
       </tr>
     </tbody>
   </table>

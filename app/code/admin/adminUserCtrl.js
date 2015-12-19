@@ -27,7 +27,6 @@
 				}
 			},
 			clickedRow: function(row) {
-				//console.log('Clicked on',u.ID, '=',u)
 				if (!angular.isDefined(row.selected)) {
 					row.selected = false
 				}

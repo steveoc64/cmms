@@ -66,10 +66,10 @@
   <table class="data-table">
     <thead>
       <tr>
+        <th><i class="icon icon--m mdi mdi-check"></i></th>      
         <th><a ng-click="Sites.setSort('Name')"> Name</a></th>
         <th><a ng-click="Sites.setSort('ParentSiteName')"> Parent</a></th>
         <th><a ng-click="Sites.setSort('Address')"> Address</a></th>
-        <th> Edit </th>
       </tr>
     </thead>
 
@@ -77,20 +77,14 @@
       <tr class="data-table__selectable-row"
       		ng-class="Sites.getClass(row)"
       		ng-repeat="row in Sites.sites | orderBy:Sites.sortField:Sites.sortDir"
-      		ng-click="Sites.clickedRow(row)"> 
-            <td><p><a ng-click="Sites.clickEdit(row)">{{row.Name}}</a></td>
+      		ng-click="Sites.clickEdit(row)"> 
+            <td ng-click="Sites.clickedRow(row); $event.stopPropagation()"></td>
+            <td><a>{{row.Name}}</a></td>
             <td><a ng-click="Sites.goParent(row)">{{row.ParentSiteName}}</a></td>
             <td><a ng-if="row.Address != ''" href="{{Sites.getMapURI(row.Address)}}" target="googlemaps">
               <i class="mdi mdi-map"></i><p>
               {{row.Address}}
             </a></td>
-            <td>
-            	<button class="btn btn--m btn--blue btn--icon" 
-            					ng-click="Sites.clickEdit(row); $event.stopPropagation()"
-            					lx-ripple>
-            						<i class="mdi mdi-plus"></i>
-            	</button>
-            </td>
       </tr>
     </tbody>
   </table>

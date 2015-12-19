@@ -66,12 +66,12 @@
       <tr>
         <!-- Generated List of Table Headers -->
 				<!-- TODO: cull the columns down, and remove any unwanted sort criterior -->
+        <th><i class="icon icon--m mdi mdi-check"></i></th>
         <th><a ng-click="Vendors.setSort('Name')"> Name</a></th>
         <th><a ng-click="Vendors.setSort('Address')"> Address</a></th>
         <th><a ng-click="Vendors.setSort('Phone')"> Phone</a></th>
         <th><a ng-click="Vendors.setSort('ContactEmail')"> ContactEmail</a></th>
         <th><a ng-click="Vendors.setSort('Rating')"> Rating</a></th>
-        <th> Edit </th>
       </tr>
     </thead>
 
@@ -81,19 +81,13 @@
       <tr class="data-table__selectable-row"
       		ng-class="Vendors.getClass(row)"
       		ng-repeat="row in Vendors.vendors | orderBy:Vendors.sortField:Vendors.sortDir"
-      		ng-click="Vendors.clickedRow(row)">     
-            <td><a ng-click="Vendors.clickEdit(row)">{{row.Name}}</a></td>
-            <td><a ng-click="Vendors.clickEdit(row)">{{row.Address}}</a></td>
-            <td><a ng-click="Vendors.clickEdit(row)">{{row.Phone}}</a></td>
-            <td><a ng-click="Vendors.clickEdit(row)">{{row.ContactEmail}}</a></td>
-            <td><a ng-click="Vendors.clickEdit(row)">{{row.Rating}}</a></td>
-            <td>
-            	<button class="btn btn--m btn--blue btn--icon" 
-            					ng-click="Vendors.clickEdit(row); $event.stopPropagation()"
-            					lx-ripple>
-            						<i class="mdi mdi-plus"></i>
-            	</button>
-            </td>
+      		ng-click="Vendors.clickEdit(row)">     
+            <td ng-click="Vendors.clickedRow(row); $event.stopPropagation()"></td>
+            <td><a>{{row.Name}}</a></td>
+            <td><a>{{row.Address}}</a></td>
+            <td><a>{{row.Phone}}</a></td>
+            <td><a>{{row.ContactEmail}}</a></td>
+            <td><a>{{row.Rating}}</a></td>
       </tr>		
     </tbody>
   </table>
