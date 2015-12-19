@@ -131,16 +131,16 @@
       <div flex-container="row" flex-gutter="24">
         <div flex-item="5">
           <lx-text-field label="Description" >
-            <input type="text" ng-model="editMachine.doc">
+            <input type="text" ng-model="editTool.doc">
           </lx-text-field>
         </div>
       </div>
       <div flex-container="row" flex-gutter="24">
           <div flex-item="10">
-            <lx-file-input label="Upload New Document ..." change="editMachine.upload(e)"></lx-file-input>
+            <lx-file-input label="Upload New Document ..." change="editTool.upload(e)"></lx-file-input>
           </div>
           <div flex-item="2">
-            <div id="upload-progress">{{editMachine.uploadProgress}}</div>          
+            <div id="upload-progress">{{editTool.uploadProgress}}</div>          
           </div>
       </div>
       <div class="data-table-container">
@@ -155,7 +155,7 @@
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-repeat="row in editMachine.docs">
+                ng-repeat="row in editTool.docs">
                   <td>{{row.Name}}</td>
                   <td>
                     <a ng-href="doc/{{row.ID}}" 

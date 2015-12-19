@@ -115,9 +115,9 @@
 
 	app.controller(base+'EditToolCtrl', 
 		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService',
-		'events','machine','Upload','LxProgressService','docs',
+		'events','machine','Upload','LxProgressService','docs','DBDocs',
 		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService,
-			events,machine,Upload,LxProgressService,docs){
+			events,machine,Upload,LxProgressService,docs,DBDocs){
 
 		angular.extend(this, {
 			session: Session,

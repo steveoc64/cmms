@@ -132,8 +132,10 @@
 	}])
 
 	app.controller(base+'EditUserCtrl', 
-		['$state','$stateParams','user','logs','Session','$window','LxDialogService','Upload','LxProgressService','docs','DBDocServer',
-		function($state,$stateParams,user,logs,Session,$window,LxDialogService,Upload,LxProgressService,docs,DBDocServer){
+		['$state','$stateParams','user','logs','Session','$window','LxDialogService',
+		'Upload','LxProgressService','docs','DBDocServer','DBDocs',
+		function($state,$stateParams,user,logs,Session,$window,LxDialogService,
+			Upload,LxProgressService,docs,DBDocServer,DBDocs){
 
  		LxProgressService.circular.hide()
 
@@ -186,6 +188,7 @@
 		    		LxProgressService.circular.hide()
 		    		vm.uploadProgress = 'Success !'
 		    		vm.doc = ''
+		    		vm.docs = DBDocs.query({type: 'user', id: $stateParams.id})
         	}
         }, function (resp) {
             console.log('Error status: ' + resp.status + ' ' + resp.data);

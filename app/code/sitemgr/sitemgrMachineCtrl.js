@@ -63,10 +63,10 @@
 	app.controller(base+'EditMachineCtrl', 
 		['$state','$stateParams','machine','Session','$window','components','$timeout','LxDialogService','parts',
 		'docs','DBDocServer','Upload','LxProgressService','events','socket',
-		'DBMachine','DBMachineComponents','DBMachineParts','DBMachineEvents','DBSysLog',		
+		'DBMachine','DBMachineComponents','DBMachineParts','DBMachineEvents','DBSysLog','DBDocs',
 		function($state,$stateParams,machine,Session,$window,components,$timeout,LxDialogService,parts,
 			docs,DBDocServer,Upload,LxProgressService, events,socket,
-			DBMachine,DBMachineComponents,DBMachineParts,DBMachineEvents,DBSysLog){
+			DBMachine,DBMachineComponents,DBMachineParts,DBMachineEvents,DBSysLog,DBDocs){
 
 
 		// Subscribe to changes for just this machine
@@ -200,6 +200,7 @@
 		    		LxProgressService.circular.hide()
 		    		vm.uploadProgress = 'Success !'
 		    		vm.doc = ''
+		    		vm.docs = DBDocs.query({type: 'machine', id: $stateParams.id})
         	}
         }, function (resp) {
             console.log('Error status: ' + resp.status + ' ' + resp.data);
