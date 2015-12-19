@@ -116,6 +116,7 @@
 		function($state,$stateParams,site,logs,Session,$window,users,$timeout,machines,LxDialogService,
 			supplies,socket,DBSiteMachines,Upload,LxProgressService,DBDocs,DBDocServer,docs){
 	
+				console.log('load',site)
 		angular.extend(this, {
 			session: Session,
 			site: site,
@@ -127,20 +128,11 @@
 			logClass: logClass,
 			formFields: getSiteForm(),		
 			submit: function() {
+				console.log('before',this.site)
 				this.site._id = $stateParams.id
-				if (angular.isDefined(this.site.ParentSite) && this.site.ParentSite) {
-					this.site.ParentSite = this.site.ParentSite.ID
-				} else {
-					this.site.ParentSite = 0
-				}
-				if (angular.isDefined(this.site.StockSite) && this.site.StockSite) {
-					this.site.StockSite = this.site.StockSite.ID
-				} else {
-					this.site.StockSite = 0
-				}
 				this.site.$update(function(newsite) {
 					$window.history.go(-1)
-				})					
+				})
 			},
 			abort: function() {
 				$window.history.go(-1)

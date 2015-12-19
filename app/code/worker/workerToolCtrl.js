@@ -61,20 +61,18 @@
 			raiseIssue: function() {
 				LxDialogService.open('raiseIssueDialog')
 			},
-			submitAlert: function(opt) {
-				console.log('eventFields=',this.eventFields)
+			submitAlert: function() {
 				if (this.eventFields.AlertDescr.length > 0) {
 					var vm = this
 					this.eventHandler.raise({
 						tool: $stateParams.id,
 						action: 'Alert',
 						descr: this.eventFields.AlertDescr
-					})
-					LxDialogService.close('raiseIssueDialog')
-					LxNotificationService.info('New Issue Raised')
-					$timeout(function(){
+					}).then(function(){
+						LxDialogService.close('raiseIssueDialog')
+						LxNotificationService.info('New Issue Raised')
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
-					}, 250)					
+					})
 				} else {
 					LxDialogService.close('raiseIssueDialog')
 				}
@@ -86,12 +84,11 @@
 						tool: $stateParams.id,
 						action: 'Halt',
 						descr: this.eventFields.HaltDescr
-					})
-					LxDialogService.close('raiseIssueDialog')
-					LxNotificationService.error('Machine Halted')
-					$timeout(function(){
+					}).then(function(){
+						LxDialogService.close('raiseIssueDialog')
+						LxNotificationService.error('Machine Halted')						
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
-					}, 250)					
+					})
 				} else {
 					LxDialogService.close('raiseIssueDialog')					
 				}

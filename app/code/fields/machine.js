@@ -195,6 +195,14 @@ getMachineFields = function() {
 				$scope.model.$promise.then(function() {
 					$scope.model.Site = $scope.model.SiteName
 				})
+
+				$scope.$watch('model.Site', function(newVal,oldVal,vm) {
+					if (angular.isDefined(newVal) && angular.isDefined(newVal.ID)) {
+						vm.model.SiteId = newVal.ID
+						vm.model.SiteName = newVal.Name
+					}
+				})
+
 			}]
 		}
 	}] // end fields

@@ -412,6 +412,8 @@ func clearMachine(c *echo.Context) error {
 	DB.SQL(`update machine set status='Running',started_at=localtimestamp,is_running=true where id=$1`, machineID).Exec()
 	DB.SQL(`update component set status='Running',is_running=true where machine_id=$1`, machineID).Exec()
 
+	// Create audit records for the machine and the component ?
+
 	publishSocket("machine", machineID)
 	return c.String(http.StatusOK, "Machine Cleared")
 }

@@ -184,11 +184,8 @@
 						return "machine-svg"
 				}
 			},
-			submit: function() {
+			submit: function() {				
 				this.machine._id = $stateParams.id				
-				if (angular.isDefined(this.machine.Site) && angular.isDefined(this.machine.Site.ID)) {
-					this.machine.SiteId = this.machine.Site.ID
-				}
 				this.machine.$update(function(newmachine) {
 					$window.history.go(-1)
 				})					

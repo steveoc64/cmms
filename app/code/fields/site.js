@@ -71,7 +71,7 @@ getSiteFields = function() {
 		extends: 'lx-select',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
-			key: 'ParentSite',
+			key: 'ParentSiteSelection',
 			templateOptions: {
 				type: 'select',
 				placeholder: 'Parent Site',
@@ -83,8 +83,16 @@ getSiteFields = function() {
 			controller: ['$scope','DBSite',function($scope,DBSite) {
 				$scope.to.options = DBSite.query()
 				$scope.model.$promise.then(function() {
-					$scope.model.ParentSite = $scope.model.ParentSiteName					
+					$scope.model.ParentSiteSelection = $scope.model.ParentSiteName					
 				})
+
+				$scope.$watch('model.ParentSiteSelection', function(newVal,oldVal,vm) {
+					if (newVal && angular.isDefined(newVal) && angular.isDefined(newVal.ID)) {
+						vm.model.ParentSite = newVal.ID
+						vm.model.ParentSiteName = newVal.Name
+					}
+				})
+
 			}]
 		}	
 	},{
@@ -92,7 +100,7 @@ getSiteFields = function() {
 		extends: 'lx-select',
 		wrapper: 'lx-wrapper-errors',
 		defaultOptions: {
-			key: 'StockSite',
+			key: 'StockSiteSelection',
 			templateOptions: {
 				type: 'select',
 				placeholder: 'Stock Provider Site',
@@ -104,7 +112,14 @@ getSiteFields = function() {
 			controller: ['$scope','DBSite',function($scope,DBSite) {
 				$scope.to.options = DBSite.query()
 				$scope.model.$promise.then(function() {
-					$scope.model.StockSite = $scope.model.StockSiteName					
+					$scope.model.StockSiteSelection = $scope.model.StockSiteName					
+				})
+
+				$scope.$watch('model.StockSiteSelection', function(newVal,oldVal,vm) {
+					if (newVal && angular.isDefined(newVal) && angular.isDefined(newVal.ID)) {
+						vm.model.StockSite = newVal.ID
+						vm.model.StockSiteName = newVal.Name
+					}
 				})
 			}]
 		}	
