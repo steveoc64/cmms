@@ -196,7 +196,6 @@
 			getDoc: function(row) {
 				console.log('Get document',row.ID)
 				var adoc = DBDocServer.get({id: row.ID})
-				console.log('adoc = ',adoc)
 			},			
       showChange: function(c) {
       	this.Audit = c

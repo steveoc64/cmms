@@ -36,6 +36,50 @@
     </lx-tab>
 
     <lx-tab heading="Documents">
+    <form>
+      <div flex-container="row" flex-gutter="24">
+        <div flex-item="5">
+          <lx-text-field label="Description" >
+            <input type="text" ng-model="editUser.doc">
+          </lx-text-field>
+        </div>
+      </div>
+      <div flex-container="row" flex-gutter="24">
+          <div flex-item="10">
+            <lx-file-input label="Upload New Document ..." change="editUser.upload(e)"></lx-file-input>
+          </div>
+          <div flex-item="2">
+            <div id="upload-progress">{{editUser.uploadProgress}}</div>          
+          </div>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> File</th>
+              <th> Size</th>
+              <th> Uploaded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editUser.docs">
+                  <td>{{row.Name}}</td>
+                  <td>
+                    <a ng-href="doc/{{row.ID}}" 
+                       target="_self" 
+                       download="{{row.Filename}}">
+                      {{row.Filename}}
+                    </a>
+                  </td>
+                  <td>{{row.Filesize}}</td>
+                  <td>{{row.Created}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
     </lx-tab>
 
     <lx-tab heading="WorkOrders">

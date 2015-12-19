@@ -178,6 +178,10 @@
 				}
 				return "0"
 			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+			},
     	upload: function (file) {
     		LxProgressService.circular.show('green','#upload-progress')
     		var vm = this

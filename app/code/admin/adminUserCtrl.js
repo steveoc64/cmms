@@ -166,7 +166,6 @@
 			getDoc: function(row) {
 				console.log('Get document',row.ID)
 				var adoc = DBDocServer.get({id: row.ID})
-				console.log('adoc = ',adoc)
 			},
     	upload: function (file) {
     		LxProgressService.circular.show('green','#upload-progress')
