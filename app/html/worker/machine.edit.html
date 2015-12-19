@@ -163,14 +163,6 @@
     </lx-tab>
 
     <lx-tab heading="Documents">
-    <form>
-      <div flex-container="row" flex-gutter="24">
-        <div flex-item="5">
-          <lx-text-field label="Description" >
-            <input type="text" ng-model="editMachine.doc">
-          </lx-text-field>
-        </div>
-      </div>
       <div class="data-table-container">
         <table class="data-table">
           <thead>
@@ -187,8 +179,7 @@
                   <td>{{row.Name}}</td>
                   <td>
                     <a ng-href="doc/{{row.ID}}" 
-                       target="_self" 
-                       download="{{row.Filename}}">
+                       target="_self">
                       {{row.Filename}}
                     </a>
                   </td>
@@ -198,7 +189,6 @@
           </tbody>
         </table>
       </div>
-    </form>
     </lx-tab>
 
   </lx-tabs>

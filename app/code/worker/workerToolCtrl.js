@@ -5,8 +5,10 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'EditToolCtrl', 
-		['$state','$stateParams','Session','$window','component','machine','$timeout','parts','LxDialogService','DBRaiseToolEvent','events','LxNotificationService',
-		function($state,$stateParams,Session,$window,component,machine,$timeout,parts,LxDialogService,DBRaiseToolEvent,events,LxNotificationService){
+		['$state','$stateParams','Session','$window','component','machine','$timeout','parts','LxDialogService',
+		'DBRaiseToolEvent','events','LxNotificationService','docs',
+		function($state,$stateParams,Session,$window,component,machine,$timeout,parts,LxDialogService,
+			DBRaiseToolEvent,events,LxNotificationService,docs){
 
 		angular.extend(this, {
 			session: Session,
@@ -14,6 +16,7 @@
 			parts: parts,
 			machine: machine,
 			events: events,
+			docs: docs,			
 			formFields: getComponentWorkerForm(),		
 			alertFields: getComponentAlertForm(),
 			haltFields: getComponentHaltForm(),
@@ -71,7 +74,7 @@
 					LxNotificationService.info('New Issue Raised')
 					$timeout(function(){
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
-					}, 600)					
+					}, 250)					
 				} else {
 					LxDialogService.close('raiseIssueDialog')
 				}
@@ -88,13 +91,15 @@
 					LxNotificationService.error('Machine Halted')
 					$timeout(function(){
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
-					}, 600)					
+					}, 250)					
 				} else {
 					LxDialogService.close('raiseIssueDialog')					
 				}
-			}
-
-
+			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+			},						
 		})
 
 	}])

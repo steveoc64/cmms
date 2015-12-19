@@ -26,8 +26,9 @@
     z-index: 998;
     width: $sidebar_margin;
     border-right: solid 1px #ddd;
-    background-color: #fff;
-    @include linear-gradient(#ffffff, $palette_16)    
+    //background-color: #fff;
+    background-color: $palette_1;
+    //@include linear-gradient(#ffffff, $palette_16)    
     @include transition-property(box-shadow, transform);
     @include transition-duration(0.6s);
     @include transition-timing-function($ease-out-quint);
@@ -49,10 +50,6 @@
     }
 }
 
-
-
-
-
 // Sidebar menu
 .sidebar-menu {
     padding: $base-spacing-unit 0;
@@ -65,15 +62,16 @@
     // Sidebar menu link
     .sidebar-menu__link {
         display: block;
-        padding: 0 $base-spacing-unit * 2;
+        padding: 5px $base-spacing-unit * 2 5px 20px;
         cursor: pointer;
-        @include font-size(14px);
-        font-weight: 700;
-        color: #333;
+        @include font-size(16px);
+        font-weight: 900;
+        color: $white;
         line-height: $base-spacing-unit * 6;
         text-decoration: none;
 
         &:hover {
-            background-color: #eee;
+            //background-color: #eee;
+            background-color: $palette_12;
         }
     }

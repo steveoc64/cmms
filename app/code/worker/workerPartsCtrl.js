@@ -5,14 +5,15 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'EditPartCtrl', 
-		['$state','$stateParams','part','Session','$window','components','LxDialogService','vendors',
-		function($state,$stateParams,part,Session,$window,components,LxDialogService,vendors){
+		['$state','$stateParams','part','Session','$window','components','LxDialogService','vendors','docs',
+		function($state,$stateParams,part,Session,$window,components,LxDialogService,vendors,docs){
 
 		angular.extend(this, {
 			session: Session,
 			part: part,
 			components: components,
 			vendors: vendors,
+			docs: docs,
 			formFields: getPartForm(),		
 			canEdit: function() {
 				return false
@@ -37,7 +38,11 @@
 			},
 			goTool: function(row) {
 				$state.go(base+".edittool",{id: row.ComponentID})
-			}
+			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+			},						
 		})
 	}])
 

@@ -158,6 +158,33 @@
     </lx-tab>
 
     <lx-tab heading="Documents">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> File</th>
+              <th> Size</th>
+              <th> Uploaded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editTool.docs">
+                  <td>{{row.Name}}</td>
+                  <td>
+                    <a ng-href="doc/{{row.ID}}" 
+                       target="_self" 
+                       download="{{row.Filename}}">
+                      {{row.Filename}}
+                    </a>
+                  </td>
+                  <td>{{row.Filesize}}</td>
+                  <td>{{row.Created}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </lx-tab>
 
     <lx-tab heading="StockTake">
