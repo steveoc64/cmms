@@ -116,7 +116,6 @@
 		function($state,$stateParams,site,logs,Session,$window,users,$timeout,machines,LxDialogService,
 			supplies,socket,DBSiteMachines,Upload,LxProgressService,DBDocs,DBDocServer,docs){
 	
-				console.log('load',site)
 		angular.extend(this, {
 			session: Session,
 			site: site,
@@ -178,7 +177,6 @@
 			  return "https://www.google.com/maps?q="+encodeURIComponent(addr)
 			},
 			getDoc: function(row) {
-				console.log('Get document',row.ID)
 				var adoc = DBDocServer.get({id: row.ID})
 			},
     	upload: function (file) {
@@ -197,35 +195,21 @@
             }
         }).then(function (resp) {
         	if (resp.config.data.file) {
-            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
 		    		LxProgressService.circular.hide()
 		    		vm.uploadProgress = 'Success !'
 		    		vm.doc = ''
 		    		vm.docs = DBDocs.query({type: 'site', id: $stateParams.id})
         	}
         }, function (resp) {
-            console.log('Error status: ' + resp.status + ' ' + resp.data);
 		    		vm.uploadProgress = 'Error ! ' + resp.data
 		    		LxProgressService.circular.hide()
 
         }, function (evt) {
             vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
-            /*
-            if (evt.config.data.file) {
-            	console.log(this.uploadProgress + ' ' + evt.config.data.file.name);
-          	}
-          	*/
         })
       },
 			
 		})
-/*
-		var vm = this
-		$timeout(function() {
-			vm.site.ParentSite = vm.site.ParentSiteName			
-		}, 200);
-*/
-
 	}])
 
 })();

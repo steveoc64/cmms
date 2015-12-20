@@ -29,6 +29,7 @@ type DBevent struct {
 	MaterialCost float64      `db:"material_cost"`
 	OtherCost    float64      `db:"other_cost"`
 	Notes        string       `db:"notes"`
+	Status       string       `db:"status"`
 }
 
 type DBeventResponse struct {
@@ -50,6 +51,7 @@ type DBeventResponse struct {
 	MaterialCost    string  `db:"material_cost"`
 	OtherCost       string  `db:"other_cost"`
 	Notes           string  `db:"notes"`
+	Status          string  `db:"status"`
 }
 
 type MachineEventRequest struct {
@@ -93,6 +95,64 @@ func queryMachineEvents(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func queryEvents(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var record []*DBeventResponse
+	err = DB.SQL(`select 
+		e.site_id,e.type,e.ref_id,e.notes,
+		to_char(e.startdate,'DD Mon YY HH24:MI') as startdate,
+		e.labour_cost, e.material_cost,e.other_cost,
+		u1.username as username, 
+		u2.username as allocated_by_user, 
+		u3.username as allocated_to_user 
+		from event e
+		left join users u1 on (u1.id=e.created_by) 
+		left join users u2 on (u2.id=e.allocated_by) 
+		left join users u3 on (u3.id=e.allocated_to) 
+		where type like 'Machine%'
+		order by startdate desc`).QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, record)
+}
+
+func getEvent(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	var record []*DBeventResponse
+	err = DB.SQL(`select 
+		e.site_id,e.type,e.ref_id,e.notes,
+		to_char(e.startdate,'DDMonYYYY HH24:MI:SS') as startdate,
+		e.labour_cost, e.material_cost,e.other_cost,
+		u1.username as username, 
+		u2.username as allocated_by_user, 
+		u3.username as allocated_to_user 
+		from event e
+		left join users u1 on (u1.id=e.created_by) 
+		left join users u2 on (u2.id=e.allocated_by) 
+		left join users u3 on (u3.id=e.allocated_to) 
+		where id=$1`, id).QueryStruct(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+
 	return c.JSON(http.StatusOK, record)
 }
 

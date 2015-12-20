@@ -1,6 +1,16 @@
 ;(function(){
 	'use strict';
 
+	angular.module('cmms').factory('DBEvent', function($resource,ServerName){
+		return $resource(ServerName+'/events/:id', {id:'@_id'}, {
+			'get':    {method:'GET'},
+  		'update': {method:'PUT'},
+  		'insert': {method:'POST'},
+  		'query':  {method:'GET', isArray:true},
+		  'delete': {method:'DELETE'}
+		})
+	})
+
 	angular.module('cmms').factory('DBRaiseMachineEvent', function($resource,ServerName){
 		return $resource(ServerName+'/event/raise/machine',{}, {
 			'raise': {method: 'POST'},

@@ -93,6 +93,8 @@ func _initRoutes() {
 	e.Put("/vendor/:id", saveVendor)
 	e.Delete("/vendor/:id", deleteVendor)
 
+	e.Get("/events", queryEvents)
+	e.Get("/events/:id", getEvent)
 	e.Post("/event/raise/machine", raiseEventMachine)
 	e.Post("/event/raise/tool", raiseEventTool)
 	e.Get("/machine/events/:id", queryMachineEvents)

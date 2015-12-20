@@ -155,6 +155,42 @@ var getMapURI = function(addr) {
 		      	templateUrl: 'html/admin/dashboard.html',
 		      	controller: 'adminDashCtrl as Dashboard',
 		      })
+		      .state('admin.events',{
+		      	url: '/events',
+		      	acl: 'Admin',
+		      	templateUrl: 'html/admin/event.list.html',
+		      	controller: 'adminEventCtrl as Events',
+		      	cache: false,
+		      	resolve: {
+		      		events: function(DBEvent) {
+		      			return DBEvent.query()
+		      		}, 
+		      		logs: function(DBSysLog) {
+		      			return DBSysLog.query({RefType: 'E', Limit: 100})
+		      		}
+		      	}  
+		      })
+			      .state('admin.editevent',{
+			      	url: '/event/edit/:id',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/event.edit.html',
+			      	controller: 'adminEditEventCtrl as editEvent',
+			      	resolve: {
+			      		event: function(DBEvent,$stateParams) {
+			      			return DBEvent.get({id: $stateParams.id})
+			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'event', id: $stateParams.id})
+			      		},
+			      		logs: function(DBSysLog,$stateParams) {
+			      			return DBSysLog.query({
+			      				RefType: 'E',
+			      				RefID: $stateParams.id,
+			      				Limit: 100
+			      			})
+			      		}
+			      	}
+			      })
 		      .state('admin.users',{
 		      	url: '/users',
 		      	acl: 'Admin',
