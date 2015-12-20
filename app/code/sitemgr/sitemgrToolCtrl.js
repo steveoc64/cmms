@@ -20,12 +20,16 @@
 			formFields: getComponentForm(),		
 			alertFields: getComponentAlertForm(),
 			haltFields: getComponentHaltForm(),
+			clearFields: getComponentClearForm(),
 			eventHandler: DBRaiseToolEvent,					
 			canEdit: function() {
 				return false
 			},
 			canStop: function() {
 				return this.machine.IsRunning
+			},
+			canClear: function() {
+				return this.machine.Status != 'Running'
 			},
 			submit: function() {
 				this.component._id = $stateParams.id
@@ -58,8 +62,27 @@
 				}
 				return "0"
 			},
+			clearIssue: function() {
+				LxDialogService.open('clearIssueDialog')
+			},
 			raiseIssue: function() {
 				LxDialogService.open('raiseIssueDialog')
+			},
+			submitClear: function() {
+				if (this.eventFields.ClearDescr.length > 0) {
+					var vm = this
+					var q = this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Clear',
+						descr: this.eventFields.ClearDescr
+					}).$promise.then(function(){
+						LxDialogService.close('clearIssueDialog')
+						LxNotificationService.info('Issues Cleared')
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					})
+				} else {
+					LxNotificationService.error('Please Enter Description')
+				}
 			},
 			submitAlert: function() {
 				if (this.eventFields.AlertDescr.length > 0) {
@@ -74,7 +97,7 @@
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
 					})
 				} else {
-					LxDialogService.close('raiseIssueDialog')
+					LxNotificationService.error('Please Enter Description')
 				}
 			},
 			submitHalt: function() {
@@ -90,7 +113,7 @@
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
 					})
 				} else {
-					LxDialogService.close('raiseIssueDialog')					
+					LxNotificationService.error('Please Enter Description')
 				}
 			},			
 			getDoc: function(row) {

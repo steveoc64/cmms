@@ -246,6 +246,7 @@ getMachineForm = function() {
 			]
 		}
 	},{
+/*		
 		type: 'lx-flex',
 		templateOptions: {
 			flex: { container: "row", item: "6"},
@@ -255,6 +256,7 @@ getMachineForm = function() {
 			]
 		}
 	},{
+*/		
 		type: 'lx-flex',
 		templateOptions: {
 			flex: {container: "row", item: "3"},

@@ -292,6 +292,17 @@ func raiseEventTool(c *echo.Context) error {
 			set status='Stopped', is_running=false
 			where id=$1`, toolId).
 			Exec()
+	case "Clear":
+		_, err = DB.SQL(`update machine 
+			set started_at=localtimestamp, status=$2, is_running=true
+			where id=$1`,
+			machineId,
+			`Running`).
+			Exec()
+		_, err = DB.SQL(`update component
+			set status='Running', is_running=true
+			where machine_id=$1`, machineId).
+			Exec()
 	}
 
 	if err != nil {

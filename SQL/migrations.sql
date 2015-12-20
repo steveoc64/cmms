@@ -1,0 +1,1 @@
+alter table event add status text not null default '';

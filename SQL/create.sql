@@ -220,6 +220,7 @@ create table event (
 	type text not null,
 	ref_id int not null,
 	priority int not null,
+	status text not null default '',
 	startdate timestamp not null default localtimestamp,
 	parent_event int not null default 0,
 	created_by int not null,

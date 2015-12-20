@@ -50,6 +50,17 @@ getComponentFields = function() {
 			}
 		}	
 	},{
+		name: 'component.ClearDescr',
+		extends: 'lx-input',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'ClearDescr',
+			templateOptions: {
+				type: 'text',
+				label: 'Comment on clearing the tool',
+			}
+		}	
+	},{
 		name: 'component.Qty',
 		extends: 'lx-number',
 		wrapper: 'lx-wrapper-errors',
@@ -287,6 +298,19 @@ getComponentHaltForm = function() {
 			flex: { container: "row", item: "12"},
 			fields: [
 				{type: 'component.HaltDescr'},
+			]
+		}
+	}] // end fields
+}
+
+getComponentClearForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "12"},
+			fields: [
+				{type: 'component.ClearDescr'},
 			]
 		}
 	}] // end fields
