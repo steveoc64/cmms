@@ -115,9 +115,11 @@
 
 	app.controller(base+'EditToolCtrl', 
 		['$state','$stateParams','logs','Session','$window','component','$timeout','parts','LxDialogService',
-		'events','machine','Upload','LxProgressService','docs','DBDocs',
+		'events','machine','Upload','LxProgressService','docs','DBDocs','DBDocServer','DBRaiseToolEvent',
+		'LxNotificationService',
 		function($state,$stateParams,logs,Session,$window,component,$timeout,parts,LxDialogService,
-			events,machine,Upload,LxProgressService,docs,DBDocs){
+			events,machine,Upload,LxProgressService,docs,DBDocs,DBDocServer,DBRaiseToolEvent,
+			LxNotificationService){
 
 		angular.extend(this, {
 			session: Session,
@@ -129,6 +131,19 @@
 			events: events,
 			formFields: getComponentForm(),		
 			logClass: logClass,
+			alertFields: getComponentAlertForm(),
+			haltFields: getComponentHaltForm(),
+			clearFields: getComponentClearForm(),
+			eventHandler: DBRaiseToolEvent,				
+			canEdit: function() {
+				return true
+			},
+			canStop: function() {
+				return this.machine.IsRunning
+			},
+			canClear: function() {
+				return this.component.Status != 'Running'
+			},							
 			getPanelClass: function() {
 				switch(this.machine.Status) {
 					case 'Needs Attention':
@@ -212,7 +227,62 @@
         }, function (evt) {
             vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
         })
-      },			
+      },
+			clearIssue: function() {
+				LxDialogService.open('clearIssueDialog')
+			},
+			raiseIssue: function() {
+				LxDialogService.open('raiseIssueDialog')
+			},
+			submitClear: function() {
+				if (this.eventFields.ClearDescr.length > 0) {
+					var vm = this
+					var q = this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Clear',
+						descr: this.eventFields.ClearDescr
+					}).$promise.then(function(){
+						LxDialogService.close('clearIssueDialog')
+						LxNotificationService.info('Issues Cleared')
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					})
+				} else {
+					LxNotificationService.error('Please Enter Description')
+				}
+			},
+			submitAlert: function() {
+				if (this.eventFields.AlertDescr.length > 0) {
+					var vm = this
+					var q = this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Alert',
+						descr: this.eventFields.AlertDescr
+					}).$promise.then(function(){
+						LxDialogService.close('raiseIssueDialog')
+						LxNotificationService.info('New Issue Raised')
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					})
+				} else {
+					LxNotificationService.error('Please Enter Description')
+				}
+			},
+			submitHalt: function() {
+				if (this.eventFields.HaltDescr.length > 0) {
+					var vm = this
+					this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Halt',
+						descr: this.eventFields.HaltDescr
+					}).$promise.then(function(){
+						LxDialogService.close('raiseIssueDialog')
+						LxNotificationService.error('Machine Halted')						
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					})
+				} else {
+					LxNotificationService.error('Please Enter Description')
+				}
+			},			
+
 
 
 		})

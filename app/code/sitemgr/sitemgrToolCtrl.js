@@ -29,7 +29,7 @@
 				return this.machine.IsRunning
 			},
 			canClear: function() {
-				return this.machine.Status != 'Running'
+				return this.component.Status != 'Running'
 			},
 			submit: function() {
 				this.component._id = $stateParams.id
