@@ -25,7 +25,11 @@
 				row.selected = !row.selected
 			},
 			clickEdit: function(row) {
-				$state.go(base+'.editevent',{id: row.ID})
+				if (row.ParentEvent != 0) {
+					$state.go(base+'.editevent',{id: row.ParentEvent})					
+				} else {
+					$state.go(base+'.editevent',{id: row.ID})					
+				}
 			},
 			goMachine: function(row) {
 				if (row.RefId != 0) {
@@ -39,5 +43,132 @@
 			}
 		})
 	}])
+
+	app.controller(base+'EditEventCtrl', 
+		['$state','$stateParams','event','logs','Session','$window','LxDialogService',
+		'socket','Upload','LxProgressService','DBDocs','DBDocServer','docs',
+		'LxNotificationService','DBEvent',
+		function($state,$stateParams,event,logs,Session,$window,LxDialogService,
+			socket,Upload,LxProgressService,DBDocs,DBDocServer,docs,
+			LxNotificationService,DBEvent){
+	
+		angular.extend(this, {
+			session: Session,
+			event: event,
+			logs: logs,
+			docs: docs,
+			logClass: logClass,
+			formFields: getEventForm(),		
+			canEdit: function() {
+				return true
+			},
+			canCost: function() {
+				return true
+			},
+			canOrder: function() {
+				return true
+			},
+			canComplete: function() {
+				return true
+			},
+			submit: function() {
+				var vm = this
+				console.log('before',this.event)
+				this.event._id = $stateParams.id
+				this.event.$update(function(newevent) {
+					LxNotificationService.info('Notes Updated')
+					vm.event = DBEvent.get({id: $stateParams.id})
+//					$window.history.go(-1)
+				})
+			},
+			costItem: function() {
+				LxDialogService.open('costDialog')
+			},
+			workOrder: function() {
+				LxDialogService.open('workOrderDialog')
+			},
+			markComplete: function() {
+				LxDialogService.open('completeDialog')
+			},
+			abort: function() {
+				$window.history.go(-1)
+			},
+			goUser: function(row) {
+				$state.go(base+'.edituser',{id: row.ID})
+			},
+			goMachine: function(row) {
+				$state.go(base+'.editmachine', {id: row.ID})
+			},
+			goSite: function(row) {
+				$state.go(base+'.editsite',{id: row.SiteId})
+			},
+      showChange: function(c) {
+      	this.Audit = c
+      	this.Before = c.Before.split('\n')
+      	this.After = c.After.split('\n')
+				LxDialogService.open('changeDialog')
+      },
+			getMachineClass: function(row) {
+				if (row.selected) {
+					return "data-table__selectable-row--is-selected"
+				}
+				switch (row.Status) {
+					case 'Running':
+						return "machine__running"
+						break
+					case 'Needs Attention':
+						return "machine__attention"
+						break
+					case 'Stopped':
+						return "machine__stopped"
+						break
+					case 'Maintenance Pending':
+						return "machine__pending"
+						break
+					case 'New':
+						return "machine__new"
+						break
+				} // switch
+			},
+			getMapURI: function(addr) {
+			  return "https://www.google.com/maps?q="+encodeURIComponent(addr)
+			},
+			getDoc: function(row) {
+				var adoc = DBDocServer.get({id: row.ID})
+			},
+    	upload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+        Upload.upload({
+            url: 'upload',
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "event",
+            	ref_id: $stateParams.id,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
+		    		vm.docs = DBDocs.query({type: 'event', id: $stateParams.id})
+						LxNotificationService.info('Document Added')
+        	}
+        }, function (resp) {
+		    		vm.uploadProgress = 'Error ! ' + resp.data
+		    		LxProgressService.circular.hide()
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+        })
+      },
+			
+		})
+
+	}])
+
 
 })();

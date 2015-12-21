@@ -77,7 +77,7 @@ func queryMachineEvents(c *echo.Context) error {
 
 	id := getID(c)
 	var record []*DBeventResponse
-	err = DB.SQL(`select 
+	err = DB.SQL(`select e.id,e.parent_event,
 		e.site_id,e.type,e.ref_id,e.notes,
 		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
@@ -92,9 +92,9 @@ func queryMachineEvents(c *echo.Context) error {
 		left join users u3 on (u3.id=e.allocated_to) 
 		left join machine m on (m.id=e.ref_id)
 		left join site s on (s.id=m.site_id)
-		where type like 'Machine%'
-		and ref_id=$1
-		order by startdate desc`, id).QueryStructs(&record)
+		where e.type like 'Machine%'
+		and e.ref_id=$1
+		order by e.startdate desc`, id).QueryStructs(&record)
 
 	log.Println("Completed machine event query", len(record))
 
@@ -114,7 +114,7 @@ func queryEvents(c *echo.Context) error {
 	sites := getClaimedSites(claim)
 	log.Println(sites)
 	var record []*DBeventResponse
-	err = DB.SQL(`select 
+	err = DB.SQL(`select e.id,e.parent_event,
 		e.site_id,e.type,e.ref_id,e.notes,
 		to_char(e.startdate,'DD Mon YY HH24:MI') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
@@ -129,9 +129,9 @@ func queryEvents(c *echo.Context) error {
 		left join users u3 on (u3.id=e.allocated_to) 
 		left join machine m on (m.id=e.ref_id)
 		left join site s on (s.id=m.site_id)
-		where type like 'Machine%'
+		where e.type like 'Machine%'
 		and e.site_id in $1
-		order by startdate desc`, sites).QueryStructs(&record)
+		order by e.startdate desc`, sites).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -148,11 +148,14 @@ func getEvent(c *echo.Context) error {
 	}
 
 	id := getID(c)
-	var record []*DBeventResponse
-	err = DB.SQL(`select 
+	var record DBeventResponse
+	err = DB.SQL(`select e.id,e.parent_event,
 		e.site_id,e.type,e.ref_id,e.notes,
-		to_char(e.startdate,'DDMonYYYY HH24:MI:SS') as startdate,
+		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
+		e.created_by as created_by,
+		e.allocated_by as allocated_by,
+		e.allocated_to as allocated_to,
 		u1.username as username, 
 		u2.username as allocated_by_user, 
 		u3.username as allocated_to_user 
@@ -160,13 +163,44 @@ func getEvent(c *echo.Context) error {
 		left join users u1 on (u1.id=e.created_by) 
 		left join users u2 on (u2.id=e.allocated_by) 
 		left join users u3 on (u3.id=e.allocated_to) 
-		where id=$1`, id).QueryStruct(&record)
+		where e.id=$1`, id).QueryStruct(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, record)
+}
+
+type EventUpdate struct {
+	Notes string `db:"notes"`
+}
+
+// All this saves is the notes field
+func saveEvent(c *echo.Context) error {
+
+	_, err := securityCheck(c, "writeEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+
+	record := &EventUpdate{}
+	if err = c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	_, err = DB.Update("event").
+		SetWhitelist(record, "notes").
+		Where("id = $1", id).
+		Exec()
+
+	if err != nil {
+		return c.String(http.StatusNotModified, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, id)
 }
 
 func queryToolEvents(c *echo.Context) error {
@@ -178,7 +212,7 @@ func queryToolEvents(c *echo.Context) error {
 
 	id := getID(c)
 	var record []*DBeventResponse
-	err = DB.SQL(`select 
+	err = DB.SQL(`select e.id,
 		e.site_id,e.type,e.ref_id,e.notes,
 		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
@@ -189,9 +223,9 @@ func queryToolEvents(c *echo.Context) error {
 		left join users u1 on (u1.id=e.created_by) 
 		left join users u2 on (u2.id=e.allocated_by) 
 		left join users u3 on (u3.id=e.allocated_to) 
-		where type like 'Tool%'
-		and ref_id=$1
-		order by startdate desc`, id).QueryStructs(&record)
+		where e.type like 'Tool%'
+		and e.ref_id=$1
+		order by e.startdate desc`, id).QueryStructs(&record)
 
 	log.Println("Completed tool event query", len(record))
 

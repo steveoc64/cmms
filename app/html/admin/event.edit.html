@@ -1,0 +1,258 @@
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='changeDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Record Modification Details
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+
+        <h3>{{editEvent.Audit.Username}} : {{editEvent.Audit.Logdate}} : {{editEvent.Audit.IP}}</h3>
+        <p>
+        <h4>Before:</h4>
+        <ul>
+          <li ng-repeat="r in editSite.Before">{{r}}</li>
+        </ul>
+        <h4>After:</h4>
+        <ul>
+          <li ng-repeat="r in editSite.After">{{r}}</li>
+        </ul>
+    </div>
+</lx-dialog>
+
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='costDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Add Cost Items to this Event
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+    </div>
+    <div class="dialog__content">   
+      <div class="p++">
+          <formly-form model="editEvent.costs" fields="editEvent.costFields"></formly-form>
+          <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" 
+                    lx-ripple 
+                    lx-dialog-close>
+                      Cancel
+            </button>
+            <button type="submit" 
+                    class="btn btn--m btn--black btn--flat" 
+                    ng-click="editEvent.submitCosts()"
+                    lx-ripple>
+                      Add
+            </button>
+          </div>    
+      </div>
+    </div>
+</lx-dialog>
+
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='workOrderDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Assign Work Orders
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+    </div>
+    <div class="dialog__content">   
+      <div class="p++">
+          <formly-form model="editEvent.workOrder" fields="editEvent.workOrderFields"></formly-form>
+          <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" 
+                    lx-ripple 
+                    lx-dialog-close>
+                      Cancel
+            </button>
+            <button type="submit" 
+                    class="btn btn--m btn--black btn--flat" 
+                    ng-click="editEvent.submitWorkOrder()"
+                    lx-ripple>
+                      Add Work Order
+            </button>
+          </div>    
+      </div>
+    </div>
+</lx-dialog>
+
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='completeDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Mark this Event as Complete
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+    </div>
+    <div class="dialog__content">   
+      <div class="p++">
+          <formly-form model="editEvent.completion" fields="editTool.completeFields"></formly-form>
+          <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" 
+                    lx-ripple 
+                    lx-dialog-close>
+                      Cancel
+            </button>
+            <button type="submit" 
+                    class="btn btn--m btn--black btn--flat" 
+                    ng-click="editEvent.submitComplete()"
+                    lx-ripple>
+                      Complete and Clear Issues
+            </button>
+          </div>    
+      </div>
+    </div>
+</lx-dialog>
+
+
+<div class="main-section__title">
+  <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-factory"></i>
+  Event Details
+</div>
+
+<form name="editEvent.form" ng-submit="editEvent.submit()">
+
+<formly-form model="editEvent.event" fields="editEvent.formFields">
+
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editEvent.abort()" lx-ripple>
+        <i class="mdi mdi-chevron-left"> Back</i>
+      </button>
+    </div>
+    <div class="toolbar__right">
+      <button type="submit"
+              ng-if="editEvent.canEdit()"
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Update Details
+      </button>      
+      <button type="button"
+              ng-if="editEvent.canCost()"
+              ng-click="editEvent.costItem()"
+              class="btn btn--l btn--orange btn--raised" 
+              lx-ripple>
+                Add Cost Item
+      </button>      
+      <button type="button"
+              ng-if="editEvent.canOrder()"
+              ng-click="editEvent.workOrder()"
+              class="btn btn--l btn--indigo btn--raised" 
+              lx-ripple>
+                Create Work Order
+      </button>      
+      <button type="button"
+              ng-if="editEvent.canComplete()"
+              ng-click="editEvent.markComplete()"
+              class="btn btn--l btn--green btn--raised" 
+              lx-ripple>
+                Mark as Complete
+      </button>      
+    </div>
+  </div>
+</div>
+
+</formly-form>
+</form>
+
+<div class="card">
+  <lx-tabs>
+
+    <lx-tab heading="Notes">
+      <div class="card">
+        <textarea ng-wig="editEvent.event.Notes"></textarea>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="WorkOrders">
+    </lx-tab>
+
+    <lx-tab heading="Documents">
+    <form>
+      <div flex-container="row" flex-gutter="24">
+        <div flex-item="5">
+          <lx-text-field label="Description" >
+            <input type="text" ng-model="editEvent.doc">
+          </lx-text-field>
+        </div>
+      </div>
+      <div flex-container="row" flex-gutter="24">
+          <div flex-item="10">
+            <lx-file-input label="Upload New Document ..." change="editEvent.upload(e)"></lx-file-input>
+          </div>
+          <div flex-item="2">
+            <div id="upload-progress">{{editEvent.uploadProgress}}</div>          
+          </div>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> File</th>
+              <th> Size</th>
+              <th> Uploaded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editEvent.docs">
+                  <td>{{row.Name}}</td>
+                  <td>
+                    <a ng-href="doc/{{row.ID}}" 
+                       target="_doc">
+                      {{row.Filename}}
+                    </a>
+                  </td>
+                  <td>{{row.Filesize}}</td>
+                  <td>{{row.Created}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+    </lx-tab>
+
+    <lx-tab heading="Activity Log">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Event</th>
+              <th> Date</th>
+              <th> Description</th>
+              <th> IP Address</th>
+              <th> By</th>
+              <th> Changes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-class="editEvent.logClass(l)"           
+                ng-repeat="l in editEvent.logs">
+                  <td>{{l.Type}}</td>
+                  <td>{{l.Logdate}}</td>
+                  <td>{{l.Descr}}</td>
+                  <td>{{l.IP}}</td>
+                  <td>{{l.Username}}</td>
+                  <td>
+                    <button ng-if="l.Before != ''" 
+                      class="btn btn--m btn--blue btn--icon" 
+                        ng-click="editEvent.showChange(l); $event.stopPropagation()"
+                        lx-ripple>
+                          <i class="mdi mdi-plus"></i>
+                    </button>
+                  </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+  </lx-tabs>
+</div>
+

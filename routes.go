@@ -95,6 +95,7 @@ func _initRoutes() {
 
 	e.Get("/events", queryEvents)
 	e.Get("/events/:id", getEvent)
+	e.Put("/events/:id", saveEvent)
 	e.Post("/event/raise/machine", raiseEventMachine)
 	e.Post("/event/raise/tool", raiseEventTool)
 	e.Get("/machine/events/:id", queryMachineEvents)
