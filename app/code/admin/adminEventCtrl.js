@@ -25,57 +25,18 @@
 				row.selected = !row.selected
 			},
 			clickEdit: function(row) {
-				$state.go(base+'.editsite',{id: row.ID})
+				$state.go(base+'.editevent',{id: row.ID})
 			},
-			goAudit: function(row) {
-				LxDialogService.close('siteLogDialog')
-				$state.go(base+'.editsite',{id: row.RefID})
-			},
-			goParent: function(row) {
-				if (row.ParentSite != 0) {
-					$state.go(base+'.editsite',{id: row.ParentSite})
+			goMachine: function(row) {
+				if (row.RefId != 0) {
+					$state.go(base+'.editmachine',{id: row.RefId})
 				}
 			},
-			showLogs: function() {
-				LxDialogService.open('siteLogDialog')
-			},
-			getSelectedLogs: function() {
-				var l = []
-				var vm = this
-				angular.forEach (vm.logs, function(v,k){
-					angular.forEach(vm.sites, function(vv,kk){
-						if (vv.selected && v.RefID == vv.ID) {
-							l.push(v)
-						}
-					})
-				})
-				if (l.length < 1) {
-					return vm.logs
+			goSite: function(row) {
+				if (row.SiteId != 0) {
+					$state.go(base+'.editsite',{id: row.SiteId})
 				}
-				// l now contains filtered logs
-				return l
-			},
-			deleteSelected: function() {
-				var vm = this
-				LxNotificationService.confirm('Delete Sites',
-					'Do you want to delete all the selected sites ?',
-					{cancel: 'No',ok:'Yes, delete them all !'},
-					function(answer){
-						if (answer) {
-							angular.forEach (vm.sites, function(v,k){
-								if (v.selected) {
-									v.$delete({id: v.ID})
-								}
-							})
-							// Now refresh the users list
-							$state.reload()
-						}
-					})
-			},
-			getMapURI: function(addr) {
-			  return "https://www.google.com/maps?q="+encodeURIComponent(addr)
-			},
-
+			}
 		})
 	}])
 

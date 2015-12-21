@@ -37,6 +37,8 @@ type DBeventResponse struct {
 	SiteId          int     `db:"site_id"`
 	Type            string  `db:"type"`
 	RefId           int     `db:"ref_id"`
+	MachineName     string  `db:"machine_name"`
+	SiteName        string  `db:"site_name"`
 	Priority        int     `db:"priority"`
 	StartDate       string  `db:"startdate"`
 	ParentEvent     int     `db:"parent_event"`
@@ -81,11 +83,15 @@ func queryMachineEvents(c *echo.Context) error {
 		e.labour_cost, e.material_cost,e.other_cost,
 		u1.username as username, 
 		u2.username as allocated_by_user, 
-		u3.username as allocated_to_user 
+		u3.username as allocated_to_user,
+		m.name as machine_name,
+		s.name as site_name		
 		from event e
 		left join users u1 on (u1.id=e.created_by) 
 		left join users u2 on (u2.id=e.allocated_by) 
 		left join users u3 on (u3.id=e.allocated_to) 
+		left join machine m on (m.id=e.ref_id)
+		left join site s on (s.id=m.site_id)
 		where type like 'Machine%'
 		and ref_id=$1
 		order by startdate desc`, id).QueryStructs(&record)
@@ -100,11 +106,13 @@ func queryMachineEvents(c *echo.Context) error {
 
 func queryEvents(c *echo.Context) error {
 
-	_, err := securityCheck(c, "readEvent")
+	claim, err := securityCheck(c, "readEvent")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
+	sites := getClaimedSites(claim)
+	log.Println(sites)
 	var record []*DBeventResponse
 	err = DB.SQL(`select 
 		e.site_id,e.type,e.ref_id,e.notes,
@@ -112,13 +120,18 @@ func queryEvents(c *echo.Context) error {
 		e.labour_cost, e.material_cost,e.other_cost,
 		u1.username as username, 
 		u2.username as allocated_by_user, 
-		u3.username as allocated_to_user 
+		u3.username as allocated_to_user,
+		m.name as machine_name,
+		s.name as site_name
 		from event e
 		left join users u1 on (u1.id=e.created_by) 
 		left join users u2 on (u2.id=e.allocated_by) 
 		left join users u3 on (u3.id=e.allocated_to) 
+		left join machine m on (m.id=e.ref_id)
+		left join site s on (s.id=m.site_id)
 		where type like 'Machine%'
-		order by startdate desc`).QueryStructs(&record)
+		and e.site_id in $1
+		order by startdate desc`, sites).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
