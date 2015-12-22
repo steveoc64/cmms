@@ -28,7 +28,6 @@ var getMapURI = function(addr) {
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	
 		.config(config)
 		.run(run)
-	    .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
 			.directive('stringToNumber', function() {
 			  return {
 			    require: 'ngModel',

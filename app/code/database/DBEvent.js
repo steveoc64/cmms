@@ -35,6 +35,12 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBEventDocs', function($resource,ServerName,Session){
+		return $resource(ServerName+'/eventdocs/:id',{id: '@_id'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
 	angular.module('cmms').factory('DBComponentEvents', function($resource,ServerName,Session){
 		return $resource(ServerName+'/tool/events/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},

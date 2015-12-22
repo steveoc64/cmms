@@ -273,6 +273,88 @@ getEventFields = function() {
         }
       }
     },{
+      name: 'eventWorkOrder.Date',
+      extends: 'lx-date-picker',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'Date',
+        templateOptions: {
+          label: 'Start Date',
+        }
+      }
+    },{
+      name: 'eventWorkOrder.Time',
+      extends: 'lx-input',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'Time',
+        templateOptions: {
+          type: 'time',
+          label: '',
+        }
+      }
+    },{
+      name: 'eventWorkOrder.EstDuration',
+      extends: 'lx-number',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'EstDuration',
+        templateOptions: {
+          label: 'Est Duration (Minutes)',
+        }
+      }
+    },{
+      name: 'eventWorkOrder.Skills',
+      extends: 'lx-select',
+      defaultOptions: {
+        key: 'Skills',
+        templateOptions: {
+          placeholder: "Select Skills",
+          space: true,
+          multiple: true,
+          choice: "Name",
+          selected: "Name",
+          options: [],
+        },
+        controller: ['$scope','DBSkill',function($scope,DBSkill) {
+          $scope.to.options = DBSkill.query()
+        }]
+      }
+    },{
+      name: 'eventWorkOrder.AssignTo',
+      extends: 'lx-select',
+      defaultOptions: {
+        key: 'AssignTo',
+        templateOptions: {
+          placeholder: "Assign To",
+          space: true,
+          multiple: true,
+          choice: "Name",
+          selected: "Name",
+          options: [],
+        },
+        controller: ['$scope','DBUser',function($scope,DBUser) {
+          $scope.to.options = DBUser.query()
+        }]
+      }
+    },{
+      name: 'eventWorkOrder.Documents',
+      extends: 'lx-select',
+      defaultOptions: {
+        key: 'Documents',
+        templateOptions: {
+          placeholder: "Select Documents",
+          space: true,
+          multiple: true,
+          choice: "Name",
+          selected: "Name",
+          options: [],
+        },
+        controller: ['$scope','DBEventDocs','$stateParams',function($scope,DBEventDocs,$stateParams) {
+          $scope.to.options = DBEventDocs.query({id: $stateParams.id})
+        }]
+      }
+    },{
       name: 'eventComplete.Description',
       extends: 'lx-input',
       wrapper: 'lx-wrapper-errors',
@@ -281,6 +363,16 @@ getEventFields = function() {
         templateOptions: {
           type: 'text',
           label: 'Enter Notes on Completing this Issue',
+        }
+      }
+    },{
+      name: 'eventComplete.Date',
+      extends: 'lx-date-picker',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'Date',
+        templateOptions: {
+          label: 'Date Complete',
         }
       }
 
@@ -316,9 +408,36 @@ getEventWorkOrderForm = function() {
   return [{
     type: 'lx-flex',
     templateOptions: {
+      flex: { container: "row", item: "4"},
+      fields: [
+        {type: 'eventWorkOrder.Date'},
+        {type: 'eventWorkOrder.Time'},
+        {type: 'eventWorkOrder.EstDuration'},
+      ]
+    }
+  },{    
+    type: 'lx-flex',
+    templateOptions: {
       flex: { container: "row", item: "12"},
       fields: [
         {type: 'eventWorkOrder.Description'},
+      ]
+    }
+  },{    
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "6"},
+      fields: [
+        {type: 'eventWorkOrder.Skills'},
+        {type: 'eventWorkOrder.AssignTo'},
+      ]
+    }
+  },{    
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "12"},
+      fields: [
+        {type: 'eventWorkOrder.Documents'},
       ]
     }
   }]
@@ -327,6 +446,14 @@ getEventWorkOrderForm = function() {
 getEventCompleteForm = function() {
 
   return [{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "6"},
+      fields: [
+        {type: 'eventComplete.Date'},
+      ]
+    }
+  },{    
     type: 'lx-flex',
     templateOptions: {
       flex: { container: "row", item: "12"},

@@ -98,11 +98,13 @@
 				})
 			},
 			submitCosts: function() {
+				var vm = this
 				this.costs.id = $stateParams.id
 				console.log('adding cost fields',this.costs)
 				this.costAdder.add(this.costs).$promise.then(function(){
 						LxDialogService.close('costDialog')
 						LxNotificationService.info('Added Costs')					
+						vm.event = DBEvent.get({id: $stateParams.id})
 				})
 			},
 			submitComplete: function() {

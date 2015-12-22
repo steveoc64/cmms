@@ -481,3 +481,62 @@ func addCostToEvent(c *echo.Context) error {
 	}
 	return c.String(http.StatusOK, "added costs")
 }
+
+func queryEventDocs(c *echo.Context) error {
+
+	_, err := securityCheck(c, "writeEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	refID := getID(c)
+
+	// Get the event record
+	myEvent := &DBevent{}
+	err = DB.SQL(`select * from event where id=$1`, refID).QueryStruct(myEvent)
+	log.Println("Got event", myEvent)
+
+	// Get the tool
+	myTool := &DBcomponent{}
+	err = DB.SQL(`select * from component where id=$1`, myEvent.RefId).QueryStruct(myTool)
+	log.Println("Got Tool", myTool)
+
+	// Get docs for this event
+	docs := &[]DBdoc{}
+	err = DB.Select("id", "name", "filename", "filesize", "to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created").
+		From("doc").
+		Where("type='event' and ref_id=$1", refID).
+		QueryStructs(docs)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	// Now get docs for the site
+	err = DB.Select("id", "name", "filename", "filesize", "to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created").
+		From("doc").
+		Where("type='site' and ref_id=$1", myEvent.SiteId).
+		QueryStructs(docs)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	// Now get docs for the tool
+	err = DB.Select("id", "name", "filename", "filesize", "to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created").
+		From("doc").
+		Where("type='tool' and ref_id=$1", myTool.ID).
+		QueryStructs(docs)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	// Now get docs for the machine
+	err = DB.Select("id", "name", "filename", "filesize", "to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created").
+		From("doc").
+		Where("type='machine' and ref_id=$1", myTool.MachineID).
+		QueryStructs(docs)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, docs)
+}
