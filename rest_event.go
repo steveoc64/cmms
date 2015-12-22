@@ -492,7 +492,7 @@ func queryEventDocs(c *echo.Context) error {
 	refID := getID(c)
 
 	// Get the event record
-	myEvent := &DBevent{}
+	myEvent := &DBeventResponse{}
 	err = DB.SQL(`select * from event where id=$1`, refID).QueryStruct(myEvent)
 	log.Println("Got event", myEvent)
 
