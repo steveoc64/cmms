@@ -425,3 +425,59 @@ func raiseEventTool(c *echo.Context) error {
 
 	return c.String(http.StatusOK, "Event Raised on the Tool & Machine")
 }
+
+type EventCost struct {
+	Id           string `json:"id"`
+	Descr        string
+	LabourCost   float64
+	MaterialCost float64
+	OtherCost    float64
+}
+
+func addCostToEvent(c *echo.Context) error {
+
+	_, err := securityCheck(c, "writeEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	req := &EventCost{}
+	err = c.Bind(req)
+	if err != nil {
+		log.Println("Binding:", err.Error())
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	id, err := strconv.Atoi(req.Id)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Invalid Event ID "+err.Error())
+	}
+
+	addNotes := fmt.Sprintf("\n<br>\n<br>\n<b><u>Added Costs :</u></b><br>\n %s\n", req.Descr)
+	if req.LabourCost != 0.0 {
+		addNotes += fmt.Sprintf("<br>Labour Costs: $%0.2f\n", req.LabourCost)
+	}
+	if req.MaterialCost != 0.0 {
+		addNotes += fmt.Sprintf("<br>Material Costs: $%0.2f\n", req.MaterialCost)
+	}
+	if req.OtherCost != 0.0 {
+		addNotes += fmt.Sprintf("<br>Other Costs: $%0.2f\n", req.OtherCost)
+	}
+	log.Println("Request:", req)
+	_, err = DB.SQL(`update event set 
+		labour_cost = labour_cost::numeric + $3,
+		material_cost = material_cost::numeric + $4,
+		other_cost = other_cost::numeric + $5,
+		notes = concat(notes, $2)
+		where id=$1`,
+		id,
+		addNotes,
+		req.LabourCost,
+		req.MaterialCost,
+		req.OtherCost).Exec()
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	return c.String(http.StatusOK, "added costs")
+}

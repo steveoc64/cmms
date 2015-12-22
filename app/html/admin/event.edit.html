@@ -38,7 +38,7 @@
                     lx-dialog-close>
                       Cancel
             </button>
-            <button type="submit" 
+            <button type="button" 
                     class="btn btn--m btn--black btn--flat" 
                     ng-click="editEvent.submitCosts()"
                     lx-ripple>
@@ -67,7 +67,7 @@
                     lx-dialog-close>
                       Cancel
             </button>
-            <button type="submit" 
+            <button type="button" 
                     class="btn btn--m btn--black btn--flat" 
                     ng-click="editEvent.submitWorkOrder()"
                     lx-ripple>
@@ -89,14 +89,14 @@
     </div>
     <div class="dialog__content">   
       <div class="p++">
-          <formly-form model="editEvent.completion" fields="editTool.completeFields"></formly-form>
+          <formly-form model="editEvent.completion" fields="editEvent.completeFields"></formly-form>
           <div class="dialog__actions">
             <button class="btn btn--m btn--black btn--flat" 
                     lx-ripple 
                     lx-dialog-close>
                       Cancel
             </button>
-            <button type="submit" 
+            <button type="button" 
                     class="btn btn--m btn--black btn--flat" 
                     ng-click="editEvent.submitComplete()"
                     lx-ripple>

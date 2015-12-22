@@ -100,6 +100,7 @@ func _initRoutes() {
 	e.Post("/event/raise/tool", raiseEventTool)
 	e.Get("/machine/events/:id", queryMachineEvents)
 	e.Get("/tool/events/:id", queryToolEvents)
+	e.Post("/event/cost", addCostToEvent)
 
 	// Add a websocket handler
 	e.WebSocket("/ws", webSocket)

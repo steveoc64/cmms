@@ -47,10 +47,10 @@
 	app.controller(base+'EditEventCtrl', 
 		['$state','$stateParams','event','logs','Session','$window','LxDialogService',
 		'socket','Upload','LxProgressService','DBDocs','DBDocServer','docs',
-		'LxNotificationService','DBEvent',
+		'LxNotificationService','DBEvent','DBEventCost',
 		function($state,$stateParams,event,logs,Session,$window,LxDialogService,
 			socket,Upload,LxProgressService,DBDocs,DBDocServer,docs,
-			LxNotificationService,DBEvent){
+			LxNotificationService,DBEvent,DBEventCost){
 	
 		angular.extend(this, {
 			session: Session,
@@ -59,6 +59,22 @@
 			docs: docs,
 			logClass: logClass,
 			formFields: getEventForm(),		
+			costFields: getEventCostForm(),
+			workOrderFields: getEventWorkOrderForm(),
+			completeFields: getEventCompleteForm(),
+			costAdder: DBEventCost,
+			costs: {
+				Descr: '',
+				LabourCost: 0.0,
+				MaterialCost: 0.0,
+				OtherCost: 0.0,
+			},
+			workOrder: {
+				Descr: '',
+			},
+			completion: {
+				Descr: '',
+			},
 			canEdit: function() {
 				return true
 			},
@@ -80,6 +96,17 @@
 					vm.event = DBEvent.get({id: $stateParams.id})
 //					$window.history.go(-1)
 				})
+			},
+			submitCosts: function() {
+				this.costs.id = $stateParams.id
+				console.log('adding cost fields',this.costs)
+				this.costAdder.add(this.costs).$promise.then(function(){
+						LxDialogService.close('costDialog')
+						LxNotificationService.info('Added Costs')					
+				})
+			},
+			submitComplete: function() {
+				console.log('completion fields',this.completion)
 			},
 			costItem: function() {
 				LxDialogService.open('costDialog')

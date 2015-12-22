@@ -17,6 +17,12 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBEventCost', function($resource,ServerName){
+		return $resource(ServerName+'/event/cost',{}, {
+			'add': {method: 'POST'},
+		})
+	})
+
 	angular.module('cmms').factory('DBRaiseToolEvent', function($resource,ServerName){
 		return $resource(ServerName+'/event/raise/tool',{}, {
 			'raise': {method: 'POST'},

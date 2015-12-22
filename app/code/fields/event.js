@@ -220,9 +220,122 @@ getEventFields = function() {
           disabled: true          
         }
       }
+    },{
+      name: 'eventCost.Description',
+      extends: 'lx-input',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'Descr',
+        templateOptions: {
+          type: 'text',
+          label: 'Description',
+        }
+      }
+    },{
+      name: 'eventCost.LabourCost',
+      extends: 'lx-number',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'LabourCost',
+        templateOptions: {
+          label: 'Labour Cost',
+        }
+      }
+    },{
+      name: 'eventCost.MaterialCost',
+      extends: 'lx-number',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'MaterialCost',
+        templateOptions: {
+          label: 'Material Cost',
+        }
+      }
+    },{
+      name: 'eventCost.OtherCost',
+      extends: 'lx-number',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'OtherCost',
+        templateOptions: {
+          label: 'Other Cost',
+        }
+      }
+    },{
+      name: 'eventWorkOrder.Description',
+      extends: 'lx-input',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'Descr',
+        templateOptions: {
+          type: 'text',
+          label: 'Description',
+        }
+      }
+    },{
+      name: 'eventComplete.Description',
+      extends: 'lx-input',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'Descr',
+        templateOptions: {
+          type: 'text',
+          label: 'Enter Notes on Completing this Issue',
+        }
+      }
+
   }] // end fields
 
 } // getEventFields
+
+getEventCostForm = function() {
+
+  return [{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "12"},
+      fields: [
+        {type: 'eventCost.Description'},
+      ]
+    }
+  },{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "4"},
+      fields: [
+        {type: 'eventCost.LabourCost'},
+        {type: 'eventCost.MaterialCost'},
+        {type: 'eventCost.OtherCost'},
+      ]
+    }
+  }]
+}
+
+getEventWorkOrderForm = function() {
+
+  return [{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "12"},
+      fields: [
+        {type: 'eventWorkOrder.Description'},
+      ]
+    }
+  }]
+}
+
+getEventCompleteForm = function() {
+
+  return [{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "12"},
+      fields: [
+        {type: 'eventComplete.Description'},
+      ]
+    }
+  }]
+}
 
 getEventForm = function() {
 
