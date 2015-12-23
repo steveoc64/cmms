@@ -24,7 +24,7 @@
     <div class="dialog__header">
         <div class="toolbar bgc-indigo-800 pl++">
             <span class="toolbar__label tc-white fs-title">
-                Raise Issue with Tool
+                Raise Issue with Tool: {{editTool.component.Name}}
             </span>       
             <span lx-dialog-close class="white">X</span>     
         </div>
@@ -75,7 +75,7 @@
     <div class="dialog__header">
         <div class="toolbar bgc-indigo-800 pl++">
             <span class="toolbar__label tc-white fs-title">
-                Clear Issues with this Tool
+                Clear Issues with Tool: {{editTool.component.Name}}
             </span>       
             <span lx-dialog-close class="white">X</span>     
         </div>
@@ -264,8 +264,7 @@
                   <td>{{row.Name}}</td>
                   <td>
                     <a ng-href="doc/{{row.ID}}" 
-                       target="_self" 
-                       download="{{row.Filename}}">
+                       target="_doc"> 
                       {{row.Filename}}
                     </a>
                   </td>

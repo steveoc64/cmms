@@ -280,7 +280,17 @@ getEventFields = function() {
         key: 'Date',
         templateOptions: {
           label: 'Start Date',
-        }
+        },
+        controller: ['$scope',function($scope) {
+          if (!angular.isDefined($scope.model.Date)) {
+            var d = new Date()
+            $scope.model.Date = d
+            d.setMinutes(0)
+            d.setSeconds(0)
+            d.setMilliseconds(0)
+            $scope.model.Time = d
+          }
+        }]
       }
     },{
       name: 'eventWorkOrder.Time',

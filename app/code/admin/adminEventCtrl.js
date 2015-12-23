@@ -14,22 +14,19 @@
 			logs: logs,
 			logClass: logClass,
 			getClass: function(row) {
-				if (row.selected) {
-					return "data-table__selectable-row--is-selected"
+				switch (row.Type) {
+					case 'Halt':
+						return "machine__stopped"
+					case 'Alert':
+						return "machine__attention"
+					case 'Running':
+						return "machine__running"
+					case 'Pending':
+						return "machine__pending"
 				}
-			},
-			clickedRow: function(row) {
-				if (!angular.isDefined(row.selected)) {
-					row.selected = false
-				}
-				row.selected = !row.selected
 			},
 			clickEdit: function(row) {
-				if (row.ParentEvent != 0) {
-					$state.go(base+'.editevent',{id: row.ParentEvent})					
-				} else {
-					$state.go(base+'.editevent',{id: row.ID})					
-				}
+				$state.go(base+'.editevent',{id: row.ID})					
 			},
 			goMachine: function(row) {
 				if (row.RefId != 0) {
@@ -126,7 +123,10 @@
 				$state.go(base+'.edituser',{id: row.ID})
 			},
 			goMachine: function(row) {
-				$state.go(base+'.editmachine', {id: row.ID})
+				$state.go(base+'.editmachine', {id: row.MachineId})
+			},
+			goTool: function(row) {
+				$state.go(base+'.edittool', {id: row.ToolId})
 			},
 			goSite: function(row) {
 				$state.go(base+'.editsite',{id: row.SiteId})

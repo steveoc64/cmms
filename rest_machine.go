@@ -215,8 +215,9 @@ func saveMachine(c *echo.Context) error {
 	UID, Username := getClaimedUser(claim)
 	evt := &DBevent{
 		SiteId:    record.SiteId,
-		Type:      fmt.Sprintf("Machine: %s", record.Status),
-		RefId:     machineID,
+		Type:      fmt.Sprintf("%s", record.Status),
+		MachineId: machineID,
+		ToolId:    0,
 		Priority:  1,
 		CreatedBy: UID,
 		Notes:     fmt.Sprintf("Manually Updated by %s", Username),
@@ -294,7 +295,7 @@ func saveMachine(c *echo.Context) error {
 
 	if addEvent {
 		DB.InsertInto("event").
-			Whitelist("site_id", "type", "ref_id", "priority", "created_by", "notes").
+			Whitelist("site_id", "type", "machine_id", "priority", "created_by", "notes").
 			Record(evt).
 			Returning("id").
 			QueryScalar(&evt.ID)

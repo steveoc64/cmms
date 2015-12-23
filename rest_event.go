@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/labstack/echo"
+	"gopkg.in/guregu/null.v3"
 	"gopkg.in/mgutz/dat.v1"
 	"log"
 	"net/http"
@@ -17,10 +18,10 @@ type DBevent struct {
 	ID           int          `db:"id"`
 	SiteId       int          `db:"site_id"`
 	Type         string       `db:"type"`
-	RefId        int          `db:"ref_id"`
+	MachineId    int          `db:"machine_id"`
+	ToolId       int          `db:"tool_id"`
 	Priority     int          `db:"priority"`
 	StartDate    dat.NullTime `db:"startdate"`
-	ParentEvent  int          `db:"parent_event"`
 	CreatedBy    int          `db:"created_by"`
 	AllocatedBy  int          `db:"allocated_by"`
 	AllocatedTo  int          `db:"allocated_to"`
@@ -33,27 +34,28 @@ type DBevent struct {
 }
 
 type DBeventResponse struct {
-	ID              int     `db:"id"`
-	SiteId          int     `db:"site_id"`
-	Type            string  `db:"type"`
-	RefId           int     `db:"ref_id"`
-	MachineName     string  `db:"machine_name"`
-	SiteName        string  `db:"site_name"`
-	Priority        int     `db:"priority"`
-	StartDate       string  `db:"startdate"`
-	ParentEvent     int     `db:"parent_event"`
-	CreatedBy       int     `db:"created_by"`
-	Username        string  `db:"username"`
-	AllocatedBy     int     `db:"allocated_by"`
-	AllocatedByUser *string `db:"allocated_by_user"`
-	AllocatedTo     int     `db:"allocated_to"`
-	AllocatedToUser *string `db:"allocated_to_user"`
-	Completed       string  `db:"completed"`
-	LabourCost      string  `db:"labour_cost"`
-	MaterialCost    string  `db:"material_cost"`
-	OtherCost       string  `db:"other_cost"`
-	Notes           string  `db:"notes"`
-	Status          string  `db:"status"`
+	ID              int         `db:"id"`
+	SiteId          int         `db:"site_id"`
+	Type            string      `db:"type"`
+	MachineId       int         `db:"machine_id"`
+	MachineName     null.String `db:"machine_name"`
+	SiteName        null.String `db:"site_name"`
+	ToolId          int         `db:"tool_id"`
+	ToolName        null.String `db:"tool_name"`
+	Priority        int         `db:"priority"`
+	StartDate       string      `db:"startdate"`
+	CreatedBy       int         `db:"created_by"`
+	Username        string      `db:"username"`
+	AllocatedBy     int         `db:"allocated_by"`
+	AllocatedByUser null.String `db:"allocated_by_user"`
+	AllocatedTo     int         `db:"allocated_to"`
+	AllocatedToUser null.String `db:"allocated_to_user"`
+	Completed       null.String `db:"completed"`
+	LabourCost      null.String `db:"labour_cost"`
+	MaterialCost    null.String `db:"material_cost"`
+	OtherCost       null.String `db:"other_cost"`
+	Notes           string      `db:"notes"`
+	Status          string      `db:"status"`
 }
 
 type MachineEventRequest struct {
@@ -77,23 +79,24 @@ func queryMachineEvents(c *echo.Context) error {
 
 	id := getID(c)
 	var record []*DBeventResponse
-	err = DB.SQL(`select e.id,e.parent_event,
-		e.site_id,e.type,e.ref_id,e.notes,
+	err = DB.SQL(`select e.id,
+		e.site_id,e.type,e.machine_id,e.tool_id,e.notes,
 		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
 		u1.username as username, 
 		u2.username as allocated_by_user, 
 		u3.username as allocated_to_user,
 		m.name as machine_name,
+		t.name as tool_name,
 		s.name as site_name		
 		from event e
 		left join users u1 on (u1.id=e.created_by) 
 		left join users u2 on (u2.id=e.allocated_by) 
 		left join users u3 on (u3.id=e.allocated_to) 
-		left join machine m on (m.id=e.ref_id)
+		left join machine m on (m.id=e.machine_id)
+		left join component t on (t.id=e.tool_id)
 		left join site s on (s.id=m.site_id)
-		where e.type like 'Machine%'
-		and e.ref_id=$1
+		where e.machine_id=$1
 		order by e.startdate desc`, id).QueryStructs(&record)
 
 	log.Println("Completed machine event query", len(record))
@@ -114,23 +117,24 @@ func queryEvents(c *echo.Context) error {
 	sites := getClaimedSites(claim)
 	log.Println(sites)
 	var record []*DBeventResponse
-	err = DB.SQL(`select e.id,e.parent_event,
-		e.site_id,e.type,e.ref_id,e.notes,
+	err = DB.SQL(`select e.id,
+		e.site_id,e.type,e.machine_id,e.tool_id,e.notes,
 		to_char(e.startdate,'DD Mon YY HH24:MI') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
 		u1.username as username, 
 		u2.username as allocated_by_user, 
 		u3.username as allocated_to_user,
 		m.name as machine_name,
+		t.name as tool_name,
 		s.name as site_name
 		from event e
 		left join users u1 on (u1.id=e.created_by) 
 		left join users u2 on (u2.id=e.allocated_by) 
 		left join users u3 on (u3.id=e.allocated_to) 
-		left join machine m on (m.id=e.ref_id)
+		left join machine m on (m.id=e.machine_id)
+		left join component t on (t.id=e.tool_id)
 		left join site s on (s.id=m.site_id)
-		where e.type like 'Machine%'
-		and e.site_id in $1
+		where e.site_id in $1
 		order by e.startdate desc`, sites).QueryStructs(&record)
 
 	if err != nil {
@@ -149,8 +153,8 @@ func getEvent(c *echo.Context) error {
 
 	id := getID(c)
 	var record DBeventResponse
-	err = DB.SQL(`select e.id,e.parent_event,
-		e.site_id,e.type,e.ref_id,e.notes,
+	err = DB.SQL(`select e.id,
+		e.site_id,e.type,e.machine_id,e.tool_id,e.notes,
 		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
 		e.created_by as created_by,
@@ -213,18 +217,21 @@ func queryToolEvents(c *echo.Context) error {
 	id := getID(c)
 	var record []*DBeventResponse
 	err = DB.SQL(`select e.id,
-		e.site_id,e.type,e.ref_id,e.notes,
+		e.site_id,e.type,e.machine_id,e.tool_id,e.notes,
 		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
 		u1.username as username, 
 		u2.username as allocated_by_user, 
-		u3.username as allocated_to_user 
+		u3.username as allocated_to_user,
+		m.name as machine_name,
+		t.name as tool_name
 		from event e
 		left join users u1 on (u1.id=e.created_by) 
 		left join users u2 on (u2.id=e.allocated_by) 
 		left join users u3 on (u3.id=e.allocated_to) 
-		where e.type like 'Tool%'
-		and e.ref_id=$1
+		left join component t on (t.id=e.tool_id)
+		left join machine m on (m.id=e.machine_id)
+		where e.tool_id=$1
 		order by e.startdate desc`, id).QueryStructs(&record)
 
 	log.Println("Completed tool event query", len(record))
@@ -269,14 +276,15 @@ func raiseEventMachine(c *echo.Context) error {
 	// Create the event record
 	evt := &DBevent{
 		SiteId:    siteId,
-		Type:      fmt.Sprintf("Machine: %s", req.Action),
-		RefId:     machineId,
+		Type:      fmt.Sprintf("%s", req.Action),
+		MachineId: machineId,
+		ToolId:    0,
 		Priority:  1,
 		CreatedBy: UID,
 		Notes:     req.Descr,
 	}
 	DB.InsertInto("event").
-		Whitelist("site_id", "type", "ref_id", "priority", "created_by", "notes").
+		Whitelist("site_id", "type", "machine_id", "priority", "created_by", "notes").
 		Record(evt).
 		Returning("id").
 		QueryScalar(&evt.ID)
@@ -349,27 +357,18 @@ func raiseEventTool(c *echo.Context) error {
 
 	UID, Username := getClaimedUser(claim)
 
-	// Create 2 event records - one for the tool, and one for the machine (with the tool event as the parent)
+	// Create 1 event record - which includes details of both tool and machine
 	evt := &DBevent{
 		SiteId:    siteId,
-		Type:      fmt.Sprintf("Tool: %s", req.Action),
-		RefId:     toolId,
+		Type:      fmt.Sprintf("%s", req.Action),
+		MachineId: machineId,
+		ToolId:    toolId,
 		Priority:  1,
 		CreatedBy: UID,
 		Notes:     req.Descr,
 	}
 	DB.InsertInto("event").
-		Whitelist("site_id", "type", "ref_id", "priority", "created_by", "notes").
-		Record(evt).
-		Returning("id").
-		QueryScalar(&evt.ID)
-
-	evt.RefId = machineId
-	evt.Type = fmt.Sprintf("Machine: %s", req.Action)
-	evt.Notes = fmt.Sprintf("%s on Tool %s", req.Action, toolName)
-	evt.ParentEvent = evt.ID
-	DB.InsertInto("event").
-		Whitelist("site_id", "type", "ref_id", "priority", "created_by", "notes", "parent_event").
+		Whitelist("site_id", "type", "machine_id", "tool_id", "priority", "created_by", "notes").
 		Record(evt).
 		Returning("id").
 		QueryScalar(&evt.ID)
@@ -493,13 +492,8 @@ func queryEventDocs(c *echo.Context) error {
 
 	// Get the event record
 	myEvent := &DBeventResponse{}
-	err = DB.SQL(`select * from event where id=$1`, refID).QueryStruct(myEvent)
+	err = DB.SQL(`select id,site_id,machine_id,tool_id from event where id=$1`, refID).QueryStruct(myEvent)
 	log.Println("Got event", myEvent)
-
-	// Get the tool
-	myTool := &DBcomponent{}
-	err = DB.SQL(`select * from component where id=$1`, myEvent.RefId).QueryStruct(myTool)
-	log.Println("Got Tool", myTool)
 
 	// Get docs for this event
 	docs := &[]DBdoc{}
@@ -523,7 +517,7 @@ func queryEventDocs(c *echo.Context) error {
 	// Now get docs for the tool
 	err = DB.Select("id", "name", "filename", "filesize", "to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created").
 		From("doc").
-		Where("type='tool' and ref_id=$1", myTool.ID).
+		Where("type='tool' and ref_id=$1", myEvent.ToolId).
 		QueryStructs(docs)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
@@ -532,7 +526,7 @@ func queryEventDocs(c *echo.Context) error {
 	// Now get docs for the machine
 	err = DB.Select("id", "name", "filename", "filesize", "to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created").
 		From("doc").
-		Where("type='machine' and ref_id=$1", myTool.MachineID).
+		Where("type='machine' and ref_id=$1", myEvent.MachineId).
 		QueryStructs(docs)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
