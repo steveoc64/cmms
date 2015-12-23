@@ -130,12 +130,12 @@
 
 .nw-editor--fixed .nw-editor__res {
   padding: 1px 8px;
-  display:list-item; 
-  ul: li:before !important {
+  display: block; 
+  ul: li:before {
     content: "• ";
   }
   li { 
-    display: list-type !important;
+    display: list-item !important;
   }
 }
 
