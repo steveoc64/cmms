@@ -5,9 +5,16 @@
 	var app = angular.module('cmms')
 
 	app.controller(base+'EventCtrl', 
-		['$state','events','Session','LxDialogService','logs','LxNotificationService',
-		function($state, events, Session, LxDialogService, logs, LxNotificationService){
+		['$state','events','Session','LxDialogService','logs','LxNotificationService','socket','DBEvent',
+		function($state, events, Session, LxDialogService, logs, LxNotificationService,socket,DBEvent){
 	
+		// Subscribe to changes in the machine list	
+		var vm = this
+		socket.on("event",function(msg){
+			console.log("Event update - reload full list",msg)
+			vm.events = DBEvent.query()					
+		})
+
 		angular.extend(this, {
 			events: events,
 			session: Session,
