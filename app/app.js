@@ -831,7 +831,7 @@ var getMapURI = function(addr) {
 	  FastClick.attach(document.body);
 
 	  // Setup the websocket
-		var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
+		var socketUrl = 'ws://' + $location.host() + ':' + 8066 + '/ws'
 	  var ws = $websocket.$new({
 	  	url: socketUrl,
 	  	reconnect: true,
