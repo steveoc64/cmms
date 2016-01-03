@@ -44,7 +44,8 @@ var getMapURI = function(addr) {
 			  };
 			})
 		.service('socket',function($websocket,$location){
-			var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
+			//var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
+			var socketUrl = 'ws://' + $location.host() + ':' + 8066 + '/ws'
 			var ws = $websocket.$get(socketUrl)
 			ws.$open() // open connection if not already done
 			return {
