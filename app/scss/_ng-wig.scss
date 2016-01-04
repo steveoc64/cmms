@@ -84,6 +84,24 @@
   background: #fff;
   cursor: text;
   width:100%;
+
+  ol {
+    //background: #0f0;
+    //@extend %default-ol;
+    list-style-type: decimal;
+    margin-bottom: 1px;
+    padding-left: 66px;    
+  }
+
+  ul {
+    //background: #00f;
+    list-style-type: disc;
+    margin-bottom: 1px;
+    padding-left: 66px;
+//    
+//    @extend %default-ul;
+  }
+
 }
 
 .nw-editor-container {
@@ -99,14 +117,13 @@
   display: table-cell;
 }
 
-.nw-editor__src,
+.nw-editor__src,  
 .nw-editor__res {
   width: 100%;
   outline: none;
   box-sizing: border-box;
   border: none;
   margin: 0;
-  list-style: square outside none;
 }
 
 .nw-editor__src-container {
@@ -131,17 +148,7 @@
 .nw-editor--fixed .nw-editor__res {
   padding: 1px 8px;
   display: block; 
-  ul: li:before {
-    content: "• ";
-  }
-  li { 
-    display: list-item !important;
-  }
-}
-
-.buttonme {
-  background-color: red;
-  display: list-item !important;
+  background: #00F;
 }
 
 .nw-invisible {
