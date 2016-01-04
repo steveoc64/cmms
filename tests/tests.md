@@ -2,16 +2,109 @@ Test Cases:
 
 	Admin User:
 		- Sites
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc			
 		- Machine
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc
 		- Tool
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc
 		- Part
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc
 		- Vendor
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc
 		- User
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc
 		- Skill 
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc
+		- Events
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc
 		- Report
 
-
 	Site Manager:
-		- Machine
-		- All Sites
-		
+		- Own Machine
+			- Docs
+				- Add new doc
+				- Show doc
+				- Cannot remove doc
+		- Own Sites
+			- Docs
+				- Add new doc
+				- Show doc
+				- Cannot remove doc
+		- Other Machine
+			- Docs
+				- Cannot add new doc
+				- Show doc
+				- Cannot remove doc
+		- Other Tool
+			- Docs
+				- Cannot add new doc
+				- Show doc
+				- Cannot remove doc
+		- Part View
+			- Docs
+				- Add new doc
+				- Show doc
+				- Cannot remove doc
+		- Other Sites
+			- Docs
+				- Cannot add new doc
+				- Show doc
+				- Cannot remove doc
+		- Events
+				- Docs
+				- Add new doc
+				- Show doc
+				- Cannot remove doc
+		- Work Orders
+			- Docs
+				- Add new doc
+				- Show doc
+				- Remove doc
+		- Users
+				- Docs
+				- Add new doc
+				- Show doc
+				- Cannot remove doc
+		- Reports
+
+	Operator:
+		- Machine View
+			- Docs
+				- Cannot add new doc
+				- Show doc
+				- Cannot remove doc
+		- Tool View
+			- Docs
+				- Cannot add new doc
+				- Show doc
+				- Cannot remove doc
+		- Part View
+			- Docs
+				- Cannot add new doc
+				- Show doc
+				- Cannot remove doc
+
