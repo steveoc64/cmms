@@ -30,7 +30,7 @@
             <td><a ng-click="Events.goMachine(row)">{{row.MachineName}}</a></td>
             <td><a ng-click="Events.goTool(row)">{{row.ToolName}}</a></td>
             <td>{{row.Username}}</td>
-            <td>{{row.Notes | limitTo:40}}</td>
+            <td>{{row.Notes | firstline}}</td>
             <td>L: {{row.LabourCost}}<br>M: {{row.MaterialCost}}<br>O: {{row.OtherCost}}</td>
       </tr>
     </tbody>

@@ -59,6 +59,11 @@ var getMapURI = function(addr) {
 				}
 			}
 		})
+		.filter('firstline', function() {
+		  return function(input) {
+		  	return input.split('\n')[0]
+  		};
+		})
 
   	function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $localStorageProvider) {
 
