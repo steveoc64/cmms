@@ -37,6 +37,10 @@
     "ngWig": "ng-wig#~2.3.3",
     "ng-file-upload": "~10.1.9",
     "angular-websocket": "~1.0.14",
-    "ng-websocket": "~0.2.1"
+    "ng-websocket": "~0.2.1",
+    "textAngular": "~1.4.6"
+  },
+  "resolutions": {
+    "angular": "1.5.0-rc.0"
   }
 }
