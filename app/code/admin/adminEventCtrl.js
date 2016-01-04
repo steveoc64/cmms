@@ -73,7 +73,7 @@
 				MaterialCost: 0.0,
 				OtherCost: 0.0,
 			},
-			workOrder: {
+			workOrderData: {
 				Descr: '',
 			},
 			completion: {
@@ -113,6 +113,19 @@
 			},
 			submitComplete: function() {
 				console.log('completion fields',this.completion)
+				/*
+				Are there any workorders outstanding ?
+					Y - ask if user wants to close them off, else dont close the ewent yet
+					N - close off the event
+
+							Mark tool as OK
+							Are there any uncleared events on other tools on the same machine ?
+								Y - ask if user wants to clear these as well
+								N - mark machine as good to go
+				*/
+			},
+			submitWorkOrder: function() {
+				console.log('workorder fields',this.workOrderData)
 				/*
 				Are there any workorders outstanding ?
 					Y - ask if user wants to close them off, else dont close the ewent yet
