@@ -50,6 +50,12 @@ var paths = {
   //'bower_components/angular-websocket/dist/angular-websocket.js',
   "bower_components/ng-websocket/ng-websocket.js",
   'bower_components/ngWig/dist/ng-wig.js',
+  /*
+  "bower_components/textAngular/dist/textAngular-rangy.min.js",
+  "bower_components/textAngular/dist/textAngular-sanitize.js",
+  "bower_components/textAngular/dist/textAngularSetup.js",
+  "bower_components/textAngular/dist/textAngular.js", 
+  */
   ],
   // These files are for your app's JavaScript
   appJS: [
