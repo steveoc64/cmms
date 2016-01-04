@@ -1,5 +1,5 @@
 @import "lumx";
-@import "neat";
+//@import "neat";  
 //@import "base";
 
 @import "settings";
@@ -18,10 +18,6 @@ body {
   font-family: 'Ubuntu', sans-serif; }
 
 // Now that everything is defined, provide last minute overrides for bits of CSS
-
-textarea ul {
-  list-style: disc;
-}
 
 .data-table {
   td {
