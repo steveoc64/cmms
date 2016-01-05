@@ -249,6 +249,37 @@ create table event_doc (
 );
 create unique index event_doc_idx on event_doc (event_id,doc_id);
 
+drop table if exists workorder;
+create table workorder (
+	id int not null primary key,
+	raised timestamp not null default localtimestamp,
+	est_duration int not null default 0,
+	actual_duration int not null default 0,
+	descr text not null default '',
+	status text not null default ''
+);
+
+drop table if exists wo_skills;
+create table wo_skills (
+	id int not null,
+	skill_id int not null
+);
+create unique index wo_skills_idx on wo_skills (id, skill_id);
+
+drop table if exists wo_assignee;
+create table wo_assignee (
+	id int not null,
+	user_id int not null
+);
+create unique index wo_assignee_idx on wo_assignee (id, user_id);
+
+drop table if exists wo_docs;
+create table wo_docs (
+	id int not null,
+	doc_id int not null
+);
+create unique index wo_docs_idx on wo_docs (id, doc_id);
+
 drop table if exists stock_level;
 create table stock_level (
 	part_id serial not null primary key,
