@@ -49,6 +49,7 @@ Test Cases:
 				- Add new doc
 				- Show doc
 				- Cannot remove doc
+				
 		- Own Sites
 			- Docs
 				- Add new doc
@@ -94,7 +95,7 @@ Test Cases:
 	Operator:
 		- Machine View
 			- Docs
-				- Cannot add new doc
+				- Cannot add new doc 
 				- Show doc
 				- Cannot remove doc
 		- Tool View
