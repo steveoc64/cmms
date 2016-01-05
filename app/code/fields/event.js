@@ -311,6 +311,7 @@ getEventFields = function() {
         key: 'EstDuration',
         templateOptions: {
           label: 'Est Duration (Minutes)',
+          step: 30,   // allow operator to incr in half hour blocks
         }
       }
     },{
