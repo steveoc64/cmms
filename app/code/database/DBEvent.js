@@ -47,4 +47,13 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBWorkOrder', function($resource,ServerName,Session){
+		return $resource(ServerName+'/workorder/:id', {id: '@_id'}, {
+  		'query':  {method:'GET', isArray:true},
+  		'insert': {method:'POST'},
+			'get':    {method:'GET'},
+  		'update': {method:'PUT'},
+		})
+	})
+
 })();

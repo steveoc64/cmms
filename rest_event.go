@@ -534,3 +534,19 @@ func queryEventDocs(c *echo.Context) error {
 
 	return c.JSON(http.StatusOK, docs)
 }
+
+func queryWorkOrders(c *echo.Context) error {
+
+	return c.JSON(http.StatusOK, "list of workorders")
+}
+
+func newWorkOrder(c *echo.Context) error {
+
+	log.Println(`adding new workorder`)
+	return c.JSON(http.StatusOK, "add new workorder")
+}
+
+func updateWorkOrder(c *echo.Context) error {
+
+	return c.JSON(http.StatusOK, "update workorder")
+}

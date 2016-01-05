@@ -127,7 +127,7 @@
 			},
 			submitWorkOrder: function() {
 				console.log('workorder fields',this.workOrderData)
-				this.workOrderService.add(this.workOrderData).$promise.then(function(){
+				this.workOrderService.insert(this.workOrderData).$promise.then(function(){
 					LxDialogService.close('workOrderDialog')
 					LxNotificationService.info('New WorkOrder Created')
 				})
