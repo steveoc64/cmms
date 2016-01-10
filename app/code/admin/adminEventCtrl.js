@@ -124,7 +124,7 @@
 				*/
 			},
 			submitWorkOrder: function() {
-				workOrderData.EventID = $stateParams.id
+				this.workOrderData.EventID = $stateParams.id
 				console.log('workorder fields',this.workOrderData)
 				this.workOrderService.insert(this.workOrderData).$promise.then(function(){
 					LxDialogService.close('workOrderDialog')
@@ -146,14 +146,14 @@
 			goUser: function(row) {
 				$state.go(base+'.edituser',{id: row.ID})
 			},
-			goMachine: function(row) {
-				$state.go(base+'.editmachine', {id: row.MachineId})
+			goMachine: function() {
+				$state.go(base+'.editmachine', {id: this.event.MachineId})
 			},
-			goTool: function(row) {
-				$state.go(base+'.edittool', {id: row.ToolId})
+			goTool: function() {
+				$state.go(base+'.edittool', {id: this.event.ToolId})
 			},
-			goSite: function(row) {
-				$state.go(base+'.editsite',{id: row.SiteId})
+			goSite: function() {
+				$state.go(base+'.editsite',{id: this.event.SiteId})
 			},
       showChange: function(c) {
       	this.Audit = c

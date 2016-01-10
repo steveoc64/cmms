@@ -109,8 +109,26 @@
 
 
 <div class="main-section__title">
-  <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-factory"></i>
+  <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-factory"></i>  
   Event Details
+  <button type="button" 
+          class="btn btn--m btn--blue btn--flat" 
+          ng-click="editEvent.goSite()"
+          lx-ripple>
+            {{editEvent.event.SiteName}}
+  </button>
+  <button type="button" 
+          class="btn btn--m btn--blue btn--flat" 
+          ng-click="editEvent.goMachine()"
+          lx-ripple>
+            {{editEvent.event.MachineName}}
+  </button>
+  <button type="button" 
+          class="btn btn--m btn--blue btn--flat" 
+          ng-click="editEvent.goTool()"
+          lx-ripple>
+            {{editEvent.event.ToolName}}
+  </button>
 </div>
 
 <form name="editEvent.form" ng-submit="editEvent.submit()">

@@ -162,11 +162,17 @@ func getEvent(c *echo.Context) error {
 		e.allocated_to as allocated_to,
 		u1.username as username, 
 		u2.username as allocated_by_user, 
-		u3.username as allocated_to_user 
+		u3.username as allocated_to_user,
+		m.name as machine_name,
+		t.name as tool_name,
+		s.name as site_name
 		from event e
 		left join users u1 on (u1.id=e.created_by) 
 		left join users u2 on (u2.id=e.allocated_by) 
 		left join users u3 on (u3.id=e.allocated_to) 
+		left join machine m on (m.id=e.machine_id)
+		left join component t on (t.id=e.tool_id)
+		left join site s on (s.id=m.site_id)
 		where e.id=$1`, id).QueryStruct(&record)
 
 	if err != nil {
