@@ -36,9 +36,7 @@
 				$state.go(base+'.editevent',{id: row.ID})					
 			},
 			goMachine: function(row) {
-				if (row.RefId != 0) {
-					$state.go(base+'.editmachine',{id: row.RefId})
-				}
+				$state.go(base+'.editmachine',{id: row.MachineId})
 			},
 			goSite: function(row) {
 				if (row.SiteId != 0) {
