@@ -65,7 +65,7 @@ create table sys_log (
 	type char(8) not null,
 	ref_type char(1) not null,
 	ref_id int not null,
-	logdate timestamp not null default localtimestamp,
+	logdate timestamptz not null default localtimestamp,
 	ip text not null,
 	descr text not null,
 	user_id int not null,
@@ -93,7 +93,7 @@ create table doc (
 	user_id int not null default 0,
 	filesize int not null default 0,
 	latest_rev int not null default 0,
-	created timestamp not null default localtimestamp
+	created timestamptz not null default localtimestamp
 );
 create unique index doc_path_idx on doc (path);
 
@@ -107,7 +107,7 @@ drop table if exists doc_rev;
 create table doc_rev (
 	doc_id int not null,
 	id serial not null,
-	revdate timestamp not null default localtimestamp,
+	revdate timestamptz not null default localtimestamp,
 	descr text not null,
 	filename text not null,
 	path text not null,
@@ -127,9 +127,9 @@ create table machine (
 	serialnum text not null,
 	is_running boolean not null default false,
 	status text not null default '',
-	stopped_at timestamp,
-	started_at timestamp,
-	alert_at timestamp,
+	stopped_at timestamptz,
+	started_at timestamptz,
+	alert_at timestamptz,
 	picture text not null default '',
 	notes text not null default ''	
 );
@@ -206,7 +206,7 @@ drop table if exists vendor_price;
 create table vendor_price (
 	part_id int not null,
 	vendor_id int not null,
-	datefrom timestamp not null default localtimestamp,
+	datefrom timestamptz not null default localtimestamp,
 	price numeric(12,2) not null,
 	min_qty numeric(12,2) not null,
 	notes text not null default ''	
@@ -222,11 +222,11 @@ create table event (
 	tool_id int not null,
 	priority int not null,
 	status text not null default '',
-	startdate timestamp not null default localtimestamp,
+	startdate timestamptz not null default localtimestamp,
 	created_by int not null,
 	allocated_by int not null default 0,
 	allocated_to int not null default 0,
-	completed timestamp,
+	completed timestamptz,
 	labour_cost money not null default 0.0,
 	material_cost money not null default 0.0,
 	other_cost money not null default 0.0,

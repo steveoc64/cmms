@@ -39,3 +39,17 @@ create table wo_docs (
 );
 create unique index wo_docs_idx on wo_docs (id, doc_id);
 
+alter table machine alter stopped_at type timestamptz;
+alter table machine alter started_at type timestamptz;
+alter table machine alter alert_at type timestamptz;
+
+alter table vendor_price alter datefrom type timestamptz;
+alter table sys_log alter logdate type timestamptz;
+alter table doc alter created type timestamptz;
+alter table doc_rev alter revdate type timestamptz;
+
+alter table event alter startdate type timestamptz;
+alter table event alter completed type timestamptz;
+
+alter table stock_level alter datefrom type timestamptz;
+
