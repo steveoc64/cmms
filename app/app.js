@@ -46,7 +46,7 @@ var getMapURI = function(addr) {
 			})
 		.service('socket',function($websocket,$location){
 			//var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
-			var socketUrl = 'ws://' + $location.host() + ':' + 8066 + '/ws'
+			var socketUrl = 'ws://' + $location.host() + '/ws'
 			console.log("socketUrl =",socketUrl)
 			var ws = $websocket.$get(socketUrl)
 			ws.$open() // open connection if not already done
@@ -837,7 +837,7 @@ var getMapURI = function(addr) {
 	  FastClick.attach(document.body);
 
 	  // Setup the websocket
-		var socketUrl = 'ws://' + $location.host() + ':' + 8066 + '/ws'
+		var socketUrl = 'ws://' + $location.host() + '/ws'
 	  var ws = $websocket.$new({
 	  	url: socketUrl,
 	  	reconnect: true,
