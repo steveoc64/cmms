@@ -546,10 +546,89 @@ func queryWorkOrders(c *echo.Context) error {
 	return c.JSON(http.StatusOK, "list of workorders")
 }
 
+type Assignee struct {
+	ID       int
+	Name     string
+	Username string
+}
+
+type WOSkill struct {
+	ID   int
+	Name string
+}
+
+type WorkOrderRequest struct {
+	EventID     string
+	Date        string
+	Descr       string
+	EstDuration int
+	AssignTo    []Assignee
+	Skills      []WOSkill
+}
+
+type DBworkorder struct {
+	ID             int    `db:"id"`
+	EventID        string `db:"event_id"`
+	StartDate      string `db:"startdate"`
+	EstDuration    int    `db:"est_duration"`
+	ActualDuration int    `db:"actual_duration"`
+	Descr          string `db:"descr"`
+	Status         string `db:"status"`
+}
+
+type DBwo_skills struct {
+	ID      int `db:"id"`
+	SkillId int `db:"skill_id"`
+}
+
+type DBwo_assignee struct {
+	ID     int `db:"id"`
+	UserId int `db:"user_id"`
+}
+
+type DBwo_docs struct {
+	ID    int `db:"id"`
+	DocId int `db:"doc_id"`
+}
+
 func newWorkOrder(c *echo.Context) error {
 
 	log.Println(`adding new workorder`)
-	return c.JSON(http.StatusOK, "add new workorder")
+
+	_, err := securityCheck(c, "writeEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	req := &WorkOrderRequest{}
+	err = c.Bind(req)
+	if err != nil {
+		log.Println("Binding:", err.Error())
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	log.Println("Request:", req)
+
+	id, err := strconv.Atoi(req.EventID)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Invalid Event ID "+err.Error())
+	}
+	log.Println("EventID=", id)
+
+	wo := DBworkorder{
+		EventID:     req.EventID,
+		StartDate:   req.Date,
+		Descr:       req.Descr,
+		EstDuration: req.EstDuration,
+		Status:      `Assigned`,
+	}
+
+	err = DB.InsertInto("workorder").
+		Columns("event_id", "est_duration", "descr", "status", "startdate").
+		Record(wo).
+		Returning("id").
+		QueryScalar(&wo.ID)
+
+	return c.JSON(http.StatusOK, wo)
 }
 
 func updateWorkOrder(c *echo.Context) error {

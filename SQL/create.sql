@@ -251,9 +251,9 @@ create unique index event_doc_idx on event_doc (event_id,doc_id);
 
 drop table if exists workorder;
 create table workorder (	
-	id int not null primary key,
-	event_id int not null,
-	raised timestamp not null default localtimestamp,
+	id serial not null primary key,
+	event_id int not null default 0,
+	startdate timestamptz not null default localtimestamp,
 	est_duration int not null default 0,
 	actual_duration int not null default 0,
 	descr text not null default '',

@@ -9,12 +9,13 @@ alter table event drop parent_event:
 
 drop table if exists workorder;
 create table workorder (
-	id int not null primary key,
-	raised timestamp not null default localtimestamp,
+	id serial not null primary key,
+	event_id int not null default 0,
+	startdate timestamp not null default localtimestamp,
 	est_duration int not null default 0,
 	actual_duration int not null default 0,
 	descr text not null default '',
-	status text not null default ''	
+	status text not null default ''
 );
 
 drop table if exists wo_skills;
@@ -37,3 +38,4 @@ create table wo_docs (
 	doc_id int not null
 );
 create unique index wo_docs_idx on wo_docs (id, doc_id);
+
