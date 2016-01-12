@@ -159,7 +159,7 @@ func saveComponent(c *echo.Context) error {
 
 	DB.SQL(`
 		select 
-		c.id,c.name,c.position,c.site_id,c.descr,c.make,c.model,c.qty,c.stock_code,c.serialnum,c.machine_id,s.name as site_name,m.name as machine_name
+		c.id,c.name,c.position,c.site_id,c.descr,c.make,c.model,c.qty,c.stock_code,c.serialnum,c.machine_id,s.name as site_name,m.name as machine_name,c.notes
 		from component c
 		left join machine m on (m.id=c.machine_id)
 		left join site s on (s.id=c.site_id)
@@ -172,7 +172,7 @@ func saveComponent(c *echo.Context) error {
 	}
 
 	_, err = DB.Update("component").
-		SetWhitelist(record, "name", "position", "site_id", "descr", "make", "model", "qty", "stock_code", "serialnum").
+		SetWhitelist(record, "name", "position", "site_id", "descr", "make", "model", "qty", "stock_code", "serialnum", "notes").
 		Where("id = $1", componentID).
 		Exec()
 
