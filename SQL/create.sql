@@ -257,7 +257,8 @@ create table workorder (
 	est_duration int not null default 0,
 	actual_duration int not null default 0,
 	descr text not null default '',
-	status text not null default ''
+	status text not null default '',
+	notes text not null default ''
 );
 
 drop table if exists wo_skills;

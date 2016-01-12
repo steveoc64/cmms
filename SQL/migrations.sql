@@ -53,3 +53,4 @@ alter table event alter completed type timestamptz;
 
 alter table stock_level alter datefrom type timestamptz;
 
+alter table workorder add notes text not null default  '';
