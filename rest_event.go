@@ -574,6 +574,7 @@ type DBworkorder struct {
 	ActualDuration int    `db:"actual_duration"`
 	Descr          string `db:"descr"`
 	Status         string `db:"status"`
+	Notes          string `db:"notes"`
 }
 
 type DBwo_skills struct {
@@ -589,6 +590,16 @@ type DBwo_assignee struct {
 type DBwo_docs struct {
 	ID    int `db:"id"`
 	DocId int `db:"doc_id"`
+}
+
+type EventNotes struct {
+	MachineName  string `db:"machine_name"`
+	MachineNotes string `db:"machine_notes"`
+	ToolName     string `db:"tool_name"`
+	ToolNotes    string `db:"tool_notes"`
+	SiteName     string `db:"site_name"`
+	SiteAddress  string `db:"site_address"`
+	SiteNotes    string `db:"site_notes"`
 }
 
 func newWorkOrder(c *echo.Context) error {
@@ -620,13 +631,66 @@ func newWorkOrder(c *echo.Context) error {
 		Descr:       req.Descr,
 		EstDuration: req.EstDuration,
 		Status:      `Assigned`,
+		Notes:       ``,
 	}
 
+	// Make up the notes field based on the notes for the machine and the tool
+	eNotes := &EventNotes{}
+	err = DB.SQL(`select
+		m.name as machine_name,
+		m.notes as machine_notes,
+		s.name as site_name,
+		s.address as site_address,
+		s.notes as site_notes,
+		t.name as tool_name,
+		t.notes as tool_notes
+		from event e
+		left join site s on s.id=e.site_id
+		left join machine m on m.id=e.machine_id
+		left join component t on t.id=e.tool_id
+		where e.id=$1`, wo.EventID).QueryStruct(eNotes)
+	if err != nil {
+		return c.String(http.StatusNotFound, err.Error())
+	}
+
+	log.Println("loaded various notes fields", eNotes)
+
+	var mNotes, tNotes, sNotes string
+
+	if eNotes.MachineNotes != `` {
+		mNotes = "<h2>Machine: " + eNotes.MachineName + "</h2>\n" + eNotes.MachineNotes + "<p>\n"
+	}
+	if eNotes.ToolNotes != `` {
+		tNotes = "<h2>Tool: " + eNotes.ToolName + "</h2>\n" + eNotes.ToolNotes + "<p>\n"
+	}
+	if eNotes.SiteNotes != `` {
+		sNotes = eNotes.SiteNotes + "<p>\n"
+	}
+	if eNotes.SiteName != `` {
+		wo.Notes = "<h2>Site: " + eNotes.SiteName + "</h2>\n" + eNotes.SiteAddress + "<p>\n" + sNotes + mNotes + tNotes
+	}
+
+	log.Println("writing workorder", wo)
+
 	err = DB.InsertInto("workorder").
-		Columns("event_id", "est_duration", "descr", "status", "startdate").
+		Columns("event_id", "est_duration", "descr", "status", "startdate", "notes").
 		Record(wo).
 		Returning("id").
 		QueryScalar(&wo.ID)
+
+	// populate the skills
+	for _, skill := range req.Skills {
+		log.Println("Attacing skill", skill)
+		DB.SQL(`insert into wo_skills (id,skill_id) values ($1,$2)`, wo.ID, skill.ID).Exec()
+	}
+
+	// populate the assignee
+	for _, assignee := range req.AssignTo {
+		log.Println("Attaching assignee", assignee)
+		DB.SQL(`insert into wo_assignee (id,user_id) values ($1,$2)`, wo.ID, assignee.ID).Exec()
+	}
+
+	// populate the docs
 
 	return c.JSON(http.StatusOK, wo)
 }
