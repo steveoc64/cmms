@@ -175,6 +175,25 @@ func publishSocket(event string, data interface{}) {
 	}
 }
 
+func pingSockets() {
+
+	gotKills := false
+	var newSubs []*websocket.Conn
+	for _, wss := range subscribers {
+		err := websocket.Message.Send(wss, `ping`)
+		if err != nil {
+			log.Println("Writing to connection", wss, "got error", err.Error(), "Removing connection from pool")
+			gotKills = true
+		} else {
+			newSubs = append(newSubs, wss)
+		}
+	}
+	if gotKills {
+		subscribers = newSubs
+		showSubscriberPool("Pool Shrinks To:")
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Functions
 

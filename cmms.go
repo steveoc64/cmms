@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/rs/cors"
 	"log"
+	"time"
 )
 
 var e *echo.Echo
@@ -46,5 +47,16 @@ func main() {
 	if Config.Debug {
 		log.Printf("... Starting Web Server on port %d", Config.WebPort)
 	}
+
+	// Start the socket monitor
+	go pinger()
+
 	e.Run(fmt.Sprintf(":%d", Config.WebPort))
+}
+
+func pinger() {
+	ticker := time.NewTicker(time.Second * 50) // just under the 1 min mark for nginx default timeouts
+	for range ticker.C {
+		pingSockets()
+	}
 }
