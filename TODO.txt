@@ -1,2 +1,6 @@
-todo items
+todo items:
+
+- Global search
+- Notes field on w/order entry screen
+
 

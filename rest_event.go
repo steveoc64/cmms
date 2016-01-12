@@ -7,6 +7,7 @@ import (
 	"gopkg.in/mgutz/dat.v1"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 )
 
@@ -617,7 +618,7 @@ func newWorkOrder(c *echo.Context) error {
 		log.Println("Binding:", err.Error())
 		return c.String(http.StatusBadRequest, err.Error())
 	}
-	log.Println("Request:", req)
+	//log.Println("Request:", req)
 
 	id, err := strconv.Atoi(req.EventID)
 	if err != nil {
@@ -653,41 +654,78 @@ func newWorkOrder(c *echo.Context) error {
 		return c.String(http.StatusNotFound, err.Error())
 	}
 
-	log.Println("loaded various notes fields", eNotes)
-
-	var mNotes, tNotes, sNotes string
-
-	if eNotes.MachineNotes != `` {
-		mNotes = "<h2>Machine: " + eNotes.MachineName + "</h2>\n" + eNotes.MachineNotes + "<p>\n"
-	}
-	if eNotes.ToolNotes != `` {
-		tNotes = "<h2>Tool: " + eNotes.ToolName + "</h2>\n" + eNotes.ToolNotes + "<p>\n"
-	}
-	if eNotes.SiteNotes != `` {
-		sNotes = eNotes.SiteNotes + "<p>\n"
-	}
-	if eNotes.SiteName != `` {
-		wo.Notes = "<h2>Site: " + eNotes.SiteName + "</h2>\n" + eNotes.SiteAddress + "<p>\n" + sNotes + mNotes + tNotes
-	}
-
-	log.Println("writing workorder", wo)
-
 	err = DB.InsertInto("workorder").
 		Columns("event_id", "est_duration", "descr", "status", "startdate", "notes").
 		Record(wo).
 		Returning("id").
 		QueryScalar(&wo.ID)
 
-	// populate the skills
-	for _, skill := range req.Skills {
-		log.Println("Attacing skill", skill)
-		DB.SQL(`insert into wo_skills (id,skill_id) values ($1,$2)`, wo.ID, skill.ID).Exec()
-	}
+	googleMapUrl, _ := UrlEncoded(eNotes.SiteAddress)
 
-	// populate the assignee
+	// create the email body to be sent to each assignee
+	emailBody := fmt.Sprintf(`
+		<h1>Maintenace WorkOrder %06d</h1>
+		%s for the %s tool on the %s machine, at %s 
+		
+		<ul>
+			<li>Start Date: %s
+			<li>Est Duration: %d mins
+		</ul>
+		<hr>
+
+		<h2>Site Details: %s</h2>
+		Map: http://www.google.com/maps?q=%s
+		<p>
+		%s
+		<p>
+		%s
+		<hr>
+		<h2>Machine: %s</h2>
+		  %s
+		<hr>
+		<h2>Tool: %s</h2>
+		  %s
+		<hr>
+		<h3>Skill Requirements:</h3>
+		<ul>`,
+		wo.ID,
+		wo.Descr,
+		eNotes.ToolName,
+		eNotes.MachineName,
+		eNotes.SiteName,
+		wo.StartDate[:10],
+		wo.EstDuration,
+		eNotes.SiteName,
+		googleMapUrl,
+		eNotes.SiteAddress,
+		eNotes.SiteNotes,
+		eNotes.MachineName,
+		eNotes.MachineNotes,
+		eNotes.ToolName,
+		eNotes.ToolNotes)
+
+	// populate the skills, adding each one to the emal body
+	for _, skill := range req.Skills {
+		log.Println("Attaching skill", skill)
+		DB.SQL(`insert into wo_skills (id,skill_id) values ($1,$2)`, wo.ID, skill.ID).Exec()
+		emailBody += fmt.Sprintf("<li> %s\n", skill.Name)
+	}
+	emailBody += fmt.Sprintf("</ul>\n%s", wo.Notes)
+
+	// populate the assignee, and send them an email with the workorder
+	var emailAddr string
 	for _, assignee := range req.AssignTo {
 		log.Println("Attaching assignee", assignee)
 		DB.SQL(`insert into wo_assignee (id,user_id) values ($1,$2)`, wo.ID, assignee.ID).Exec()
+
+		// get the assignee's email address
+		DB.SQL(`select email from users where id=$1`, assignee.ID).QueryScalar(&emailAddr)
+
+		m := NewMail()
+		m.SetHeader("To", "steveoc64@gmail.com")
+		m.SetHeader("Subject", fmt.Sprintf("Maintenance WorkOrder %06d", wo.ID))
+		m.SetBody("text/html", "To:"+emailAddr+"<p>"+emailBody)
+		MailChannel <- m
 	}
 
 	// populate the docs
@@ -698,4 +736,13 @@ func newWorkOrder(c *echo.Context) error {
 func updateWorkOrder(c *echo.Context) error {
 
 	return c.JSON(http.StatusOK, "update workorder")
+}
+
+// UrlEncoded encodes a string like Javascript's encodeURIComponent()
+func UrlEncoded(str string) (string, error) {
+	u, err := url.Parse(str)
+	if err != nil {
+		return "", err
+	}
+	return u.String(), nil
 }
