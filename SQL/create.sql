@@ -285,7 +285,7 @@ drop table if exists stock_level;
 create table stock_level (
 	part_id serial not null primary key,
 	site_id int not null,
-	datefrom date not null default localtimestamp,
+	datefrom timestamptz not null default localtimestamp,
 	qty numeric(12,2) not null,
 	notes text not null default ''	
 );
