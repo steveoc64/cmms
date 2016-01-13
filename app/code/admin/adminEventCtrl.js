@@ -125,7 +125,7 @@
 			},
 			submitWorkOrder: function() {
 				this.workOrderData.EventID = $stateParams.id
-				console.log('workorder fields',this.workOrderData)
+				console.log('workorder fields',this.workOrderData)				
 				this.workOrderService.insert(this.workOrderData).$promise.then(function(){
 					LxDialogService.close('workOrderDialog')
 					LxNotificationService.info('New WorkOrder Created')

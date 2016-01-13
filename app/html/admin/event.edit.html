@@ -60,20 +60,25 @@
     </div>
     <div class="dialog__content">   
       <div class="p++">
-          <formly-form model="editEvent.workOrderData" fields="editEvent.workOrderFields"></formly-form>
-          <div class="dialog__actions">
-            <button class="btn btn--m btn--black btn--flat" 
-                    lx-ripple 
-                    lx-dialog-close>
-                      Cancel
-            </button>
-            <button type="button" 
-                    class="btn btn--m btn--black btn--flat" 
-                    ng-click="editEvent.submitWorkOrder()"
-                    lx-ripple>
-                      Add Work Order
-            </button>
-          </div>    
+        <formly-form model="editEvent.workOrderData" fields="editEvent.workOrderFields"></formly-form>
+        <div class="card">
+          <h4>Detailed Instructions for this WorkOrder</h4>
+          <textarea ng-wig="editEvent.workOrderData.Notes"
+                    style="display:block; height:240px; overflow:scroll;"></textarea>
+        </div>
+        <div class="dialog__actions">
+          <button class="btn btn--m btn--black btn--flat" 
+                  lx-ripple 
+                  lx-dialog-close>
+                    Cancel
+          </button>
+          <button type="button" 
+                  class="btn btn--m btn--black btn--flat" 
+                  ng-click="editEvent.submitWorkOrder()"
+                  lx-ripple>
+                    Add Work Order
+          </button>
+        </div> 
       </div>
     </div>
 </lx-dialog>

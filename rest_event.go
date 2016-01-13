@@ -664,7 +664,7 @@ func newWorkOrder(c *echo.Context) error {
 
 	// create the email body to be sent to each assignee
 	emailBody := fmt.Sprintf(`
-		<h1>Maintenace WorkOrder %06d</h1>
+		<h1>Maintenance WorkOrder %06d</h1>
 		%s for the %s tool on the %s machine, at %s 
 		
 		<ul>

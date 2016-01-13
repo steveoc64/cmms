@@ -21,14 +21,14 @@ func _initMailer() {
 
 	go _MailerDaemon()
 
-	m := NewMail()
-	//m.SetHeader("From", "steve@la-musette.net")
-	//m.SetHeader("From", "cmms-admin@sbsinternational.com.au")
-	m.SetHeader("To", "steveoc64@gmail.com")
-	m.SetHeader("Subject", "CMMS has started !")
-	m.SetBody("text/html", "The CMMS server has been started")
-	//m.Attach("/home/Alex/lolcat.jpg")
-	MailChannel <- m
+	/*
+		m := NewMail()
+		m.SetHeader("To", "steveoc64@gmail.com")
+		m.SetHeader("Subject", "CMMS has started !")
+		m.SetBody("text/html", "The CMMS server has been started")
+		MailChannel <- m
+	*/
+
 }
 
 func _MailerDaemon() {
