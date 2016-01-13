@@ -558,6 +558,12 @@ type WOSkill struct {
 	Name string
 }
 
+type WODocs struct {
+	ID       int
+	Name     string
+	Filename string
+}
+
 type WorkOrderRequest struct {
 	EventID     string
 	Date        string
@@ -565,6 +571,7 @@ type WorkOrderRequest struct {
 	EstDuration int
 	AssignTo    []Assignee
 	Skills      []WOSkill
+	Documents   []WODocs
 }
 
 type DBworkorder struct {
@@ -729,6 +736,9 @@ func newWorkOrder(c *echo.Context) error {
 	}
 
 	// populate the docs
+	for _idx, theDoc := range req.Documents {
+		log.Println("Data", _idx, theDoc)
+	}
 
 	return c.JSON(http.StatusOK, wo)
 }
