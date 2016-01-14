@@ -186,6 +186,33 @@ var getMapURI = function(addr) {
 			      		event: function(DBEvent,$stateParams) {
 			      			return DBEvent.get({id: $stateParams.id})
 			      		},
+			      		workorders: function(DBEventWorkorders,$stateParams) {
+			      			return DBEventWorkorders.query({id: $stateParams.id})
+			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'event', id: $stateParams.id})
+			      		},
+			      		logs: function(DBSysLog,$stateParams) {
+			      			return DBSysLog.query({
+			      				RefType: 'E',
+			      				RefID: $stateParams.id,
+			      				Limit: 100
+			      			})
+			      		}
+			      	}
+			      })
+			      .state('admin.editworkorder',{
+			      	url: '/workorder/edit/:id',
+			      	acl: 'Admin',
+			      	templateUrl: 'html/admin/workorder.edit.html',
+			      	controller: 'adminEditWorkorderCtrl as editWorkorder',
+			      	resolve: {
+			      		event: function(DBEvent,$stateParams) {
+			      			return DBEvent.get({id: $stateParams.id})
+			      		},
+			      		workorders: function(DBEventWorkorders,$stateParams) {
+			      			return DBEventWorkorders.query({id: $stateParams.id})
+			      		},
 			      		docs: function(DBDocs,$stateParams) {
 			      			return DBDocs.query({type: 'event', id: $stateParams.id})
 			      		},

@@ -56,4 +56,10 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBEventWorkorders', function($resource,ServerName,Session){
+		return $resource(ServerName+'/event/workorders/:id',{id: '@_id'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
 })();

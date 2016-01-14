@@ -102,6 +102,7 @@ func _initRoutes() {
 	e.Get("/tool/events/:id", queryToolEvents)
 	e.Post("/event/cost", addCostToEvent)
 	e.Get("/eventdocs/:id", queryEventDocs)
+	e.Get("/event/workorders/:id", queryEventWorkorders)
 	e.Get("/workorder/:id", queryWorkOrders)
 	e.Post("/workorder", newWorkOrder)
 	e.Put("/workorder/:id", updateWorkOrder)

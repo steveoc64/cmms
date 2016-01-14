@@ -192,6 +192,28 @@
     </lx-tab>
 
     <lx-tab heading="WorkOrders">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> StartDate</th>
+              <th> Est Duration</th>
+              <th> Description</th>
+              <th> Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-click="editEvent.goWorkOrder(row)"
+                ng-repeat="row in editEvent.workorders">
+                  <td><a>{{row.StartDate}}</a></td>
+                  <td><a>{{row.EstDuration}}</a></td>
+                  <td><a>{{row.Description}}</a></td>
+                  <td><a>{{row.Status}}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </lx-tab>
 
     <lx-tab heading="Documents">

@@ -48,10 +48,10 @@
 
 	app.controller(base+'EditEventCtrl', 
 		['$state','$stateParams','event','logs','Session','$window','LxDialogService',
-		'socket','Upload','LxProgressService','DBDocs','DBDocServer','docs',
+		'socket','Upload','LxProgressService','DBDocs','DBDocServer','docs','workorders',
 		'LxNotificationService','DBEvent','DBEventCost','DBWorkOrder',
 		function($state,$stateParams,event,logs,Session,$window,LxDialogService,
-			socket,Upload,LxProgressService,DBDocs,DBDocServer,docs,
+			socket,Upload,LxProgressService,DBDocs,DBDocServer,docs,workorders,
 			LxNotificationService,DBEvent,DBEventCost,DBWorkOrder){
 	
 		angular.extend(this, {
@@ -66,6 +66,7 @@
 			completeFields: getEventCompleteForm(),
 			costAdder: DBEventCost,
 			workOrderService: DBWorkOrder,
+			workorders: workorders,
 			costs: {
 				Descr: '',
 				LabourCost: 0.0,

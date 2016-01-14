@@ -562,6 +562,7 @@ type WODocs struct {
 	ID       int
 	Name     string
 	Filename string
+	Filesize int
 }
 
 type WorkOrderRequest struct {
@@ -673,13 +674,15 @@ func newWorkOrder(c *echo.Context) error {
 	emailBody := fmt.Sprintf(`
 		<h1>Maintenance WorkOrder %06d</h1>
 		%s for the %s tool on the %s machine, at %s 
-		
+
+		%s 
+
 		<ul>
 			<li>Start Date: %s
 			<li>Est Duration: %d mins
 		</ul>
 		<hr>
-
+	
 		<h2>Site Details: %s</h2>
 		Map: http://www.google.com/maps?q=%s
 		<p>
@@ -700,6 +703,7 @@ func newWorkOrder(c *echo.Context) error {
 		eNotes.ToolName,
 		eNotes.MachineName,
 		eNotes.SiteName,
+		wo.Notes,
 		wo.StartDate[:10],
 		wo.EstDuration,
 		eNotes.SiteName,
@@ -717,7 +721,18 @@ func newWorkOrder(c *echo.Context) error {
 		DB.SQL(`insert into wo_skills (id,skill_id) values ($1,$2)`, wo.ID, skill.ID).Exec()
 		emailBody += fmt.Sprintf("<li> %s\n", skill.Name)
 	}
-	emailBody += fmt.Sprintf("</ul>\n%s", wo.Notes)
+	emailBody += fmt.Sprintf("</ul>\n")
+
+	// populate the docs
+	if len(req.Documents) > 0 {
+		emailBody += fmt.Sprintf("Attached Documents:<ul>")
+		for _idx, theDoc := range req.Documents {
+			log.Println("Attaching document", _idx, theDoc)
+			DB.SQL(`insert into wo_docs (id,doc_id) values ($1,$2)`, wo.ID, theDoc.ID).Exec()
+			emailBody += fmt.Sprintf("<li> %s (%d kB)\n", theDoc.Name, theDoc.Filesize/1024)
+		}
+		emailBody += fmt.Sprintf("</ul>\n")
+	}
 
 	// populate the assignee, and send them an email with the workorder
 	var emailAddr string
@@ -732,12 +747,12 @@ func newWorkOrder(c *echo.Context) error {
 		m.SetHeader("To", "steveoc64@gmail.com")
 		m.SetHeader("Subject", fmt.Sprintf("Maintenance WorkOrder %06d", wo.ID))
 		m.SetBody("text/html", "To:"+emailAddr+"<p>"+emailBody)
-		MailChannel <- m
-	}
+		// attach any docs to the email
+		for _, theDoc := range req.Documents {
+			m.Attach("uploads/" + theDoc.Filename)
+		}
 
-	// populate the docs
-	for _idx, theDoc := range req.Documents {
-		log.Println("Data", _idx, theDoc)
+		MailChannel <- m
 	}
 
 	return c.JSON(http.StatusOK, wo)
@@ -755,4 +770,26 @@ func UrlEncoded(str string) (string, error) {
 		return "", err
 	}
 	return u.String(), nil
+}
+
+func queryEventWorkorders(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+
+	var record []*DBworkorder
+	err = DB.Select("to_char(startdate,'DD-Mon-YYYY') as startdate", "est_duration", "descr", "status").
+		From("workorder").
+		Where("event_id=$1", id).
+		QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, record)
 }
