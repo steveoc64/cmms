@@ -550,7 +550,7 @@ func queryWorkOrders(c *echo.Context) error {
 	}
 
 	var record []*DBworkorder
-	err = DB.SelectDoc("to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
+	err = DB.SelectDoc("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
 		Many("assignees", `select 
 			x.user_id as id, u.name as name, u.username as username 
 			from wo_assignee x 
@@ -804,7 +804,7 @@ func queryEventWorkorders(c *echo.Context) error {
 	id := getID(c)
 
 	var record []*DBworkorder
-	err = DB.SelectDoc("to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
+	err = DB.SelectDoc("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
 		Many("assignees", `select 
 			x.user_id as id, u.name as name, u.username as username 
 			from wo_assignee x 
