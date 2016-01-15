@@ -32,7 +32,8 @@ func _initMailer() {
 }
 
 func _MailerDaemon() {
-	d := gomail.NewPlainDialer("mail.cycle2u.com.au", 465, "steve", "unx911zxx")
+	// d := gomail.NewPlainDialer("mail.cycle2u.com.au", 465, "steve", "unx911zxx")
+	d := gomail.NewPlainDialer("mail.sbsinternational.com.au", 465, "cmms-admin", "M@ch1ne$")
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	var s gomail.SendCloser

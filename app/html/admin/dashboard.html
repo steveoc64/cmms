@@ -7,6 +7,42 @@
     <div class="main-section__content">
         <h4 class="main-section__subtitle">Open Workorders</h4>
         ... Show a summary of open workorders here
+            <div class="data-table-container">
+              <header class="data-table-header">
+                <div class="data-table-header__label">
+                  <span class="fs-title">Open WorkOrders</span>
+                </div>
+              </header>
+
+              <table class="data-table">
+                <thead>
+                  <tr>
+                      <th> StartDate</th>
+                      <th> Est Duration</th>
+                      <th> Description</th>
+                      <th> Status</th>
+                      <th> Assignee</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="data-table"
+                        ng-click="editEvent.goWorkOrder(row)"
+                        ng-repeat="row in Dashboard.workorders">
+                          <td><a>{{row.StartDate}}</a></td>
+                          <td><a>{{row.EstDuration}}</a></td>
+                          <td><a>{{row.Descr}}</a></td>
+                          <td><a>{{row.Status}}</a></td>
+                          <td>
+                              <ul>
+                                  <li ng-repeat="a in row.Assignees">{{a.Name}}</li>
+                              </ul>
+                          </td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+
     </div>
 
     <div class="main-section__content">

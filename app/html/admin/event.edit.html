@@ -200,6 +200,7 @@
               <th> Est Duration</th>
               <th> Description</th>
               <th> Status</th>
+              <th> Assignee</th>
             </tr>
           </thead>
           <tbody>
@@ -208,8 +209,13 @@
                 ng-repeat="row in editEvent.workorders">
                   <td><a>{{row.StartDate}}</a></td>
                   <td><a>{{row.EstDuration}}</a></td>
-                  <td><a>{{row.Description}}</a></td>
+                  <td><a>{{row.Descr}}</a></td>
                   <td><a>{{row.Status}}</a></td>
+                  <td>
+                      <ul>
+                          <li ng-repeat="a in row.Assignees">{{a.Name}}</li>
+                      </ul>
+                  </td>
             </tr>
           </tbody>
         </table>

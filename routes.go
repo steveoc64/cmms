@@ -105,6 +105,7 @@ func _initRoutes() {
 	e.Get("/event/workorders/:id", queryEventWorkorders)
 	e.Get("/workorder/:id", queryWorkOrders)
 	e.Post("/workorder", newWorkOrder)
+	e.Get("/workorder", queryWorkOrders)
 	e.Put("/workorder/:id", updateWorkOrder)
 
 	// Add a websocket handler

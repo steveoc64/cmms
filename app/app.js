@@ -161,6 +161,11 @@ var getMapURI = function(addr) {
 		      	acl: 'Admin',
 		      	templateUrl: 'html/admin/dashboard.html',
 		      	controller: 'adminDashCtrl as Dashboard',
+		      	resolve: {
+		      		workorders: function(DBWorkOrder){
+		      			return DBWorkOrder.query()
+		      		}
+		      	}
 		      })
 		      .state('admin.events',{
 		      	url: '/events',

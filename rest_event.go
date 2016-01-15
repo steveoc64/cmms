@@ -544,7 +544,27 @@ func queryEventDocs(c *echo.Context) error {
 
 func queryWorkOrders(c *echo.Context) error {
 
-	return c.JSON(http.StatusOK, "list of workorders")
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var record []*DBworkorder
+	err = DB.SelectDoc("to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
+		Many("assignees", `select 
+			x.user_id as id, u.name as name, u.username as username 
+			from wo_assignee x 
+			left join users u on (u.id=x.user_id)
+			where x.id = workorder.id
+			order by startdate desc`).
+		From("workorder").
+		QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, record)
 }
 
 type Assignee struct {
@@ -576,14 +596,15 @@ type WorkOrderRequest struct {
 }
 
 type DBworkorder struct {
-	ID             int    `db:"id"`
-	EventID        string `db:"event_id"`
-	StartDate      string `db:"startdate"`
-	EstDuration    int    `db:"est_duration"`
-	ActualDuration int    `db:"actual_duration"`
-	Descr          string `db:"descr"`
-	Status         string `db:"status"`
-	Notes          string `db:"notes"`
+	ID             int        `db:"id"`
+	EventID        string     `db:"event_id"`
+	StartDate      string     `db:"startdate"`
+	EstDuration    int        `db:"est_duration"`
+	ActualDuration int        `db:"actual_duration"`
+	Descr          string     `db:"descr"`
+	Status         string     `db:"status"`
+	Notes          string     `db:"notes"`
+	Assignees      []Assignee `db:"assignees"`
 }
 
 type DBwo_skills struct {
@@ -744,7 +765,8 @@ func newWorkOrder(c *echo.Context) error {
 		DB.SQL(`select email from users where id=$1`, assignee.ID).QueryScalar(&emailAddr)
 
 		m := NewMail()
-		m.SetHeader("To", "steveoc64@gmail.com")
+		// m.SetHeader("To", "steveoc64@gmail.com")
+		m.SetHeader("To", "steve.oconnor@sbsinternational.com.au")
 		m.SetHeader("Subject", fmt.Sprintf("Maintenance WorkOrder %06d", wo.ID))
 		m.SetBody("text/html", "To:"+emailAddr+"<p>"+emailBody)
 		// attach any docs to the email
@@ -782,7 +804,13 @@ func queryEventWorkorders(c *echo.Context) error {
 	id := getID(c)
 
 	var record []*DBworkorder
-	err = DB.Select("to_char(startdate,'DD-Mon-YYYY') as startdate", "est_duration", "descr", "status").
+	err = DB.SelectDoc("to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
+		Many("assignees", `select 
+			x.user_id as id, u.name as name, u.username as username 
+			from wo_assignee x 
+			left join users u on (u.id=x.user_id)
+			where x.id = workorder.id
+			order by startdate desc`).
 		From("workorder").
 		Where("event_id=$1", id).
 		QueryStructs(&record)
@@ -790,6 +818,8 @@ func queryEventWorkorders(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}
+
+	// for each
 
 	return c.JSON(http.StatusOK, record)
 }
