@@ -1,0 +1,230 @@
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='changeDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Record Modification Details
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+
+        <h3>{{editSite.Audit.Username}} : {{editSite.Audit.Logdate}} : {{editSite.Audit.IP}}</h3>
+        <p>
+        <h4>Before:</h4>
+        <ul>
+          <li ng-repeat="r in editSite.Before">{{r}}</li>
+        </ul>
+        <h4>After:</h4>
+        <ul>
+          <li ng-repeat="r in editSite.After">{{r}}</li>
+        </ul>
+    </div>
+</lx-dialog>
+
+
+<div class="main-section__title">
+  <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-factory"></i>
+  Site Details
+</div>
+
+<form name="editSite.form" ng-submit="editSite.submit()">
+
+<formly-form model="editSite.site" fields="editSite.formFields">
+
+<div flex-container="row">
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editSite.abort()" lx-ripple>
+        <i class="mdi mdi-chevron-left"> Back</i>
+      </button>
+    </div>
+    <div class="toolbar__right">
+      <button type="submit"
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+                Save Details
+      </button>      
+    </div>
+  </div>
+</div>
+
+</formly-form>
+</form>
+
+<div class="card">
+  <lx-tabs>
+    <lx-tab heading="Machines">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Serial #</th>
+              <th> Site</th>
+              <th> Description</th>
+              <th> Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-class="editSite.getMachineClass(row)"
+                ng-click="editSite.goMachine(row)"
+                ng-repeat="row in editSite.machines">
+                  <td><a>{{row.Name}}</a></td>
+                  <td>{{row.Serialnum}}</td>
+                  <td><a ng-click="editSite.goSite(row)">{{row.SiteName}}</a></td>
+                  <td>{{row.Descr}}</td>
+                  <td>{{row.Status}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="WorkOrders">
+    </lx-tab>
+
+    <lx-tab heading="Notes">
+      <div class="card">
+        <textarea ng-wig="editSite.site.Notes"></textarea>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="Documents">
+    <form>
+      <div flex-container="row" flex-gutter="24">
+        <div flex-item="5">
+          <lx-text-field label="Description" >
+            <input type="text" ng-model="editSite.doc">
+          </lx-text-field>
+        </div>
+      </div>
+      <div flex-container="row" flex-gutter="24">
+          <div flex-item="10">
+            <lx-file-input label="Upload New Document ..." value="filename" change="editSite.upload(e)"></lx-file-input>
+          </div>
+          <div flex-item="2">
+            <div id="upload-progress">{{editSite.uploadProgress}}</div>          
+          </div>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> File</th>
+              <th> Size</th>
+              <th> Uploaded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editSite.docs">
+                  <td>{{row.Name}}</td>
+                  <td>
+                    <a ng-href="doc/{{row.ID}}" 
+                       target="_doc">
+                      {{row.Filename}}
+                    </a>
+                  </td>
+                  <td>{{row.Filesize}}</td>
+                  <td>{{row.Created}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+    </lx-tab>
+
+    <lx-tab heading="Supplies">      
+      <h4 ng-if="editSite.supplies.length > 0">List of other Sites that are supplied from this Site</h4>
+      <h4 ng-if="editSite.supplies.length == 0">This Site does not supply any other Sites</h4>
+      <div class="data-table-container" ng-if="editSite.supplies.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Parent Site</th>
+              <th> Address</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr class="data-table"
+                ng-repeat="row in editSite.supplies"
+                ng-click="editSite.clickedSite(row)"> 
+                  <td>{{row.Name}}</td>
+                  <td>{{row.ParentSiteName}}</td>
+                  <td><a ng-if="row.Address != ''" href="{{editSite.getMapURI(row.Address)}}" target="googlemaps">
+                    <i class="mdi mdi-map"></i><p>
+                    {{row.Address}}
+                  </a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="Users">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Email</th>
+              <th> SMS</th>
+              <th> Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-click="editSite.goUser(u)"
+                ng-repeat="u in editSite.users">
+                  <td><a>{{u.Name}}</a></td>
+                  <td>{{u.Email}}</td>
+                  <td>{{u.SMS}}</td>
+                  <td>{{u.Role}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+    <lx-tab heading="Activity Log">
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Event</th>
+              <th> Date</th>
+              <th> Description</th>
+              <th> IP Address</th>
+              <th> By</th>
+              <th> Changes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-class="editSite.logClass(l)"           
+                ng-repeat="l in editSite.logs">
+                  <td>{{l.Type}}</td>
+                  <td>{{l.Logdate}}</td>
+                  <td>{{l.Descr}}</td>
+                  <td>{{l.IP}}</td>
+                  <td>{{l.Username}}</td>
+                  <td>
+                    <button ng-if="l.Before != ''" 
+                      class="btn btn--m btn--blue btn--icon" 
+                        ng-click="editSite.showChange(l); $event.stopPropagation()"
+                        lx-ripple>
+                          <i class="mdi mdi-plus"></i>
+                    </button>
+                  </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </lx-tab>
+
+  </lx-tabs>
+</div>
+

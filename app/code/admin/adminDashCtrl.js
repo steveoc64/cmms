@@ -17,6 +17,10 @@
 
 		angular.extend(this, {
 			workorders: workorders,
+
+			goWorkOrder: function(row) {
+				$state.go(base+'.editworkorder', {id: row.ID})
+			},
 		})
 		
 	}])
