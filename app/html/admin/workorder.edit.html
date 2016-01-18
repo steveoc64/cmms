@@ -1,39 +1,16 @@
-<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='changeDialog' escape-close="true">
-    <div class="dialog__header">
-        <div class="toolbar bgc-indigo-800 pl++">
-            <span class="toolbar__label tc-white fs-title">
-                Record Modification Details
-            </span>       
-            <span lx-dialog-close class="white">X</span>     
-        </div>
-
-        <h3>{{editSite.Audit.Username}} : {{editSite.Audit.Logdate}} : {{editSite.Audit.IP}}</h3>
-        <p>
-        <h4>Before:</h4>
-        <ul>
-          <li ng-repeat="r in editSite.Before">{{r}}</li>
-        </ul>
-        <h4>After:</h4>
-        <ul>
-          <li ng-repeat="r in editSite.After">{{r}}</li>
-        </ul>
-    </div>
-</lx-dialog>
-
-
 <div class="main-section__title">
   <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-factory"></i>
-  Site Details
+  Work Order Details
 </div>
 
-<form name="editSite.form" ng-submit="editSite.submit()">
+<form name="editWorkorder.form" ng-submit="editWorkorder.submit()">
 
-<formly-form model="editSite.site" fields="editSite.formFields">
+<formly-form model="editWorkorder.site" fields="editWorkorder.formFields">
 
 <div flex-container="row">
   <div class="toolbar">
     <div class="toolbar__left">
-      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editSite.abort()" lx-ripple>
+      <button type="button" class="btn btn--l btn--blue-grey btn--raised" ng-click="editWorkorder.abort()" lx-ripple>
         <i class="mdi mdi-chevron-left"> Back</i>
       </button>
     </div>
@@ -66,12 +43,12 @@
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-class="editSite.getMachineClass(row)"
-                ng-click="editSite.goMachine(row)"
-                ng-repeat="row in editSite.machines">
+                ng-class="editWorkorder.getMachineClass(row)"
+                ng-click="editWorkorder.goMachine(row)"
+                ng-repeat="row in editWorkorder.machines">
                   <td><a>{{row.Name}}</a></td>
                   <td>{{row.Serialnum}}</td>
-                  <td><a ng-click="editSite.goSite(row)">{{row.SiteName}}</a></td>
+                  <td><a ng-click="editWorkorder.goSite(row)">{{row.SiteName}}</a></td>
                   <td>{{row.Descr}}</td>
                   <td>{{row.Status}}</td>
             </tr>
@@ -85,7 +62,7 @@
 
     <lx-tab heading="Notes">
       <div class="card">
-        <textarea ng-wig="editSite.site.Notes"></textarea>
+        <textarea ng-wig="editWorkorder.site.Notes"></textarea>
       </div>
     </lx-tab>
 
@@ -94,16 +71,16 @@
       <div flex-container="row" flex-gutter="24">
         <div flex-item="5">
           <lx-text-field label="Description" >
-            <input type="text" ng-model="editSite.doc">
+            <input type="text" ng-model="editWorkorder.doc">
           </lx-text-field>
         </div>
       </div>
       <div flex-container="row" flex-gutter="24">
           <div flex-item="10">
-            <lx-file-input label="Upload New Document ..." value="filename" change="editSite.upload(e)"></lx-file-input>
+            <lx-file-input label="Upload New Document ..." value="filename" change="editWorkorder.upload(e)"></lx-file-input>
           </div>
           <div flex-item="2">
-            <div id="upload-progress">{{editSite.uploadProgress}}</div>          
+            <div id="upload-progress">{{editWorkorder.uploadProgress}}</div>          
           </div>
       </div>
       <div class="data-table-container">
@@ -118,7 +95,7 @@
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-repeat="row in editSite.docs">
+                ng-repeat="row in editWorkorder.docs">
                   <td>{{row.Name}}</td>
                   <td>
                     <a ng-href="doc/{{row.ID}}" 
@@ -136,9 +113,9 @@
     </lx-tab>
 
     <lx-tab heading="Supplies">      
-      <h4 ng-if="editSite.supplies.length > 0">List of other Sites that are supplied from this Site</h4>
-      <h4 ng-if="editSite.supplies.length == 0">This Site does not supply any other Sites</h4>
-      <div class="data-table-container" ng-if="editSite.supplies.length > 0">
+      <h4 ng-if="editWorkorder.supplies.length > 0">List of other Sites that are supplied from this Site</h4>
+      <h4 ng-if="editWorkorder.supplies.length == 0">This Site does not supply any other Sites</h4>
+      <div class="data-table-container" ng-if="editWorkorder.supplies.length > 0">
         <table class="data-table">
           <thead>
             <tr>
@@ -150,11 +127,11 @@
 
           <tbody>
             <tr class="data-table"
-                ng-repeat="row in editSite.supplies"
-                ng-click="editSite.clickedSite(row)"> 
+                ng-repeat="row in editWorkorder.supplies"
+                ng-click="editWorkorder.clickedSite(row)"> 
                   <td>{{row.Name}}</td>
                   <td>{{row.ParentSiteName}}</td>
-                  <td><a ng-if="row.Address != ''" href="{{editSite.getMapURI(row.Address)}}" target="googlemaps">
+                  <td><a ng-if="row.Address != ''" href="{{editWorkorder.getMapURI(row.Address)}}" target="googlemaps">
                     <i class="mdi mdi-map"></i><p>
                     {{row.Address}}
                   </a></td>
@@ -177,8 +154,8 @@
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-click="editSite.goUser(u)"
-                ng-repeat="u in editSite.users">
+                ng-click="editWorkorder.goUser(u)"
+                ng-repeat="u in editWorkorder.users">
                   <td><a>{{u.Name}}</a></td>
                   <td>{{u.Email}}</td>
                   <td>{{u.SMS}}</td>
@@ -204,8 +181,8 @@
           </thead>
           <tbody>
             <tr class="data-table"
-                ng-class="editSite.logClass(l)"           
-                ng-repeat="l in editSite.logs">
+                ng-class="editWorkorder.logClass(l)"           
+                ng-repeat="l in editWorkorder.logs">
                   <td>{{l.Type}}</td>
                   <td>{{l.Logdate}}</td>
                   <td>{{l.Descr}}</td>
@@ -214,7 +191,7 @@
                   <td>
                     <button ng-if="l.Before != ''" 
                       class="btn btn--m btn--blue btn--icon" 
-                        ng-click="editSite.showChange(l); $event.stopPropagation()"
+                        ng-click="editWorkorder.showChange(l); $event.stopPropagation()"
                         lx-ripple>
                           <i class="mdi mdi-plus"></i>
                     </button>

@@ -19,6 +19,7 @@
 			workorders: workorders,
 
 			goWorkOrder: function(row) {
+				console.log("go to workorder", row)
 				$state.go(base+'.editworkorder', {id: row.ID})
 			},
 		})

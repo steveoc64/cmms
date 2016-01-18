@@ -29,16 +29,18 @@
 <!-- Machine SVG representation -->
 <div>
   <svg class="svg-panel" xmlns="http://www.w3.org/2000/svg">
-    <rect ng-class="editMachine.getSVGClass()"/>  
+    <rect ng-class="editMachine.getSVGClass()"/>      
     <svg ng-repeat="row in editMachine.components" 
          ng-attr-x="{{editMachine.toolOffset($index)}}" 
          ng-click="editMachine.goTool(row)">
+      <a>
       <rect ng-class="editMachine.getToolClass(row)" 
             ng-attr-width="{{editMachine.toolWidth()}}" />
       <text ng-if="row.Qty > 1" transform="translate(40 140)">x{{row.Qty}}</text>
       <text class="label-svg" 
             transform="translate(20) rotate(40 0,0) translate(0 20)">{{row.StockCode}}<tspan x="16" y="16">{{row.Name}}</tspan>
       </text>
+      </a>
     </svg>
   </svg>
 </div>

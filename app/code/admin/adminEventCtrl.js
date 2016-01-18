@@ -156,6 +156,11 @@
 			goSite: function() {
 				$state.go(base+'.editsite',{id: this.event.SiteId})
 			},
+			goWorkorder: function(row) {
+				console.log('go to workorder', row)
+				console.log(base+'.editworkorder',{id: row.ID})
+				$state.go(base+'.editworkorder',{id: row.ID})
+			},
       showChange: function(c) {
       	this.Audit = c
       	this.Before = c.Before.split('\n')

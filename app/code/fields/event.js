@@ -454,6 +454,46 @@ getEventWorkOrderForm = function() {
   }]
 }
 
+getWorkOrderForm = function() {
+
+  return [{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "4"},
+      fields: [
+        {type: 'eventWorkOrder.Date'},
+        {type: 'eventWorkOrder.Time'},
+        {type: 'eventWorkOrder.EstDuration'},
+      ]
+    }
+  },{    
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "12"},
+      fields: [
+        {type: 'eventWorkOrder.Description'},
+      ]
+    }
+  },{    
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "6"},
+      fields: [
+        {type: 'eventWorkOrder.Skills'},
+        {type: 'eventWorkOrder.AssignTo'},
+      ]
+    }
+  },{    
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "12"},
+      fields: [
+        {type: 'eventWorkOrder.Documents'},
+      ]
+    }
+  }]
+}
+
 getEventCompleteForm = function() {
 
   return [{

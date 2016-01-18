@@ -4,7 +4,7 @@
 	var base = 'admin'
 	var app = angular.module('cmms')
 
-	app.controller(base+'EditWorkOrderCtrl', 
+	app.controller(base+'EditWorkorderCtrl', 
 		['$state','$stateParams','workorder','Session','$window','LxDialogService',
 		'socket','DBDocs','DBDocServer','docs',
 		'LxNotificationService','DBWorkOrder',

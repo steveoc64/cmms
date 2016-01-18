@@ -27,6 +27,8 @@ func _initMailer() {
 		m.SetHeader("Subject", "CMMS has started !")
 		m.SetBody("text/html", "The CMMS server has been started")
 		MailChannel <- m
+
+
 	*/
 
 }
