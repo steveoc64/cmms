@@ -4,98 +4,28 @@
 	var base = 'admin'
 	var app = angular.module('cmms')
 
-	app.controller(base+'EventCtrl', 
-		['$state','events','Session','LxDialogService','logs','LxNotificationService','socket','DBEvent',
-		function($state, events, Session, LxDialogService, logs, LxNotificationService,socket,DBEvent){
-	
-		// Subscribe to changes in the machine list	
-		var vm = this
-		socket.on("event",function(msg){
-			console.log("Event update - reload full list",msg)
-			vm.events = DBEvent.query()					
-		})
-
-		angular.extend(this, {
-			events: events,
-			session: Session,
-			logs: logs,
-			logClass: logClass,
-			getClass: function(row) {
-				switch (row.Type) {
-					case 'Halt':
-						return "machine__stopped"
-					case 'Alert':
-						return "machine__attention"
-					case 'Running':
-						return "machine__running"
-					case 'Pending':
-						return "machine__pending"
-				}
-			},
-			clickEdit: function(row) {
-				$state.go(base+'.editevent',{id: row.ID})					
-			},
-			goMachine: function(row) {
-				$state.go(base+'.editmachine',{id: row.MachineId})
-			},
-			goSite: function(row) {
-				if (row.SiteId != 0) {
-					$state.go(base+'.editsite',{id: row.SiteId})
-				}
-			}
-		})
-	}])
-
-	app.controller(base+'EditEventCtrl', 
-		['$state','$stateParams','event','logs','Session','$window','LxDialogService',
-		'socket','Upload','LxProgressService','DBDocs','DBDocServer','docs','workorders',
-		'LxNotificationService','DBEvent','DBEventCost','DBWorkOrder',
-		function($state,$stateParams,event,logs,Session,$window,LxDialogService,
-			socket,Upload,LxProgressService,DBDocs,DBDocServer,docs,workorders,
-			LxNotificationService,DBEvent,DBEventCost,DBWorkOrder){
+	app.controller(base+'EditWorkOrderCtrl', 
+		['$state','$stateParams','workorder','Session','$window','LxDialogService',
+		'socket','DBDocs','DBDocServer','docs',
+		'LxNotificationService','DBWorkOrder',
+		function($state,$stateParams,workorder,Session,$window,LxDialogService,
+			socket,DBDocs,DBDocServer,docs,
+			LxNotificationService,DBWorkOrder){
 	
 		angular.extend(this, {
 			session: Session,
-			event: event,
-			logs: logs,
 			docs: docs,
-			logClass: logClass,
-			formFields: getEventForm(),		
-			costFields: getEventCostForm(),
-			workOrderFields: getEventWorkOrderForm(),
-			completeFields: getEventCompleteForm(),
-			costAdder: DBEventCost,
+			formFields: getWorkOrderForm(),		
 			workOrderService: DBWorkOrder,
-			workorders: workorders,
-			costs: {
-				Descr: '',
-				LabourCost: 0.0,
-				MaterialCost: 0.0,
-				OtherCost: 0.0,
-			},
-			workOrderData: {
-				Descr: '',
-			},
-			completion: {
-				Descr: '',
-			},
+			workorder: workorder,
 			canEdit: function() {
-				return true
-			},
-			canCost: function() {
-				return true
-			},
-			canOrder: function() {
-				return true
-			},
-			canComplete: function() {
 				return true
 			},
 			submit: function() {
 				var vm = this
-				console.log('before',this.event)
-				this.event._id = $stateParams.id
-				this.event.$update(function(newevent) {
+				console.log('before',this.workorder)
+				this.workorder._id = $stateParams.id
+				this.workorder.$update(function(newworkorder) {
 					LxNotificationService.info('Notes Updated')
 					vm.event = DBEvent.get({id: $stateParams.id})
 //					$window.history.go(-1)

@@ -810,7 +810,7 @@ func queryEventWorkorders(c *echo.Context) error {
 			from wo_assignee x 
 			left join users u on (u.id=x.user_id)
 			where x.id = workorder.id
-			order by startdate desc`).
+			order by workorder.startdate desc`).
 		From("workorder").
 		Where("event_id=$1", id).
 		QueryStructs(&record)
