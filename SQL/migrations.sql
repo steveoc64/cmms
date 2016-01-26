@@ -11,11 +11,12 @@ drop table if exists workorder;
 create table workorder (
 	id serial not null primary key,
 	event_id int not null default 0,
-	startdate timestamp not null default localtimestamp,
+	startdate timestamptz not null default localtimestamp,
 	est_duration int not null default 0,
 	actual_duration int not null default 0,
 	descr text not null default '',
-	status text not null default ''
+	status text not null default '',
+	notes text not null default ''
 );
 
 drop table if exists wo_skills;

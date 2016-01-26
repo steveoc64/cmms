@@ -273,11 +273,11 @@ getEventFields = function() {
         }
       }
     },{
-      name: 'eventWorkOrder.Date',
+      name: 'eventWorkOrder.StartDate',
       extends: 'lx-date-picker',
       wrapper: 'lx-wrapper-errors',
       defaultOptions: {
-        key: 'Date',
+        key: 'StartDate',
         templateOptions: {
           label: 'Start Date',
         },
@@ -335,7 +335,7 @@ getEventFields = function() {
       name: 'eventWorkOrder.AssignTo',
       extends: 'lx-select',
       defaultOptions: {
-        key: 'AssignTo',
+        key: 'Assignees',
         templateOptions: {
           placeholder: "Assign To",
           space: true,
@@ -421,7 +421,7 @@ getEventWorkOrderForm = function() {
     templateOptions: {
       flex: { container: "row", item: "4"},
       fields: [
-        {type: 'eventWorkOrder.Date'},
+        {type: 'eventWorkOrder.StartDate'},
         {type: 'eventWorkOrder.Time'},
         {type: 'eventWorkOrder.EstDuration'},
       ]
@@ -461,7 +461,7 @@ getWorkOrderForm = function() {
     templateOptions: {
       flex: { container: "row", item: "4"},
       fields: [
-        {type: 'eventWorkOrder.Date'},
+        {type: 'eventWorkOrder.StartDate'},
         {type: 'eventWorkOrder.Time'},
         {type: 'eventWorkOrder.EstDuration'},
       ]

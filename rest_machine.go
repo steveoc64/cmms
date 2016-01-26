@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	// "time"
 )
 
 ///////////////////////////////////////////////////////////////////////
@@ -217,6 +218,7 @@ func saveMachine(c *echo.Context) error {
 		SiteId:    record.SiteId,
 		Type:      fmt.Sprintf("%s", record.Status),
 		MachineId: machineID,
+		Status:    "Complete",
 		ToolId:    0,
 		Priority:  1,
 		CreatedBy: UID,

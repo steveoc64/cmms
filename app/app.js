@@ -213,7 +213,10 @@ var getMapURI = function(addr) {
 			      	controller: 'adminEditWorkorderCtrl as editWorkorder',
 			      	resolve: {
 			      		workorder: function(DBWorkOrder,$stateParams) {
-			      			return DBWorkorder.get({id: $stateParams.id})
+			      			return DBWorkOrder.get({id: $stateParams.id})
+			      		},
+			      		docs: function(DBDocs,$stateParams) {
+			      			return DBDocs.query({type: 'workorder', id: $stateParams.id})
 			      		},
 			      	}
 			      })

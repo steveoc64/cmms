@@ -12,6 +12,8 @@
 			socket,DBDocs,DBDocServer,docs,
 			LxNotificationService,DBWorkOrder){
 	
+	console.log("here with wo",workorder)
+	
 		angular.extend(this, {
 			session: Session,
 			docs: docs,

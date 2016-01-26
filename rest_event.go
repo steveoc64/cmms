@@ -550,19 +550,45 @@ func queryWorkOrders(c *echo.Context) error {
 	}
 
 	var record []*DBworkorder
-	err = DB.SelectDoc("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
-		Many("assignees", `select 
-			x.user_id as id, u.name as name, u.username as username 
-			from wo_assignee x 
-			left join users u on (u.id=x.user_id)
-			where x.id = workorder.id
-			order by startdate desc`).
+
+	// Use this with newer versions of postgres (9.2+)
+	////////////////////////////////////////////////////////////////
+	// err = DB.SelectDoc("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
+	// 	Many("assignees", `select
+	// 		x.user_id as id, u.name as name, u.username as username
+	// 		from wo_assignee x
+	// 		left join users u on (u.id=x.user_id)
+	// 		where x.id = workorder.id`).
+	// 	From("workorder").
+	// 	QueryStructs(&record)
+
+	// if err != nil {
+	// 	return c.String(http.StatusNoContent, err.Error())
+	// }
+	// End of code for newer version of Postgres
+	////////////////////////////////////////////////////////////////
+
+	// Use this with older versions of Postgres
+	////////////////////////////////////////////////////////////////
+	err = DB.Select("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
 		From("workorder").
 		QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}
+
+	for _, v := range record {
+		err = DB.SQL(`select
+			x.user_id as id, u.name as name, u.username as username
+			from wo_assignee x
+			left join users u on (u.id=x.user_id)
+			where x.id = $1`, v.ID).
+			QueryStructs(&v.Assignees)
+		// log.Println("got assignees for", v)
+	}
+
+	////////////////////////////////////////////////////////////////
 
 	return c.JSON(http.StatusOK, record)
 }
@@ -587,10 +613,10 @@ type WODocs struct {
 
 type WorkOrderRequest struct {
 	EventID     string
-	Date        string
+	StartDate   string
 	Descr       string
 	EstDuration int
-	AssignTo    []Assignee
+	Assignees   []Assignee
 	Skills      []WOSkill
 	Documents   []WODocs
 }
@@ -605,6 +631,7 @@ type DBworkorder struct {
 	Status         string     `db:"status"`
 	Notes          string     `db:"notes"`
 	Assignees      []Assignee `db:"assignees"`
+	Skills         []WOSkill  `db:"skills"`
 }
 
 type DBwo_skills struct {
@@ -657,7 +684,7 @@ func newWorkOrder(c *echo.Context) error {
 
 	wo := DBworkorder{
 		EventID:     req.EventID,
-		StartDate:   req.Date,
+		StartDate:   req.StartDate,
 		Descr:       req.Descr,
 		EstDuration: req.EstDuration,
 		Status:      `Assigned`,
@@ -757,7 +784,7 @@ func newWorkOrder(c *echo.Context) error {
 
 	// populate the assignee, and send them an email with the workorder
 	var emailAddr string
-	for _, assignee := range req.AssignTo {
+	for _, assignee := range req.Assignees {
 		log.Println("Attaching assignee", assignee)
 		DB.SQL(`insert into wo_assignee (id,user_id) values ($1,$2)`, wo.ID, assignee.ID).Exec()
 
@@ -765,8 +792,8 @@ func newWorkOrder(c *echo.Context) error {
 		DB.SQL(`select email from users where id=$1`, assignee.ID).QueryScalar(&emailAddr)
 
 		m := NewMail()
-		// m.SetHeader("To", "steveoc64@gmail.com")
-		m.SetHeader("To", "steve.oconnor@sbsinternational.com.au")
+		m.SetHeader("To", "steveoc64@gmail.com")
+		// m.SetHeader("To", "steve.oconnor@sbsinternational.com.au")
 		m.SetHeader("Subject", fmt.Sprintf("Maintenance WorkOrder %06d", wo.ID))
 		m.SetBody("text/html", "To:"+emailAddr+"<p>"+emailBody)
 		// attach any docs to the email
@@ -804,13 +831,27 @@ func queryEventWorkorders(c *echo.Context) error {
 	id := getID(c)
 
 	var record []*DBworkorder
-	err = DB.SelectDoc("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
-		Many("assignees", `select 
-			x.user_id as id, u.name as name, u.username as username 
-			from wo_assignee x 
-			left join users u on (u.id=x.user_id)
-			where x.id = workorder.id
-			order by workorder.startdate desc`).
+	// Newer versions of Postgres (9.2+), use this:
+	//////////////////////////////////////////////////
+	// err = DB.SelectDoc("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
+	// 	Many("assignees", `select
+	// 		x.user_id as id, u.name as name, u.username as username
+	// 		from wo_assignee x
+	// 		left join users u on (u.id=x.user_id)
+	// 		where x.id = workorder.id
+	// 		order by workorder.startdate desc`).
+	// 	From("workorder").
+	// 	Where("event_id=$1", id).
+	// 	QueryStructs(&record)
+	///////////////////////////////////////////////////
+
+	// Earlier versions of Postgres, use this instead:
+	////////////////////////////////////////////////////
+	err = DB.Select("id",
+		"to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate",
+		"est_duration",
+		"descr",
+		"status").
 		From("workorder").
 		Where("event_id=$1", id).
 		QueryStructs(&record)
@@ -819,7 +860,73 @@ func queryEventWorkorders(c *echo.Context) error {
 		return c.String(http.StatusNoContent, err.Error())
 	}
 
-	// for each
+	// for each workorder record found, manually fill in the assignee block
+	for _, v := range record {
+		// log.Println("getting assingnees for workorder", v)
+		DB.SQL(`select 
+			x.user_id as id, u.name as name, u.username as username
+			from wo_assignee x
+			left join users u on (u.id=x.user_id)
+			where x.id = $1`, v.ID).
+			QueryStructs(&v.Assignees)
+		// log.Println("got", v.Assignees)
+	}
+
+	// End of block for the older Postgres server
+	///////////////////////////////////////////////////
+
+	return c.JSON(http.StatusOK, record)
+}
+
+func getWorkOrder(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+
+	var record DBworkorder
+	// Newer versions of Postgres (9.2+), use this:
+	//////////////////////////////////////////////////
+	// as below, but use the dat.selectdoc method
+	///////////////////////////////////////////////////
+
+	// Earlier versions of Postgres, use this instead:
+	////////////////////////////////////////////////////
+	err = DB.Select("id",
+		"to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate",
+		"est_duration",
+		"descr",
+		"status").
+		From("workorder").
+		Where("id=$1", id).
+		QueryStruct(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+
+	// get the assignee array
+	log.Println("getting assingnees for workorder", record)
+	DB.SQL(`select 
+			x.user_id as id, u.name as name, u.username as username
+			from wo_assignee x
+			left join users u on (u.id=x.user_id)
+			where x.id = $1`, id).
+		QueryStructs(&record.Assignees)
+	log.Println("got", record.Assignees)
+
+	// get the skills array
+	DB.SQL(`select s.id, s.name 
+		from wo_skills x
+		left join skill s on (s.id=x.skill_id)
+		where x.id=$1`, id).
+		QueryStructs(&record.Skills)
+
+	// End of block for the older Postgres server
+	///////////////////////////////////////////////////
 
 	return c.JSON(http.StatusOK, record)
 }
