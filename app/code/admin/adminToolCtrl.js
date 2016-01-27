@@ -29,6 +29,23 @@
 				if (row.selected) {
 					return "data-table__selectable-row--is-selected"
 				}
+				switch (row.Status) {
+					case 'Running':
+						return "machine__running"
+						break
+					case 'Needs Attention':
+						return "machine__attention"
+						break
+					case 'Stopped':
+						return "machine__stopped"
+						break
+					case 'Maintenance Pending':
+						return "machine__pending"
+						break
+					case 'New':
+						return "machine__new"
+						break
+				}
 			},
 			clickedRow: function(row) {
 				if (!angular.isDefined(row.selected)) {
@@ -210,6 +227,37 @@
             	desc: this.doc,
             	type: "tool",
             	ref_id: $stateParams.id,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
+     				vm.docs = DBDocs.query({type: 'tool', id: $stateParams.id})
+        	}
+        }, function (resp) {
+            console.log('Error status: ' + resp.status + ' ' + resp.data);
+		    		vm.uploadProgress = 'Error ! ' + resp.data
+		    		LxProgressService.circular.hide()
+
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+        })
+      },
+    	eventUpload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+        Upload.upload({
+            url: 'upload',
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "toolevent",
+            	ref_id: 1000000 + parseInt($stateParams.id),
             	worker: "true",
             	sitemgr: "true",
             	contractor: "true"
