@@ -909,7 +909,7 @@ func getWorkOrder(c *echo.Context) error {
 	}
 
 	// get the assignee array
-	log.Println("getting assingnees for workorder", record)
+	log.Println("getting assignees for workorder", record)
 	DB.SQL(`select 
 			x.user_id as id, u.name as name, u.username as username
 			from wo_assignee x
