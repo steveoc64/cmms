@@ -422,6 +422,23 @@ func raiseEventTool(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
+	// Now, if any docs were attached to the event, they have a ref_id of 1000000 + tool_id, and a
+	// ref type of "toolevent"
+	// These are temporary references to store the doc until the event id is known
+	// So, now we need to stamp them with the correct ref_id and the correct description
+
+	log.Printf("update doc set ref_id=%d, name='%s' where type='toolevent' and ref_id=%d\n", evt.ID, evt.Notes, 1000000+toolId)
+
+	_, err = DB.SQL(`update doc
+		set ref_id=$1, name=$3
+		where type='toolevent' and ref_id=$2
+		`, evt.ID, 1000000+toolId,
+		evt.Notes).Exec()
+
+	if err != nil {
+		log.Println("Problem registering the document to the event")
+	}
+
 	log.Println("Raising Tool Event", evt.ID, evt, "User:", Username)
 	publishSocket("machine", machineId)
 	publishSocket("tool", toolId)

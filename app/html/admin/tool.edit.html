@@ -34,6 +34,9 @@
         <lx-tab heading="Needs Attention">
           <div class="p++">
               <formly-form model="editTool.eventFields" fields="editTool.alertFields"></formly-form>
+                <div flex-item="10">
+                  <lx-file-input label="Add Photo / Document ..." value="filename" change="editTool.eventUpload(e)"></lx-file-input>
+                </div>
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" 
                         lx-ripple 
@@ -52,6 +55,12 @@
         <lx-tab heading="Halt">
           <div class="p++">
               <formly-form model="editTool.eventFields" fields="editTool.haltFields"></formly-form>
+                <div flex-item="10">
+                  <lx-file-input label="Add Photo / Document ..." value="filename" change="editTool.eventUpload(e)"></lx-file-input>
+                </div>
+                <div flex-item="2">
+                  <div id="upload-progress">{{editTool.uploadProgress}}</div>          
+                </div>
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" 
                         lx-ripple 
@@ -83,6 +92,9 @@
     <div class="dialog__content">   
       <div class="p++">
           <formly-form model="editTool.eventFields" fields="editTool.clearFields"></formly-form>
+            <div flex-item="10">
+              <lx-file-input label="Add Photo / Document ..." value="filename" change="editTool.eventUpload(e)"></lx-file-input>
+            </div>
           <div class="dialog__actions">
             <button class="btn btn--m btn--black btn--flat" 
                     lx-ripple 
