@@ -12,7 +12,7 @@ var MailChannel = make(chan *gomail.Message, 64)
 func NewMail() *gomail.Message {
 
 	m := gomail.NewMessage()
-	m.SetHeader("From", "cmms-admin@sbsinternational.com.au")
+	m.SetHeader("From", Config.MailSender)
 	return m
 }
 
@@ -23,15 +23,14 @@ func _initMailer() {
 
 	m := NewMail()
 	m.SetHeader("To", "steveoc64@gmail.com")
-	m.SetHeader("Subject", "CMMS has started !")
-	m.SetBody("text/html", "The CMMS server has been started")
+	m.SetHeader("Subject", "CMMS has started on "+Config.Installation)
+	m.SetBody("text/html", "The CMMS server has been started @"+Config.Installation+":"+Config.MailServer)
 	MailChannel <- m
 
 }
 
 func _MailerDaemon() {
-	d := gomail.NewPlainDialer("mail.cycle2u.com.au", 465, "steve", "unx911zxx")
-	// d := gomail.NewPlainDialer("mail.sbsinternational.com.au", 465, "cmms-admin", "M@ch1ne$")
+	d := gomail.NewPlainDialer(Config.MailServer, Config.MailPort, Config.MailUser, Config.MailPasswd)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	var s gomail.SendCloser
