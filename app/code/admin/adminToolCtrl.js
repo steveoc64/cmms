@@ -238,7 +238,7 @@
 				LxDialogService.open('raiseIssueDialog')
 			},
 			submitClear: function() {
-				if (this.eventFields.ClearDescr.length > 0) {
+				if (angular.isDefined(this.eventFields.ClearDescr) && this.eventFields.ClearDescr.length > 0) {
 					var vm = this
 					var q = this.eventHandler.raise({
 						tool: $stateParams.id,
@@ -254,7 +254,7 @@
 				}
 			},
 			submitAlert: function() {
-				if (this.eventFields.AlertDescr.length > 0) {
+				if (angular.isDefined(this.eventFields.AlertDescr) && this.eventFields.AlertDescr.length > 0) {
 					var vm = this
 					var q = this.eventHandler.raise({
 						tool: $stateParams.id,
@@ -270,7 +270,7 @@
 				}
 			},
 			submitHalt: function() {
-				if (this.eventFields.HaltDescr.length > 0) {
+				if (angular.isDefined(this.eventFields.HaltDescr) && this.eventFields.HaltDescr.length > 0) {
 					var vm = this
 					this.eventHandler.raise({
 						tool: $stateParams.id,
