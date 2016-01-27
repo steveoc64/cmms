@@ -896,7 +896,7 @@ func getWorkOrder(c *echo.Context) error {
 	// Earlier versions of Postgres, use this instead:
 	////////////////////////////////////////////////////
 	err = DB.Select("id",
-		"to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate",
+		"to_char(startdate,'YYYY-MM-DD HH24:MI') as startdate",
 		"est_duration",
 		"descr",
 		"status").
