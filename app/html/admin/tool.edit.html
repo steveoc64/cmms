@@ -191,8 +191,9 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-click="editTool.goEvent(row)"
                 ng-repeat="row in editTool.events">
-                  <td>{{row.StartDate}}</td>
+                  <td><a>{{row.StartDate}}</a></td>
                   <td>{{row.Type}}</td>
                   <td>{{row.Username}}</td>
                   <td>{{row.Notes | firstline}}</td>

@@ -87,8 +87,9 @@
           </thead>
           <tbody>
             <tr class="data-table"
+                ng-click="editMachine.goEvent(row)"
                 ng-repeat="row in editMachine.events">
-                  <td>{{row.StartDate}}</td>
+                  <td><a>{{row.StartDate}}</a></td>
                   <td>{{row.Type}}</td>
                   <td>{{row.Username}}</td>
                   <td>{{row.Notes | firstline}}</td>

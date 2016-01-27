@@ -177,6 +177,9 @@
 			goPart: function(row) {
 				$state.go(base+'.editpart',{id: row.PartID})
 			},
+			goEvent: function(row) {
+				$state.go(base+'.editevent',{id: row.ID})
+			},
 			partWidth: function() {
 				if (parts.length > 0) {
 					var percentage = 100 / (parts.length + 1)

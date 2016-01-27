@@ -212,6 +212,9 @@
 			goPart: function(row) {
 				$state.go(base+'.editpart',{id: row.ID})
 			},
+			goEvent: function(row) {
+				$state.go(base+'.editevent',{id: row.ID})
+			},
 			getToolArray: function(row) {
 				// dynamically create an array of the same tool
 				var tools = []
