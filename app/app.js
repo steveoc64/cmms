@@ -23,7 +23,8 @@ var getMapURI = function(addr) {
 
 	//console.log('Init app')
 //	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage','textAngular','ngWig','ngFileUpload','ngWebsocket'])
-	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage','ngWig','ngFileUpload','ngWebsocket'])
+	angular.module('cmms', ['ngMessages','ngAria','formly','lumx','formlyLumx','ui.router','ngResource','ngStorage',
+		'ngWig','ngFileUpload','ngWebsocket','gridshore.c3js.chart'])
 		.service('Session', session)
     .constant('ServerName', '')
     .filter('unsafe', function($sce) { return $sce.trustAsHtml; })	

@@ -4,6 +4,15 @@
         Admin Dashboard
     </div>
 
+<c3chart bindto-id="chart1">
+  <chart-column column-id="data 1"
+          column-values="30,200,100,400,150,250"
+          column-type="spline"/>
+  <chart-column column-id="data 2"
+                column-values="50,20,10,40,15,25"
+                column-type="line"/>
+</c3chart>
+
     <div class="main-section__content">
         <h4 class="main-section__subtitle">Open Workorders</h4>
             <div class="data-table-container">
@@ -38,6 +47,68 @@
             </div>
 
     </div>
+
+<c3chart bindto-id="donut-plot1-chart">
+  <chart-column column-id="Scheduled"
+              column-values="70"
+              column-type="donut"/>
+  <chart-column column-id="Preventative"
+              column-values="35"
+              column-type="donut"/>
+  <chart-column column-id="BreakDown"
+              column-values="60"
+              column-type="donut"/>
+  <chart-donut title="WorkOrders" width="60"/>
+</c3chart>
+
+<c3chart bindto-id="chart4">
+  <chart-column column-id="x"
+          column-values="period 10,period 20,period 30,period 40,period 50,period 60"/>
+  <chart-column column-id="data1"
+            column-name="Data 1"
+            column-color="red"
+            column-values="30,200,100,400,150,250"
+          column-type="spline"/>
+  <chart-column column-id="data2"
+            column-name="Data 2"
+            column-color="green"
+                column-values="50,20,10,40,15,25"
+                column-type="line"/>
+  <chart-column column-id="data3"
+            column-name="Data 3"
+            column-color="#000000"
+                column-values="150,20,100,70,85,215"
+                column-type="spline"/>
+  <chart-axes values-x="x" y="data1,data3" y2="data2"/>                 
+   
+  <chart-axis>
+    <chart-axis-x axis-position="outer-center"
+                  axis-label="Number by 10"
+                  axis-type="category">
+          <chart-axis-x-tick tick-rotate="50"/>
+      </chart-axis-x>
+    <chart-axis-y axis-id="y"
+                  axis-position="outer-right"
+                  axis-label="Higher numbers"
+                  padding-top="100"
+                  padding-bottom="0"
+                  range-min="0"/>
+    <chart-axis-y axis-id="y2"
+                  axis-position="outer-right"
+                  axis-label="Lower numbers"
+                  padding-top="10"
+                  padding-bottom="0"
+                  range-max="100"
+                  range-min="0"/>
+  </chart-axis>
+ 
+    <chart-grid show-x="false" show-y="true">
+    <chart-grid-optional axis-id="x" grid-value="1" grid-text="Start"/>
+    <chart-grid-optional axis-id="y" grid-value="20" grid-text="Minimum"/>
+    <chart-grid-optional axis-id="y" grid-value="200" grid-text="Maximum"/>
+  </chart-grid>
+ 
+</c3chart>
 
     <div class="main-section__content">
         <h4 class="main-section__subtitle">Breakdown Events</h4>
