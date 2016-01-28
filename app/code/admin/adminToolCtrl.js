@@ -256,8 +256,8 @@
             data: {
             	file: file, 
             	desc: this.doc,
-            	type: "toolevent",
-            	ref_id: 1000000 + parseInt($stateParams.id),
+            	type: "temptoolevent",
+            	ref_id: $stateParams.id,
             	worker: "true",
             	sitemgr: "true",
             	contractor: "true"

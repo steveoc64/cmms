@@ -36,6 +36,7 @@ func _initRoutes() {
 	e.Post("/syslog", querySyslog)
 	e.Post("/upload", uploadDocument)
 	e.Get("/docs/:type/:id", queryDocs)
+	e.Get("/wodocs/:id", queryWODocs)
 	e.Get("/doc/:id", serveDoc)
 
 	e.Get("/users", queryUsers)
@@ -657,6 +658,24 @@ func uploadDocument(c *echo.Context) error {
 }
 
 // Get all documents related to any record
+func queryDocs(c *echo.Context) error {
+
+	refID := getID(c)
+	docType := c.Param("type")
+
+	docs := &[]DBdoc{}
+	err := DB.Select("id", "name", "filename", "filesize", "to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created").
+		From("doc").
+		Where("type=$1 and ref_id=$2", docType, refID).
+		QueryStructs(docs)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	} else {
+		return c.JSON(http.StatusOK, docs)
+	}
+}
+
+// Get all documents related to a workorder
 func queryDocs(c *echo.Context) error {
 
 	refID := getID(c)

@@ -203,7 +203,7 @@
             data: {
             	file: file, 
             	desc: this.doc,
-            	type: "event",
+            	type: "toolevent",
             	ref_id: $stateParams.id,
             	worker: "true",
             	sitemgr: "true",
@@ -214,7 +214,7 @@
 		    		LxProgressService.circular.hide()
 		    		vm.uploadProgress = 'Success !'
 		    		vm.doc = ''
-		    		vm.docs = DBDocs.query({type: 'event', id: $stateParams.id})
+		    		vm.docs = DBDocs.query({type: 'toolevent', id: $stateParams.id})
 						LxNotificationService.info('Document Added')
         	}
         }, function (resp) {

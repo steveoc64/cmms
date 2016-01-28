@@ -422,17 +422,17 @@ func raiseEventTool(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	// Now, if any docs were attached to the event, they have a ref_id of 1000000 + tool_id, and a
-	// ref type of "toolevent"
+	// Now, if any docs were attached to the event, they have a ref_id of tool_id, and a
+	// ref type of "temptoolevent"
 	// These are temporary references to store the doc until the event id is known
 	// So, now we need to stamp them with the correct ref_id and the correct description
 
 	log.Printf("update doc set ref_id=%d, name='%s' where type='toolevent' and ref_id=%d\n", evt.ID, evt.Notes, 1000000+toolId)
 
 	_, err = DB.SQL(`update doc
-		set ref_id=$1, name=$3
-		where type='toolevent' and ref_id=$2
-		`, evt.ID, 1000000+toolId,
+		set ref_id=$1, name=$3, type='toolevent'
+		where type='temptoolevent' and ref_id=$2
+		`, evt.ID, toolId,
 		evt.Notes).Exec()
 
 	if err != nil {
@@ -788,6 +788,19 @@ func newWorkOrder(c *echo.Context) error {
 	}
 	emailBody += fmt.Sprintf("</ul>\n")
 
+	// include the event level docs
+	type eventDocType struct {
+		ID       int
+		Name     string
+		Filename string
+		Filesize int
+	}
+	var eventDocs []eventDocType
+	err = DB.SQL(`select id,name,filename,filesize from doc where type='toolevent' and ref_id=$1`, req.EventID).QueryStructs(&eventDocs)
+	if err != nil {
+		log.Println("Problem reading event level docs", err.Error())
+	}
+
 	// populate the docs
 	if len(req.Documents) > 0 {
 		emailBody += fmt.Sprintf("Attached Documents:<ul>")
@@ -796,6 +809,11 @@ func newWorkOrder(c *echo.Context) error {
 			DB.SQL(`insert into wo_docs (id,doc_id) values ($1,$2)`, wo.ID, theDoc.ID).Exec()
 			emailBody += fmt.Sprintf("<li> %s (%d kB)\n", theDoc.Name, theDoc.Filesize/1024)
 		}
+		for _, evtDoc := range eventDocs {
+			DB.SQL(`insert into wo_docs (id,doc_id) values ($1,$2)`, wo.ID, evtDoc.ID).Exec()
+			emailBody += fmt.Sprintf("<li> %s (%d kB)\n", evtDoc.Name, evtDoc.Filesize/1024)
+		}
+
 		emailBody += fmt.Sprintf("</ul>\n")
 	}
 
@@ -816,6 +834,10 @@ func newWorkOrder(c *echo.Context) error {
 		// attach any docs to the email
 		for _, theDoc := range req.Documents {
 			m.Attach("uploads/" + theDoc.Filename)
+		}
+		// include event level docs as well
+		for _, evtDoc := range eventDocs {
+			m.Attach("uploads/" + evtDoc.Filename)
 		}
 
 		MailChannel <- m

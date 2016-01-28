@@ -196,7 +196,7 @@ var getMapURI = function(addr) {
 			      			return DBEventWorkorders.query({id: $stateParams.id})
 			      		},
 			      		docs: function(DBDocs,$stateParams) {
-			      			return DBDocs.query({type: 'event', id: $stateParams.id})
+			      			return DBDocs.query({type: 'toolevent', id: $stateParams.id})
 			      		},
 			      		logs: function(DBSysLog,$stateParams) {
 			      			return DBSysLog.query({
@@ -216,8 +216,8 @@ var getMapURI = function(addr) {
 			      		workorder: function(DBWorkOrder,$stateParams) {
 			      			return DBWorkOrder.get({id: $stateParams.id})
 			      		},
-			      		docs: function(DBDocs,$stateParams) {
-			      			return DBDocs.query({type: 'workorder', id: $stateParams.id})
+			      		docs: function(DBWODocs,$stateParams) {
+			      			return DBWODocs.query({id: $stateParams.id})
 			      		},
 			      	}
 			      })

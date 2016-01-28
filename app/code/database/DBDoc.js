@@ -7,6 +7,12 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBWODocs', function($resource,ServerName,Session){
+		return $resource(ServerName+'/wodocs/:id',{id: '@_id'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
 	angular.module('cmms').factory('DBDocServer', function($resource,ServerName,Session){
 		return $resource(ServerName+'/doc/:id',{type: '@_type', id: '@_id'},{
   		'query':  {method:'GET', isArray:true},
