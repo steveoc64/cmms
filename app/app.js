@@ -980,6 +980,15 @@ var getMapURI = function(addr) {
 		loadFieldDefinitions(formlyConfig)
 	}  // run function
 
-
 })();
+
+function getImageEstimate(doc) {
+	console.log("getImageEstimate",doc)
+	return "doc/"+doc.ID
+}
+
+function isImage(doc) {
+	console.log("is this an image ?", doc)
+	return true
+}
 

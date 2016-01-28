@@ -6,11 +6,11 @@
 
 	app.controller(base+'EditWorkorderCtrl', 
 		['$state','$stateParams','workorder','Session','$window','LxDialogService',
-		'socket','DBDocs','DBDocServer','docs',
-		'LxNotificationService','DBWorkOrder',
+		'socket','DBDocs','DBDocServer','docs','DBWODocs',
+		'LxNotificationService','DBWorkOrder','LxProgressService','Upload',
 		function($state,$stateParams,workorder,Session,$window,LxDialogService,
-			socket,DBDocs,DBDocServer,docs,
-			LxNotificationService,DBWorkOrder){
+			socket,DBDocs,DBDocServer,docs,DBWODocs,
+			LxNotificationService,DBWorkOrder,LxProgressService,Upload){
 	
 	console.log("here with wo",workorder)
 	
@@ -94,6 +94,28 @@
       	this.After = c.After.split('\n')
 				LxDialogService.open('changeDialog')
       },
+			getThumbnail: function(doc) {
+				var ext = doc.Filename.split('.').pop().toLowerCase()
+				// console.log("getThumbnail",doc.Filename,ext)
+				switch (ext) {
+					case 'jpg':
+					case 'png':
+					case 'gif':
+						return "doc/"+doc.ID
+					case 'doc':
+					case 'xls':
+					case 'odt':
+						return "img/doc.png"
+					case 'exe':
+						return "img/program.png"
+					case 'pdf':
+						return "img/pdf.png"
+					case 'zip':
+						return "img/zip.jpg"
+					default:
+						return "img/data.jpg"
+				}
+			},      
 			getMachineClass: function(row) {
 				if (row.selected) {
 					return "data-table__selectable-row--is-selected"
@@ -141,8 +163,10 @@
 		    		LxProgressService.circular.hide()
 		    		vm.uploadProgress = 'Success !'
 		    		vm.doc = ''
-		    		vm.docs = DBDocs.query({type: 'event', id: $stateParams.id})
+		    		vm.docs = DBDocs.query({type: 'toolevent', id: vm.workorder.EventID})
 						LxNotificationService.info('Document Added')
+
+
         	}
         }, function (resp) {
 		    		vm.uploadProgress = 'Error ! ' + resp.data

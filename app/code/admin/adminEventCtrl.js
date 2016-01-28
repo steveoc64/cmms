@@ -167,6 +167,28 @@
       	this.After = c.After.split('\n')
 				LxDialogService.open('changeDialog')
       },
+			getThumbnail: function(doc) {
+				var ext = doc.Filename.split('.').pop().toLowerCase()
+				// console.log("getThumbnail",doc.Filename,ext)
+				switch (ext) {
+					case 'jpg':
+					case 'png':
+					case 'gif':
+						return "doc/"+doc.ID
+					case 'doc':
+					case 'xls':
+					case 'odt':
+						return "img/doc.png"
+					case 'exe':
+						return "img/program.png"
+					case 'pdf':
+						return "img/pdf.png"
+					case 'zip':
+						return "img/zip.jpg"
+					default:
+						return "img/data.jpg"
+				}
+			},            
 			getMachineClass: function(row) {
 				if (row.selected) {
 					return "data-table__selectable-row--is-selected"

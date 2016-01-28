@@ -9,7 +9,7 @@
 
 	angular.module('cmms').factory('DBWODocs', function($resource,ServerName,Session){
 		return $resource(ServerName+'/wodocs/:id',{id: '@_id'},{
-  		'query':  {method:'GET', isArray:true},
+  		'query':  {method:'GET', isArray:true}
 		})
 	})
 

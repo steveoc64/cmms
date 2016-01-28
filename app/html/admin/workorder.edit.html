@@ -6,6 +6,26 @@
 <form name="editWorkorder.form" ng-submit="editWorkorder.submit()">
 
 <formly-form model="editWorkorder.workorder" fields="editWorkorder.formFields">
+  <div flex-container="row" ng-if="editWorkorder.docs.length > 0">
+    <div flex-item ng-repeat="row in editWorkorder.docs">
+      <div class="card">
+        <div flex-container="row">
+          <div class="card__img card__img--left" style="height: 160px">
+            <a ng-href="doc/{{row.ID}}" target="_doc">              
+              <img ng-src="{{editWorkorder.getThumbnail(row)}}">
+            </a>  
+          </div>
+          <div flex-item flex-container="column">
+            <div class="p+">
+              <span class="fs-subhead tc-black-2 display-block">
+                {{row.Name}} 
+              </span>
+            </div>          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <div flex-container="row">
   <div class="toolbar">

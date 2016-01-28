@@ -144,20 +144,19 @@
 <form name="editEvent.form" ng-submit="editEvent.submit()">
 
 <formly-form model="editEvent.event" fields="editEvent.formFields">
-
   <div flex-container="row" ng-if="editEvent.docs.length > 0">
     <div flex-item ng-repeat="row in editEvent.docs">
       <div class="card">
         <div flex-container="row">
           <div class="card__img card__img--left" style="height: 160px">
-            <a ng-href="doc/{{row.ID}}" target="_doc">
-              <img ng-src="doc/{{row.ID}}">
+            <a ng-href="doc/{{row.ID}}" target="_doc">              
+              <img ng-src="{{editEvent.getThumbnail(row)}}">
             </a>  
           </div>
           <div flex-item flex-container="column">
             <div class="p+">
               <span class="fs-subhead tc-black-2 display-block">
-                {{row.name}} 
+                {{row.Name}} 
               </span>
             </div>          
           </div>
@@ -165,7 +164,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="toolbar">
     <div class="toolbar__left">
