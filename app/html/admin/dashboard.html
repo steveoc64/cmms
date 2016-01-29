@@ -4,6 +4,19 @@
         Admin Dashboard
     </div>
 
+<c3chart bindto-id="gauge-plot1-chart">
+    <chart-column column-id="Uptime"
+                  column-values="72"
+                  column-type="gauge"/>
+    <chart-gauge min="50"
+                 max="75"
+                 units=" Efficiency"
+                 width="39"
+                 show-label="true"
+                 expand="true"
+    />
+</c3chart>
+
 <c3chart bindto-id="chart1">
   <chart-column column-id="Actual Downtime"
           column-values="30,200,100,400,150,250"
@@ -61,6 +74,34 @@
   <chart-donut title="WorkOrders" width="60"/>
 </c3chart>
 
+<c3chart bindto-id="chart2" show-labels="true">
+    <chart-column column-id="x"
+                  column-values="period 1,period 2,period 3,period 4,period 5,period 6"/>
+    <chart-column column-id="bar1"
+                  column-name="Bar 1"
+                  column-color="green"
+                  column-values="30,200,100,400,150,250"
+                  column-type="bar"/>
+    <chart-column column-id="bar2"
+                  column-name="Bar 2"
+                  column-color="red"
+                  column-values="50,100,200,300,350,450"
+                  column-type="bar"/>
+    <chart-bar ratio="0.8"/>
+    <chart-axes values-x="x"/>
+    <chart-axis>
+        <chart-axis-x axis-position="outer-center"
+                      axis-label="The periods"
+                      axis-type="category"/>
+    </chart-axis>
+</c3chart>
+
+    <div class="main-section__content">
+        <h4 class="main-section__subtitle">Breakdown Events</h4>
+        ... Show a summary of breakdown events here
+
+    </div>
+
 <c3chart bindto-id="chart4">
   <chart-column column-id="x"
           column-values="period 10,period 20,period 30,period 40,period 50,period 60"/>
@@ -87,6 +128,8 @@
                   axis-type="category">
           <chart-axis-x-tick tick-rotate="50"/>
       </chart-axis-x>
+
+
     <chart-axis-y axis-id="y"
                   axis-position="outer-right"
                   axis-label="Higher numbers"
@@ -100,8 +143,9 @@
                   padding-bottom="0"
                   range-max="100"
                   range-min="0"/>
-  </chart-axis>
+
  
+  </chart-axis>
     <chart-grid show-x="false" show-y="true">
     <chart-grid-optional axis-id="x" grid-value="1" grid-text="Start"/>
     <chart-grid-optional axis-id="y" grid-value="20" grid-text="Minimum"/>
@@ -110,11 +154,6 @@
  
 </c3chart>
 
-    <div class="main-section__content">
-        <h4 class="main-section__subtitle">Breakdown Events</h4>
-        ... Show a summary of breakdown events here
-
-    </div>
 
     <div class="main-section__content">
         <h4 class="main-section__subtitle">Preventative Maintenance Events</h4>
