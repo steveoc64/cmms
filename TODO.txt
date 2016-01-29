@@ -1,6 +1,101 @@
-todo items:
+todo items & test cases
+
+//////////////////////////////////////////////////////////////////
+// Event and Workorder processing
 
 - Global search
-- Notes field on w/order entry screen
 
+- When Site Mgr vets the event, they mark it as preventative maint, or breakdown maint
+
+- Be able to remove any doc
+- Full test cases and QA with doc attachments and doc pointers
+
+- On workorder entry, match people to skills
+
+- With event document card list, stack the text under the image
+- With workorder document card list, stack the text under the image
+
+- With workorder document updates, refresh data and screen, the same
+	way that the event screen works
+
+- Add workorder to event, needs to reload event-workorder data	
+
+- New workorder default start data no longer works ... fix
+
+- Once workorder is created, should lock down the details and not allow edits
+	* OR *
+	- if add new assignee, add them to the workorder, and generate a Workorder email for them
+
+- Event search
+- WorkOrder search
+
+- Event list, toggle view all / open events
+- WorkOrder list, toggle view all / open workorders
+
+- Annotate WorkOrder
+- Close off WorkOrder
+- Close off Event
+
+- On close workorder, close off event (if no other workorders pending)
+- On close event, clear tool (if no other events pending)
+- On clear tool, clear machine (if all tools are clear)
+
+//////////////////////////////////////////////////////////////////
+// Scheduling Maintenance
+
+- Allow the Site Mgr to very easily create a new Event of type Preventative Maint,
+	which can be used to attach workorders to as needed
+
+- Allow the Site Mgr to maintain a Preventative Maint Schedule, with pre-canned 
+	workorders, and store these on the basis of :
+	- Per tool
+	- Per machine
+	- Per site
+
+- System shall report on suggested preventative maint that is due, either by
+	displaying the suggestions on the dashboard, the daily digest email, or 
+	raising a maint event automatically
+
+
+//////////////////////////////////////////////////////////////////
+// Ports
+
+- Port all WorkOrder and Event processing code and changes to Site Manager
+
+
+//////////////////////////////////////////////////////////////////
+// Reporting 
+
+- Email daily digest
+
+- User sub / unsub from daily digest email
+
+- 
+
+//////////////////////////////////////////////////////////////////
+// Code Refactors
+
+- All socket comms should be wrapped in channels
+
+
+//////////////////////////////////////////////////////////////////
+// Known bugs
+
+- Some docs still have type "event" in place of "toolevent" 
+	(seems to be for docs that are supposed to be attached to a workordeg)
+
+- WorkOrder details not showing the time correctly
+
+- On raise new issue, if you add a photo, and then back of raising the issue,
+	this leaves an orphaned doc still temporarily attached to the event
+
+- CSS hover over lists loses any hilighting colors
+
+- Add document to existing workorder ... tries to call /docs/toolevent
+
+
+//////////////////////////////////////////////////////////////////
+// Done Today
+
+- Notes field on w/order entry screen
 
