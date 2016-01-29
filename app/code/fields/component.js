@@ -28,6 +28,17 @@ getComponentFields = function() {
 			}
 		}	
 	},{
+		name: 'component.PendingDescr',
+		extends: 'lx-input',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'PendingDescr',
+			templateOptions: {
+				type: 'text',
+				label: 'Description of Pending Maintenance',
+			}
+		}	
+	},{
 		name: 'component.AlertDescr',
 		extends: 'lx-input',
 		wrapper: 'lx-wrapper-errors',
@@ -272,6 +283,19 @@ getComponentWorkerForm = function() {
 			flex: {container: "row", item: "8"},
 			fields: [
 				{type: 'component.Name'},
+			]
+		}
+	}] // end fields
+}
+
+getComponentPendingForm = function() {
+
+	return [{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: { container: "row", item: "12"},
+			fields: [
+				{type: 'component.PendingDescr'},
 			]
 		}
 	}] // end fields

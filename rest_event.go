@@ -382,6 +382,18 @@ func raiseEventTool(c *echo.Context) error {
 
 	// Update the machine record and the tool record
 	switch req.Action {
+	case "Pending":
+		_, err = DB.SQL(`update machine 
+			set alert_at=localtimestamp, status=$2 
+			where id=$1`,
+			machineId,
+			`Maintenance Pending`).
+			Exec()
+
+		_, err = DB.SQL(`update component
+			set status='Maintenance Pending'
+			where id=$1`, toolId).
+			Exec()
 	case "Alert":
 		_, err = DB.SQL(`update machine 
 			set alert_at=localtimestamp, status=$2 

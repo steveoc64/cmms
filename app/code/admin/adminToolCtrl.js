@@ -148,6 +148,7 @@
 			events: events,
 			formFields: getComponentForm(),		
 			logClass: logClass,
+			pendingFields: getComponentPendingForm(),
 			alertFields: getComponentAlertForm(),
 			haltFields: getComponentHaltForm(),
 			clearFields: getComponentClearForm(),
@@ -295,6 +296,22 @@
 					}).$promise.then(function(){
 						LxDialogService.close('clearIssueDialog')
 						LxNotificationService.info('Issues Cleared')
+						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
+					})
+				} else {
+					LxNotificationService.error('Please Enter Description')
+				}
+			},
+			submitPending: function() {
+				if (angular.isDefined(this.eventFields.PendingDescr) && this.eventFields.PendingDescr.length > 0) {
+					var vm = this
+					var q = this.eventHandler.raise({
+						tool: $stateParams.id,
+						action: 'Pending',
+						descr: this.eventFields.PendingDescr
+					}).$promise.then(function(){
+						LxDialogService.close('raiseIssueDialog')
+						LxNotificationService.info('Sched Maint Raised')
 						$state.go(base+'.editmachine',{id: vm.component.MachineID})					
 					})
 				} else {
