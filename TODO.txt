@@ -5,17 +5,16 @@ todo items & test cases
 
 - Global search
 
-- When Site Mgr vets the event, they mark it as preventative maint, or breakdown maint  ???
-
-- On site mgr or admin only ... raise issue modal dialog to have preventative maint option
-
 - Be able to remove any doc
 - Full test cases and QA with doc attachments and doc pointers
 
 - On workorder entry, match people to skills
 
-- With event document card list, stack the text under the image
-- With workorder document card list, stack the text under the image
+- Update details of a live workorder (start date / duration / descr, etc ....) that is not yet complete,
+  then popup another dialog with :
+  	- list of participants with checkboxes. Select which one to send an email to
+  	- notes field to edit the contents of the update
+  	- submit btn to generate the email(s)
 
 - With workorder document updates, refresh data and screen, the same
 	way that the event screen works
@@ -24,8 +23,8 @@ todo items & test cases
 
 - New workorder default start data no longer works ... fix
 
-- Once workorder is created, should lock down the details and not allow edits
-	* OR *
+- Once workorder is created, should lock down the details and not allow edits ?
+	** Better **
 	- if add new assignee, add them to the workorder, and generate a Workorder email for them
 	- if add new doc, then send the new doc out to existing participants for the existing workorders
 
@@ -35,21 +34,38 @@ todo items & test cases
 - Event list, toggle view all / open events
 - WorkOrder list, toggle view all / open workorders
 
-- Annotate WorkOrder
+- Annotate WorkOrder as it progresses
+
 - Close off WorkOrder
 - Close off Event
 
 - On close workorder, close off event (if no other workorders pending)
 - On close event, clear tool (if no other events pending)
-- On clear tool, clear machine (if all tools are clear)
-
+- On clear tool, clear machine (if all tools on that machine are clear)
 - Allow user to edit the description of docs that are attached to the event
+
+- Be able to mark the workorder as acknowledged or accepted ...
+	Either manually by the site mgr, or by the tech logging in
+	and acknowledging the workorder
+
+- Raise an alarm for workorders that are not acknowledged after a set 
+	acceptable delay
+
+//////////////////////////////////////////////////////////////////
+// General Data Management
+
+- Edit parts that make up a tool
+
+
+//////////////////////////////////////////////////////////////////
+// Feature Mapping with FastMaint
+
+- "Task Templates" 
+
 
 //////////////////////////////////////////////////////////////////
 // Scheduling Maintenance
 
-- Allow the Site Mgr to very easily create a new Event of type Preventative Maint,
-	which can be used to attach workorders to as needed
 
 - Allow the Site Mgr to maintain a Preventative Maint Schedule, with pre-canned 
 	workorders, and store these on the basis of :
@@ -103,4 +119,11 @@ todo items & test cases
 // Done Today
 
 - Notes field on w/order entry screen
+- With event document card list, stack the text under the image
+- With workorder document card list, stack the text under the image
 
+
+- Allow the Site Mgr to very easily create a new Event of type Preventative Maint,
+	which can be used to attach workorders to as needed
+
+- On site mgr or admin only ... raise issue modal dialog to have preventative maint option
