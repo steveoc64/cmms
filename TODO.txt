@@ -114,6 +114,8 @@ todo items & test cases
 
 - Add document to existing workorder ... tries to call /docs/toolevent
 
+- new workorder ... WO notes not appearing on WO initial email ??
+
 
 //////////////////////////////////////////////////////////////////
 // Done Today
