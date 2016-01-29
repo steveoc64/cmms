@@ -5,7 +5,9 @@ todo items & test cases
 
 - Global search
 
-- When Site Mgr vets the event, they mark it as preventative maint, or breakdown maint
+- When Site Mgr vets the event, they mark it as preventative maint, or breakdown maint  ???
+
+- On site mgr or admin only ... raise issue modal dialog to have preventative maint option
 
 - Be able to remove any doc
 - Full test cases and QA with doc attachments and doc pointers
@@ -25,6 +27,7 @@ todo items & test cases
 - Once workorder is created, should lock down the details and not allow edits
 	* OR *
 	- if add new assignee, add them to the workorder, and generate a Workorder email for them
+	- if add new doc, then send the new doc out to existing participants for the existing workorders
 
 - Event search
 - WorkOrder search
@@ -39,6 +42,8 @@ todo items & test cases
 - On close workorder, close off event (if no other workorders pending)
 - On close event, clear tool (if no other events pending)
 - On clear tool, clear machine (if all tools are clear)
+
+- Allow user to edit the description of docs that are attached to the event
 
 //////////////////////////////////////////////////////////////////
 // Scheduling Maintenance
