@@ -697,6 +697,19 @@ func queryWODocs(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	} else {
+
+		// and now, add any docs that are attached to this workorder directly
+		err = DB.SQL(`select
+			id,name,filename,filesize,
+			to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created
+			from doc
+			where type='workorder' and ref_id=$1`, refID).
+			QueryStructs(docs)
+
+		if err != nil {
+			return c.String(http.StatusInternalServerError, err.Error())
+		}
+
 		return c.JSON(http.StatusOK, docs)
 	}
 }

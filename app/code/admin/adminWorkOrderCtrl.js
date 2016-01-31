@@ -152,7 +152,7 @@
             data: {
             	file: file, 
             	desc: this.doc,
-            	type: "event",
+            	type: "workorder",
             	ref_id: $stateParams.id,
             	worker: "true",
             	sitemgr: "true",
@@ -163,7 +163,7 @@
 		    		LxProgressService.circular.hide()
 		    		vm.uploadProgress = 'Success !'
 		    		vm.doc = ''
-		    		vm.docs = DBDocs.query({type: 'toolevent', id: vm.workorder.EventID})
+      			vm.docs = DBWODocs.query({id: $stateParams.id})
 						LxNotificationService.info('Document Added')
 
 

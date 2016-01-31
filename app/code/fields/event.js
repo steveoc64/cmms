@@ -483,14 +483,14 @@ getWorkOrderForm = function() {
         {type: 'eventWorkOrder.AssignTo'},
       ]
     }
-  },{    
+/*  },{    
     type: 'lx-flex',
     templateOptions: {
       flex: { container: "row", item: "12"},
       fields: [
         {type: 'eventWorkOrder.Documents'},
       ]
-    }
+    }*/
   }]
 }
 
