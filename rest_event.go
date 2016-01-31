@@ -645,6 +645,7 @@ type WorkOrderRequest struct {
 	StartDate   string
 	Descr       string
 	EstDuration int
+	Notes       string
 	Assignees   []Assignee
 	Skills      []WOSkill
 	Documents   []WODocs
@@ -717,7 +718,7 @@ func newWorkOrder(c *echo.Context) error {
 		Descr:       req.Descr,
 		EstDuration: req.EstDuration,
 		Status:      `Assigned`,
-		Notes:       ``,
+		Notes:       req.Notes,
 	}
 
 	// Make up the notes field based on the notes for the machine and the tool
@@ -752,11 +753,10 @@ func newWorkOrder(c *echo.Context) error {
 		<h1>Maintenance WorkOrder %06d</h1>
 		%s for the %s tool on the %s machine, at %s 
 
-		%s 
-
 		<ul>
 			<li>Start Date: %s
 			<li>Est Duration: %d mins
+			<li>Notes: %s
 		</ul>
 		<hr>
 	
@@ -780,9 +780,9 @@ func newWorkOrder(c *echo.Context) error {
 		eNotes.ToolName,
 		eNotes.MachineName,
 		eNotes.SiteName,
-		wo.Notes,
 		wo.StartDate[:10],
 		wo.EstDuration,
+		wo.Notes,
 		eNotes.SiteName,
 		googleMapUrl,
 		eNotes.SiteAddress,
