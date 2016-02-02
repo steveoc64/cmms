@@ -643,6 +643,7 @@ type WODocs struct {
 type WorkOrderRequest struct {
 	EventID     string
 	StartDate   string
+	Time        string
 	Descr       string
 	EstDuration int
 	Notes       string
@@ -655,6 +656,7 @@ type DBworkorder struct {
 	ID             int        `db:"id"`
 	EventID        string     `db:"event_id"`
 	StartDate      string     `db:"startdate"`
+	Time           string     `db:"time"`
 	EstDuration    int        `db:"est_duration"`
 	ActualDuration int        `db:"actual_duration"`
 	Descr          string     `db:"descr"`
@@ -715,11 +717,13 @@ func newWorkOrder(c *echo.Context) error {
 	wo := DBworkorder{
 		EventID:     req.EventID,
 		StartDate:   req.StartDate,
+		Time:        req.Time,
 		Descr:       req.Descr,
 		EstDuration: req.EstDuration,
 		Status:      `Assigned`,
 		Notes:       req.Notes,
 	}
+	log.Println("passed in workorder", wo)
 
 	// Make up the notes field based on the notes for the machine and the tool
 	eNotes := &EventNotes{}
@@ -745,6 +749,10 @@ func newWorkOrder(c *echo.Context) error {
 		Record(wo).
 		Returning("id").
 		QueryScalar(&wo.ID)
+
+	// read the date back in a sane format
+	theDate := ""
+	err = DB.SQL(`select to_char(startdate, 'DD-Mon-YYYY HH:MI AM') from workorder where id=$1`, wo.ID).QueryScalar(&theDate)
 
 	googleMapUrl, _ := UrlEncoded(eNotes.SiteAddress)
 
@@ -780,7 +788,7 @@ func newWorkOrder(c *echo.Context) error {
 		eNotes.ToolName,
 		eNotes.MachineName,
 		eNotes.SiteName,
-		wo.StartDate[:10],
+		theDate,
 		wo.EstDuration,
 		wo.Notes,
 		eNotes.SiteName,

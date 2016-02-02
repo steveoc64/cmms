@@ -126,7 +126,13 @@
 			},
 			submitWorkOrder: function() {
 				this.workOrderData.EventID = $stateParams.id
-				console.log('workorder fields',this.workOrderData)				
+				console.log('workorder fields',this.workOrderData)	
+
+				// manually merge the startdate and the time field
+				this.workOrderData.StartDate.setHours(this.workOrderData.Time.getHours())				
+				this.workOrderData.StartDate.setMinutes(this.workOrderData.Time.getMinutes())				
+				console.log('workorder fields after',this.workOrderData)	
+
 				this.workOrderService.insert(this.workOrderData).$promise.then(function(){
 					LxDialogService.close('workOrderDialog')
 					LxNotificationService.info('New WorkOrder Created')
