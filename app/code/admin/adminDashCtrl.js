@@ -23,7 +23,7 @@
 				var rd = new Date(row.StartDate)
 				var now = new Date()
 				var age = (now - rd)/(3600000 * 24)
-				console.log(rd, age, "hrs")
+				//console.log(rd, age, "hrs")
 
 				if (age < -10) { return "age-10" }
 				if (age < -9) { return "age-9" }
