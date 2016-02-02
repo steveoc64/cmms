@@ -44,6 +44,7 @@
                 <tbody>
                     <tr class="data-table"
                         ng-click="Dashboard.goWorkOrder(row)"
+                        ng-class="Dashboard.getWOClass(row)"
                         ng-repeat="row in Dashboard.workorders">
                           <td><a>{{row.StartDate}}</a></td>
                           <td><a>{{row.EstDuration}}</a></td>

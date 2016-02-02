@@ -600,7 +600,8 @@ func queryWorkOrders(c *echo.Context) error {
 	// Use this with older versions of Postgres
 	////////////////////////////////////////////////////////////////
 	err = DB.Select("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
-		From("workorder").
+		From("workorder w").
+		OrderBy("w.startdate").
 		QueryStructs(&record)
 
 	if err != nil {
