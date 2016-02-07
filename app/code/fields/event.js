@@ -282,15 +282,15 @@ getEventFields = function() {
           label: 'Start Date',
         },
         controller: ['$scope',function($scope) {
-          console.log($scope.model.StartDate,$scope.model)
-          if (!angular.isDefined($scope.model.StartDate)) {
-            var d = new Date()
-            $scope.model.StartDate = d
-            d.setMinutes(0)
-            d.setSeconds(0)
-            d.setMilliseconds(0)
-            $scope.model.Time = d
-          }
+            if (!angular.isDefined($scope.model.StartDate)) {
+              var d = new Date()
+              $scope.model.StartDate = d            
+              d.setMinutes(0)
+              d.setSeconds(0)
+              d.setMilliseconds(0)
+              //$scope.model.Time = d.substr(d.length-5)
+              //console.log("setting time to",$scope.model.Time)
+            }            
         }]
       }
     },{
@@ -302,6 +302,17 @@ getEventFields = function() {
         templateOptions: {
           type: 'time',
           label: '',
+        }
+      }
+    },{
+      name: 'eventWorkOrder.TimeDisplay',
+      extends: 'lx-input',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'Time',
+        templateOptions: {
+          type: 'text',
+          label: 'Time',
         }
       }
     },{
@@ -492,6 +503,38 @@ getWorkOrderForm = function() {
         {type: 'eventWorkOrder.Documents'},
       ]
     }*/
+  }]
+}
+
+getWorkOrderDisplayForm = function() {
+
+  return [{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "4"},
+      fields: [
+        {type: 'eventWorkOrder.StartDate'},
+        {type: 'eventWorkOrder.TimeDisplay'},
+        {type: 'eventWorkOrder.EstDuration'},
+      ]
+    }
+  },{    
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "12"},
+      fields: [
+        {type: 'eventWorkOrder.Description'},
+      ]
+    }
+  },{    
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "6"},
+      fields: [
+        {type: 'eventWorkOrder.Skills'},
+        {type: 'eventWorkOrder.AssignTo'},
+      ]
+    }
   }]
 }
 

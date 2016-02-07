@@ -12,12 +12,15 @@
 			socket,DBDocs,DBDocServer,docs,DBWODocs,
 			LxNotificationService,DBWorkOrder,LxProgressService,Upload){
 	
-	console.log("here with wo",workorder)
+	// console.log("here with wo2",workorder)
+	workorder.$promise.then(function(){
+		workorder.Time = workorder.StartDate.substr(workorder.StartDate.length - 5)
+	})
 	
 		angular.extend(this, {
 			session: Session,
 			docs: docs,
-			formFields: getWorkOrderForm(),		
+			formFields: getWorkOrderDisplayForm(),		
 			workOrderService: DBWorkOrder,
 			workorder: workorder,
 			canEdit: function() {
@@ -27,51 +30,13 @@
 				var vm = this
 				console.log('before',this.workorder)
 				this.workorder._id = $stateParams.id
+				// TODO    this.workorder.StartDate -> set the time from the time field
+				
 				this.workorder.$update(function(newworkorder) {
 					LxNotificationService.info('Notes Updated')
-					vm.event = DBEvent.get({id: $stateParams.id})
+					// vm.event = DBEvent.get({id: $stateParams.id})
 //					$window.history.go(-1)
 				})
-			},
-			submitCosts: function() {
-				var vm = this
-				this.costs.id = $stateParams.id
-				console.log('adding cost fields',this.costs)
-				this.costAdder.add(this.costs).$promise.then(function(){
-						LxDialogService.close('costDialog')
-						LxNotificationService.info('Added Costs')					
-						vm.event = DBEvent.get({id: $stateParams.id})
-				})
-			},
-			submitComplete: function() {
-				console.log('completion fields',this.completion)
-				/*
-				Are there any workorders outstanding ?
-					Y - ask if user wants to close them off, else dont close the ewent yet
-					N - close off the event
-
-							Mark tool as OK
-							Are there any uncleared events on other tools on the same machine ?
-								Y - ask if user wants to clear these as well
-								N - mark machine as good to go
-				*/
-			},
-			submitWorkOrder: function() {
-				this.workOrderData.EventID = $stateParams.id
-				console.log('workorder fields',this.workOrderData)				
-				this.workOrderService.insert(this.workOrderData).$promise.then(function(){
-					LxDialogService.close('workOrderDialog')
-					LxNotificationService.info('New WorkOrder Created')
-				})
-			},
-			costItem: function() {
-				LxDialogService.open('costDialog')
-			},
-			workOrder: function() {
-				LxDialogService.open('workOrderDialog')
-			},
-			markComplete: function() {
-				LxDialogService.open('completeDialog')
 			},
 			abort: function() {
 				$window.history.go(-1)

@@ -3,6 +3,10 @@ todo items & test cases
 //////////////////////////////////////////////////////////////////
 // Event and Workorder processing
 
+- Trace updating workorder .... 
+
+- Fill in time on displaying workorder
+
 - Global search
 
 - Be able to remove any doc

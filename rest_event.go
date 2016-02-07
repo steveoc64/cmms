@@ -657,7 +657,6 @@ type DBworkorder struct {
 	ID             int        `db:"id"`
 	EventID        string     `db:"event_id"`
 	StartDate      string     `db:"startdate"`
-	Time           string     `db:"time"`
 	EstDuration    int        `db:"est_duration"`
 	ActualDuration int        `db:"actual_duration"`
 	Descr          string     `db:"descr"`
@@ -718,7 +717,6 @@ func newWorkOrder(c *echo.Context) error {
 	wo := DBworkorder{
 		EventID:     req.EventID,
 		StartDate:   req.StartDate,
-		Time:        req.Time,
 		Descr:       req.Descr,
 		EstDuration: req.EstDuration,
 		Status:      `Assigned`,
@@ -868,6 +866,8 @@ func newWorkOrder(c *echo.Context) error {
 }
 
 func updateWorkOrder(c *echo.Context) error {
+
+	// TODO - a number of possible actions, including re-issuing the workorder
 
 	return c.JSON(http.StatusOK, "update workorder")
 }
