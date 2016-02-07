@@ -282,7 +282,9 @@ getEventFields = function() {
           label: 'Start Date',
         },
         controller: ['$scope',function($scope) {
+          console.log("startdate controller",$scope.model)
             if (!angular.isDefined($scope.model.StartDate)) {
+              console.log("and in here")
               var d = new Date()
               $scope.model.StartDate = d            
               d.setMinutes(0)
@@ -298,22 +300,14 @@ getEventFields = function() {
       extends: 'lx-input',
       wrapper: 'lx-wrapper-errors',
       defaultOptions: {
-        key: 'Time',
+        key: 'StartDate',
         templateOptions: {
           type: 'time',
           label: '',
-        }
-      }
-    },{
-      name: 'eventWorkOrder.TimeDisplay',
-      extends: 'lx-input',
-      wrapper: 'lx-wrapper-errors',
-      defaultOptions: {
-        key: 'Time',
-        templateOptions: {
-          type: 'text',
-          label: 'Time',
-        }
+        },
+        controller: ['$scope',function($scope) {
+          console.log("time field controller")
+        }]
       }
     },{
       name: 'eventWorkOrder.EstDuration',
@@ -503,38 +497,6 @@ getWorkOrderForm = function() {
         {type: 'eventWorkOrder.Documents'},
       ]
     }*/
-  }]
-}
-
-getWorkOrderDisplayForm = function() {
-
-  return [{
-    type: 'lx-flex',
-    templateOptions: {
-      flex: { container: "row", item: "4"},
-      fields: [
-        {type: 'eventWorkOrder.StartDate'},
-        {type: 'eventWorkOrder.TimeDisplay'},
-        {type: 'eventWorkOrder.EstDuration'},
-      ]
-    }
-  },{    
-    type: 'lx-flex',
-    templateOptions: {
-      flex: { container: "row", item: "12"},
-      fields: [
-        {type: 'eventWorkOrder.Description'},
-      ]
-    }
-  },{    
-    type: 'lx-flex',
-    templateOptions: {
-      flex: { container: "row", item: "6"},
-      fields: [
-        {type: 'eventWorkOrder.Skills'},
-        {type: 'eventWorkOrder.AssignTo'},
-      ]
-    }
   }]
 }
 

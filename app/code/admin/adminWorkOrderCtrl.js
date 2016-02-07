@@ -12,15 +12,18 @@
 			socket,DBDocs,DBDocServer,docs,DBWODocs,
 			LxNotificationService,DBWorkOrder,LxProgressService,Upload){
 	
-	// console.log("here with wo2",workorder)
+	console.log("here with workorder =",workorder)
 	workorder.$promise.then(function(){
 		workorder.Time = workorder.StartDate.substr(workorder.StartDate.length - 5)
+		var d = new Date(workorder.StartDate)
+		console.log("js thinks the date is", d)
+		workorder.StartDate = d
 	})
 	
 		angular.extend(this, {
 			session: Session,
 			docs: docs,
-			formFields: getWorkOrderDisplayForm(),		
+			formFields: getWorkOrderForm(),		
 			workOrderService: DBWorkOrder,
 			workorder: workorder,
 			canEdit: function() {
@@ -34,6 +37,7 @@
 				
 				this.workorder.$update(function(newworkorder) {
 					LxNotificationService.info('Notes Updated')
+					vm.workorder = DBWorkOrder.get({id: $stateParams.id})
 					// vm.event = DBEvent.get({id: $stateParams.id})
 //					$window.history.go(-1)
 				})

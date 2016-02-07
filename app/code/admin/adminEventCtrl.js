@@ -49,10 +49,10 @@
 	app.controller(base+'EditEventCtrl', 
 		['$state','$stateParams','event','logs','Session','$window','LxDialogService',
 		'socket','Upload','LxProgressService','DBDocs','DBDocServer','docs','workorders',
-		'LxNotificationService','DBEvent','DBEventCost','DBWorkOrder',
+		'LxNotificationService','DBEvent','DBEventCost','DBWorkOrder','DBEventWorkorders',
 		function($state,$stateParams,event,logs,Session,$window,LxDialogService,
 			socket,Upload,LxProgressService,DBDocs,DBDocServer,docs,workorders,
-			LxNotificationService,DBEvent,DBEventCost,DBWorkOrder){
+			LxNotificationService,DBEvent,DBEventCost,DBWorkOrder,DBEventWorkorders){
 	
 		angular.extend(this, {
 			session: Session,
@@ -126,16 +126,18 @@
 			},
 			submitWorkOrder: function() {
 				this.workOrderData.EventID = $stateParams.id
-				// console.log('workorder fields',this.workOrderData)	
+				console.log('workorder fields',this.workOrderData)	
 
 				// manually merge the startdate and the time field
-				this.workOrderData.StartDate.setHours(this.workOrderData.Time.getHours())				
-				this.workOrderData.StartDate.setMinutes(this.workOrderData.Time.getMinutes())				
-				// console.log('workorder fields after',this.workOrderData)	
+				//this.workOrderData.StartDate.setHours(this.workOrderData.Time.getHours())				
+				//this.workOrderData.StartDate.setMinutes(this.workOrderData.Time.getMinutes())				
+				//console.log('workorder fields after',this.workOrderData)	
 
+				var vm = this
 				this.workOrderService.insert(this.workOrderData).$promise.then(function(){
 					LxDialogService.close('workOrderDialog')
 					LxNotificationService.info('New WorkOrder Created')
+		      vm.workorders = DBEventWorkorders.query({id: $stateParams.id})
 				})
 			},
 			costItem: function() {

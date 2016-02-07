@@ -644,7 +644,6 @@ type WODocs struct {
 type WorkOrderRequest struct {
 	EventID     string
 	StartDate   string
-	Time        string
 	Descr       string
 	EstDuration int
 	Notes       string
@@ -846,7 +845,8 @@ func newWorkOrder(c *echo.Context) error {
 		DB.SQL(`select email from users where id=$1`, assignee.ID).QueryScalar(&emailAddr)
 
 		m := NewMail()
-		m.SetHeader("To", "steveoc64@gmail.com")
+		//m.SetHeader("To", "steveoc64@gmail.com", "steve.oconnor@sbsinternational.com.au", "cmms-admin@sbsinternational.com.au")
+		m.SetHeader("To", "steveoc64@gmail.com", "steve.oconnor@sbsinternational.com.au")
 		// m.SetHeader("To", "steve.oconnor@sbsinternational.com.au")
 		m.SetHeader("Subject", fmt.Sprintf("Maintenance WorkOrder %06d", wo.ID))
 		m.SetBody("text/html", "To:"+emailAddr+"<p>"+emailBody)
@@ -868,6 +868,22 @@ func newWorkOrder(c *echo.Context) error {
 func updateWorkOrder(c *echo.Context) error {
 
 	// TODO - a number of possible actions, including re-issuing the workorder
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	record := &DBworkorder{}
+	if err = c.Bind(record); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	//var record DBworkorder
+	DB.Update("workorder").
+		SetWhitelist(record, "notes").
+		Where("id = $1", id).
+		Exec()
 
 	return c.JSON(http.StatusOK, "update workorder")
 }

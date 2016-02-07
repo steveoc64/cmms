@@ -1,15 +1,21 @@
 todo items & test cases
 
 //////////////////////////////////////////////////////////////////
+// Works in Progress
+
+
+
+
+
+//////////////////////////////////////////////////////////////////
 // Event and Workorder processing
-
-- Trace updating workorder .... 
-
-- Fill in time on displaying workorder
 
 - Global search
 
 - Be able to remove any doc
+
+- User manual
+
 - Full test cases and QA with doc attachments and doc pointers
 
 - On workorder entry, match people to skills
@@ -20,22 +26,21 @@ todo items & test cases
   	- notes field to edit the contents of the update
   	- submit btn to generate the email(s)
 
-- With workorder document updates, refresh data and screen, the same
-	way that the event screen works
 
-- Add workorder to event, needs to reload event-workorder data	
 
-- New workorder default start data no longer works ... fix
 
 - Once workorder is created, should lock down the details and not allow edits ?
 	** Better **
 	- if add new assignee, add them to the workorder, and generate a Workorder email for them
 	- if add new doc, then send the new doc out to existing participants for the existing workorders
 
+
 - Event search
+
 - WorkOrder search
 
 - Event list, toggle view all / open events
+
 - WorkOrder list, toggle view all / open workorders
 
 - Annotate WorkOrder as it progresses
@@ -64,7 +69,7 @@ todo items & test cases
 //////////////////////////////////////////////////////////////////
 // Feature Mapping with FastMaint
 
-- "Task Templates" 
+- "Task Templates" .. sort of have this with the notes and docs attached to each site / machine / tool
 
 
 //////////////////////////////////////////////////////////////////
@@ -95,7 +100,7 @@ todo items & test cases
 
 - User sub / unsub from daily digest email
 
-- 
+- Graphs as needed
 
 //////////////////////////////////////////////////////////////////
 // Code Refactors
@@ -106,23 +111,16 @@ todo items & test cases
 //////////////////////////////////////////////////////////////////
 // Known bugs
 
-- Some docs still have type "event" in place of "toolevent" 
-	(seems to be for docs that are supposed to be attached to a workordeg)
 
-- WorkOrder details not showing the time correctly
-
-- On raise new issue, if you add a photo, and then back of raising the issue,
+- On raise new issue, if you add a photo, and then back off from raising the issue,
 	this leaves an orphaned doc still temporarily attached to the event
 
 - CSS hover over lists loses any hilighting colors
 
-- Add document to existing workorder ... tries to call /docs/toolevent
-
-- new workorder ... WO notes not appearing on WO initial email ??
 
 
 //////////////////////////////////////////////////////////////////
-// Done Today
+// Done 
 
 - Notes field on w/order entry screen
 - With event document card list, stack the text under the image
@@ -133,3 +131,23 @@ todo items & test cases
 	which can be used to attach workorders to as needed
 
 - On site mgr or admin only ... raise issue modal dialog to have preventative maint option
+
+- Trace updating workorder .... 
+
+- Fill in time on displaying workorder
+
+- New workorder default start date no longer works ... fix
+
+- Add workorder to event, needs to reload event-workorder data	
+
+- With workorder document updates, refresh data and screen, the same
+	way that the event screen works
+
+- WorkOrder details not showing the time correctly
+
+- Some docs still have type "event" in place of "toolevent" 
+	(seems to be for docs that are supposed to be attached to a workordeg)
+
+- Add document to existing workorder ... tries to call /docs/toolevent
+
+- new workorder ... WO notes not appearing on WO initial email ??
