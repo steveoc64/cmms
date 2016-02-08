@@ -10,6 +10,11 @@ todo items & test cases
 //////////////////////////////////////////////////////////////////
 // Event and Workorder processing
 
+- on raise event, generate email and SMS to dist list by site
+
+- edit alarm dist lists for each site
+
+
 - Global search
 
 - Be able to remove any doc
@@ -18,7 +23,7 @@ todo items & test cases
 
 - Full test cases and QA with doc attachments and doc pointers
 
-- On workorder entry, match people to skills
+- On workorder entry, match people to site of event  (not just skill)
 
 - Update details of a live workorder (start date / duration / descr, etc ....) that is not yet complete,
   then popup another dialog with :
@@ -60,10 +65,14 @@ todo items & test cases
 - Raise an alarm for workorders that are not acknowledged after a set 
 	acceptable delay
 
+- On raise workorder, select people by site associated with the event
+
 //////////////////////////////////////////////////////////////////
 // General Data Management
 
 - Edit parts that make up a tool
+
+- apply part edits to other machines of same type, in other sites, allowing some versioning
 
 
 //////////////////////////////////////////////////////////////////
@@ -104,7 +113,7 @@ todo items & test cases
 
 - Cost reporting, including estimated costs for work in progress, and estimated preventative maint costs
   that are projected forward
-  
+
 
 //////////////////////////////////////////////////////////////////
 // Code Refactors
@@ -120,6 +129,8 @@ todo items & test cases
 	this leaves an orphaned doc still temporarily attached to the event
 
 - CSS hover over lists loses any hilighting colors
+
+- 
 
 
 
