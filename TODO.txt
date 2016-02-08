@@ -27,7 +27,7 @@ todo items & test cases
   	- submit btn to generate the email(s)
 
 
-
+- Add estimated costs to workorders, and include this data in reports
 
 - Once workorder is created, should lock down the details and not allow edits ?
 	** Better **
@@ -101,6 +101,10 @@ todo items & test cases
 - User sub / unsub from daily digest email
 
 - Graphs as needed
+
+- Cost reporting, including estimated costs for work in progress, and estimated preventative maint costs
+  that are projected forward
+  
 
 //////////////////////////////////////////////////////////////////
 // Code Refactors
