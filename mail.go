@@ -16,7 +16,7 @@ func NewMail() *gomail.Message {
 	return m
 }
 
-func _initMailer() {
+func _initMailer(msg string) {
 	// queue up a test message to say that we have begun
 
 	go _MailerDaemon()
@@ -24,7 +24,7 @@ func _initMailer() {
 	m := NewMail()
 	m.SetHeader("To", "steveoc64@gmail.com")
 	m.SetHeader("Subject", "CMMS has started on "+Config.Installation)
-	m.SetBody("text/html", "The CMMS server has been started @"+Config.Installation+":"+Config.MailServer)
+	m.SetBody("text/html", "The CMMS server has been started @"+Config.Installation+":"+Config.MailServer+"\n"+msg)
 	MailChannel <- m
 
 }
