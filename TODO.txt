@@ -3,8 +3,13 @@ todo items & test cases
 //////////////////////////////////////////////////////////////////
 // Works in Progress
 
+- add SMS gateway to config
 
-
+- on workorder, show the site / machine / tool / event
+- show workorders attached to site
+- on site screen, edit user list
+- on site screen, user list, toggle btns to put people on the dist list for alerts / workorders
+- publish an
 
 
 //////////////////////////////////////////////////////////////////
@@ -66,6 +71,11 @@ todo items & test cases
 	acceptable delay
 
 - On raise workorder, select people by site associated with the event
+
+- Raise an email alert for any events that are not actioned / converted to workorders within a reasonble timeframe
+
+- add auditing and activity logs to the workorders and events
+
 
 //////////////////////////////////////////////////////////////////
 // General Data Management
@@ -130,7 +140,8 @@ todo items & test cases
 
 - CSS hover over lists loses any hilighting colors
 
-- 
+- Create workorder from event list attached to machine list does not default time to a sensible value ???
+  ... cant reproduce yet
 
 
 
@@ -166,3 +177,83 @@ todo items & test cases
 - Add document to existing workorder ... tries to call /docs/toolevent
 
 - new workorder ... WO notes not appearing on WO initial email ??
+
+
+CPU & BOARDS
+VIDEO CARDS
+CASES & PSU
+STORAGE, HDS & SSDS
+PERIPHERALS
+ 
+   
+
+SEARCH
+
+ 
+ 
+News
+Forums
+Contact Us
+Contributors
+ 
+ Pure Overclock
+Pureoverclock: PC Hardware reviews and news for overclockers!
+
+ 
+  
+ 
+HOME
+REVIEWS
+FORUMS
+ADVERTISE
+SEND NEWS!
+  
+ 
+I spend far too much time scouring the internet for anything hardware related. As it is, I see a lot of comments from people asking why nobody is coming out with better FX series motherboards, especially with the 9590 having been out for quite some time now. To be fair to manufacturers, nobody wants to invest too much in a chipset that is on the verge of being obsolete. This makes what GIGABYTE is doing all the more confusing but I think I can shed some light on what’s really going on. Between certain supply issues and what amounts to a surprisingly high demand, GIGABYTE may be positioning themselves as a sole contender with the release of the GA-990FX-Gaming.
+
+First, let’s talk about what could be bringing this on. Both ASUS and GIGABYTE are experiencing about a 10% drop in their motherboard sales. Most of the time when this happens, everyone is quick to point out that desktops are going to fail and be replaced by the all-powerful tablet (seriously?). But there are other factors attributing to a possible rise with AMD, namely, Skylake. INTEL really missed the mark on this release, in spite of trying to make it look like it was exactly what enthusiasts were wanting. The biggest problem is Skylake is still pretty hard to purchase. While no one has officially claimed there has been yield issues, the fact that the i7-6700K keeps going out of stock might indicate that. There’s also the problem that while Skylake does have new architecture, it doesn’t have the new iGPU and L3 Cache features that Broadwell released with just before. These issues could hurt the CPU sales, which has no doubt hurt all of the motherboard manufacturers in process, forcing them to look for another avenue to bring in profits.
+
+There’s one more thought before we look into the GA-990FX-Gaming. Sure, FX CPUs don’t perform as well as their INTEL counterparts and 3 years of age on an architecture is practically ancient in the computer world. However, the real world and gaming performance on these chips are typically more than enough for the average builder out there. The other nice thing about the FX series is that while it may be a bit energy hungry while running a bit hot, it’s still an incredibly fun chip to overclock. One of the things I’ve notice about all of my FX chips is that if you can find a way to cool it more, you can keep pushing it higher. What I’ve seen from many INTEL chips lately is there seems to be a hard cap on how high you can push that chip, and there’s no amount of cooling that can control the heat once you hit that point. Gigabyte G1 990FX (2)This could be in part because of the nature of the thermal interface material they use on the lids, but still takes some of the fun out of trying to see just how far you can push your silicon. Since there’s actually a good supply of FX chips while also remaining at very reasonable price points, it’s any wonder there is still demand for higher end 990FX motherboards.
+
+Now, we can see how the GA-990FX-Gaming makes sense even though it’s being released this close to Zen. This could be a slight gamble for GIGABYTE, but they have to get sales somewhere and with plenty of 8350s to 9590s in stock, there’s a good chance this could happen. Next, it’s important to note that there hasn’t been a truly enthusiast level 990FX release since the ASROCK 990FX Extreme9. All of the high-end boards are showing there age, and even the recent MSI 990FXA Gaming lacks the robust VRM to truly run a 9590. (I personally just went through this. Who says they support a chip but requires you to custom liquid cool the VRM to do it?) This G1 series board looks like it’s going to have an 8+2 phase VRM to help keep things running cool while delivering 200+ watts to overclocked or top tier FX chips. On top of that, GIGABYTE is including advanced audio, USB 3.1, and even an M.2 port with a 20 Gb/s bandwidth for modern SSDs. The only thing that can’t be fixed is the fact that the board is still using PCIe x16 2.0 rather than 3.0 slots, but you’d be looking at getting a 5% performance increase at best even and this would most likely require a chipset overhaul from AMD to truly be 3.0. Finally, the board looks amazing, has the ambient LED technology and has some of the sturdy features that their previous G1 boards have. Overall, GIGABYTE looks like they’re releasing the best AMD motherboard available for FX users.
+
+Unfortunately, I have no idea on region availability, price, or release date yet. GIGABYTE does have an official page for the GA-990FX-Gaming already, so it seems that this board will be hitting retailers pretty soon. Overall, I’m extremely excited about this product. I feel like it gives a much needed high end platform for chips like the 9590, but also gives a great AMD alternative to those who want to save a few bucks or are tired of availability issues with INTEL. Hopefully we’ll begin seeing these guys before the end of the year!
+
+Gigabyte G1 990FX (1)
+Gigabyte G1 990FX (2)
+Gigabyte G1 990FX (3)
+Gigabyte G1 990FX (4)
+
+http://www.gigabyte.com/products/product-page.aspx?pid=5655#ov
+
+
+
+ 
+
+990FX, amd, G1 Series, GA-990FX-Gaming, gigabyte
+About the Author
+Josh Jackson
+
+ 
+ 
+
+More articles by Josh Jackson »
+RELATED:  
+990FX
+AMD
+GIGABYTE
+
+Gigabyte CES 2016 (13)
+GIGABYTE has Great New Motherboards and Laptops at CES 2016
+Radeon-Software_Press.FINAL_
+Why I think AMD is Turning it Around, and it’s not the Reason You’d Expect
+AMD-Logo
+AMD FX 8320E Processor Review
+
+
+2 COMMENTSLeave a comment »
+  auspicious December 28, 2015 at 1:12 am
+Thanks, nicely stated! If you can get past the gaming marketing, those of us who make the games will certainly buy these up. Please update once they ship. My 9590’s runs circles around my competitor’s boxx setup at about half the cost.
+
+REPLY
+
