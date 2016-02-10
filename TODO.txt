@@ -3,6 +3,8 @@ todo items & test cases
 //////////////////////////////////////////////////////////////////
 // Works in Progress
 
+- On raise new issue, if you add a photo, and then back off from raising the issue,
+	this leaves an orphaned doc still temporarily attached to the event
 
 - on workorder, show the site / machine / tool / event
 - show workorders attached to site
@@ -17,7 +19,6 @@ todo items & test cases
 - on raise event, generate email and SMS to dist list by site
 
 - edit alarm dist lists for each site
-
 
 - Global search
 
@@ -178,3 +179,5 @@ todo items & test cases
 - new workorder ... WO notes not appearing on WO initial email ??
 
 - add SMS gateway to config
+
+

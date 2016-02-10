@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 func GetSMSBalance() (int, error) {
@@ -53,4 +54,42 @@ func GetSMSBalance() (int, error) {
 	}
 	s := string(body[3:])
 	return strconv.Atoi(s)
+}
+
+func SendSMS(number string, message string, ref string) error {
+
+	resp, err := http.PostForm(
+		Config.SMSServer,
+		url.Values{
+			"username": {Config.SMSUser},
+			"password": {Config.SMSPasswd},
+			"to":       {number},
+			"from":     {"SBS Intl"},
+			"ref":      {ref},
+			"message":  {message},
+		})
+
+	if err != nil {
+		log.Println("HTTP Post Error", err.Error())
+		return err
+	}
+
+	// read the response
+	body, err := ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	lines := strings.Split(string(body), "\n")
+	for _, v := range lines {
+		p := strings.Split(v, ":")
+		switch p[0] {
+		case "OK":
+			log.Println("SMS OK", p[1], "ref", p[2])
+		case "BAD":
+			log.Println("SMS BAD", p[1], "reason", p[2])
+			return errors.New(p[2])
+		case "ERROR":
+			log.Println("SMS ERROR", p[1])
+			return errors.New(p[1])
+		}
+	}
+	return nil
 }

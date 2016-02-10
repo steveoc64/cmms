@@ -273,7 +273,8 @@ func raiseEventMachine(c *echo.Context) error {
 		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Machine ID %s", req.Machine))
 	}
 
-	err = DB.SQL(`select site_id from machine where id=$1`, machineId).QueryScalar(&siteId)
+	var machineName string
+	err = DB.SQL(`select site_id,name from machine where id=$1`, machineId).QueryScalar(&siteId, &machineName)
 	if err != nil {
 		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Site ID for Machine %d: %s", machineId, err.Error()))
 	}
@@ -321,8 +322,14 @@ func raiseEventMachine(c *echo.Context) error {
 	log.Println("Raising Event", evt.ID, evt, "User:", Username)
 	publishSocket("machine", machineId)
 	publishSocket("event", evt.ID)
-	return c.String(http.StatusOK, "Event Raised on the Machine")
 
+	// send SMS to all people on the distribution list for this site
+	// which at the moment, will hard code to Shane's number
+	err = SendSMS("0417824950",
+		fmt.Sprintf("%s on Machine %s %s", req.Action, machineName, req.Descr),
+		fmt.Sprintf("%d", evt.ID))
+
+	return c.String(http.StatusOK, "Event Raised on the Machine")
 	// TODO - add a mega amount of auditing to the machine and event records
 }
 
@@ -347,6 +354,7 @@ func raiseEventTool(c *echo.Context) error {
 	var machineId int
 	var toolId int
 	var toolName string
+	var machineName string
 	toolId, err = strconv.Atoi(req.Tool)
 	if err != nil {
 		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Tool ID %s", req.Tool))
@@ -354,10 +362,11 @@ func raiseEventTool(c *echo.Context) error {
 
 	err = DB.SQL(`
 		select 
-		site_id,machine_id,name 
-		from component 
-		where id=$1`, toolId).
-		QueryScalar(&siteId, &machineId, &toolName)
+		c.site_id,c.machine_id,m.name,c.name 
+		from component c
+		left join machine m on (m.id = c.machine_id) 
+		where c.id=$1`, toolId).
+		QueryScalar(&siteId, &machineId, &machineName, &toolName)
 	if err != nil {
 		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Site ID for Tool (%d): %s", toolId, err.Error()))
 	}
@@ -455,6 +464,12 @@ func raiseEventTool(c *echo.Context) error {
 	publishSocket("machine", machineId)
 	publishSocket("tool", toolId)
 	publishSocket("event", evt.ID)
+
+	// send SMS to Shane
+	// TODO - include everyone elso on the distro list
+	err = SendSMS("0417824950",
+		fmt.Sprintf("%s on Tool %s/%s %s", req.Action, machineName, toolName, req.Descr),
+		fmt.Sprintf("%d", evt.ID))
 
 	// TODO - audit records for both the machine and tool
 
