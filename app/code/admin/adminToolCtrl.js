@@ -302,6 +302,11 @@
 					LxNotificationService.error('Please Enter Description')
 				}
 			},
+			unAlert: function() {
+				this.eventHandler.clear({
+					tool: $stateParams.id,
+				})
+			},
 			submitPending: function() {
 				if (angular.isDefined(this.eventFields.PendingDescr) && this.eventFields.PendingDescr.length > 0) {
 					var vm = this

@@ -12,11 +12,21 @@ todo items & test cases
 - on site screen, user list, toggle btns to put people on the dist list for alerts / workorders
 - publish an
 
+- on SMS send, grab the reference retvals and store the SMS traffic against the DB
+- display comms history, including emails and SMSs
+
+- look at the whole UI again, from the point of view of a mobile user
+
+- admin user, hover over IP address, allow them to capture that and apply some rules such as :
+	- give it a name
+	- any other settings
+
+
+- dont be case sensitive on logins
 
 //////////////////////////////////////////////////////////////////
 // Event and Workorder processing
 
-- on raise event, generate email and SMS to dist list by site
 
 - edit alarm dist lists for each site
 
@@ -180,4 +190,90 @@ todo items & test cases
 
 - add SMS gateway to config
 
+- on raise event, generate email and SMS to dist list by site
 
+
+Ok that is a valid argument against remote work.
+I still don't agree. In my experience, the added productivity gains from working in a Peopleware-ideal office, where I could occasionally stop by a colleague's office to ask a question, were not much greater than what could be accomplished through video and chat. The personal "comradery" gains were slim to nil as well.
+The negatives are tremendous. Wasting time traveling to the office. Wasting time appearing to work, which is probably 50% of the average office workers day if we're being honest. Having to arrange your life around work instead of the other way around.
+If nothing else, I think a fully broken-down cost analysis of your office layout plus the higher cost-of-living expenses built into employee wages when hiring in a big city would convince you that remote is the way. Probably looking at 30-50k per employee savings for hiring remote vs SF, and getting happier, more productive employees.
+reply
+	
+p4wnc6 1 hour ago
+
+You make many good points. However, I find that some of them still affect remote work too. For example, people still make efforts to "appear" to be working. They will make spurious commits to version control. They will ration out a series of questions or emails that could be more concisely sent together. And god forbid the company uses Agile/Scrum, which is a Pandora's Box of ways to appear to be working without working at all.
+Still, your points are well taken. On the other hand, if a company is really looking at fully-remote work as a way to avoid paying higher wages, that would be a red flag for me. I'm very good at what I do, and even if I'm not co-located in Fancyopolis, I expect to be earning a competitive wage based on the value I can add to the business, not how much a gallon of milk costs for me. It comes off as extremely petty and divisive for a company to intentionally play cost of living to their advantage like that. And further, what stops a person from choosing to live in a more expensive place? Your company is in Milwaukee but I want to live in London and work remotely.
+The kinds of risks that employees face are very asymmetric when compared with what employers face. For a lone employee, the single number that is your annual compensation is a big deal. Other companies might force you to tell them that number if you seek a new job. And whatever that number is, that's going to determine your pay. Those other companies won't give a shit about cost of living.
+Let's say you used to live in SF and made X-thousand per year. Then you took a new job in Austin, TX, and someone convinced you that you should accept something like 0.7X per year, because Austin is cheaper and 0.7 still leaves you quote unquote above market there.
+A few years later, you're looking to move to New York, well guess what, you're salary is going to be pegged to 0.7X, not X, and you might have to negotiate hard even just to get it back up to X in New York, let alone arguing for whatever premium the 0.7X might have been above market in Austin.
+That's just how these things work. Have you negotiated pay when considering a move from a major city to a city with lower cost of living? I have before, and one of the major points of discussion was that salary actually should not decrease in response to cost of living changes. That's just an unpleasant side of it that the hiring company has to eat. The risks facing the lone employee are too high that they'll never recover the "downward adjustment" amount if they ever find that they need to move on to another area again.
+When I speak with HR reps about this, I've never had a problem. Sometimes they will say they are not looking to pay in the range I am seeking, but they universally understand and fully expect it when candidates say that their salary should not decrease purely due to cost of living decreases.
+reply
+	
+InclinedPlane 3 hours ago
+
+One thing I've noticed, there's the "coolness factor". Open offices are just more photogenic than closed offices, almost no matter how you do them. That's a big factor in startups and gamedev where coolness factor is actually important.
+Edit: to be clear by "important" I don't mean that it's a good thing, I mean that it has an unfortunately big impact on PR, hiring, and it's something that the people in charge take seriously. Personally I prefer individual offices, regardless of the coolness factor.
+reply
+	
+p4wnc6 3 hours ago
+
+Yes, tech workers often are just pieces of office furniture these days, and so getting to be cool rustic armoir is better than being a lame ottoman.
+This is an important lesson for undergrad CS majors. Instead of working really hard to master dynamic programming or taking that extra course on programming language concepts, you should instead just watch Michael Bay's Transformers movie so that you know when to say "Furrier Transform" at the right moment.
+Seriously. Go right now and buy a pair of purely decorative eye glasses. At work tomorrow, got stand by the coffee machine and let your glasses slide slightly down your nose. Wait for an important-seeming person to walk by and then push your glasses up and say "Furrier Transform" -- this is a much faster way to a promotion than coding at your desk.
+Be wearing a slim-fitting hoodie if at all possible. If your MacBook doesn't already have stickers reflecting which causes you SJW on reddit, get some now!!!!11
+reply
+	
+fredleblanc 6 hours ago
+
+I guess I'm the flip-side of this. I work for myself, self-employed, and my office is the best $360 I spend each month. I need separation of space. My 15 minute walk ("commute") adds to the separation of work from home.
+The other thing is that there are two small children running around my house. I simply can't work there, or else I'd never get anything done. Our house isn't large enough to have a separate, dedicated office-space. I'd be constantly interrupted.
+I like the concept of remote working, even in a shared environment, but if I were working at that company and I no longer had a free place to go do work, I'd be looking for another gig.
+reply
+	
+jpindar 5 hours ago
+
+You have small children running around the house, so you'd never get anything done there because you'd be constantly interrupted.
+I have childish coworkers running around the office, so I can barely get any work done there and I am constantly interrupted.
+reply
+	
+swalsh 5 hours ago
+
+Work from home, son shoots you with nerf gun, work from office, brogrammer shoots you with nerf gun....
+reply
+	
+BinaryIdiot 4 hours ago
+
+I've been in this exact situation. Fortunately I found another place to work in the same building that contained our office and I was super productive. I feel like the "no fun employee" but when you get shot 20 times a day from all the nerf Wars that break out I don't understand how anyone gets shit done. Ultimately they probably just don't (at least if it is as frequent as I ran into).
+reply
+	
+cballard 3 hours ago
+
+I really wish that I could kick out the office dogs, shut down the office music, and enforce library rules.
+I am definitely the "no fun employee".
+reply
+	
+harmegido 4 hours ago
+
+Wait, those seriously happen? I thought examples of that were just satire. I guess there are some upsides to working in finance. That would never happen there lol.
+reply
+	
+NickNameNick 57 minutes ago
+
+It used to happen in my office, but it was usually a friday evening thing, or in one of those awkward gaps after meetings, but before lunch, and everyone was distracted anyway.
+reply
+	
+BinaryIdiot 1 hour ago
+
+I mean my 20 was probably an exaggeration but I can remember days where 10+ battles erupted around me. If it's 1 or maybe 2 times I don't mind and might even join in but on the days when it becomes excessive? I can't get anything done! Very frustrating.
+reply
+	
+GuiA 4 hours ago
+
+At least you can send your son in timeout.
+reply
+	
+stronglikedan 4 hours ago
+
+I have no children running around my house, but I still lack the discipline to work from home effectively. That "separation of space" helps to keep me focused. That's just me personally, and I know plenty of people that are effective working form home, but I just procrastinate and distract myself. I am my own interruption.
+reply
