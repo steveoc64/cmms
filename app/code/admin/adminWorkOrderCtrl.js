@@ -6,10 +6,10 @@
 
 	app.controller(base+'EditWorkorderCtrl', 
 		['$state','$stateParams','workorder','Session','$window','LxDialogService',
-		'socket','DBDocs','DBDocServer','docs','DBWODocs',
+		'socket','DBDocs','DBDocServer','docs','DBWODocs','event',
 		'LxNotificationService','DBWorkOrder','LxProgressService','Upload',
 		function($state,$stateParams,workorder,Session,$window,LxDialogService,
-			socket,DBDocs,DBDocServer,docs,DBWODocs,
+			socket,DBDocs,DBDocServer,docs,DBWODocs,event,
 			LxNotificationService,DBWorkOrder,LxProgressService,Upload){
 	
 	console.log("here with workorder =",workorder)
@@ -26,6 +26,7 @@
 			formFields: getWorkOrderForm(),		
 			workOrderService: DBWorkOrder,
 			workorder: workorder,
+			event: event,
 			canEdit: function() {
 				return true
 			},

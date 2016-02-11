@@ -1,6 +1,25 @@
 <div class="main-section__title">
   <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-factory"></i>
   Work Order Details
+  <button type="button" 
+          class="btn btn--m btn--blue btn--flat" 
+          ng-click="editWorkorder.goSite()"
+          lx-ripple>
+            {{editWorkorder.event.SiteName}}
+  </button>
+  <button type="button" 
+          class="btn btn--m btn--blue btn--flat" 
+          ng-click="editWorkorder.goMachine()"
+          lx-ripple>
+            {{editWorkorder.event.MachineName}}
+  </button>
+  <button type="button" 
+          class="btn btn--m btn--blue btn--flat" 
+          ng-click="editWorkorder.goTool()"
+          lx-ripple>
+            {{editWorkorder.event.ToolName}}
+  </button>
+
 </div>
 
 <form name="editWorkorder.form" ng-submit="editWorkorder.submit()">
