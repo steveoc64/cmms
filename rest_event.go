@@ -476,147 +476,19 @@ func raiseEventTool(c *echo.Context) error {
 	return c.String(http.StatusOK, "Event Raised on the Tool & Machine")
 }
 
-func clearEventTool(c *echo.Context) error {
+func clearTempEventTool(c *echo.Context) error {
 
-	claim, err := securityCheck(c, "writeEvent")
+	_, err := securityCheck(c, "writeEvent")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	req := &ToolEventRequest{}
-	err = c.Bind(req)
-	if err != nil {
-		log.Println("Binding:", err.Error())
-		return c.String(http.StatusBadRequest, err.Error())
-	}
+	id := getID(c)
+	log.Println("clearing temp docs for event", id)
 
-	log.Println("Request:", req)
+	DB.SQL(`delete from doc where ref_id=$1 and type='temptoolevent'`, id).Exec()
 
-	// Lookup the machine
-	var siteId int
-	var machineId int
-	var toolId int
-	var toolName string
-	var machineName string
-	toolId, err = strconv.Atoi(req.Tool)
-	if err != nil {
-		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Tool ID %s", req.Tool))
-	}
-
-	err = DB.SQL(`
-		select 
-		c.site_id,c.machine_id,m.name,c.name 
-		from component c
-		left join machine m on (m.id = c.machine_id) 
-		where c.id=$1`, toolId).
-		QueryScalar(&siteId, &machineId, &machineName, &toolName)
-	if err != nil {
-		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Site ID for Tool (%d): %s", toolId, err.Error()))
-	}
-
-	UID, Username := getClaimedUser(claim)
-
-	// Create 1 event record - which includes details of both tool and machine
-	evt := &DBevent{
-		SiteId:    siteId,
-		Type:      fmt.Sprintf("%s", req.Action),
-		MachineId: machineId,
-		ToolId:    toolId,
-		Priority:  1,
-		CreatedBy: UID,
-		Notes:     req.Descr,
-	}
-	DB.InsertInto("event").
-		Whitelist("site_id", "type", "machine_id", "tool_id", "priority", "created_by", "notes").
-		Record(evt).
-		Returning("id").
-		QueryScalar(&evt.ID)
-
-	// Update the machine record and the tool record
-	switch req.Action {
-	case "Pending":
-		_, err = DB.SQL(`update machine 
-			set alert_at=localtimestamp, status=$2 
-			where id=$1`,
-			machineId,
-			`Maintenance Pending`).
-			Exec()
-
-		_, err = DB.SQL(`update component
-			set status='Maintenance Pending'
-			where id=$1`, toolId).
-			Exec()
-	case "Alert":
-		_, err = DB.SQL(`update machine 
-			set alert_at=localtimestamp, status=$2 
-			where id=$1`,
-			machineId,
-			`Needs Attention`).
-			Exec()
-
-		_, err = DB.SQL(`update component
-			set status='Needs Attention'
-			where id=$1`, toolId).
-			Exec()
-	case "Halt":
-		_, err = DB.SQL(`update machine 
-			set stopped_at=localtimestamp, status=$2, is_running=false
-			where id=$1`,
-			machineId,
-			`Stopped`).
-			Exec()
-		_, err = DB.SQL(`update component
-			set status='Stopped', is_running=false
-			where id=$1`, toolId).
-			Exec()
-	case "Clear":
-		_, err = DB.SQL(`update machine 
-			set started_at=localtimestamp, status=$2, is_running=true
-			where id=$1`,
-			machineId,
-			`Running`).
-			Exec()
-		_, err = DB.SQL(`update component
-			set status='Running', is_running=true
-			where machine_id=$1`, machineId).
-			Exec()
-	}
-
-	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
-	}
-
-	// Now, if any docs were attached to the event, they have a ref_id of tool_id, and a
-	// ref type of "temptoolevent"
-	// These are temporary references to store the doc until the event id is known
-	// So, now we need to stamp them with the correct ref_id and the correct description
-
-	log.Printf("update doc set ref_id=%d, name='%s' where type='temptoolevent' and ref_id=%d\n", evt.ID, evt.Notes, toolId)
-
-	_, err = DB.SQL(`update doc
-		set ref_id=$1, name=$3, type='toolevent'
-		where type='temptoolevent' and ref_id=$2
-		`, evt.ID, toolId,
-		evt.Notes).Exec()
-
-	if err != nil {
-		log.Println("Problem registering the document to the event")
-	}
-
-	log.Println("Raising Tool Event", evt.ID, evt, "User:", Username)
-	publishSocket("machine", machineId)
-	publishSocket("tool", toolId)
-	publishSocket("event", evt.ID)
-
-	// send SMS to Shane
-	// TODO - include everyone elso on the distro list
-	err = SendSMS("0417824950",
-		fmt.Sprintf("%s on Tool %s/%s %s", req.Action, machineName, toolName, req.Descr),
-		fmt.Sprintf("%d", evt.ID))
-
-	// TODO - audit records for both the machine and tool
-
-	return c.String(http.StatusOK, "Event Raised on the Tool & Machine")
+	return c.String(http.StatusOK, "Cleared temp docs")
 }
 
 type EventCost struct {

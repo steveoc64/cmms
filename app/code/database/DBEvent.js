@@ -25,7 +25,7 @@
 	})
 
 	angular.module('cmms').factory('DBRaiseToolEvent', function($resource,ServerName){
-		return $resource(ServerName+'/event/raise/tool',{}, {
+		return $resource(ServerName+'/event/raise/tool/:id',{id: '@_id'}, {
 			'raise': {method: 'POST'},
 			'clear': {method: 'DELETE'},
 		})

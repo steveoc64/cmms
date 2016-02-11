@@ -303,8 +303,9 @@
 				}
 			},
 			unAlert: function() {
+				console.log("unalert")
 				this.eventHandler.clear({
-					tool: $stateParams.id,
+					id: $stateParams.id,
 				})
 			},
 			submitPending: function() {
