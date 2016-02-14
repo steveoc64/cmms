@@ -1,10 +1,20 @@
 todo items & test cases
 
 //////////////////////////////////////////////////////////////////
-// Works in Progress
+// Target
 
+1 oclock - simple wins
+
+- remove make/model from machine display, as we dont use it
 - on workorder, show the site / machine / tool / event
 - show workorders attached to site
+- dont be case sensitive on logins
+
+//////////////////////////////////////////////////////////////////
+// Works in Progress
+
+
+
 - on site screen, edit user list
 - on site screen, user list, toggle btns to put people on the dist list for alerts / workorders
 - publish an
@@ -18,8 +28,6 @@ todo items & test cases
 	- give it a name
 	- any other settings
 
-
-- dont be case sensitive on logins
 
 - be able to viev much more sys activity info on user sessions
 
