@@ -430,6 +430,9 @@ func login(c *echo.Context) error {
 	}
 
 	res := &loginResponse{}
+	// force usenname to lowercase
+	l.Username = strings.ToLower(l.Username)
+
 	err = DB.
 		Select("u.id,u.username,u.name,u.role,u.site_id,s.name as sitename").
 		From(`users u
