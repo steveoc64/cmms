@@ -3,8 +3,6 @@ todo items & test cases
 //////////////////////////////////////////////////////////////////
 // Target
 
-1 oclock - simple wins
-
 - remove make/model from machine display, as we dont use it
 - on workorder, show the site / machine / tool / event
 - show workorders attached to site
@@ -12,8 +10,6 @@ todo items & test cases
 
 //////////////////////////////////////////////////////////////////
 // Works in Progress
-
-
 
 - on site screen, edit user list
 - on site screen, user list, toggle btns to put people on the dist list for alerts / workorders
@@ -28,7 +24,6 @@ todo items & test cases
 	- give it a name
 	- any other settings
 
-
 - be able to viev much more sys activity info on user sessions
 
 - QA scan and apply socket updaters everywhere needed
@@ -36,6 +31,10 @@ todo items & test cases
 - All updaters to refresh page data
 
 - All editable data to have AddNew btn and simple access
+
+- On user display, be able to dig into the log file and extract their HTTP history, either by IP or name
+
+- display machine images by serialnum, not database id
 
 //////////////////////////////////////////////////////////////////
 // Event and Workorder processing
