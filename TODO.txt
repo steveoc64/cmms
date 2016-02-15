@@ -3,10 +3,25 @@ todo items & test cases
 //////////////////////////////////////////////////////////////////
 // Target
 
-- remove make/model from machine display, as we dont use it
-- on workorder, show the site / machine / tool / event
-- show workorders attached to site
+- show workorders attached to:
+ 	- site
+ 	- machine
+ 	- tool
+
+- show the event name on the workorder
+
+- apply the document display panel to :
+	- site
+	- machine
+	- tool
+
+//////////////////////////////////////////////////////////////////
+// Done Today - and committed
+
 - dont be case sensitive on logins
+- on workorder, show the site / machine / tool / event
+- remove make/model from machine display, as we dont use it
+- dashboard list, show site / machine / tool
 
 //////////////////////////////////////////////////////////////////
 // Works in Progress
