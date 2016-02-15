@@ -6,27 +6,25 @@
 
 	app.controller(base+'EditWorkorderCtrl', 
 		['$state','$stateParams','workorder','Session','$window','LxDialogService',
-		'socket','DBDocs','DBDocServer','docs','DBWODocs','event',
+		'socket','DBDocs','DBDocServer','docs','DBWODocs',
 		'LxNotificationService','DBWorkOrder','LxProgressService','Upload',
 		function($state,$stateParams,workorder,Session,$window,LxDialogService,
-			socket,DBDocs,DBDocServer,docs,DBWODocs,event,
+			socket,DBDocs,DBDocServer,docs,DBWODocs,
 			LxNotificationService,DBWorkOrder,LxProgressService,Upload){
 	
 	console.log("here with workorder =",workorder)
 	workorder.$promise.then(function(){
 		workorder.Time = workorder.StartDate.substr(workorder.StartDate.length - 5)
 		var d = new Date(workorder.StartDate)
-		console.log("js thinks the date is", d)
 		workorder.StartDate = d
 	})
-	
+
 		angular.extend(this, {
 			session: Session,
 			docs: docs,
 			formFields: getWorkOrderForm(),		
 			workOrderService: DBWorkOrder,
 			workorder: workorder,
-			event: event,
 			canEdit: function() {
 				return true
 			},
@@ -50,13 +48,13 @@
 				$state.go(base+'.edituser',{id: row.ID})
 			},
 			goMachine: function() {
-				$state.go(base+'.editmachine', {id: this.event.MachineId})
+				$state.go(base+'.editmachine', {id: this.workorder.MachineID})
 			},
 			goTool: function() {
-				$state.go(base+'.edittool', {id: this.event.ToolId})
+				$state.go(base+'.edittool', {id: this.workorder.ToolID})
 			},
 			goSite: function() {
-				$state.go(base+'.editsite',{id: this.event.SiteId})
+				$state.go(base+'.editsite',{id: this.workorder.SiteID})
 			},
       showChange: function(c) {
       	this.Audit = c

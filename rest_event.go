@@ -693,6 +693,13 @@ type DBworkorder struct {
 	Notes          string     `db:"notes"`
 	Assignees      []Assignee `db:"assignees"`
 	Skills         []WOSkill  `db:"skills"`
+	// derived fields off the event, machine, site, etc
+	SiteID      int    `db:"site_id"`
+	SiteName    string `db:"site_name"`
+	MachineID   int    `db:"machine_id"`
+	MachineName string `db:"machine_name"`
+	ToolID      int    `db:"tool_id"`
+	ToolName    string `db:"tool_name"`
 }
 
 type DBwo_skills struct {
@@ -1001,13 +1008,25 @@ func getWorkOrder(c *echo.Context) error {
 
 	// Earlier versions of Postgres, use this instead:
 	////////////////////////////////////////////////////
-	err = DB.Select("id",
-		"to_char(startdate,'YYYY-MM-DD HH24:MI') as startdate",
-		"est_duration",
-		"descr",
-		"status").
-		From("workorder").
-		Where("id=$1", id).
+	err = DB.Select("workorder.id",
+		"to_char(workorder.startdate,'YYYY-MM-DD HH24:MI') as startdate",
+		"workorder.est_duration as est_duration",
+		"workorder.descr as descr",
+		"workorder.status as status",
+		"event.site_id as site_id",
+		"site.name as site_name",
+		"event.machine_id as machine_id",
+		"machine.name as machine_name",
+		"event.tool_id as tool_id",
+		"component.name as tool_name").
+		From(`
+			workorder
+			left join event on (event.id = workorder.event_id)
+			left join site on (site.id = event.site_id)
+			left join machine on (machine.id = event.machine_id)
+			left join component on (component.id = event.tool_id)
+		`).
+		Where("workorder.id=$1", id).
 		QueryStruct(&record)
 
 	if err != nil {
