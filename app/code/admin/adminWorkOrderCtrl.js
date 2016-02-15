@@ -12,7 +12,7 @@
 			socket,DBDocs,DBDocServer,docs,DBWODocs,
 			LxNotificationService,DBWorkOrder,LxProgressService,Upload){
 	
-	console.log("here with workorder =",workorder)
+//	console.log("here with workorder =",workorder)
 	workorder.$promise.then(function(){
 		workorder.Time = workorder.StartDate.substr(workorder.StartDate.length - 5)
 		var d = new Date(workorder.StartDate)

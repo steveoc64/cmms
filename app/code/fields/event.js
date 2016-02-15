@@ -282,7 +282,7 @@ getEventFields = function() {
           label: 'Start Date',
         },
         controller: ['$scope',function($scope) {
-          console.log("startdate controller",$scope.model)
+          //console.log("startdate controller",$scope.model)
             if (!angular.isDefined($scope.model.StartDate)) {
               var d = new Date()
               $scope.model.StartDate = d            
