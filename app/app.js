@@ -216,7 +216,10 @@ var getMapURI = function(addr) {
 			      		workorder: function(DBWorkOrder,$stateParams) {
 			      			return DBWorkOrder.get({id: $stateParams.id})
 			      		},
-			      		docs: function(DBWODocs,$stateParams) {
+/*			      		event: function(DBWorkOrderEvent, $stateParams)	{
+			      			return DBWorkOrderEvent.get({id: $stateParams.id})
+			      		},
+*/			      		docs: function(DBWODocs,$stateParams) {
 			      			return DBWODocs.query({id: $stateParams.id})
 			      		},
 			      	}
