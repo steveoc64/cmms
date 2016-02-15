@@ -629,9 +629,25 @@ func queryWorkOrders(c *echo.Context) error {
 
 	// Use this with older versions of Postgres
 	////////////////////////////////////////////////////////////////
-	err = DB.Select("id", "to_char(startdate,'DD-Mon-YYYY HH24:MI') as startdate", "est_duration", "descr", "status").
-		From("workorder w").
-		OrderBy("w.startdate").
+	err = DB.Select("workorder.id",
+		"to_char(workorder.startdate,'DD-Mon-YYYY HH24:MI') as startdate",
+		"workorder.est_duration as est_duration",
+		"workorder.descr as descr",
+		"workorder.status as status",
+		"event.site_id as site_id",
+		"site.name as site_name",
+		"event.machine_id as machine_id",
+		"machine.name as machine_name",
+		"event.tool_id as tool_id",
+		"component.name as tool_name").
+		From(`
+			workorder
+			left join event on (event.id = workorder.event_id)
+			left join site on (site.id = event.site_id)
+			left join machine on (machine.id = event.machine_id)
+			left join component on (component.id = event.tool_id)
+		`).
+		OrderBy("workorder.startdate").
 		QueryStructs(&record)
 
 	if err != nil {

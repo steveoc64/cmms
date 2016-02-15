@@ -35,6 +35,7 @@
                   <tr>
                       <th> StartDate</th>
                       <th> Est Duration</th>
+                      <th> Machine</th>
                       <th> Description</th>
                       <th> Status</th>
                       <th> Assignee</th>
@@ -48,6 +49,11 @@
                         ng-repeat="row in Dashboard.workorders">
                           <td><a>{{row.StartDate}}</a></td>
                           <td><a>{{row.EstDuration}}</a></td>
+                          <td><a>
+                            {{row.SiteName}}<br>
+                            {{row.MachineName}}<br>
+                            {{row.ToolName}}
+                          </a></td>
                           <td><a>{{row.Descr}}</a></td>
                           <td><a>{{row.Status}}</a></td>
                           <td>

@@ -284,7 +284,6 @@ getEventFields = function() {
         controller: ['$scope',function($scope) {
           console.log("startdate controller",$scope.model)
             if (!angular.isDefined($scope.model.StartDate)) {
-              console.log("and in here")
               var d = new Date()
               $scope.model.StartDate = d            
               d.setMinutes(0)
@@ -304,10 +303,7 @@ getEventFields = function() {
         templateOptions: {
           type: 'time',
           label: '',
-        },
-        controller: ['$scope',function($scope) {
-          console.log("time field controller")
-        }]
+        }
       }
     },{
       name: 'eventWorkOrder.EstDuration',
