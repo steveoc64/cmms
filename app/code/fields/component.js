@@ -253,7 +253,7 @@ getComponentForm = function() {
 				{type: 'component.Descr'},
 			]
 		}
-	},{
+/*	},{
 		type: 'lx-flex',
 		templateOptions: {
 			flex: { container: "row", item: "6"},
@@ -262,7 +262,7 @@ getComponentForm = function() {
 				{type: 'component.Model'},
 			]
 		}
-	}] // end fields
+*/	}] // end fields
 }
 
 getComponentWorkerForm = function() {
