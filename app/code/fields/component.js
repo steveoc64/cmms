@@ -82,6 +82,16 @@ getComponentFields = function() {
 			}
 		}	
 	},{
+		name: 'component.ZIndex',
+		extends: 'lx-number',
+		wrapper: 'lx-wrapper-errors',
+		defaultOptions: {
+			key: 'ZIndex',
+			templateOptions: {
+				label: 'ZIndex',
+			}
+		}	
+	},{
 		name: 'component.Make',
 		extends: 'lx-input',
 		wrapper: 'lx-wrapper-errors',
@@ -229,12 +239,20 @@ getComponentForm = function() {
 	},{
 		type: 'lx-flex',
 		templateOptions: {
-			flex: {container: "row", item: "3"},
+			flex: {container: "row", item: "6"},
 			fields: [
 				{type: 'component.Site'},
 				{type: 'component.Machine'},
+			]
+		}
+	},{
+		type: 'lx-flex',
+		templateOptions: {
+			flex: {container: "row", item: "4"},
+			fields: [
 				{type: 'component.Position'},
 				{type: 'component.Qty'},
+				{type: 'component.ZIndex'},
 			]
 		}
 	},{

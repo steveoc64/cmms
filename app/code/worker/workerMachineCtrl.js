@@ -26,7 +26,44 @@
 					this.sortDir = !this.sortDir
 				}
 				this.sortField = field
-			},
+			},		
+			getSVGClass: function(m) {
+				switch (m.Status) {
+					case 'Stopped':
+						return "svg-panel stopped"
+					case 'Needs Attention':
+						return "svg-panel attn"
+					case 'Maintenance Pending':
+						return "svg-panel pending"
+					default: 
+						return "svg-panel"
+				}
+			},			
+			calcBaseComponents: function() {
+				angular.forEach(machines, function(m,k){
+					m.baseComponents = []
+					for (var i = 0; i < m.Components.length; i++) {
+						if (m.Components[i].ZIndex == 0) {
+							m.baseComponents.push(m.Components[i])
+						}
+					};
+				})
+			},					
+			toolFill: function(row) {
+				switch(row.Status) {
+					case 'Needs Attention':
+						return '#fff176'
+					case 'Maintenance Pending':
+						return '#9e9d24'
+					case 'Stopped':
+						return '#ff7043'
+					default:
+						return 'white'
+				}
+			},			
+			goTool: function(row) {
+				$state.go(base+'.edittool',{id: row.ID})
+			},			
 			getClass: function(row) {
 				if (row.selected) {
 					return "data-table__selectable-row--is-selected"
@@ -59,6 +96,14 @@
 			}
 
 		})
+
+		{
+			var vm = this
+			machines.$promise.then(function(){
+				vm.calcBaseComponents()
+			})
+		}
+
 
 	}])
 
@@ -108,23 +153,33 @@
 			docs: docs,
 			events: events,
 			components: components,
+			baseComponents: components,			
 			formFields: getMachineWorkerForm(),	
 			haltFields: getMachineHaltForm(),
 			alertFields: getMachineAlertForm(),	
 			eventHandler: DBRaiseMachineEvent,		
+			calcBaseComponents: function() {
+				this.baseComponents = []
+				for (var i = 0; i < this.components.length; i++) {
+					if (this.components[i].ZIndex == 0) {
+						this.baseComponents.push(this.components[i])
+					}
+				};
+				console.log("base components = ", this.baseComponents)
+			},			
 			getSVGClass: function() {
 				switch (this.machine.Status) {
 					case 'Stopped':
-						return "machine-svg-stopped"
+						return "svg-panel stopped"
 					case 'Needs Attention':
-						return "machine-svg-attn"
+						return "svg-panel attn"
 					case 'Maintenance Pending':
-						return "machine-svg-pending"
+						return "svg-panel pending"
 					default: 
-						return "machine-svg"
+						return "svg-panel"
 				}
-			},			
-			canEdit: function() {
+			},
+		canEdit: function() {
 				return false
 			},
 			abort: function() {
@@ -148,9 +203,28 @@
 				}
 				return tools
 			},
+			toolFill: function(row) {
+				switch(row.Status) {
+					case 'Needs Attention':
+						return '#fff176'
+					case 'Maintenance Pending':
+						return '#9e9d24'
+					case 'Stopped':
+						return '#ff7043'
+					default:
+						return 'white'
+				}
+			},			
 			toolWidth: function() {
 				if (components.length > 0) {
 					var percentage = 100 / (components.length + 1)
+					return "" + percentage + "%"
+				}
+				return "0"
+			},
+			toolWidth2: function() {
+				if (components.length > 0) {
+					var percentage = 60 / (components.length + 1)
 					return "" + percentage + "%"
 				}
 				return "0"
@@ -160,6 +234,14 @@
 				if (components.length > 0) {
 					var useIndex = components.length - index -1
 					var percentage = useIndex * (100 / components.length)
+					return "" + percentage + "%"
+				}
+				return "0"
+			},
+			toolOffset2: function(index) {				
+				if (components.length > 0) {
+					var useIndex = components.length - index -1
+					var percentage = useIndex * (60 / components.length)
 					return "" + percentage + "%"
 				}
 				return "0"
@@ -203,6 +285,13 @@
 			},			
 			
 		})
+		{
+			var vm = this
+			components.$promise.then(function(){
+				vm.calcBaseComponents()
+			})
+		}
+
 
 	}])
 

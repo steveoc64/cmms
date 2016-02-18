@@ -14,39 +14,41 @@ import (
 // Machine Maintenance
 
 type DBmachine struct {
-	ID        int          `db:"id"`
-	SiteId    int          `db:"site_id"`
-	Name      string       `db:"name"`
-	Descr     string       `db:"descr"`
-	Make      string       `db:"make"`
-	Model     string       `db:"model"`
-	Serialnum string       `db:"serialnum"`
-	IsRunning bool         `db:"is_running"`
-	Status    string       `db:"status"`
-	Stopped   dat.NullTime `db:"stopped_at"`
-	Started   dat.NullTime `db:"started_at"`
-	Alert     dat.NullTime `db:"alert_at"`
-	Picture   string       `db:"picture"`
-	SiteName  *string      `db:"site_name"`
-	Notes     string       `db:"notes"`
+	ID         int          `db:"id"`
+	SiteId     int          `db:"site_id"`
+	Name       string       `db:"name"`
+	Descr      string       `db:"descr"`
+	Make       string       `db:"make"`
+	Model      string       `db:"model"`
+	Serialnum  string       `db:"serialnum"`
+	IsRunning  bool         `db:"is_running"`
+	Status     string       `db:"status"`
+	Stopped    dat.NullTime `db:"stopped_at"`
+	Started    dat.NullTime `db:"started_at"`
+	Alert      dat.NullTime `db:"alert_at"`
+	Picture    string       `db:"picture"`
+	SiteName   *string      `db:"site_name"`
+	Notes      string       `db:"notes"`
+	Components []*DBcomponent
 }
 
 type DBmachineResponse struct {
-	ID        int     `db:"id"`
-	SiteId    int     `db:"site_id"`
-	Name      string  `db:"name"`
-	Descr     string  `db:"descr"`
-	Make      string  `db:"make"`
-	Model     string  `db:"model"`
-	Serialnum string  `db:"serialnum"`
-	IsRunning bool    `db:"is_running"`
-	Status    string  `db:"status"`
-	Stopped   *string `db:"stopped_at"`
-	Started   *string `db:"started_at"`
-	Alert     *string `db:"alert_at"`
-	Picture   string  `db:"picture"`
-	SiteName  *string `db:"site_name"`
-	Notes     string  `db:"notes"`
+	ID         int     `db:"id"`
+	SiteId     int     `db:"site_id"`
+	Name       string  `db:"name"`
+	Descr      string  `db:"descr"`
+	Make       string  `db:"make"`
+	Model      string  `db:"model"`
+	Serialnum  string  `db:"serialnum"`
+	IsRunning  bool    `db:"is_running"`
+	Status     string  `db:"status"`
+	Stopped    *string `db:"stopped_at"`
+	Started    *string `db:"started_at"`
+	Alert      *string `db:"alert_at"`
+	Picture    string  `db:"picture"`
+	SiteName   *string `db:"site_name"`
+	Notes      string  `db:"notes"`
+	Components []*DBcomponent
 }
 
 type DBmachineReq struct {
@@ -81,6 +83,39 @@ func queryMachine(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}
+	return c.JSON(http.StatusOK, record)
+}
+
+func queryMachineFull(c *echo.Context) error {
+
+	claim, err := securityCheck(c, "readMachine")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	sites := getClaimedSites(claim)
+
+	var record []*DBmachine
+	err = DB.SQL(`select m.*,s.name as site_name
+		from machine m
+		left join site s on (s.id=m.site_id)
+		where site_id in $1
+		order by lower(m.name)`, sites).QueryStructs(&record)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+
+	// For each machine, fetch all components
+	for _, m := range record {
+
+		err = DB.Select("*").
+			From("component").
+			Where("machine_id = $1", m.ID).
+			OrderBy("position,zindex,lower(name)").
+			QueryStructs(&m.Components)
+	}
+
 	return c.JSON(http.StatusOK, record)
 }
 
@@ -351,7 +386,7 @@ func queryMachineComponents(c *echo.Context) error {
 	err = DB.Select("*").
 		From("component").
 		Where("machine_id = $1", machineID).
-		OrderBy("position,lower(name)").
+		OrderBy("position,zindex,lower(name)").
 		QueryStructs(&components)
 
 	if err != nil {

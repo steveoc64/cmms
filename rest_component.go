@@ -11,6 +11,7 @@ import (
 type DBcomponent struct {
 	MachineID   int    `db:"machine_id"`
 	Position    int    `db:"position"`
+	ZIndex      int    `db:"zindex"`
 	ID          int    `db:"id"`
 	SiteId      int    `db:"site_id"`
 	Name        string `db:"name"`
@@ -159,7 +160,8 @@ func saveComponent(c *echo.Context) error {
 
 	DB.SQL(`
 		select 
-		c.id,c.name,c.position,c.site_id,c.descr,c.make,c.model,c.qty,c.stock_code,c.serialnum,c.machine_id,s.name as site_name,m.name as machine_name,c.notes
+		c.id,c.name,c.position,c.site_id,c.descr,c.make,c.model,c.qty,c.zindex,
+		c.stock_code,c.serialnum,c.machine_id,s.name as site_name,m.name as machine_name,c.notes
 		from component c
 		left join machine m on (m.id=c.machine_id)
 		left join site s on (s.id=c.site_id)
@@ -172,7 +174,9 @@ func saveComponent(c *echo.Context) error {
 	}
 
 	_, err = DB.Update("component").
-		SetWhitelist(record, "name", "position", "site_id", "descr", "make", "model", "qty", "stock_code", "serialnum", "notes").
+		SetWhitelist(record, "name", "position", "site_id",
+		"descr", "make", "model", "qty", "zindex",
+		"stock_code", "serialnum", "notes").
 		Where("id = $1", componentID).
 		Exec()
 

@@ -1,9 +1,27 @@
 .svg-panel {
-  height: 160px;
+  height: 240px;
   width: 100%;
-  background-color: $grey-50;
+  background-color: $green-100;
   border: 2px;
   stroke: $black;
+}
+.pending {
+  background-color: $lime-100;
+}
+.attn {
+  background-color: $yellow-100;
+}
+.stopped {
+  background-color: $deep-orange-200;
+}
+.hoverme:hover {
+  stroke: red;
+  stroke-width: 4;
+}
+.fillhover:hover {
+  stroke: red;
+  stroke-width: 4;
+  fill: #fffde7;
 }
 
 .svg-tool-panel {
@@ -37,7 +55,8 @@
 
 .machine-svg {
 	y: 100px;
-  width: 100%;
+  x: 100px;
+  width: 80%;
   height: 60px;
   fill: $blue-grey-600;
   fill-opacity: 0.8;
@@ -47,7 +66,8 @@
 }
 .machine-svg-pending {
 	y: 100px;
-  width: 100%;
+  x: 100px;
+  width: 80%;
   height: 60px;
   fill: $brown-500;
   fill-opacity: 0.8;
@@ -57,7 +77,8 @@
 }
 .machine-svg-attn {
 	y: 100px;
-  width: 100%;
+  x: 100px;
+  width: 80%;
   height: 60px;
   fill: $orange-500;
   fill-opacity: 0.8;
@@ -67,7 +88,8 @@
 }
 .machine-svg-stopped {
 	y: 100px;
-  width: 100%;
+  x: 100px;
+  width: 80%;
   height: 60px;
   fill: $red-700;
   fill-opacity: 0.8;
@@ -77,7 +99,7 @@
 }
 
 .tool-svg {
-  y: 90px;
+  y: 30px;
   height: 60px;
   fill: $green-200;
   fill-opacity: 0.8;
@@ -91,7 +113,7 @@
 }
 
 .tool-svg-attention {
-  y: 90px;
+  y: 30px;
   height: 60px;
   fill: $orange-600;
   fill-opacity: 0.8;
@@ -108,7 +130,7 @@
 }
 
 .tool-svg-pending {
-  y: 90px;
+  y: 30px;
   height: 60px;
   fill: $brown-600;
   fill-opacity: 0.8;
@@ -125,7 +147,7 @@
 }
 
 .tool-svg-stopped {
-	y: 90px;
+	y: 30px;
 	height: 60px;
 	fill: $red-600;
 	fill-opacity: 0.8;

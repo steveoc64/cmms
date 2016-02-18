@@ -138,6 +138,7 @@ drop table if exists component;
 create table component (
 	machine_id int not null,
 	position int not null default 1,
+	zindex int not null default 0,
 	id serial not null,
 	site_id int not null,
 	name text not null,

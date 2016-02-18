@@ -168,20 +168,29 @@
 			parts: parts,
 			events: events,
 			docs: docs,
-
+			baseComponents: components,
 			components: components,
 			formFields: getMachineForm(),		
 			logClass: logClass,
+			calcBaseComponents: function() {
+				this.baseComponents = []
+				for (var i = 0; i < this.components.length; i++) {
+					if (this.components[i].ZIndex == 0) {
+						this.baseComponents.push(this.components[i])
+					}
+				};
+				console.log("base components = ", this.baseComponents)
+			},
 			getSVGClass: function() {
 				switch (this.machine.Status) {
 					case 'Stopped':
-						return "machine-svg-stopped"
+						return "svg-panel stopped"
 					case 'Needs Attention':
-						return "machine-svg-attn"
+						return "svg-panel attn"
 					case 'Maintenance Pending':
-						return "machine-svg-pending"
+						return "svg-panel pending"
 					default: 
-						return "machine-svg"
+						return "svg-panel"
 				}
 			},
 			submit: function() {				
@@ -236,18 +245,31 @@
 						return 'tool-svg'
 				}
 			},
+			toolFill: function(row) {
+				switch(row.Status) {
+					case 'Needs Attention':
+						return '#fff176'
+					case 'Maintenance Pending':
+						return '#9e9d24'
+					case 'Stopped':
+						return '#ff7043'
+					default:
+						return 'white'
+				}
+			},
 			toolWidth: function() {
-				if (components.length > 0) {
-					var percentage = 100 / (components.length + 1)
+				if (this.baseComponents.length > 0) {
+					var percentage = 80 / (this.baseComponents.length + 1)
 					return "" + percentage + "%"
 				}
 				return "0"
 			},
 			// Note that offsets are in reverse, as we run from right to left in the display
 			toolOffset: function(index) {				
-				if (components.length > 0) {
-					var useIndex = components.length - index -1
-					var percentage = useIndex * (100 / components.length)
+				if (this.baseComponents.length > 0) {
+					var useIndex = (this.baseComponents.length + 4) - index -1
+					//console.log(index,"=",useIndex)
+					var percentage = useIndex * (80 / this.baseComponents.length)
 					return "" + percentage + "%"
 				}
 				return "0"
@@ -284,6 +306,14 @@
         })
       },			
 		})
+
+		{
+			var vm = this
+			components.$promise.then(function(){
+				vm.calcBaseComponents()
+			})
+		}
+
 
 	}])
 

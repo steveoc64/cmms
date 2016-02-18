@@ -1,3 +1,63 @@
+<div ng-repeat="row in Machines.machines">
+  <svg ng-class="Machines.getSVGClass(row)" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="50,100 10,160 90,160" style="fill:#bbb;stroke:black;stroke-width:2" />
+    <circle cx="50" cy="100" r="40" stroke="black" stroke-width="2" fill="#eee" class="fillhover"/>
+    <text x="20" y="105">Uncoiler</text>       
+    <rect x="100" y="100" ng-attr-width="{{250 + (row.baseComponents.length * 75)}}" 
+      height="60" stroke="black" stroke-width="2" fill="#eee"
+      ng-click="Machines.clickEdit(row)"/>
+    <text transform="translate(300 140)">{{row.Name}}</text>
+
+    <rect x="100" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="115" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+    <rect x="135" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="150" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+    <rect x="170" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="185" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+    <rect x="205" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="220" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+
+    <rect x="280" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="295" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+    <rect x="315" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="330" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+
+    <svg ng-repeat="comp in row.baseComponents" 
+         ng-attr-x="{{350 + $index * 75}}" 
+         ng-click="Machines.goTool(comp)">
+      <a>
+      <rect x="25" y="0" width="20" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
+      <rect y="20" width="70" rx="10" ry="10" height="80" stroke="black" stroke-width="2" 
+            ng-attr-fill="{{Machines.toolFill(comp)}}"
+            class="hoverme"/>
+      <text x="5" y="50">{{$index + 1}}</text>
+      </a>
+    </svg>
+
+    <svg ng-repeat="comp in row.baseComponents" 
+         ng-attr-x="{{350 + row.baseComponents.length * 75}}" 
+         ng-click="Machines.goTool(comp)">
+      <a>
+      <text x="50" ng-attr-y="{{30 + $index * 20}}">{{$index+1}} {{comp.Name}}</text>
+      </a>
+    </svg>
+
+    <text x="110" y="200">Electrical</text>
+    <rect x="100" y="175" width="100" rx="10" ry="10" height="45" 
+      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
+    <text x="220" y="200">Hydraulic</text>
+    <rect x="210" y="175" width="100" rx="10" ry="10" height="45" 
+      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
+    <text x="330" y="200">Printer</text>
+    <rect x="320" y="175" width="100" rx="10" ry="10" height="45" 
+      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
+    <text x="440" y="200">Console</text>
+    <rect x="430" y="175" width="100" rx="10" ry="10" height="45" 
+      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
+
+  </svg>
+</div>
+  
 <div class="data-table-container">
   <header class="data-table-header">
     <div class="data-table-header__label">
@@ -28,11 +88,11 @@
 <td colspan="5">
   <svg class="svg-panel">
     <rect class="machine-svg"/>  
-    <svg ng-repeat="row in editMachine.components" 
-         ng-attr-x="{{editMachine.toolOffset($index)}}" 
-         ng-click="editMachine.goTool(row)">
+    <svg ng-repeat="row in Machines.components" 
+         ng-attr-x="{{Machines.toolOffset($index)}}" 
+         ng-click="Machines.goTool(row)">
       <rect class="tool-svg" 
-            ng-attr-width="{{editMachine.toolWidth()}}" />
+            ng-attr-width="{{Machines.toolWidth()}}" />
       <text ng-if="row.Qty > 1" transform="translate(40 140)">x{{row.Qty}}</text>
       <text class="label-svg" 
             transform="translate(20) rotate(40 0,0) translate(0 20)">{{row.StockCode}}<tspan x="16" y="16">{{row.Name}}</tspan>
