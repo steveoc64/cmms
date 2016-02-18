@@ -58,6 +58,9 @@ func GetSMSBalance() (int, error) {
 
 func SendSMS(number string, message string, ref string) error {
 
+	log.Println("Sending SMS to", number, ":", message)
+	return nil
+
 	resp, err := http.PostForm(
 		Config.SMSServer,
 		url.Values{
