@@ -58,3 +58,5 @@ alter table workorder add notes text not null default  '';
 
 
 alter table component add zindex int not null default 0;
+
+alter table event add infrastucture text not null default '';

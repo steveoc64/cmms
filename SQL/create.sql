@@ -221,6 +221,7 @@ create table event (
 	type text not null,
 	machine_id int not null,
 	tool_id int not null,
+	infrastucture text not null default '',
 	priority int not null,
 	status text not null default '',
 	startdate timestamptz not null default localtimestamp,
