@@ -6,13 +6,18 @@
 
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
-		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine){
+		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window',
+		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
+			LxProgressService,DBRaiseMachineEvent,$stateParams,$window){
 
 		// Subscribe to changes in the machine list	
 		var vm = this
-		socket.on("machine",function(msg){
+		socket.on("machine not",function(msg){
 			console.log("Machine event - reload full list",msg)
-			vm.machines = DBMachine.query()					
+			vm.machines = DBMachine.query()			
+			vm.machines.$promise.then(function(){
+				vm.calcBaseComponents()
+			})
 		})
 
 		angular.extend(this, {
@@ -21,6 +26,15 @@
 			sortField: 'Name',
 			sortDir: false,
 			socket: socket,
+			alertFields: getMachineAlertForm(),	
+			eventHandler: DBRaiseMachineEvent,	
+			eventFields: {
+				machineName: "",
+				machineID: 0,
+				toolID: 0,
+				toolName: "",
+				type: "Tool",
+			},
 			setSort: function(field) {
 				if (this.sortField == field) {
 					this.sortDir = !this.sortDir
@@ -93,7 +107,40 @@
 				if (row.SiteId != 0) {
 					$state.go(base+'.editsite',{id: row.SiteId})
 				}
-			}
+			},
+			raiseIssue: function(machine,comp,id,type) {
+				this.eventFields.machineName = machine.Name
+				this.eventFields.toolName = comp.Name
+				this.eventFields.toolID = id
+				this.eventFields.machineID = machine.ID
+				this.eventFields.type = type
+				console.log(machine,comp,this.eventFields)
+				LxDialogService.open('raiseIssueDialog')			
+			},
+			submitAlert: function() {
+				this.eventHandler.raise({
+					machineID: this.eventFields.machineID,
+					toolID: this.eventFields.toolID,
+					type: this.eventFields.type,
+					action: 'Alert',
+					descr: this.eventFields.AlertDescr
+				})
+				LxDialogService.close('raiseIssueDialog')
+			},
+			submitHalt: function() {
+				this.eventHandler.raise({
+					machine: $stateParams.id,
+					action: 'Halt',
+					descr: this.eventFields.HaltDescr
+				})
+				LxDialogService.close('raiseIssueDialog')
+				$window.history.go(-1)
+			},
+			getDoc: function(row) {
+				console.log('Get document',row.ID)
+				var adoc = DBDocServer.get({id: row.ID})
+			},			
+
 
 		})
 

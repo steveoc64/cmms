@@ -59,4 +59,5 @@ alter table workorder add notes text not null default  '';
 
 alter table component add zindex int not null default 0;
 
-alter table event add infrastucture text not null default '';
+-- alter table event add infrastucture text not null default '';
+alter table event add tool_type text not null default 'Tool';

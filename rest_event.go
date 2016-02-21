@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/labstack/echo"
-	"gopkg.in/guregu/null.v3"
-	"gopkg.in/mgutz/dat.v1"
 	"log"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/labstack/echo"
+	"gopkg.in/guregu/null.v3"
+	"gopkg.in/mgutz/dat.v1"
 )
 
 ///////////////////////////////////////////////////////////////////////
@@ -21,6 +22,7 @@ type DBevent struct {
 	Type         string       `db:"type"`
 	MachineId    int          `db:"machine_id"`
 	ToolId       int          `db:"tool_id"`
+	ToolType     string       `db:"tool_type"`
 	Priority     int          `db:"priority"`
 	StartDate    dat.NullTime `db:"startdate"`
 	CreatedBy    int          `db:"created_by"`
@@ -60,9 +62,11 @@ type DBeventResponse struct {
 }
 
 type MachineEventRequest struct {
-	Machine string `json:"machine"`
-	Descr   string `json:"descr"`
-	Action  string `json:"action"`
+	MachineID int    `json:"machineID"`
+	ToolID    int    `json:"toolID"`
+	Descr     string `json:"descr"`
+	Action    string `json:"action"`
+	Type      string `json:"type"`
 }
 
 type ToolEventRequest struct {
@@ -263,20 +267,20 @@ func raiseEventMachine(c *echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	log.Println("Request:", req)
+	log.Println("Machine Request:", req)
 
 	// Lookup the machine
 	var siteId int
-	var machineId int
-	machineId, err = strconv.Atoi(req.Machine)
-	if err != nil {
-		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Machine ID %s", req.Machine))
-	}
+	// var machineId int
+	// machineId, err = strconv.Atoi(req.MachineID)
+	// if err != nil {
+	// return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Machine ID %s", req.MachineID))
+	// }
 
 	var machineName string
-	err = DB.SQL(`select site_id,name from machine where id=$1`, machineId).QueryScalar(&siteId, &machineName)
+	err = DB.SQL(`select site_id,name from machine where id=$1`, req.MachineID).QueryScalar(&siteId, &machineName)
 	if err != nil {
-		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Site ID for Machine %d: %s", machineId, err.Error()))
+		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid Site ID for Machine %d: %s", req.MachineID, err.Error()))
 	}
 
 	UID, Username := getClaimedUser(claim)
@@ -285,8 +289,9 @@ func raiseEventMachine(c *echo.Context) error {
 	evt := &DBevent{
 		SiteId:    siteId,
 		Type:      fmt.Sprintf("%s", req.Action),
-		MachineId: machineId,
-		ToolId:    0,
+		MachineId: req.MachineID,
+		ToolId:    req.ToolID,
+		ToolType:  req.Type,
 		Priority:  1,
 		CreatedBy: UID,
 		Notes:     req.Descr,
@@ -303,14 +308,14 @@ func raiseEventMachine(c *echo.Context) error {
 		_, err = DB.SQL(`update machine 
 			set alert_at=localtimestamp, status=$2 
 			where id=$1`,
-			machineId,
+			req.MachineID,
 			`Needs Attention`).
 			Exec()
 	case "Halt":
 		_, err = DB.SQL(`update machine 
 			set stopped_at=localtimestamp, status=$2, is_running=false
 			where id=$1`,
-			machineId,
+			req.MachineID,
 			`Stopped`).
 			Exec()
 	}
@@ -320,7 +325,7 @@ func raiseEventMachine(c *echo.Context) error {
 	}
 
 	log.Println("Raising Event", evt.ID, evt, "User:", Username)
-	publishSocket("machine", machineId)
+	publishSocket("machine", req.MachineID)
 	publishSocket("event", evt.ID)
 
 	// send SMS to all people on the distribution list for this site
@@ -379,6 +384,7 @@ func raiseEventTool(c *echo.Context) error {
 		Type:      fmt.Sprintf("%s", req.Action),
 		MachineId: machineId,
 		ToolId:    toolId,
+		ToolType:  "Tool",
 		Priority:  1,
 		CreatedBy: UID,
 		Notes:     req.Descr,
