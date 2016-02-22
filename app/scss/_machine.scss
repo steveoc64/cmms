@@ -16,12 +16,13 @@
 }
 .hoverme:hover {
   stroke: red;
-  stroke-width: 4;
+  stroke-width: 3;
 }
 .fillhover:hover {
   stroke: red;
-  stroke-width: 4;
+  stroke-width: 3;
   fill: #fffde7;
+  fill: white;
 }
 
 .svg-tool-panel {

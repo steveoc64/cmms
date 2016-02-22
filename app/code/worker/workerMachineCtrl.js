@@ -62,6 +62,8 @@
 						}
 					};
 				})
+
+				// for each base component, create an array of sub-components
 			},					
 			toolFill: function(row) {
 				switch(row.Status) {
@@ -116,6 +118,9 @@
 				this.eventFields.type = type
 				console.log(machine,comp,this.eventFields)
 				LxDialogService.open('raiseIssueDialog')			
+			},
+			showComponent: function(comp) {
+//				console.log("mouseover",comp.Name)
 			},
 			submitAlert: function() {
 				this.eventHandler.raise({
