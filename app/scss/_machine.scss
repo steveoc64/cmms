@@ -1,9 +1,12 @@
 .svg-panel {
   height: 170px;
   width: 100%;
-  background-color: $green-100;
+  // background-color: $green-100;
   border: 2px;
   stroke: $black;
+}
+.svg-panel:hover {
+  background-color: #eee; 
 }
 .pending {
   background-color: $lime-100;

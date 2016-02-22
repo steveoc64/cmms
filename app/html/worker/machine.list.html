@@ -70,7 +70,8 @@
 
 
 <div ng-repeat="row in Machines.machines">
-  <svg ng-class="Machines.getSVGClass(row)" xmlns="http://www.w3.org/2000/svg">
+  <!-- <svg ng-class="Machines.getSVGClass(row)" xmlns="http://www.w3.org/2000/svg"> -->
+  <svg class="svg-panel" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" style="stop-color:#eee;stop-opacity:1" />
@@ -84,6 +85,15 @@
         <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
         <stop offset="100%" style="stop-color:#abd;stop-opacity:1" />
       </linearGradient>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="2 2" result="shadow"/>
+        <feOffset dx="3" dy="3"/>
+      </filter>      
+      <filter id="shadow1" x="0" y="0" width="200%" height="200%">
+        <feOffset result="offOut" in="SourceAlpha" dx="1" dy="1" />
+        <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+        <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+      </filter>
     </defs>
 
     <g stroke="#114" stroke-width="2" 
@@ -99,6 +109,26 @@
       height="60" stroke="black" stroke-width="2" fill="url(#grad1)"/>
       <!-- ng-click="Machines.clickEdit(row)"/> -->
     <text transform="translate(270 140)">{{row.SiteName}} - {{row.Name}}</text>
+
+    <g ng-if="row.Status == 'Needs Attention'"
+       font-size="52"
+       stroke="black" fill="black">
+        <text x="1400" y="80" stroke-width="2" filter="url(#shadow)">Attention</text>
+        <text x="1400" y="80" stroke-width="2" stroke="#fa0" fill="yellow">Attention</text>
+    </g>
+    <g ng-if="row.Status == 'Stopped'"
+       font-size="52"
+       stroke="black" fill="black">
+        <text x="1400" y="80" stroke-width="2" filter="url(#shadow)">Stopped</text>
+        <text x="1400" y="80" stroke-width="2" stroke="#a00" fill="red">Stopped</text>
+    </g>
+    <g ng-if="row.Status == 'Maintenance Pending'"
+       font-size="52"
+       stroke="black" fill="black">
+        <text x="1400" y="80" stroke-width="2" filter="url(#shadow)">Maint Due</text>
+        <text x="1400" y="80" stroke-width="2" stroke="#048" fill="#08f">Maint Due</text>
+    </g>
+
 
     <g stroke="#114" stroke-width="2" 
           ng-click="Machines.raiseIssue(row,0,0,'Rollbed')" 
