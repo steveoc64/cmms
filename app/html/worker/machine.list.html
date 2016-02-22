@@ -8,18 +8,37 @@
         </div>
     </div>
     <div class="dialog__content">   
-      <lx-tabs links-tc="light" links-bgc="blue-500" indicator="yellow-500" no-divider="true" layout="inline">
+<!--       <lx-tabs links-tc="light" links-bgc="blue-500" indicator="yellow-500" no-divider="true" layout="inline">
         <lx-tab heading="Needs Attention">
-          <div class="p++">
+ -->    
+        <div class="p++">
             <form name="Machines.alertForm" ng-submit="Machines.submitAlert()">          
+              <div flex-container="row" ng-if="Machines.eventFields.tool.subComp.length > 0">
+                <div ng-repeat="c in Machines.eventFields.tool.subComp" flex-item="4">
+                  <svg x="0" y="0">
+                    <a>
+                    <rect x="80" y="0" width="20" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
+                    <rect y="20" width="180" rx="10" ry="10" height="80" stroke="black" stroke-width="2" 
+                          fill="#eee"/>
+                    <text x="10" y="50">{{c.Name}}</text>
+                    </a>
+                  </svg>
+                </div>
+              </div>
               <formly-form model="Machines.eventFields" fields="Machines.alertFields"></formly-form>
+                <div flex-item="10">
+                  <lx-file-input label="Add Photo / Document ..." value="filename" change="Machines.eventUpload(e)"></lx-file-input>
+                </div>
+                <div flex-item="2">
+                  <div id="upload-progress">{{Machines.uploadProgress}}</div>          
+                </div>              
               <div class="dialog__actions">
                 <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
                 <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Alert</button>
               </div>    
           </form>
-          </div>
-        </lx-tab>
+        </div>
+        <!-- </lx-tab> -->
 <!--         <lx-tab heading="Halt">
           <div class="p++">
             <form name="editMachine.haltForm" ng-submit="editMachine.submitHalt()">          
@@ -31,33 +50,57 @@
               </form>
           </div>
         </lx-tab>
- -->      </lx-tabs>
+ -->   
+    <!-- </lx-tabs> -->
     </div>
 </lx-dialog>
 
 
-<div flex-container="row" flex-align="space-between center"><img src="img/aust.png" alt="" flex-item="2"></div>
+<div flex-container="row" flex-align="space-between center">
+  <div flex-item="9">
+    <img src="img/aust.png" alt="" flex-item="2">
+  </div>
+  <div flex-item="2">
+    <h1>Edinburgh Factory</h1>
+  </div>
+</div>
+
 
 <div ng-repeat="row in Machines.machines">
   <svg ng-class="Machines.getSVGClass(row)" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="200,100 160,160 240,160" style="fill:#bbb;stroke:black;stroke-width:2" />
+    <defs>
+      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#eee;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#869ab1;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="bgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#9ac;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="bgradh" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#abd;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+
     <g stroke="#114" stroke-width="2" 
           ng-click="Machines.raiseIssue(row,0,0,'Uncoiler')" 
           class="fillhover"
           lx-tooltip="Raise Issue with Uncoiler" tooltip-position="right">
+      <polygon points="200,100 160,160 240,160" fill="url(#grad1)"/>
       <circle cx="200" cy="100" r="40" fill="#eee"/>
       <text x="170" y="105" stroke-width="1" fill="black">UnCoiler</text>       
     </g>
 
-    <rect x="250" y="100" ng-attr-width="{{250 + (row.baseComponents.length * 75)}}" 
-      height="60" stroke="black" stroke-width="2" fill="#eee"/>
+    <rect x="250" y="100" ng-attr-width="{{250 + (row.baseComponents.length * 65)}}" 
+      height="60" stroke="black" stroke-width="2" fill="url(#grad1)"/>
       <!-- ng-click="Machines.clickEdit(row)"/> -->
     <text transform="translate(270 140)">{{row.SiteName}} - {{row.Name}}</text>
 
     <g stroke="#114" stroke-width="2" 
           ng-click="Machines.raiseIssue(row,0,0,'Rollbed')" 
           class="fillhover"
-          lx-tooltip="Roll Bed" tooltip-position="top">
+          lx-tooltip="Raise Issue with Roll Bed" tooltip-position="top">
   
     <rect x="250" y="60" width="30" height="40" fill="#eee"/>
       <circle cx="265" cy="73" r="6" fill="#ccc"/>
@@ -81,12 +124,12 @@
     </g>
 
     <svg ng-repeat="comp in row.baseComponents" 
-         ng-attr-x="{{500 + $index * 75}}" 
+         ng-attr-x="{{500 + $index * 65}}" 
          lx-tooltip="{{comp.Name}}" tooltip-position="bottom"
          ng-click="Machines.raiseIssue(row,comp,comp.ID,'tool')">
       <a>
-      <rect x="25" y="0" width="20" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
-      <rect y="20" width="70" rx="10" ry="10" height="80" stroke="black" stroke-width="2" 
+      <rect x="20" y="0" width="20" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
+      <rect y="20" width="60" rx="10" ry="10" height="80" stroke="black" stroke-width="2" 
             ng-attr-fill="{{Machines.toolFill(comp)}}"
             class="hoverme"/>
       <text x="5" y="50">{{$index + 1}}</text>
@@ -103,30 +146,27 @@
  -->
     <g stroke="#114" stroke-width="2" 
           ng-click="Machines.raiseIssue(row,0,0,'Electrical')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue - Electrical" tooltip-position="right">
-      <rect x="10" y="10" width="100" rx="10" ry="10" height="30" fill="#eee" class="fillhover"/>
+          class="fillhover">
+      <rect x="10" y="10" width="100" rx="10" ry="10" height="30" fill="url(#bgrad)" class="bhover"/>
       <text x="20" y="30" fill="black" stroke-width="1">Electrical</text>
     </g>
     <g stroke="#114" stroke-width="2" 
           ng-click="Machines.raiseIssue(row,0,0,'Hydraulic')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue - Hydraulic" tooltip-position="right">
-      <rect x="10" y="50" width="100" rx="10" ry="10" height="30" fill="#eee" class="fillhover"/>
+          class="fillhover">
+      <rect x="10" y="50" width="100" rx="10" ry="10" height="30" fill="url(#bgrad)" class="bhover"/>
       <text x="20" y="70" fill="black" stroke-width="1">Hydraulic</text>
     </g>
     <g stroke="#114" stroke-width="2" 
           ng-click="Machines.raiseIssue(row,0,0,'Printer')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue - Printer" tooltip-position="right">
-      <rect x="10" y="90" width="100" rx="10" ry="10" height="30" fill="#eee" class="fillhover"/>
+          class="fillhover">
+      <rect x="10" y="90" width="100" rx="10" ry="10" height="30" fill="url(#bgrad)" class="bhover"/>
       <text x="20" y="110" fill="black" stroke-width="1">Printer</text>
     </g>
+          <!-- lx-tooltip="Raise Issue - Printer" tooltip-position="right"> -->
     <g stroke="#114" stroke-width="2" 
           ng-click="Machines.raiseIssue(row,0,0,'Console')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue - Console" tooltip-position="right">
-      <rect x="10" y="130" width="100" rx="10" ry="10" height="30" fill="#eee" class="fillhover"/>
+          class="fillhover">
+      <rect x="10" y="130" width="100" rx="10" ry="10" height="30" fill="url(#bgrad)" class="bhover"/>
       <text x="20" y="150" fill="black" stroke-width="1">Console</text>
     </g>
 <!-- 

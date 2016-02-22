@@ -35,7 +35,7 @@ getMachineFields = function() {
 			key: 'AlertDescr',
 			templateOptions: {
 				type: 'text',
-				label: 'Description of Alert',
+				label: 'Description of Problem',
 			}
 		}	
 	},{

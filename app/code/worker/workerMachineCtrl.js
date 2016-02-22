@@ -61,9 +61,21 @@
 							m.baseComponents.push(m.Components[i])
 						}
 					};
+					// for each base component, create an array of sub-components
+					angular.forEach(m.baseComponents, function(bcomp,ckey){
+						bcomp.subComp = []
+						for (var i = 0; i < m.Components.length; i++) {							
+							if (m.Components[i].ZIndex > 0 && m.Components[i].Position == bcomp.Position) {
+								// then m.Component[i] is a sub-conponent of bcomp
+								bcomp.subComp.push(m.Components[i])
+							}
+						}
+						if (bcomp.subComp.length > 0) {
+							console.log("has subs", bcomp)
+						}
+					})
 				})
 
-				// for each base component, create an array of sub-components
 			},					
 			toolFill: function(row) {
 				switch(row.Status) {
@@ -116,6 +128,7 @@
 				this.eventFields.toolID = id
 				this.eventFields.machineID = machine.ID
 				this.eventFields.type = type
+				this.eventFields.tool = comp
 				console.log(machine,comp,this.eventFields)
 				LxDialogService.open('raiseIssueDialog')			
 			},

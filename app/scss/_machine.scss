@@ -24,6 +24,13 @@
   fill: #fffde7;
   fill: white;
 }
+.bhover:hover {
+  stroke: red;
+  stroke-width: 3;
+  fill: #fffde7;
+  fill: white;
+  fill: url(#bgradh)
+}
 
 .svg-tool-panel {
   height: 160px;
