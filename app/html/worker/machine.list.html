@@ -25,6 +25,9 @@
                   </svg>
                 </div>
               </div>
+              <div flex-container="row" ng-if="Machines.eventFields.tool.subComp.length > 0">
+                <h4>Which Tools in this frame are part of the problem ?</h4>
+              </div>
               <formly-form model="Machines.eventFields" fields="Machines.alertFields"></formly-form>
                 <div flex-item="10">
                   <lx-file-input label="Add Photo / Document ..." value="filename" change="Machines.eventUpload(e)"></lx-file-input>
