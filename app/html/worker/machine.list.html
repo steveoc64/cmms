@@ -117,7 +117,7 @@
           <stop offset="95%" stop-color="#888"/>
       </radialGradient>
       <radialGradient id="RedBtn">   <!--  fx="60%" fy="30%"> -->
-          <stop offset="10%" stop-color="#f00">
+          <stop offset="10%" stop-color="#fa0">
             <animate attributeName="stop-color"
             values="#f00;#f80;#fa0;#f80;#f00"
             dur="0.8s"
@@ -182,18 +182,18 @@
     <!-- Add the status indicators -->
     <g ng-if="row.Status == 'Running'"
        stroke="black" fill="url(#GreenBtn)">
-      <circle cx="{{240 + (row.baseComponents.length * 50) - 60}}" cy="120" r="18"/>
-      <circle cx="{{240 + (row.baseComponents.length * 50) - 20}}" fill="url(#DullYellowBtn)" cy="120" r="18"/>
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" fill="url(#DullYellowBtn)" cy="120" r="18"/>
     </g>
     <g ng-if="row.Status == 'Needs Attention'"
        stroke="black" fill="url(#YellowBtn)">
-      <circle cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/>
-      <circle cx="{{240 + (row.baseComponents.length * 50) - 20}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/>
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" cy="120" r="18"/>
     </g>
     <g ng-if="row.Status == 'Stopped'"
        stroke="black" fill="url(#RedBtn)">
-      <circle cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/>
-      <circle cx="{{240 + (row.baseComponents.length * 50) - 20}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/>
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" cy="120" r="18"/>
     </g>
 
     
