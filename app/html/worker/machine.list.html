@@ -182,23 +182,23 @@
     <!-- Add the status indicators -->
     <g ng-if="row.Status == 'Running'"
        stroke="black" fill="url(#GreenBtn)">
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" cy="120" r="18"/>
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" fill="url(#DullYellowBtn)" cy="120" r="18"/>
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" fill="url(#DullYellowBtn)" cy="120" r="18"/> -->
     </g>
     <g ng-if="row.Status == 'Needs Attention'"
        stroke="black" fill="url(#YellowBtn)">
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/>
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" cy="120" r="18"/>
+      <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
     </g>
     <g ng-if="row.Status == 'Maintenance Pending'"
        stroke="black" fill="url(#YellowBtn)">
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/>
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" cy="120" r="18"/>
+      <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
     </g>
     <g ng-if="row.Status == 'Stopped'"
        stroke="black" fill="url(#RedBtn)">
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/>
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" cy="120" r="18"/>
+      <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
+      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
     </g>
 
     
