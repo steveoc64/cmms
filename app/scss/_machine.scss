@@ -1,9 +1,10 @@
 .svg-panel {
-  height: 170px;
-  width: 100%;
+  height: 140px;
+  width: 900px;
   // background-color: $green-100;
   border: 2px;
   stroke: $black;
+  overflow: scroll;
 }
 .svg-panel:hover {
   background-color: #eee; 
