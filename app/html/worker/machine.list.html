@@ -258,7 +258,7 @@
  -->
     <svg ng-repeat="comp in row.baseComponents" 
          ng-attr-x="{{240 + $index * 50}}" 
-         lx-tooltip="{{comp.Name}}" tooltip-position="bottom"
+         lx-tooltip="{{comp.Name}} - {{comp.Status}}" tooltip-position="bottom"
          ng-click="Machines.raiseIssue(row,comp,comp.ID,'tool')">
       <a>
       <rect x="16" y="0" width="15" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
