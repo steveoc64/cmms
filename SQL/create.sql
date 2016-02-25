@@ -131,7 +131,14 @@ create table machine (
 	started_at timestamptz,
 	alert_at timestamptz,
 	picture text not null default '',
-	notes text not null default ''
+	notes text not null default '',
+	electrical text not null default 'Running',
+	hydraulic text not null default 'Running',
+	printer text not null default 'Running',
+	console text not null default 'Running',
+	rollbed text not null default 'Running',
+	uncoiler text not null default 'Running',
+	lube text not null default 'Running'
 );
 
 drop table if exists site_layout;

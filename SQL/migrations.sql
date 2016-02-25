@@ -72,3 +72,12 @@ create table site_layout (
 );
 create index site_layout_idx on site_layout (site_id, seq);
 
+alter table machine add	electrical text not null default 'Running';
+alter table machine add	hydraulic text not null default 'Running';
+alter table machine add	printer text not null default 'Running';
+alter table machine add	console text not null default 'Running';
+alter table machine add	rollbed text not null default 'Running';
+alter table machine add	uncoiler text not null default 'Running';
+alter table machine add	lube text not null default 'Running';
+
+

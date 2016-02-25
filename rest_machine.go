@@ -29,6 +29,13 @@ type DBmachine struct {
 	Picture    string       `db:"picture"`
 	SiteName   *string      `db:"site_name"`
 	Notes      string       `db:"notes"`
+	Electrical string       `db:"electrical"`
+	Hydraulic  string       `db:"hydraulic"`
+	Printer    string       `db:"printer"`
+	Console    string       `db:"console"`
+	Rollbed    string       `db:"rollbed"`
+	Uncoiler   string       `db:"uncoiler"`
+	Lube       string       `db:"lube"`
 	Components []*DBcomponent
 }
 
