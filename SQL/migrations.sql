@@ -61,3 +61,14 @@ alter table component add zindex int not null default 0;
 
 -- alter table event add infrastucture text not null default '';
 alter table event add tool_type text not null default 'Tool';
+
+
+drop table if exists site_layout;
+create table site_layout (
+	site_id int not null,
+	seq int not null,
+	machine_id int not null,
+	span int not null
+);
+create index site_layout_idx on site_layout (site_id, seq);
+

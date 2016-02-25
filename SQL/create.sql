@@ -131,8 +131,17 @@ create table machine (
 	started_at timestamptz,
 	alert_at timestamptz,
 	picture text not null default '',
-	notes text not null default ''	
+	notes text not null default ''
 );
+
+drop table if exists site_layout;
+create table site_layout (
+	site_id int not null,
+	seq int not null,
+	machine_id int not null,
+	span int not null
+);
+create index site_layout_idx on site_layout (site_id, seq);
 
 drop table if exists component;
 create table component (
