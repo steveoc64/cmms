@@ -158,18 +158,25 @@
       <image xlink:href="/img/hydraulic.png" x="51" y="2" height="38px" width="38px"/>
     </g>
     <g stroke="#114" stroke-width="1" 
+          ng-click="Machines.raiseIssue(row,0,0,'Lube')" 
+          class="fillhover"
+          lx-tooltip="Lube" tooltip-position="top">
+      <rect x="100" y="0" width="40" rx="3" ry="3" height="40" fill="url(#bgrad)" class="bhover"/>
+      <image xlink:href="/img/lube.png" x="101" y="2" height="38px" width="38px"/>
+    </g>
+    <g stroke="#114" stroke-width="1" 
           ng-click="Machines.raiseIssue(row,0,0,'Printer')" 
           class="fillhover"
           lx-tooltip="Printer" tooltip-position="top">
-      <rect x="100" y="0" width="40" rx="3" ry="3" height="40" fill="url(#bgrad)" class="bhover"/>
-      <image xlink:href="/img/printer.png" x="101" y="2" height="38px" width="38px"/>
+      <rect x="150" y="0" width="40" rx="3" ry="3" height="40" fill="url(#bgrad)" class="bhover"/>
+      <image xlink:href="/img/printer.png" x="151" y="2" height="38px" width="38px"/>
     </g>
     <g stroke="#114" stroke-width="1" 
           ng-click="Machines.raiseIssue(row,0,0,'Console')" 
           class="fillhover"
           lx-tooltip="Console" tooltip-position="top">
-      <rect x="150" y="0" width="40" rx="3" ry="3" height="40" fill="url(#bgrad)" class="bhover"/>
-      <image xlink:href="/img/console.png" x="150" y="2" height="38px" width="38px"/>
+      <rect x="200" y="0" width="40" rx="3" ry="3" height="40" fill="url(#bgrad)" class="bhover"/>
+      <image xlink:href="/img/console.png" x="201" y="2" height="38px" width="38px"/>
     </g>
     
     <!-- Add main rectangle -->
@@ -182,23 +189,23 @@
     <!-- Add the status indicators -->
     <g ng-if="row.Status == 'Running'"
        stroke="black" fill="url(#GreenBtn)">
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
       <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" fill="url(#DullYellowBtn)" cy="120" r="18"/> -->
     </g>
     <g ng-if="row.Status == 'Needs Attention'"
        stroke="black" fill="url(#YellowBtn)">
       <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
     </g>
     <g ng-if="row.Status == 'Maintenance Pending'"
        stroke="black" fill="url(#YellowBtn)">
       <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
     </g>
     <g ng-if="row.Status == 'Stopped'"
        stroke="black" fill="url(#RedBtn)">
       <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
-      <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
     </g>
 
     
@@ -257,7 +264,7 @@
     </g>
  -->
     <svg ng-repeat="comp in row.baseComponents" 
-         ng-attr-x="{{240 + $index * 50}}" 
+         ng-attr-x="{{250 + $index * 50}}" 
          lx-tooltip="{{comp.Name}} - {{comp.Status}}" tooltip-position="bottom"
          ng-click="Machines.raiseIssue(row,comp,comp.ID,'tool')">
       <a>
