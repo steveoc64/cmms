@@ -28,6 +28,7 @@ type DBmachine struct {
 	Alert      dat.NullTime `db:"alert_at"`
 	Picture    string       `db:"picture"`
 	SiteName   *string      `db:"site_name"`
+	Span       *string      `db:"span"`
 	Notes      string       `db:"notes"`
 	Electrical string       `db:"electrical"`
 	Hydraulic  string       `db:"hydraulic"`
@@ -54,7 +55,15 @@ type DBmachineResponse struct {
 	Alert      *string `db:"alert_at"`
 	Picture    string  `db:"picture"`
 	SiteName   *string `db:"site_name"`
+	Span       *string `db:"span"`
 	Notes      string  `db:"notes"`
+	Electrical string  `db:"electrical"`
+	Hydraulic  string  `db:"hydraulic"`
+	Printer    string  `db:"printer"`
+	Console    string  `db:"console"`
+	Rollbed    string  `db:"rollbed"`
+	Uncoiler   string  `db:"uncoiler"`
+	Lube       string  `db:"lube"`
 	Components []*DBcomponent
 }
 
@@ -103,11 +112,18 @@ func queryMachineFull(c *echo.Context) error {
 	sites := getClaimedSites(claim)
 
 	var record []*DBmachine
-	err = DB.SQL(`select m.*,s.name as site_name
+	err = DB.SQL(`select m.*,s.name as site_name,x.span as span
 		from machine m
 		left join site s on (s.id=m.site_id)
-		where site_id in $1
-		order by lower(m.name)`, sites).QueryStructs(&record)
+		left join site_layout x on (x.site_id=m.site_id and x.machine_id=m.id)
+		where m.site_id in $1
+		order by x.seq,lower(m.name)`, sites).QueryStructs(&record)
+
+	// err = DB.SQL(`select m.*,s.name as site_name
+	// 	from machine m
+	// 	left join site s on (s.id=m.site_id)
+	// 	where site_id in $1
+	// 	order by lower(m.name)`, sites).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
@@ -176,6 +192,7 @@ func getMachine(c *echo.Context) error {
 
 	err = DB.SQL(`select m.id,m.site_id,m.name,m.descr,m.make,m.model,m.serialnum,
 			m.is_running,m.status,m.picture,m.notes,
+			m.electrical,m.hydraulic,m.printer,m.console,m.rollbed,m.uncoiler,m.lube,
 			to_char(m.started_at,'DD Mon YYYY HH24:MI:SS pm') as started_at,
 			to_char(m.stopped_at,'DD Mon YYYY HH24:MI:SS pm') as stopped_at,
 			to_char(m.alert_at,'DD Mon YYYY HH24:MI:SS pm') as alert_at,

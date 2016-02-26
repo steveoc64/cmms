@@ -70,9 +70,9 @@
 								bcomp.subComp.push(m.Components[i])
 							}
 						}
-						if (bcomp.subComp.length > 0) {
-							console.log("has subs", bcomp)
-						}
+						// if (bcomp.subComp.length > 0) {
+						// 	console.log("has subs", bcomp)
+						// }
 					})
 				})
 
