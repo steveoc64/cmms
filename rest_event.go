@@ -253,6 +253,9 @@ func queryToolEvents(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+// TODO - bring this code into line with the tool event, as this is the entry point for
+// raising events from the machine list screen now
+
 func raiseEventMachine(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "writeEvent")
