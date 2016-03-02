@@ -20,6 +20,11 @@ body {
 
 // Now that everything is defined, provide last minute overrides for bits of CSS
 
+h1 {
+  font-size: 55px;
+  color: #024;
+}
+
 .data-table {
   td {
     a {

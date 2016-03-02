@@ -6,9 +6,9 @@
 
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
-		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window',
+		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
-			LxProgressService,DBRaiseMachineEvent,$stateParams,$window){
+			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites){
 
 		// Subscribe to changes in the machine list	
 		var vm = this
@@ -20,6 +20,9 @@
 			})
 		})
 
+		sites.$promise.then(function(){
+			console.log("got sites =",sites[0].Name)			
+		})
 		angular.extend(this, {
 			machines: machines,
 			session: Session,
@@ -28,6 +31,7 @@
 			socket: socket,
 			alertFields: getMachineAlertForm(),	
 			eventHandler: DBRaiseMachineEvent,	
+			sites: sites,
 			eventFields: {
 				machineName: "",
 				machineID: 0,
@@ -158,8 +162,6 @@
 				console.log('Get document',row.ID)
 				var adoc = DBDocServer.get({id: row.ID})
 			},			
-
-
 		})
 
 		{

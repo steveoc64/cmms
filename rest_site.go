@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/labstack/echo"
+	"log"
 	"net/http"
 )
 
@@ -41,20 +42,24 @@ func getRelatedSites(siteID int) []int {
 	return relatedSites
 }
 
-// Get a list of all sites
+// Get a list of all sites, limited to the sites that this user can see !
 func querySites(c *echo.Context) error {
 
-	_, err := securityCheck(c, "readSite")
+	claim, err := securityCheck(c, "readSite")
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
+
+	Sites := getClaimedSites(claim)
+	log.Println("==============", Sites)
 
 	var record []*DBsite
 	err = DB.SQL(`select s.*,p.name as parent_site_name,t.name as stock_site_name
 		from site s
 		left join site p on (p.id=s.parent_site)
 		left join site t on (t.id=s.stock_site)
-		order by lower(s.name)`).QueryStructs(&record)
+		where s.id in $1
+		order by lower(s.name)`, Sites).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())

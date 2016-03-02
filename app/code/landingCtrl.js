@@ -12,8 +12,8 @@
 			case 'Site Manager':
 				$state.go('sitemgr.dashboard')
 				break
-			case 'Worker':
-				$state.go('worker.machines')
+			case 'Worker':			
+				$state.go('worker.map')
 				break
 			case 'Vendor':
 				$state.go('vendor.dashboard')

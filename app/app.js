@@ -748,6 +748,18 @@ var getMapURI = function(addr) {
 	      	templateUrl: 'html/worker/worker.menu.html',
 	      	controller: 'workerCtrl as worker'
 	      })
+					.state('worker.map', {
+						url: '/map',
+						acl: 'Worker',
+						templateUrl: 'html/worker/map.html',
+						controller: 'workerMapCtrl as Map',
+						resolve: {
+							sites: function(DBSite) {
+								
+								return DBSite.query()
+							}
+						}
+					})
 		      .state('worker.machines',{
 		      	url: '/machines',
 		      	acl: 'Worker',
@@ -758,6 +770,9 @@ var getMapURI = function(addr) {
 		      		machines: function(DBMachine) {
 		      			return DBMachine.query()
 		      		},
+		      		sites: function(DBSite) {
+		      			return DBSite.query()
+		      		}
 		      	}
 		      })
 			      .state('worker.editmachine',{
@@ -887,7 +902,7 @@ var getMapURI = function(addr) {
 					var token = $localStorage.token
 					var sess  = $localStorage.session
 					if (token != null) {
-						console.log('Restart session at',toState.name,'using existing token', token)
+						console.log('Restart session at',toState.name,'using existing token', token, 'and sess =',sess)
 	          Session.loggedIn = sess.loggedIn
 	          Session.ID = sess.ID
 	          Session.Username = sess.Username

@@ -60,11 +60,12 @@
 
 
 <div flex-container="row" flex-align="space-between center">
-  <div flex-item="9">
-    <img src="img/aust.png" alt="" flex-item="2">
+  <div flex-item="2"></div>
+  <div flex-item="4" ng-if="Machines.sites.length > 1">
+    <img src="img/aust.png" height="120" alt="" flex-item="2">
   </div>
-  <div flex-item="2">
-    <h1>Edinburgh Factory</h1>
+  <div flex-item="6">
+    <h1>{{Machines.sites[0].Name}}</h1>
   </div>
 </div>
 
@@ -137,7 +138,7 @@
           ng-click="Machines.raiseIssue(row,0,0,'Uncoiler')" 
           class="fillhover"
           lx-tooltip="Raise Issue with Uncoiler" tooltip-position="right">
-      <polygon points="30,90 0,138 60,138" fill="url(#grad1)"/>
+      <polygon points="30,90 0,148 60,148" fill="url(#grad1)"/>
       <circle cx="30" cy="90" r="30" fill="#eee"/>
       <!-- <text x="170" y="105" stroke-width="1" fill="black">UnCoiler</text>        -->
     </g>
@@ -181,31 +182,31 @@
     
     <!-- Add main rectangle -->
     <rect x="80" y="100" ng-attr-width="{{170 + (row.baseComponents.length * 50)}}" 
-      height="38" stroke="black" stroke-width="2" fill="url(#grad1)"/>
+      height="48" stroke="black" stroke-width="2" fill="url(#grad1)"/>
       <!-- ng-click="Machines.clickEdit(row)"/> -->
     <!-- <text transform="translate(270 140)">{{row.SiteName}} - {{row.Name}}</text> -->
-    <text transform="translate(100 130)">{{row.Name}}</text>
+    <text transform="translate(100 135)" style="font-size: 22;">{{row.Name}}</text>
 
     <!-- Add the status indicators -->
     <g ng-if="row.Status == 'Running'"
        stroke="black" fill="url(#GreenBtn)">
-      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="125" r="18"/>
       <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" fill="url(#DullYellowBtn)" cy="120" r="18"/> -->
     </g>
     <g ng-if="row.Status == 'Needs Attention'"
        stroke="black" fill="url(#YellowBtn)">
       <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
-      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="125" r="18"/>
     </g>
     <g ng-if="row.Status == 'Maintenance Pending'"
        stroke="black" fill="url(#YellowBtn)">
       <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
-      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="125" r="18"/>
     </g>
     <g ng-if="row.Status == 'Stopped'"
        stroke="black" fill="url(#RedBtn)">
       <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
-      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="120" r="18"/>
+      <circle ng-attr-cx="{{250 + (row.baseComponents.length * 50) - 26}}" cy="125" r="18"/>
     </g>
 
     

@@ -24,7 +24,7 @@ angular.module('cmms')
               username: this.username,
               passwd: this.passwd
             },function(retval,r){
-              //console.log('login from dialog OK', retval)
+              console.log('login from dialog OK', retval)
               Session.loggedIn = true
               Session.ID = retval.ID
               Session.Username = retval.Username
