@@ -1,3 +1,37 @@
-This is a Map of Our Strayer Mate
+<!-- This is a Map of Our Strayer Mate -->
+<!-- <img src="img/aust.png" alt=""> -->
+
+
+  <svg class="svg-map" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="YellowBtn">
+          <stop offset="10%" stop-color="#ff0">
+            <animate attributeName="stop-color"
+            values="#da2;#ee0;#ff0;#ff0;#ee0;#da2"
+            dur="0.8s"
+            repeatCount="indefinite" />
+          </stop>
+          <stop offset="95%" stop-color="#da2"/>
+      </radialGradient>
+      <radialGradient id="RedBtn">   <!--  fx="60%" fy="30%"> -->
+          <stop offset="10%" stop-color="#fa0">
+            <animate attributeName="stop-color"
+            values="#f00;#f80;#fa0;#f80;#f00"
+            dur="0.8s"
+            repeatCount="indefinite" />
+          </stop>
+          <stop offset="95%" stop-color="#e00">
+            <animate attributeName="stop-color"
+            values="#800;#a00;#f00;#a00;#800"
+            dur="0.8s"
+            repeatCount="indefinite" />
+          </stop>
+      </radialGradient>
+    </defs>
+
+    <image xlink:href="img/aust.png" x="1" y="1" width="402px" height="364px"/>
+
+  </svg>
+<br>
 
 <button ng-click="Map.engriven()">Go to site</button>
