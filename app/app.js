@@ -762,21 +762,15 @@ var getMapURI = function(addr) {
 		      .state('worker.machines',{
 		      	url: '/machines/:id',
 		      	acl: 'Worker',
-		      	cache: false,
+		      	// cache: false,
 		      	templateUrl: 'html/worker/machine.list.html',
 		      	controller: 'workerMachineCtrl as Machines',
 		      	resolve: {
-		      		machines: function(DBSiteMachines) {
-		      			console.log("dbsitemachines", $stateParams)
-		      			var q = DBSiteMachines.query({id: $stateParams.id})
-		      			console.log(q)
-		      			return q
+		      		machines: function(DBSiteMachines, $stateParams) {
+		      			return DBSiteMachines.query({id: $stateParams.id})
 		      		},
 		      		sites: function(DBSite) {
-		      			console.log("sites")
-		      			var q = DBSite.query()
-		      			console.log(q)
-		      			return q
+		      			return DBSite.query()
 		      		}
 		      	}
 		      })

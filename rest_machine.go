@@ -152,7 +152,7 @@ func querySiteMachines(c *echo.Context) error {
 	}
 
 	siteID := getID(c)
-	siteIDs := getRelatedSites(siteID)
+	// siteIDs := getRelatedSites(siteID)
 
 	// Get a list of site_ids that are relevant for this site
 
@@ -170,9 +170,23 @@ func querySiteMachines(c *echo.Context) error {
 		where m.site_id = $1
 		order by x.seq,lower(m.name)`, siteID).QueryStructs(&record)
 
+	log.Println("machines = ", record)
+
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}
+
+	// For each machine, fetch all components
+	for _, m := range record {
+
+		err = DB.Select("*").
+			From("component").
+			Where("machine_id = $1", m.ID).
+			OrderBy("position,zindex,lower(name)").
+			// QueryStructs(&(record[i].Components))
+			QueryStructs(&m.Components)
+	}
+
 	return c.JSON(http.StatusOK, record)
 }
 

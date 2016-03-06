@@ -6,24 +6,21 @@
 
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
-		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites',
+		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites','DBSite',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
-			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites){
+			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite){
 
-			console.log("init worker machine ctrl")
 		// Subscribe to changes in the machine list	
-		var vm = this
-		socket.on("machine not",function(msg){
-			console.log("Machine event - reload full list",msg)
-			vm.machines = DBMachine.query()			
-			vm.machines.$promise.then(function(){
-				vm.calcBaseComponents()
-			})
-		})
+		// var vm = this
+		// socket.on("machine",function(msg){
+		// 	console.log("Machine event - reload full list",msg)
+		// 	vm.machines = DBMachine.query()			
+		// 	vm.machines.$promise.then(function(){
+		// 		vm.calcBaseComponents()
+		// 	})
+		// })
 
-		sites.$promise.then(function(){
-			console.log("got sites =",sites[0].Name)			
-		})
+		console.log(machines)
 		angular.extend(this, {
 			machines: machines,
 			session: Session,
@@ -33,6 +30,7 @@
 			alertFields: getMachineAlertForm(),	
 			eventHandler: DBRaiseMachineEvent,	
 			sites: sites,
+			mysite: DBSite.get({id: $stateParams.id}),
 			eventFields: {
 				machineName: "",
 				machineID: 0,
