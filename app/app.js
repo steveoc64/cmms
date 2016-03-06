@@ -754,24 +754,29 @@ var getMapURI = function(addr) {
 						templateUrl: 'html/worker/map.html',
 						controller: 'workerMapCtrl as Map',
 						resolve: {
-							sites: function(DBSite) {
-								
+							sites: function(DBSite) {								
 								return DBSite.query()
 							}
 						}
 					})
 		      .state('worker.machines',{
-		      	url: '/machines',
+		      	url: '/machines/:id',
 		      	acl: 'Worker',
 		      	cache: false,
 		      	templateUrl: 'html/worker/machine.list.html',
 		      	controller: 'workerMachineCtrl as Machines',
 		      	resolve: {
-		      		machines: function(DBMachine) {
-		      			return DBMachine.query()
+		      		machines: function(DBSiteMachines) {
+		      			console.log("dbsitemachines", $stateParams)
+		      			var q = DBSiteMachines.query({id: $stateParams.id})
+		      			console.log(q)
+		      			return q
 		      		},
 		      		sites: function(DBSite) {
-		      			return DBSite.query()
+		      			console.log("sites")
+		      			var q = DBSite.query()
+		      			console.log(q)
+		      			return q
 		      		}
 		      	}
 		      })

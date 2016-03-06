@@ -300,7 +300,7 @@ func raiseEventMachine(c *echo.Context) error {
 		Notes:     req.Descr,
 	}
 	DB.InsertInto("event").
-		Whitelist("site_id", "type", "machine_id", "priority", "created_by", "notes").
+		Whitelist("site_id", "type", "machine_id", "tool_id", "priority", "created_by", "notes").
 		Record(evt).
 		Returning("id").
 		QueryScalar(&evt.ID)
@@ -313,6 +313,11 @@ func raiseEventMachine(c *echo.Context) error {
 			where id=$1`,
 			req.MachineID,
 			`Needs Attention`).
+			Exec()
+
+		_, err = DB.SQL(`update component
+			set status='Needs Attention'
+			where id=$1`, req.ToolID).
 			Exec()
 	case "Halt":
 		_, err = DB.SQL(`update machine 

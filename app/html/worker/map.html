@@ -34,4 +34,12 @@
   </svg>
 <br>
 
-<button ng-click="Map.engriven()">Go to site</button>
+<div flex-container="row" flex-colunm="12" flex-gutter="24">
+  <div flex-item="3" 
+          ng-repeat="site in Map.sites"
+       class="p+">    
+  <button class="btn btn--l btn--blue-grey btn--raised" 
+          ng-click="Map.goSite(site)">{{site.Name}}
+  </button>      
+  </div>
+</div>    

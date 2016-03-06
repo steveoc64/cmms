@@ -1,14 +1,23 @@
 ;(function() {
 	'use strict';
 
-	angular.module('cmms').controller('workerMapCtrl',
-	 function($state){
+	var base = 'worker'
+	var app = angular.module('cmms')
 
-		return {
-			engriven: function() {
-				$state.go("worker.machines")
+	app.controller(base+'MapCtrl', 
+		['$scope','$state','sites',
+		function($scope,$state, sites){
+
+		angular.extend(this, {
+			sites: sites,
+			goSite: function(row) {
+				console.log("show machines for site", row.ID)
+				// $state.go(base+'.machines',{id: row.ID})
+				$state.go(base+'.machines')
+				console.log("here")
 			}
-		}	
-	})
+		})
+
+	}])
 
 })();

@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/labstack/echo"
-	"gopkg.in/mgutz/dat.v1"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo"
+	"gopkg.in/mgutz/dat.v1"
 	// "time"
 )
 
@@ -110,6 +111,7 @@ func queryMachineFull(c *echo.Context) error {
 	}
 
 	sites := getClaimedSites(claim)
+	log.Println("sites =", sites)
 
 	var record []*DBmachine
 	err = DB.SQL(`select m.*,s.name as site_name,x.span as span
@@ -117,7 +119,7 @@ func queryMachineFull(c *echo.Context) error {
 		left join site s on (s.id=m.site_id)
 		left join site_layout x on (x.site_id=m.site_id and x.machine_id=m.id)
 		where m.site_id in $1
-		order by x.seq,lower(m.name)`, sites).QueryStructs(&record)
+		order by x.seq,lower(m.name)`, sites[0]).QueryStructs(&record)
 
 	// err = DB.SQL(`select m.*,s.name as site_name
 	// 	from machine m
@@ -155,11 +157,18 @@ func querySiteMachines(c *echo.Context) error {
 	// Get a list of site_ids that are relevant for this site
 
 	var record []*DBmachine
-	err = DB.SQL(`select m.*,s.name as site_name
-		from machine m 
-		left join site s on (s.id=m.site_id) 
-		where m.site_id in $1
-		order by lower(m.name)`, siteIDs).QueryStructs(&record)
+	// err = DB.SQL(`select m.*,s.name as site_name
+	// 	from machine m
+	// 	left join site s on (s.id=m.site_id)
+	// 	where m.site_id in $1
+	// 	order by lower(m.name)`, siteIDs).QueryStructs(&record)
+
+	err = DB.SQL(`select m.*,s.name as site_name,x.span as span
+		from machine m
+		left join site s on (s.id=m.site_id)
+		left join site_layout x on (x.site_id=m.site_id and x.machine_id=m.id)
+		where m.site_id = $1
+		order by x.seq,lower(m.name)`, siteID).QueryStructs(&record)
 
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())

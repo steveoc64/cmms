@@ -71,6 +71,7 @@
 
 <div flex-container="row" flex-wrap="wrap">
 <div ng-repeat="row in Machines.machines" ng-attr-flex-item="{{row.Span}}">
+Span = {{row.Span}}
   <!-- <svg ng-class="Machines.getSVGClass(row)" xmlns="http://www.w3.org/2000/svg"> -->
   <svg class="svg-panel" xmlns="http://www.w3.org/2000/svg" 
     ng-attr-width="{{250 + (row.baseComponents.length * 50)}}">

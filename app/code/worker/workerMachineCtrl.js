@@ -10,6 +10,7 @@
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
 			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites){
 
+			console.log("init worker machine ctrl")
 		// Subscribe to changes in the machine list	
 		var vm = this
 		socket.on("machine not",function(msg){
