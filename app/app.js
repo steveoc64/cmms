@@ -867,6 +867,7 @@ var getMapURI = function(addr) {
 	  			this.fromState = ''
 	  			this.toState = ''
 	  			this.Site = 0,
+	  			this.Sites = [],
 	  			this.ID = 0,
 	  			this.SiteName = ''
 	  		}
@@ -908,6 +909,7 @@ var getMapURI = function(addr) {
 	          Session.Role = sess.Role
 	          Session.Token = sess.Token
 	          Session.Site = sess.Site
+	          Session.Sites = sess.Sites
 	          Session.SiteName = sess.SiteName.String
 	          if (Session.toState != '') {
 	            $state.go(Session.toState)

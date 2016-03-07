@@ -31,6 +31,7 @@ angular.module('cmms')
               Session.Role = retval.Role
               Session.Token = retval.Token
               Session.Site = retval.Site
+              Session.Sites = retval.Sites
               Session.SiteName = retval.SiteName.String
               LxDialogService.close('loginDialog', true)  
                vm.username = ''

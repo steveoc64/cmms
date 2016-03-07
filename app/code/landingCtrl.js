@@ -13,7 +13,12 @@
 				$state.go('sitemgr.dashboard')
 				break
 			case 'Worker':			
-				$state.go('worker.map')
+				console.log("worker landing page", Session)
+				if (Session.Sites.length == 1) {
+					$state.go('worker.machines',{id: Session.Sites[0]})					
+				} else {
+					$state.go('worker.map')					
+				}
 				break
 			case 'Vendor':
 				$state.go('vendor.dashboard')

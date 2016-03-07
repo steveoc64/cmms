@@ -419,7 +419,8 @@ type loginResponse struct {
 	Role     string     `db:"role"`
 	Site_ID  int        `db:"site_id"`
 	SiteName NullString `db:"sitename"`
-	Token    string     `db:"token"`
+	Sites    []int
+	Token    string `db:"token"`
 }
 
 func login(c *echo.Context) error {
@@ -460,6 +461,7 @@ func login(c *echo.Context) error {
 		}
 
 		res.Token = tokenString
+		res.Sites = Sites
 		log.Println("New Login:", l.Username)
 		return c.JSON(http.StatusOK, res)
 	}

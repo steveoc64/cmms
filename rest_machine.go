@@ -112,7 +112,6 @@ func queryMachineFull(c *echo.Context) error {
 	}
 
 	sites := getClaimedSites(claim)
-	log.Println("querymachinefull sites =", sites)
 
 	var record []*DBmachine
 	err = DB.SQL(`select m.*,s.name as site_name,x.span as span
