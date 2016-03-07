@@ -134,6 +134,7 @@
 				this.eventFields.tool = comp
 				console.log(machine,comp,this.eventFields)
 				LxDialogService.open('raiseIssueDialog')			
+				// LxDialogService.open('showStatusDialog')			
 			},
 			showComponent: function(comp) {
 //				console.log("mouseover",comp.Name)

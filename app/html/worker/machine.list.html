@@ -58,6 +58,33 @@
     </div>
 </lx-dialog>
 
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='showStatusDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Status of {{Machines.eventFields.machineName}} - {{Machines.eventFields.toolName}} {{Machines.eventFields.type}}
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+    </div>
+    <div class="dialog__content">   
+      <div class="p++">
+        <form name="Machines.alertForm">          
+          <formly-form model="Machines.eventFields" fields="Machines.alertFields"></formly-form>
+            <div flex-item="10">
+              <lx-file-input label="Add Photo / Document ..." value="filename" change="Machines.eventUpload(e)"></lx-file-input>
+            </div>
+            <div flex-item="2">
+              <div id="upload-progress">{{Machines.uploadProgress}}</div>          
+            </div>              
+          <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Back</button>
+          </div>    
+        </form>
+      </div>
+    </div>
+</lx-dialog>
+
 
 <div flex-container="row" flex-align="space-between center">
   <div flex-item="2"></div>
