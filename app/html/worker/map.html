@@ -4,6 +4,10 @@
 
   <svg class="svg-map" xmlns="http://www.w3.org/2000/svg">
     <defs>
+      <radialGradient id="GreenBtn">
+          <stop offset="10%" stop-color="#4f2"/>
+          <stop offset="95%" stop-color="#2a1"/>
+      </radialGradient>    
       <radialGradient id="YellowBtn">
           <stop offset="10%" stop-color="#ff0">
             <animate attributeName="stop-color"
@@ -28,7 +32,18 @@
           </stop>
       </radialGradient>
     </defs>
-      <image xlink:href="/img/aust.png" x="1" y="1" height="364px" width="402px"/>
+    <image xlink:href="/img/aust.png" x="1" y="1" height="364px" width="402px"/>
+
+    <g stroke="black" fill="url(#GreenBtn)">
+      <circle cx="260" cy="250" r="12"/>
+    </g>
+    <g stroke="black" fill="url(#YellowBtn)">
+      <circle cx="380" cy="160" r="12"/>
+    </g>
+    <g stroke="black" fill="url(#RedBtn)">
+      <circle cx="360" cy="230" r="12"/>
+    </g>
+
   </svg>
 <br>
 
