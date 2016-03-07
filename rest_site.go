@@ -31,6 +31,8 @@ type DBsite struct {
 	StockSite      int     `db:"stock_site"`
 	StockSiteName  *string `db:"stock_site_name"`
 	Notes          string  `db:"notes"`
+	X              int     `db:"x"`
+	Y              int     `db:"y"`
 }
 
 // Return a slice, that contains This SiteID, and all child SiteIDs that have this site as a parent
