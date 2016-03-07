@@ -89,12 +89,13 @@ func queryMachine(c *echo.Context) error {
 	}
 
 	sites := getClaimedSites(claim)
+	log.Println("admin query machine sites", sites)
 
 	var record []*DBmachine
 	err = DB.SQL(`select m.*,s.name as site_name
 		from machine m
 		left join site s on (s.id=m.site_id)
-		where site_id in $1
+		where site_id in ($1)
 		order by lower(m.name)`, sites).QueryStructs(&record)
 
 	if err != nil {
@@ -111,7 +112,7 @@ func queryMachineFull(c *echo.Context) error {
 	}
 
 	sites := getClaimedSites(claim)
-	log.Println("sites =", sites)
+	log.Println("querymachinefull sites =", sites)
 
 	var record []*DBmachine
 	err = DB.SQL(`select m.*,s.name as site_name,x.span as span
@@ -119,7 +120,7 @@ func queryMachineFull(c *echo.Context) error {
 		left join site s on (s.id=m.site_id)
 		left join site_layout x on (x.site_id=m.site_id and x.machine_id=m.id)
 		where m.site_id in $1
-		order by x.seq,lower(m.name)`, sites[0]).QueryStructs(&record)
+		order by x.seq,lower(m.name)`, sites).QueryStructs(&record)
 
 	// err = DB.SQL(`select m.*,s.name as site_name
 	// 	from machine m
