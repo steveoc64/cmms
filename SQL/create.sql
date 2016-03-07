@@ -23,7 +23,9 @@ create table site (
 	image text not null default '',
 	parent_site int not null default 0,
 	stock_site int not null default 0,
-	notes text not null default ''
+	notes text not null default '',
+	x int not null default 0,
+	y int not null default 0
 );
 
 drop table if exists user_site;
