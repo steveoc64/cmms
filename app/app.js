@@ -45,6 +45,15 @@ var getMapURI = function(addr) {
 			    }
 			  };
 			})
+			.directive('vbox', function () {
+			    return {
+			        link: function (scope, element, attrs) {
+			            attrs.$observe('vbox', function (value) {
+			                element.context.setAttribute('viewBox', value);
+			            })
+			        }
+			    };
+			})
 		.service('socket',function($websocket,$location){
 			var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
 			//var socketUrl = 'ws://' + $location.host() + '/ws'
