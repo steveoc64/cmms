@@ -724,12 +724,12 @@ type DBworkorder struct {
 	Assignees      []Assignee `db:"assignees"`
 	Skills         []WOSkill  `db:"skills"`
 	// derived fields off the event, machine, site, etc
-	SiteID      int    `db:"site_id"`
-	SiteName    string `db:"site_name"`
-	MachineID   int    `db:"machine_id"`
-	MachineName string `db:"machine_name"`
-	ToolID      int    `db:"tool_id"`
-	ToolName    string `db:"tool_name"`
+	SiteID      int     `db:"site_id"`
+	SiteName    string  `db:"site_name"`
+	MachineID   int     `db:"machine_id"`
+	MachineName string  `db:"machine_name"`
+	ToolID      int     `db:"tool_id"`
+	ToolName    *string `db:"tool_name"`
 }
 
 type DBwo_skills struct {
