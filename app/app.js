@@ -765,6 +765,9 @@ var getMapURI = function(addr) {
 						resolve: {
 							sites: function(DBSite) {								
 								return DBSite.query()
+							},
+							siteStatus: function(DBSiteStatus) {
+								return DBSiteStatus.get()
 							}
 						}
 					})
@@ -780,7 +783,10 @@ var getMapURI = function(addr) {
 		      		},
 		      		sites: function(DBSite) {
 		      			return DBSite.query()
-		      		}
+		      		},
+							siteStatus: function(DBSiteStatus) {
+								return DBSiteStatus.get()
+							}		      		
 		      	}
 		      })
 			      .state('worker.editmachine',{
