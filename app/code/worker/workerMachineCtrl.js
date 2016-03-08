@@ -7,8 +7,10 @@
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
 		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites','DBSite','siteStatus',
+		'DBComponentEvents',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
-			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite, siteStatus){
+			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite, siteStatus,
+			DBComponentEvents){
 
 		// Subscribe to changes in the machine list	
 		// var vm = this
@@ -28,6 +30,7 @@
 			sortDir: false,
 			socket: socket,
 			alertFields: getMachineAlertForm(),	
+			statusFields: getToolStatusForm(),
 			eventHandler: DBRaiseMachineEvent,	
 			sites: sites,
 			siteStatus: siteStatus,
@@ -38,6 +41,13 @@
 				toolID: 0,
 				toolName: "",
 				type: "Tool",
+				status: "",
+			},
+			eventHistory: {
+				Status: "",
+				Startdate: "",
+				Username: "",
+				Notes: "",
 			},
 			setSort: function(field) {
 				if (this.sortField == field) {
@@ -127,15 +137,38 @@
 				}
 			},
 			raiseIssue: function(machine,comp,id,type) {
-				this.eventFields.machineName = machine.Name
-				this.eventFields.toolName = comp.Name
-				this.eventFields.toolID = id
-				this.eventFields.machineID = machine.ID
-				this.eventFields.type = type
-				this.eventFields.tool = comp
-				console.log(machine,comp,this.eventFields)
-				LxDialogService.open('raiseIssueDialog')			
-				// LxDialogService.open('showStatusDialog')			
+				// console.log("we are here with comp ",comp,"and need to decide which dialog to raise")
+				if (comp.Status == "Running") {
+					this.eventFields.machineName = machine.Name
+					this.eventFields.toolName = comp.Name
+					this.eventFields.toolID = id
+					this.eventFields.machineID = machine.ID
+					this.eventFields.type = type
+					this.eventFields.tool = comp
+					this.eventFields.status = comp.Status
+					// console.log(machine,comp,this.eventFields)
+					LxDialogService.open('raiseIssueDialog')			
+				} else {
+					this.eventFields.machineName = machine.Name
+					this.eventFields.toolName = comp.Name
+					this.eventFields.toolID = id
+					this.eventFields.machineID = machine.ID
+					this.eventFields.type = type
+					this.eventFields.tool = comp
+					this.eventFields.status = comp.Status
+					this.eventHistory.Status = comp.Status
+					// console.log(machine,comp,this.eventFields)
+					// Get most recent event for this machine
+					var q = DBComponentEvents.query({id: comp.ID})
+					var vm = this
+					q.$promise.then(function(){
+						console.log("comp events = ", q)
+						vm.eventHistory.StartDate = q[0].StartDate
+						vm.eventHistory.Username = q[0].Username
+						vm.eventHistory.Notes = q[0].Notes
+					})
+					LxDialogService.open('showStatusDialog')			
+				}
 			},
 			showComponent: function(comp) {
 //				console.log("mouseover",comp.Name)

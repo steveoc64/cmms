@@ -209,6 +209,18 @@ getEventFields = function() {
         }
       }
     },{
+      name: 'event.NotesView',
+      extends: 'lx-input',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'Notes',
+        templateOptions: {
+          type: 'text',
+          label: 'Notes',
+          disabled: true
+        }
+      }
+    },{
       name: 'event.Status',
       extends: 'lx-input',
       wrapper: 'lx-wrapper-errors',
@@ -392,6 +404,28 @@ getEventFields = function() {
   }] // end fields
 
 } // getEventFields
+
+getToolStatusForm = function() {
+
+  return [{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "12"},
+      fields: [
+        {type: 'event.Status'},
+      ]
+    }
+  },{
+    type: 'lx-flex',
+    templateOptions: {
+      flex: { container: "row", item: "6"},
+      fields: [
+        {type: 'event.Startdate'},
+        {type: 'event.Username'},
+      ]
+    }
+  }] // end fields
+}
 
 getEventCostForm = function() {
 
