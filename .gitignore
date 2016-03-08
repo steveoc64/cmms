@@ -84,3 +84,4 @@ $RECYCLE.BIN/
 config.json
 readings
 debugnotes.txt
+*.exe~
