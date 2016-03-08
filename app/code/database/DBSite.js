@@ -29,4 +29,10 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBSiteStatus', function($resource,ServerName,Session){
+		return $resource(ServerName+'/site/status',{},{
+  		'get':  {method:'GET'},
+		})
+	})
+
 })();

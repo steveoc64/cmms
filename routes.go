@@ -53,6 +53,7 @@ func _initRoutes() {
 	e.Post("/sites", newSite)
 	e.Put("/sites/:id", saveSite)
 	e.Delete("/sites/:id", deleteSite)
+	e.Get("/site/status", siteStatus)
 
 	e.Get("/skills", querySkills)
 	e.Get("/skills/:id", getSkill)

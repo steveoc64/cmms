@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/labstack/echo"
-	"log"
 	"net/http"
 )
 
@@ -53,7 +52,6 @@ func querySites(c *echo.Context) error {
 	}
 
 	Sites := getClaimedSites(claim)
-	log.Println("==============", Sites)
 
 	var record []*DBsite
 	err = DB.SQL(`select s.*,p.name as parent_site_name,t.name as stock_site_name
@@ -66,7 +64,114 @@ func querySites(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusNoContent, err.Error())
 	}
+
 	return c.JSON(http.StatusOK, record)
+}
+
+type SiteStatusReport struct {
+	Edinburgh string
+	Minto     string
+	Tomago    string
+	Chinderah string
+}
+
+// Get a record that describes the statuses for the main sites
+func siteStatus(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readSite")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	retval := SiteStatusReport{
+		Edinburgh: "Running",
+		Minto:     "Running",
+		Tomago:    "Running",
+		Chinderah: "Running",
+	}
+
+	i := 0
+
+	// Get the overall status for Edinburgh
+	DB.SQL(`select count(m.*) 
+		from machine m
+		left join site s on (s.id = m.site_id)
+		where m.status = 'Stopped' 
+		and s.name like 'Edinburgh%'`).QueryScalar(&i)
+	if i > 0 {
+		retval.Edinburgh = "Stopped"
+	} else {
+		DB.SQL(`select count(m.*) 
+			from machine m
+			left join site s on (s.id = m.site_id)
+			where m.status = 'Needs Attention' 
+			and s.name like 'Edinburgh%'`).QueryScalar(&i)
+		if i > 0 {
+			retval.Edinburgh = "Needs Attention"
+		}
+	}
+
+	// Get the overall status for Minto
+	i = 0
+	DB.SQL(`select count(m.*) 
+		from machine m
+		left join site s on (s.id = m.site_id)
+		where m.status = 'Stopped' 
+		and s.name = 'Minto'`).QueryScalar(&i)
+	if i > 0 {
+		retval.Minto = "Stopped"
+	} else {
+		DB.SQL(`select count(m.*) 
+			from machine m
+			left join site s on (s.id = m.site_id)
+			where m.status = 'Needs Attention' 
+			and s.name = 'Minto'`).QueryScalar(&i)
+		if i > 0 {
+			retval.Minto = "Needs Attention"
+		}
+	}
+
+	// Get the overall status for Tomago
+	i = 0
+	DB.SQL(`select count(m.*) 
+		from machine m
+		left join site s on (s.id = m.site_id)
+		where m.status = 'Stopped' 
+		and s.name = 'Tomago'`).QueryScalar(&i)
+	if i > 0 {
+		retval.Tomago = "Stopped"
+	} else {
+		DB.SQL(`select count(m.*) 
+			from machine m
+			left join site s on (s.id = m.site_id)
+			where m.status = 'Needs Attention' 
+			and s.name = 'Tomago'`).QueryScalar(&i)
+		if i > 0 {
+			retval.Tomago = "Needs Attention"
+		}
+	}
+
+	// Get the overall status for Chinderah
+	i = 0
+	DB.SQL(`select count(m.*) 
+		from machine m
+		left join site s on (s.id = m.site_id)
+		where m.status = 'Stopped' 
+		and s.name = 'Chinderah'`).QueryScalar(&i)
+	if i > 0 {
+		retval.Chinderah = "Stopped"
+	} else {
+		DB.SQL(`select count(m.*) 
+			from machine m
+			left join site s on (s.id = m.site_id)
+			where m.status = 'Needs Attention' 
+			and s.name = 'Chinderah'`).QueryScalar(&i)
+		if i > 0 {
+			retval.Chinderah = "Needs Attention"
+		}
+	}
+
+	return c.JSON(http.StatusOK, retval)
 }
 
 // Get a list of sites that this site supplies

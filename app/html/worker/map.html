@@ -1,8 +1,9 @@
 <!-- This is a Map of Our Strayer Mate -->
 <!-- <img src="img/aust.png" alt=""> -->
 
-
-  <svg class="svg-map" xmlns="http://www.w3.org/2000/svg">
+  <svg class="svg-map"
+       viewBox="0 0 490 380"
+       xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="GreenBtn">
           <stop offset="10%" stop-color="#4f2"/>
@@ -34,14 +35,50 @@
     </defs>
     <image xlink:href="/img/aust.png" x="1" y="1" height="364px" width="402px"/>
 
-    <g stroke="black" fill="url(#GreenBtn)">
-      <circle cx="260" cy="250" r="12"/>
+    <text x="180" y="290">Edinburgh</text>
+    <g ng-if="Map.siteStatus.Edinburgh == 'Running'" stroke="black" fill="url(#GreenBtn)">
+      <circle cx="260" cy="250" r="12"/> 
     </g>
-    <g stroke="black" fill="url(#YellowBtn)">
-      <circle cx="380" cy="160" r="12"/>
+    <g ng-if="Map.siteStatus.Edinburgh == 'Needs Attention'" stroke="black" fill="url(#YellowBtn)">
+      <circle cx="260" cy="250" r="12"/> 
     </g>
-    <g stroke="black" fill="url(#RedBtn)">
-      <circle cx="360" cy="230" r="12"/>
+    <g ng-if="Map.siteStatus.Edinburgh == 'Stopped'" stroke="black" fill="url(#RedBtn)">
+      <circle cx="260" cy="250" r="12"/> 
+    </g>
+
+    <text x="410" y="205">Chinderah</text>
+    <g ng-if="Map.siteStatus.Chinderah == 'Running'" stroke="black" fill="url(#GreenBtn)">
+      <circle cx="390" cy="200" r="12"/> 
+    </g>
+    <g ng-if="Map.siteStatus.Chinderah == 'Needs Attention'" stroke="black" fill="url(#YellowBtn)">
+      <circle cx="390" cy="200" r="12"/> 
+    </g>
+    <g ng-if="Map.siteStatus.Chinderah == 'Stopped'" stroke="black" fill="url(#RedBtn)">
+      <circle cx="390" cy="200" r="12"/> 
+    </g>
+
+
+    <text x="400" y="235">Tomago</text>
+    <g ng-if="Map.siteStatus.Tomago == 'Running'" stroke="black" fill="url(#GreenBtn)">
+      <circle cx="380" cy="230" r="12"/> 
+    </g>
+    <g ng-if="Map.siteStatus.Tomago == 'Needs Attention'" stroke="black" fill="url(#YellowBtn)">
+      <circle cx="380" cy="230" r="12"/> 
+    </g>
+    <g ng-if="Map.siteStatus.Tomago == 'Stopped'" stroke="black" fill="url(#RedBtn)">
+      <circle cx="380" cy="230" r="12"/> 
+    </g>
+
+
+    <text x="380" y="265">Minto</text>
+    <g ng-if="Map.siteStatus.Minto == 'Running'" stroke="black" fill="url(#GreenBtn)">
+      <circle cx="360" cy="260" r="12"/> 
+    </g>
+    <g ng-if="Map.siteStatus.Minto == 'Needs Attention'" stroke="black" fill="url(#YellowBtn)">
+      <circle cx="360" cy="260" r="12"/> 
+    </g>
+    <g ng-if="Map.siteStatus.Minto == 'Stopped'" stroke="black" fill="url(#RedBtn)">
+      <circle cx="360" cy="260" r="12"/> 
     </g>
 
   </svg>

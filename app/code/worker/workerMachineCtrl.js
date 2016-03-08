@@ -6,9 +6,9 @@
 
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
-		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites','DBSite',
+		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites','DBSite','siteStatus',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
-			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite){
+			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite, siteStatus){
 
 		// Subscribe to changes in the machine list	
 		// var vm = this
@@ -30,6 +30,7 @@
 			alertFields: getMachineAlertForm(),	
 			eventHandler: DBRaiseMachineEvent,	
 			sites: sites,
+			siteStatus: siteStatus,
 			mysite: DBSite.get({id: $stateParams.id}),
 			eventFields: {
 				machineName: "",

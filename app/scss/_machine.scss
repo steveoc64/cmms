@@ -8,7 +8,8 @@
   overflow: scroll;
 }
 .svg-map {
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   height: 400px;
 }
 .svg-panel:hover {
