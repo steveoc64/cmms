@@ -19,11 +19,11 @@ func main() {
 	_initJWT()
 
 	// Make sure the SMS stuff is all working before we go too far
-	smsbal, smserr := GetSMSBalance()
-	if smserr != nil {
-		log.Fatal("Cannot retrieve SMS account info", smserr.Error())
-	}
-	log.Println("... Remaining SMS Balance =", smsbal)
+	// smsbal, smserr := GetSMSBalance()
+	// if smserr != nil {
+	// 	log.Fatal("Cannot retrieve SMS account info", smserr.Error())
+	// }
+	// log.Println("... Remaining SMS Balance =", smsbal)
 
 	e = echo.New()
 	e.Index("./build/index.html")
@@ -51,7 +51,8 @@ func main() {
 	_initDB()
 
 	// Start the mail server
-	_initMailer(fmt.Sprintf("Remaining SMS Balance = %d", smsbal))
+	// _initMailer(fmt.Sprintf("Remaining SMS Balance = %d", smsbal))
+	_initMailer("mailer")
 
 	// Start the socket monitor
 	go pinger()
