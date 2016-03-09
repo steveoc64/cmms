@@ -77,6 +77,27 @@
             <h5>Notes</h5>
             <div ng-bind-html="Machines.eventHistory.Notes | unsafe"></div>
           </div>
+          <!-- Show the attached docs for this event -->
+          <div flex-container="row" ng-if="Machines.eventHistory.Docs.length > 0">
+            <div flex-item ng-repeat="row in Machines.eventHistory.Docs">
+              <div class="card" style="height: 240px">
+                <div flex-container="row">
+                    <div class="p+">
+                      <div flex-item flex-container="column">
+                        <div flex-item class="card__img card__img--left" style="height: 140px">
+                          <a ng-href="doc/{{row.ID}}" target="_doc">              
+                            <img ng-src="{{Machines.getThumbnail(row)}}">
+                          </a>  
+                        </div>
+                        <span flex-item class="fs-subhead tc-black-2 display-block">
+                          {{row.Name}} 
+                        </span>
+                      </div>          
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="dialog__actions">
             <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Back</button>
           </div>    

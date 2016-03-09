@@ -7,10 +7,10 @@
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
 		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites','DBSite','siteStatus',
-		'DBComponentEvents',
+		'DBComponentEvents','DBEventDocs','Upload','DBDocs',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
 			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite, siteStatus,
-			DBComponentEvents){
+			DBComponentEvents,DBEventDocs,Upload,DBDocs){
 
 		// Subscribe to changes in the machine list	
 		// var vm = this
@@ -48,6 +48,7 @@
 				Startdate: "",
 				Username: "",
 				Notes: "",
+				Docs: [],
 			},
 			setSort: function(field) {
 				if (this.sortField == field) {
@@ -163,13 +164,71 @@
 					var vm = this
 					q.$promise.then(function(){
 						console.log("comp events = ", q)
-						vm.eventHistory.StartDate = q[0].StartDate
-						vm.eventHistory.Username = q[0].Username
-						vm.eventHistory.Notes = q[0].Notes
+						var evt = q[0]
+						vm.eventHistory.StartDate = evt.StartDate
+						vm.eventHistory.Username = evt.Username
+						vm.eventHistory.Notes = evt.Notes
+						vm.eventHistory.Docs = DBEventDocs.query({id: evt.ID})
+						vm.eventHistory.Docs.$promise.then(function(){
+							console.log("docs for this event", evt.ID, vm.eventHistory.Docs)
+						})
 					})
 					LxDialogService.open('showStatusDialog')			
 				}
 			},
+			getThumbnail: function(doc) {
+				var ext = doc.Filename.split('.').pop().toLowerCase()
+				// console.log("getThumbnail",doc.Filename,ext)
+				switch (ext) {
+					case 'jpg':
+					case 'png':
+					case 'gif':
+						return "doc/"+doc.ID
+					case 'doc':
+					case 'xls':
+					case 'odt':
+						return "img/doc.png"
+					case 'exe':
+						return "img/program.png"
+					case 'pdf':
+						return "img/pdf.png"
+					case 'zip':
+						return "img/zip.jpg"
+					default:
+						return "img/data.jpg"
+				}
+			},            
+    	eventUpload: function (file) {
+    		LxProgressService.circular.show('green','#upload-progress')
+    		var vm = this
+        Upload.upload({
+            url: 'upload',
+            data: {
+            	file: file, 
+            	desc: this.doc,
+            	type: "temptoolevent",
+            	ref_id: vm.eventFields.toolID,
+            	worker: "true",
+            	sitemgr: "true",
+            	contractor: "true"
+            }
+        }).then(function (resp) {
+        	if (resp.config.data.file) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+		    		LxProgressService.circular.hide()
+		    		vm.uploadProgress = 'Success !'
+		    		vm.doc = ''
+     				// vm.docs = DBDocs.query({type: 'tool', id: $stateParams.id})
+        	}
+        }, function (resp) {
+            console.log('Error status: ' + resp.status + ' ' + resp.data);
+		    		vm.uploadProgress = 'Error ! ' + resp.data
+		    		LxProgressService.circular.hide()
+
+        }, function (evt) {
+            vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+        })
+      },
 			showComponent: function(comp) {
 //				console.log("mouseover",comp.Name)
 			},

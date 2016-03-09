@@ -342,6 +342,12 @@ func raiseEventMachine(c *echo.Context) error {
 		fmt.Sprintf("%s on Machine %s %s", req.Action, machineName, req.Descr),
 		fmt.Sprintf("%d", evt.ID))
 
+	// Patch in any attached documents
+	_, err = DB.SQL(`update doc
+		set ref_id=$1, name=$3, type='toolevent'
+		where type='temptoolevent' and ref_id=$2
+		`, evt.ID, evt.ToolId, evt.Notes).Exec()
+
 	return c.String(http.StatusOK, "Event Raised on the Machine")
 	// TODO - add a mega amount of auditing to the machine and event records
 }
@@ -579,7 +585,7 @@ func queryEventDocs(c *echo.Context) error {
 	docs := &[]DBdoc{}
 	err = DB.Select("id", "name", "filename", "filesize", "to_char(created, 'DD-Mon-YYYY HH:MI:SS') as created").
 		From("doc").
-		Where("type='event' and ref_id=$1", refID).
+		Where("type='toolevent' and ref_id=$1", refID).
 		QueryStructs(docs)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
