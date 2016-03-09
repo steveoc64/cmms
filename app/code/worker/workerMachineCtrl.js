@@ -7,10 +7,10 @@
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
 		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites','DBSite','siteStatus',
-		'DBComponentEvents','DBEventDocs','Upload','DBDocs',
+		'DBComponentEvents','DBEventDocs','Upload','DBDocs','DBSiteMachines',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
 			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite, siteStatus,
-			DBComponentEvents,DBEventDocs,Upload,DBDocs){
+			DBComponentEvents,DBEventDocs,Upload,DBDocs,DBSiteMachines){
 
 		// Subscribe to changes in the machine list	
 		// var vm = this
@@ -69,7 +69,7 @@
 				}
 			},			
 			calcBaseComponents: function() {
-				angular.forEach(machines, function(m,k){
+				angular.forEach(this.machines, function(m,k){
 					m.baseComponents = []
 					for (var i = 0; i < m.Components.length; i++) {
 						if (m.Components[i].ZIndex == 0) {
@@ -233,12 +233,21 @@
 //				console.log("mouseover",comp.Name)
 			},
 			submitAlert: function() {
+				var vm = this
 				this.eventHandler.raise({
 					machineID: this.eventFields.machineID,
 					toolID: this.eventFields.toolID,
 					type: this.eventFields.type,
 					action: 'Alert',
 					descr: this.eventFields.AlertDescr
+				}).$promise.then(function(){
+					console.log("getting a whole new machine list for id", $stateParams.id)
+					vm.baseComponents = []  // prevents Angular going bezerk with invalid refs
+					vm.machines = DBSiteMachines.query({id: $stateParams.id})					
+					vm.machines.$promise.then(function(){
+						vm.calcBaseComponents()
+						console.log("got the new list and it looks like this", vm.machines)
+					})
 				})
 				LxDialogService.close('raiseIssueDialog')
 			},
