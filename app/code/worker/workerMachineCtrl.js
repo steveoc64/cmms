@@ -7,10 +7,10 @@
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
 		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites','DBSite','siteStatus',
-		'DBComponentEvents','DBEventDocs','Upload','DBDocs','DBSiteMachines',
+		'DBComponentEvents','DBEventDocs','Upload','DBDocs','DBSiteMachines','DBSiteStatus',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
 			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite, siteStatus,
-			DBComponentEvents,DBEventDocs,Upload,DBDocs,DBSiteMachines){
+			DBComponentEvents,DBEventDocs,Upload,DBDocs,DBSiteMachines,DBSiteStatus){
 
 		// Subscribe to changes in the machine list	
 		// var vm = this
@@ -139,6 +139,46 @@
 			},
 			raiseIssue: function(machine,comp,id,type) {
 				// console.log("we are here with comp ",comp,"and need to decide which dialog to raise")
+				if (comp == 0) {
+					console.log("we are looking at the",type,"on the",machine.Descr,machine)
+					comp = {}
+					this.eventFields.machineName = machine.Name
+					this.eventFields.type = type
+					this.eventFields.toolID = 0					
+					switch(type) {
+						case "Electrical":
+							this.eventFields.status = machine.Electrical
+							break
+						case "Hydraulic":
+							this.eventFields.status = machine.Hydraulic
+							break
+						case "Lube":
+							this.eventFields.status = machine.Lube
+							break
+						case "Printer":
+							this.eventFields.status = machine.Printer
+							break
+						case "Console":
+							this.eventFields.status = machine.Console
+							break
+						case "Uncoiler":
+							this.eventFields.status = machine.Uncoiler
+							break
+						case "Rollbed":
+							this.eventFields.status = machine.Rollbed
+							break
+					}
+
+					if (this.eventFields.status == "Running") {
+						console.log("this bit is running, so raise new issue")
+						LxDialogService.open('raiseIssueDialog')			
+					} else {
+						console.log("this bit is not running - show last event")
+					}
+
+					return
+				}
+
 				if (comp.Status == "Running") {
 					this.eventFields.machineName = machine.Name
 					this.eventFields.toolName = comp.Name
@@ -243,6 +283,7 @@
 				}).$promise.then(function(){
 					console.log("getting a whole new machine list for id", $stateParams.id)
 					vm.baseComponents = []  // prevents Angular going bezerk with invalid refs
+					vm.siteStatus = DBSiteStatus.get()
 					vm.machines = DBSiteMachines.query({id: $stateParams.id})					
 					vm.machines.$promise.then(function(){
 						vm.calcBaseComponents()
