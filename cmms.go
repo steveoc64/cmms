@@ -19,11 +19,13 @@ func main() {
 	_initJWT()
 
 	// Make sure the SMS stuff is all working before we go too far
-	// smsbal, smserr := GetSMSBalance()
-	// if smserr != nil {
-	// 	log.Fatal("Cannot retrieve SMS account info", smserr.Error())
-	// }
-	// log.Println("... Remaining SMS Balance =", smsbal)
+	if Config.SMSOn {
+		smsbal, smserr := GetSMSBalance()
+		if smserr != nil {
+			log.Fatal("Cannot retrieve SMS account info", smserr.Error())
+		}
+		log.Println("... Remaining SMS Balance =", smsbal)
+	}
 
 	e = echo.New()
 	e.Index("./build/index.html")

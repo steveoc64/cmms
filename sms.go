@@ -11,6 +11,11 @@ import (
 )
 
 func GetSMSBalance() (int, error) {
+
+	if !Config.SMSOn {
+		return 0, nil
+	}
+
 	resp, err := http.PostForm(
 		Config.SMSServer,
 		url.Values{
@@ -58,8 +63,10 @@ func GetSMSBalance() (int, error) {
 
 func SendSMS(number string, message string, ref string) error {
 
+	if !Config.SMSOn {
+		return nil
+	}
 	log.Println("Sending SMS to", number, ":", message)
-	return nil
 
 	resp, err := http.PostForm(
 		Config.SMSServer,

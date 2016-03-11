@@ -21,6 +21,7 @@ type ConfigType struct {
 	SMSServer      string
 	SMSUser        string
 	SMSPasswd      string
+	SMSOn          bool
 }
 
 var Config ConfigType
@@ -48,6 +49,7 @@ func _loadConfig() {
 	flag.StringVar(&Config.SMSServer, "smsserver", Config.SMSServer, "SMS Server")
 	flag.StringVar(&Config.SMSUser, "smsuser", Config.SMSUser, "SMS Username")
 	flag.StringVar(&Config.SMSPasswd, "smspasswd", Config.SMSPasswd, "SMS Password")
+	flag.BoolVar(&Config.SMSOn, "sms", Config.SMSOn, "Enable SMS Messaging")
 
 	flag.Parse()
 
