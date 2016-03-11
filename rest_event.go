@@ -300,7 +300,7 @@ func raiseEventMachine(c *echo.Context) error {
 		Notes:     req.Descr,
 	}
 	DB.InsertInto("event").
-		Whitelist("site_id", "type", "machine_id", "tool_id", "priority", "created_by", "notes").
+		Whitelist("site_id", "type", "machine_id", "tool_id", "priority", "created_by", "notes", "tool_type").
 		Record(evt).
 		Returning("id").
 		QueryScalar(&evt.ID)

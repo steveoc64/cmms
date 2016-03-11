@@ -138,13 +138,20 @@
 				}
 			},
 			raiseIssue: function(machine,comp,id,type) {
-				// console.log("we are here with comp ",comp,"and need to decide which dialog to raise")
+				console.log("we are here with comp ",comp,"and need to decide which dialog to raise",type)
 				if (comp == 0) {
 					console.log("we are looking at the",type,"on the",machine.Descr,machine)
 					comp = {}
 					this.eventFields.machineName = machine.Name
 					this.eventFields.type = type
-					this.eventFields.toolID = 0					
+					this.eventFields.toolID = 0		
+					this.eventFields.toolName = type
+					this.eventFields.machineID = machine.ID
+					this.eventFields.type = type
+					this.eventFields.tool = comp
+					this.eventFields.status = comp.Status
+					this.eventHistory.Status = comp.Status
+
 					switch(type) {
 						case "Electrical":
 							this.eventFields.status = machine.Electrical
