@@ -145,7 +145,7 @@
 					this.eventFields.machineName = machine.Name
 					this.eventFields.type = type
 					this.eventFields.toolID = 0		
-					this.eventFields.toolName = type
+					this.eventFields.toolName = ""
 					this.eventFields.machineID = machine.ID
 					this.eventFields.type = type
 					this.eventFields.tool = comp
@@ -288,6 +288,8 @@
 					action: 'Alert',
 					descr: this.eventFields.AlertDescr
 				}).$promise.then(function(){
+					vm.eventFields.AlertDescr = ""
+
 					console.log("getting a whole new machine list for id", $stateParams.id)
 					vm.baseComponents = []  // prevents Angular going bezerk with invalid refs
 					vm.siteStatus = DBSiteStatus.get()

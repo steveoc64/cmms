@@ -332,14 +332,20 @@ func raiseEventMachine(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	log.Println("Raising Event", evt.ID, evt, "User:", Username)
+	ToolName := req.Type
+	if req.ToolID != 0 {
+		DB.SQL("select name from component where id=$1", req.ToolID).QueryScalar(ToolName)
+	}
+
+	log.Println("Raising Event", evt.ID, evt, "User:", Username, "Tool:", ToolName, "ToolID:", req.ToolID)
 	publishSocket("machine", req.MachineID)
 	publishSocket("event", evt.ID)
 
 	// send SMS to all people on the distribution list for this site
 	// which at the moment, will hard code to Shane's number
+
 	err = SendSMS("0417824950",
-		fmt.Sprintf("%s on Machine %s %s", req.Action, machineName, req.Descr),
+		fmt.Sprintf("%s on Machine %s %s: %s", req.Action, machineName, ToolName, req.Descr),
 		fmt.Sprintf("%d", evt.ID))
 
 	// Patch in any attached documents
