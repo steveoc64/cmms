@@ -334,7 +334,7 @@ func raiseEventMachine(c *echo.Context) error {
 
 	ToolName := req.Type
 	if req.ToolID != 0 {
-		DB.SQL("select name from component where id=$1", req.ToolID).QueryScalar(ToolName)
+		DB.SQL("select name from component where id=$1", req.ToolID).QueryScalar(&ToolName)
 	}
 
 	log.Println("Raising Event", evt.ID, evt, "User:", Username, "Tool:", ToolName, "ToolID:", req.ToolID)
