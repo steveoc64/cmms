@@ -315,10 +315,36 @@ func raiseEventMachine(c *echo.Context) error {
 			`Needs Attention`).
 			Exec()
 
-		_, err = DB.SQL(`update component
+		// if its a tool, then update the tool record, otherwise update the non-tool field on the machine record
+		if req.ToolID == 0 {
+			// is a non-tool.
+			fieldName := ""
+			switch req.Type {
+			case "Electrical":
+				fieldName = "electrical"
+			case "Hydraulic":
+				fieldName = "hydraulic"
+			case "Lube":
+				fieldName = "lube"
+			case "Printer":
+				fieldName = "printer"
+			case "Console":
+				fieldName = "console"
+			case "Uncoiler":
+				fieldName = "uncoiler"
+			case "Rollbed":
+				fieldName = "rollbed"
+			}
+			if fieldName != "" {
+				_, err = DB.SQL(fmt.Sprintf("update machine set %s='Needs Attention' where id=$1", fieldName), req.MachineID).Exec()
+			}
+		} else {
+			// is a tool
+			_, err = DB.SQL(`update component
 			set status='Needs Attention'
 			where id=$1`, req.ToolID).
-			Exec()
+				Exec()
+		}
 	case "Halt":
 		_, err = DB.SQL(`update machine 
 			set stopped_at=localtimestamp, status=$2, is_running=false

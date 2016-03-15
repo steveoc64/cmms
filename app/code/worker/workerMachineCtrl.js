@@ -103,7 +103,46 @@
 					default:
 						return 'white'
 				}
-			},			
+			},		
+			nonToolFill: function(row,comp,def) {
+				switch(comp) {
+					case "Electrical":
+						if (row.Electrical == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Hydraulic":
+						if (row.Hydraulic == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Lube":
+						if (row.Lube == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Printer":
+						if (row.Printer == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Console":
+						if (row.Console == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Uncoiler":
+						if (row.Uncoiler == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "#eee"
+					case "Rollbed":
+						if (row.Rollbed == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "#eee"
+				}
+			},							
 			goTool: function(row) {
 				$state.go(base+'.edittool',{id: row.ID})
 			},			
@@ -432,6 +471,17 @@
 						return '#ff7043'
 					default:
 						return 'white'
+				}
+			},			
+			nonToolFill: function(row,comp) {
+				console.log("test row",row,"for",comp)
+				switch(comp) {
+					case "Electrical":
+						console.log("looking at elec on row",row)
+						if (row.Electrical == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
 				}
 			},			
 			toolWidth: function() {
