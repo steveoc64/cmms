@@ -25,7 +25,7 @@
       		ng-repeat="row in Events.events"
       		ng-click="Events.clickEdit(row)"> 
             <td><a>{{row.StartDate}}</a></td>
-            <td>{{row.Type}}</td>
+            <td>{{row.ToolType}} {{row.Type}}</td>
             <td><a ng-click="Events.goSite(row)">{{row.SiteName}}</a></td>
             <td><a ng-click="Events.goMachine(row)">{{row.MachineName}}</a></td>
             <td><a ng-click="Events.goTool(row)">{{row.ToolName}}</a></td>
