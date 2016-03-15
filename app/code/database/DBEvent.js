@@ -37,6 +37,12 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBMachineCompEvents', function($resource,ServerName,Session){
+		return $resource(ServerName+'/machine/compevents/:id/:type',{id: '@_id', type: '@_type'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
 	angular.module('cmms').factory('DBEventDocs', function($resource,ServerName,Session){
 		return $resource(ServerName+'/eventdocs/:id',{id: '@_id'},{
   		'query':  {method:'GET', isArray:true},

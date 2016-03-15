@@ -40,6 +40,7 @@ type DBeventResponse struct {
 	ID              int         `db:"id"`
 	SiteId          int         `db:"site_id"`
 	Type            string      `db:"type"`
+	ToolType        string      `db:"tool_type"`
 	MachineId       int         `db:"machine_id"`
 	MachineName     null.String `db:"machine_name"`
 	SiteName        null.String `db:"site_name"`
@@ -85,7 +86,7 @@ func queryMachineEvents(c *echo.Context) error {
 	id := getID(c)
 	var record []*DBeventResponse
 	err = DB.SQL(`select e.id,
-		e.site_id,e.type,e.machine_id,e.tool_id,e.notes,
+		e.site_id,e.type,e.tool_type,e.machine_id,e.tool_id,e.notes,
 		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
 		u1.username as username, 
@@ -112,6 +113,45 @@ func queryMachineEvents(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
+func queryMachineCompEvents(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readEvent")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	id := getID(c)
+	compType := c.Param("type")
+
+	var record []*DBeventResponse
+	err = DB.SQL(`select e.id,
+		e.site_id,e.type,e.tool_type,e.machine_id,e.tool_id,e.notes,
+		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
+		e.labour_cost, e.material_cost,e.other_cost,
+		u1.username as username, 
+		u2.username as allocated_by_user, 
+		u3.username as allocated_to_user,
+		m.name as machine_name,
+		t.name as tool_name,
+		s.name as site_name		
+		from event e
+		left join users u1 on (u1.id=e.created_by) 
+		left join users u2 on (u2.id=e.allocated_by) 
+		left join users u3 on (u3.id=e.allocated_to) 
+		left join machine m on (m.id=e.machine_id)
+		left join component t on (t.id=e.tool_id)
+		left join site s on (s.id=m.site_id)
+		where e.machine_id=$1 and e.tool_type=$2
+		order by e.startdate desc`, id, compType).QueryStructs(&record)
+
+	log.Println("Completed machine comp event query", id, compType, len(record))
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, record)
+}
+
 func queryEvents(c *echo.Context) error {
 
 	claim, err := securityCheck(c, "readEvent")
@@ -123,7 +163,7 @@ func queryEvents(c *echo.Context) error {
 	log.Println(sites)
 	var record []*DBeventResponse
 	err = DB.SQL(`select e.id,
-		e.site_id,e.type,e.machine_id,e.tool_id,e.notes,
+		e.site_id,e.type,e.tool_type,e.machine_id,e.tool_id,e.notes,
 		to_char(e.startdate,'DD Mon YY HH24:MI') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
 		u1.username as username, 
@@ -159,7 +199,7 @@ func getEvent(c *echo.Context) error {
 	id := getID(c)
 	var record DBeventResponse
 	err = DB.SQL(`select e.id,
-		e.site_id,e.type,e.machine_id,e.tool_id,e.notes,
+		e.site_id,e.type,e.tool_type,e.machine_id,e.tool_id,e.notes,
 		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
 		e.created_by as created_by,
@@ -228,7 +268,7 @@ func queryToolEvents(c *echo.Context) error {
 	id := getID(c)
 	var record []*DBeventResponse
 	err = DB.SQL(`select e.id,
-		e.site_id,e.type,e.machine_id,e.tool_id,e.notes,
+		e.site_id,e.type,e.tool_type,e.machine_id,e.tool_id,e.notes,
 		to_char(e.startdate,'DD Mon YYYY HH24:MI:SS pm') as startdate,
 		e.labour_cost, e.material_cost,e.other_cost,
 		u1.username as username, 

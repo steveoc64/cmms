@@ -7,10 +7,10 @@
 	app.controller(base+'MachineCtrl', 
 		['$scope','$state','machines','Session','LxDialogService','LxNotificationService','socket','DBMachine',
 		'LxProgressService','DBRaiseMachineEvent','$stateParams','$window','sites','DBSite','siteStatus',
-		'DBComponentEvents','DBEventDocs','Upload','DBDocs','DBSiteMachines','DBSiteStatus',
+		'DBComponentEvents','DBEventDocs','Upload','DBDocs','DBSiteMachines','DBSiteStatus','DBMachineCompEvents',
 		function($scope,$state, machines, Session, LxDialogService, LxNotificationService,socket, DBMachine,
 			LxProgressService,DBRaiseMachineEvent,$stateParams,$window,sites, DBSite, siteStatus,
-			DBComponentEvents,DBEventDocs,Upload,DBDocs,DBSiteMachines,DBSiteStatus){
+			DBComponentEvents,DBEventDocs,Upload,DBDocs,DBSiteMachines,DBSiteStatus,DBMachineCompEvents){
 
 		// Subscribe to changes in the machine list	
 		// var vm = this
@@ -220,6 +220,20 @@
 						LxDialogService.open('raiseIssueDialog')			
 					} else {
 						console.log("this bit is not running - show last event")
+						var q = DBMachineCompEvents.query({id: machine.ID, type: type})
+						var vm = this
+						q.$promise.then(function(){
+							console.log("machine events = ", q)
+							var evt = q[0]
+							vm.eventHistory.StartDate = evt.StartDate
+							vm.eventHistory.Username = evt.Username
+							vm.eventHistory.Notes = evt.Notes
+							vm.eventHistory.Docs = DBEventDocs.query({id: evt.ID})
+							vm.eventHistory.Docs.$promise.then(function(){
+								console.log("docs for this machine event", evt.ID, vm.eventHistory.Docs)
+							})
+						})
+						LxDialogService.open('showStatusDialog')									
 					}
 
 					return

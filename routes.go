@@ -102,6 +102,7 @@ func _initRoutes() {
 	e.Post("/event/raise/tool", raiseEventTool)
 	e.Delete("/event/raise/tool/:id", clearTempEventTool)
 	e.Get("/machine/events/:id", queryMachineEvents)
+	e.Get("/machine/compevents/:id/:type", queryMachineCompEvents)
 	e.Get("/tool/events/:id", queryToolEvents)
 	e.Post("/event/cost", addCostToEvent)
 	e.Get("/eventdocs/:id", queryEventDocs)
