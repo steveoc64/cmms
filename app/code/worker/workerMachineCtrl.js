@@ -188,8 +188,6 @@
 					this.eventFields.machineID = machine.ID
 					this.eventFields.type = type
 					this.eventFields.tool = comp
-					this.eventFields.status = comp.Status
-					this.eventHistory.Status = comp.Status
 
 					switch(type) {
 						case "Electrical":
@@ -214,6 +212,7 @@
 							this.eventFields.status = machine.Rollbed
 							break
 					}
+					this.eventHistory.Status = this.eventFields.status
 
 					if (this.eventFields.status == "Running") {
 						console.log("this bit is running, so raise new issue")

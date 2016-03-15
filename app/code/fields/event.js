@@ -37,6 +37,18 @@ getEventFields = function() {
         }
       }
     },{
+      name: 'event.ToolType',
+      extends: 'lx-input',
+      wrapper: 'lx-wrapper-errors',
+      defaultOptions: {
+        key: 'ToolType',
+        templateOptions: {
+          type: 'text',
+          label: 'Tool Type',
+          disabled: true
+        }
+      }
+    },{
       name: 'event.RefId',
       extends: 'lx-input',
       wrapper: 'lx-wrapper-errors',
@@ -559,6 +571,7 @@ getEventForm = function() {
       flex: { container: "row", item: "6"},
       fields: [
         {type: 'event.Type'},
+        {type: 'event.ToolType'},
       ]
     }
   },{
