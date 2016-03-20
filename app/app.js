@@ -166,6 +166,12 @@ var getMapURI = function(addr) {
 	      	templateUrl: 'html/admin/admin.menu.html',
 	      	controller: 'adminCtrl as admin'
 	      })
+	      	.state('admin.simulator', {
+	      		url: '/simulator',
+	      		acl: 'Admin',
+	      		templateUrl: 'html/admin/simulator.html',
+	      		controller: 'adminSimCtrl as sim',
+	      	})
 		      .state('admin.dashboard',{
 		      	url: '/dashboard',		
 		      	acl: 'Admin',

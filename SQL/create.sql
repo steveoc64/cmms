@@ -312,7 +312,92 @@ create table stock_level (
 );
 create index stock_level_idx on stock_level (part_id,site_id);
 
+drop table if exists sm_task;
+create table sm_task (
+	id serial not null primary key,	
+	user_id int not null,
+	date timestamptz not null default localtimestamp,
+	type text not null default '',
+	week int not null default 1,	
+	completed timestamptz,
+	escalate_date timestamptz,
+	escalate_user int,
+	status text not null default ''
+);
+create index sm_task_user_idx on sm_task (user_id, date);
 
+drop table if exists sm_machine;
+create table sm_machine (
+	task_id int not null,
+	machine_id int not null,
+	completed timestamptz
+);
+create index sm_machine_idx on sm_machine (task_id, machine_id);
 
+drop table if exists sm_machine_item;
+create table sm_machine_item (
+	task_id int not null,
+	machine_id int not null,
+	seq int not null,
+	notes text,
+	done boolean not null default false
+);
+create index sm_machine_item_idx on sm_machine_item (task_id, machine_id, seq);
+
+create table if exists sm_tool;
+create table sm_tool (
+	task_id int not null,
+	machine_id int not null,
+	tool_id int not null,
+	completed timestamptz,
+	mins_spent int not null default 0,
+	labour_cost numeric(12,2) not null,
+	materal_cost numeric(12,2) not null,
+	notes text
+);	
+create index sm_tool_idx on sm_tool (task_id, machine_id, tool_id);
+
+drop table if exists sm_tool_item;
+create table sm_tool_item (
+	task_id int not null,
+	tool_id int not null,
+	seq int not null,
+	notes text,
+	done boolean not null default false
+);
+create index sm_tool_item_idx on sm_tool_item (task_id, tool_id, seq);
+
+drop table if exists sm_component;
+create table sm_component (
+	task_id int not null,
+	machine_id int not null,
+	component text not null,
+	completed timestamptz,
+	mins_spent int not null default 0,
+	labour_cost numeric(12,2) not null,
+	materal_cost numeric(12,2) not null,
+	notes text
+);	
+create index sm_component_idx on sm_tool (task_id, machine_id, tool_id);
+
+drop table if exists sm_component_item;
+create table sm_component_item (
+	task_id int not null,
+	component text not null,
+	seq int not null,
+	notes text,
+	done boolean not null default false
+);
+create index sm_component_item_idx on sm_component_item (task_id, component, seq);
+
+drop table if exists sm_parts;
+create table sm_parts (
+	task_id int not null,
+	part_id int not null,
+	date timestamptz not null default localtimestamp,
+	qty numeric(12,2) not null,
+	value numeric(12,2) not null
+);
+create index sm_part_idx on sm_parts (task_id, part_id, date);
 
 

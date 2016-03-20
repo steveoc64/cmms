@@ -1,7 +1,7 @@
 all: clean run
 
 clean:		
-	terminate.bat
+	./terminate
 
 dist: 
 	go build
