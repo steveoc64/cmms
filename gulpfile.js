@@ -64,6 +64,7 @@ var paths = {
   */
   ],
   // These files are for your app's JavaScript
+  // test
   appJS: [
   	'app/app.js',
     'app/code/**/*.*',
