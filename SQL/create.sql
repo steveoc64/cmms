@@ -122,7 +122,7 @@ drop table if exists machine;
 create table machine (
 	id serial not null primary key,
 	site_id int not null,
-	name text not null,
+	name text not null default '',
 	descr text not null default '',
 	make text not null default '',
 	model text not null default '',

@@ -826,13 +826,21 @@ type DBwo_docs struct {
 }
 
 type EventNotes struct {
-	MachineName  null.String `db:"machine_name"`
+	MachineName  string      `db:"machine_name"`
 	MachineNotes null.String `db:"machine_notes"`
 	ToolName     null.String `db:"tool_name"`
 	ToolNotes    null.String `db:"tool_notes"`
 	SiteName     null.String `db:"site_name"`
-	SiteAddress  string      `db:"site_address"`
+	SiteAddress  null.String `db:"site_address"`
 	SiteNotes    null.String `db:"site_notes"`
+}
+
+func getString(s null.String) string {
+	r := s.String
+	if !s.Valid {
+		r = ""
+	}
+	return r
 }
 
 func newWorkOrder(c *echo.Context) error {
@@ -887,6 +895,13 @@ func newWorkOrder(c *echo.Context) error {
 		return c.String(http.StatusNotFound, err.Error())
 	}
 
+	MachineNotes := getString(eNotes.MachineNotes)
+	ToolName := getString(eNotes.ToolName)
+	ToolNotes := getString(eNotes.ToolNotes)
+	SiteName := getString(eNotes.SiteName)
+	SiteNotes := getString(eNotes.SiteNotes)
+	SiteAddress := getString(eNotes.SiteAddress)
+
 	err = DB.InsertInto("workorder").
 		Columns("event_id", "est_duration", "descr", "status", "startdate", "notes").
 		Record(wo).
@@ -897,7 +912,7 @@ func newWorkOrder(c *echo.Context) error {
 	theDate := ""
 	err = DB.SQL(`select to_char(startdate, 'DD-Mon-YYYY HH:MI AM') from workorder where id=$1`, wo.ID).QueryScalar(&theDate)
 
-	googleMapUrl, _ := UrlEncoded(eNotes.SiteAddress)
+	googleMapUrl, _ := UrlEncoded(getString(eNotes.SiteAddress))
 
 	// create the email body to be sent to each assignee
 	emailBody := fmt.Sprintf(`
@@ -928,20 +943,20 @@ func newWorkOrder(c *echo.Context) error {
 		<ul>`,
 		wo.ID,
 		wo.Descr,
-		eNotes.ToolName,
+		ToolName,
 		eNotes.MachineName,
-		eNotes.SiteName,
+		SiteName,
 		theDate,
 		wo.EstDuration,
 		wo.Notes,
-		eNotes.SiteName,
+		SiteName,
 		googleMapUrl,
-		eNotes.SiteAddress,
-		eNotes.SiteNotes,
+		SiteAddress,
+		SiteNotes,
 		eNotes.MachineName,
-		eNotes.MachineNotes,
-		eNotes.ToolName,
-		eNotes.ToolNotes)
+		MachineNotes,
+		ToolName,
+		ToolNotes)
 
 	// populate the skills, adding each one to the emal body
 	for _, skill := range req.Skills {
