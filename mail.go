@@ -23,7 +23,8 @@ func _initMailer(msg string) {
 	// return
 
 	m := NewMail()
-	m.SetHeader("To", "steveoc64@gmail.com")
+	m.SetHeader("To", "steve.oconnor@sbsinternational.com.au")
+	// m.SetHeader("To", "steveoc64@gmail.com")
 	m.SetHeader("Subject", "CMMS has started on "+Config.Installation)
 	m.SetBody("text/html", "The CMMS server has been started @"+Config.Installation+":"+Config.MailServer+"\n"+msg)
 	MailChannel <- m
