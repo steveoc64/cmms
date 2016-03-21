@@ -833,6 +833,8 @@ type EventNotes struct {
 	SiteName     null.String `db:"site_name"`
 	SiteAddress  null.String `db:"site_address"`
 	SiteNotes    null.String `db:"site_notes"`
+	EventNotes   null.String `db:"event_notes"`
+	ToolType     string      `db:"tool_type"`
 }
 
 func getString(s null.String) string {
@@ -885,7 +887,9 @@ func newWorkOrder(c *echo.Context) error {
 		s.address as site_address,
 		s.notes as site_notes,
 		t.name as tool_name,
-		t.notes as tool_notes
+		t.notes as tool_notes,
+		e.notes as event_notes,
+		e.tool_type as tool_type
 		from event e
 		left join site s on s.id=e.site_id
 		left join machine m on m.id=e.machine_id
@@ -917,7 +921,7 @@ func newWorkOrder(c *echo.Context) error {
 	// create the email body to be sent to each assignee
 	emailBody := fmt.Sprintf(`
 		<h1>Maintenance WorkOrder %06d</h1>
-		%s for the %s tool on the %s machine, at %s 
+		%s for the %s %s on the %s machine, at %s 
 
 		<ul>
 			<li>Start Date: %s
@@ -936,7 +940,7 @@ func newWorkOrder(c *echo.Context) error {
 		<h2>Machine: %s</h2>
 		  %s
 		<hr>
-		<h2>Tool: %s</h2>
+		<h2>Tool: %s %s</h2>
 		  %s
 		<hr>
 		<h3>Skill Requirements:</h3>
@@ -944,6 +948,7 @@ func newWorkOrder(c *echo.Context) error {
 		wo.ID,
 		wo.Descr,
 		ToolName,
+		eNotes.ToolType,
 		eNotes.MachineName,
 		SiteName,
 		theDate,
@@ -956,6 +961,7 @@ func newWorkOrder(c *echo.Context) error {
 		eNotes.MachineName,
 		MachineNotes,
 		ToolName,
+		eNotes.ToolType,
 		ToolNotes)
 
 	// populate the skills, adding each one to the emal body
