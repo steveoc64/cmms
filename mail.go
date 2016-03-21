@@ -20,7 +20,7 @@ func _initMailer(msg string) {
 	// queue up a test message to say that we have begun
 
 	go _MailerDaemon()
-	return
+	// return
 
 	m := NewMail()
 	m.SetHeader("To", "steveoc64@gmail.com")
