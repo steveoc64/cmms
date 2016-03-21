@@ -400,4 +400,37 @@ create table sm_parts (
 );
 create index sm_part_idx on sm_parts (task_id, part_id, date);
 
+drop table if exists sched_task;
+create table sched_task (
+	seq serial not null primary key,
+	machine_id int not null,
+	tool_id int not null,
+	component text not null default '',
+	startdate timestamptz not null default localtimestamp,
+	freq text not null default 'R',
+	parent_task int,
+	days int,
+	labour_cost numeric(12,2) not null,
+	materal_cost numeric(12,2) not null,
+	other_cost numeric(12,2) not null	
+);
+
+drop table if exists task;
+create table task (
+	seq serial not null primary key,
+	user_id int not null,
+	machine_id int not null,
+	tool_id int not null,
+	component text not null default '',
+	startdate timestamptz not null default localtimestamp,
+	freq text not null default 'R',
+	parent_task int,
+	days int,
+	labour_cost numeric(12,2) not null,
+	materal_cost numeric(12,2) not null,
+	other_cost numeric(12,2) not null,
+	completed timestamptz,
+	has_issue boolean not null default false
+);
+
 
