@@ -71,11 +71,13 @@
 			calcBaseComponents: function() {
 				angular.forEach(this.machines, function(m,k){
 					m.baseComponents = []
-					for (var i = 0; i < m.Components.length; i++) {
-						if (m.Components[i].ZIndex == 0) {
-							m.baseComponents.push(m.Components[i])
-						}
-					};
+					if (m.Components != null) {
+						for (var i = 0; i < m.Components.length; i++) {
+							if (m.Components[i].ZIndex == 0) {
+								m.baseComponents.push(m.Components[i])
+							}
+						};
+					}
 					// for each base component, create an array of sub-components
 					angular.forEach(m.baseComponents, function(bcomp,ckey){
 						bcomp.subComp = []
