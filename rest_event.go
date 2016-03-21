@@ -826,13 +826,13 @@ type DBwo_docs struct {
 }
 
 type EventNotes struct {
-	MachineName  string `db:"machine_name"`
-	MachineNotes string `db:"machine_notes"`
-	ToolName     string `db:"tool_name"`
-	ToolNotes    string `db:"tool_notes"`
-	SiteName     string `db:"site_name"`
-	SiteAddress  string `db:"site_address"`
-	SiteNotes    string `db:"site_notes"`
+	MachineName  null.String `db:"machine_name"`
+	MachineNotes null.String `db:"machine_notes"`
+	ToolName     null.String `db:"tool_name"`
+	ToolNotes    null.String `db:"tool_notes"`
+	SiteName     null.String `db:"site_name"`
+	SiteAddress  string      `db:"site_address"`
+	SiteNotes    null.String `db:"site_notes"`
 }
 
 func newWorkOrder(c *echo.Context) error {
