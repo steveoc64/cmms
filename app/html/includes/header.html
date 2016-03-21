@@ -9,8 +9,10 @@
                         ng-if="!headerCtrl.session.loggedIn"
                         ui-sref="landing"
                         lx-ripple>Login</button></li>
-            <li><button class="btn btn--l btn-blue btn-"
-                        ng-if="headerCtrl.session.loggedIn">User: {{headerCtrl.session.Username}}</li>
+            <li><button class="btn btn--l btn-blue btn--raised"
+                        ng-if="headerCtrl.session.loggedIn"
+                        ng-click="headerCtrl.profile()"
+                        lx-ripple>User: {{headerCtrl.session.Username}}</button></li>
             <li><button class="btn btn--l btn--blue-grey btn--raised" 
                         ng-if="headerCtrl.session.loggedIn"
                         ng-click="headerCtrl.logout()"

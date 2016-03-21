@@ -19,9 +19,11 @@
 					if (Session.loggedIn) {
 						$state.go('landing')
 					}
+				},
+				profile: function() {
+					console.log('clicked on user profile')
 				}
 					  			
-
 			})
 
 		})
