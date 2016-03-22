@@ -30,115 +30,63 @@
 <!-- Machine IMG if present -->
 <div><img ng-src="img/machine/{{editMachine.machine.Serialnum}}.jpg"></div>
 
+<!-- SVG copied from worker view -->
+
 <!-- Machine SVG representation -->
-<div>
   <svg ng-class="editMachine.getSVGClass()" xmlns="http://www.w3.org/2000/svg">
     <polygon points="50,100 10,160 90,160" style="fill:#bbb;stroke:black;stroke-width:2" />
-    <g stroke="#114" stroke-width="2" 
-          ng-click="editMachine.raiseIssue(0,0,'Uncoiler')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue with Uncoiler" tooltip-position="right">
-      <circle cx="50" cy="100" r="40" fill="#eee"/>
-      <text x="20" y="105" stroke-width="1" fill="black">Uncoiler</text>       
-    </g>
+    <circle cx="50" cy="100" r="40" stroke="black" stroke-width="2" fill="#eee" class="fillhover"/>
+    <text x="20" y="105">Uncoiler</text>   
+    <rect x="100" y="100" ng-attr-width="{{250 + (editMachine.baseComponents.length * 75)}}" height="60" stroke="black" stroke-width="2" fill="#eee"/>
+    <text transform="translate(120 140)">{{row.SiteName}} - {{row.Name}}</text>
 
-    <rect x="100" y="100" ng-attr-width="{{250 + (editMachine.baseComponents.length * 75)}}" 
-      height="60" stroke="black" stroke-width="2" fill="#eee"/>
-      <!-- ng-click="editMachine.clickEdit(row)"/> -->
-    <text transform="translate(120 140)">{{editMachine.machine.SiteName}} - {{editMachine.machine.Name}}</text>
+    <rect x="100" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="115" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+    <rect x="135" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="150" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+    <rect x="170" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="185" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+    <rect x="205" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="220" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
 
-    <g stroke="#114" stroke-width="2" 
-          ng-click="editMachine.raiseIssue(0,0,'Rollbed')" 
-          class="fillhover"
-          lx-tooltip="Roll Bed" tooltip-position="top">
-  
-    <rect x="100" y="60" width="30" height="40" fill="#eee"/>
-      <circle cx="115" cy="73" r="6" fill="#ccc"/>
-      <circle cx="115" cy="87" r="6" fill="#ccc"/>
-    <rect x="135" y="60" width="30" height="40" fill="#eee"/>
-      <circle cx="150" cy="73" r="6" fill="#ccc"/>
-      <circle cx="150" cy="87" r="6" fill="#ccc"/>
-    <rect x="170" y="60" width="30" height="40" fill="#eee"/>
-      <circle cx="185" cy="73" r="6" fill="#ccc"/>
-      <circle cx="185" cy="87" r="6" fill="#ccc"/>
-    <rect x="205" y="60" width="30" height="40" fill="#eee"/>
-      <circle cx="220" cy="73" r="6" fill="#ccc"/>
-      <circle cx="220" cy="87" r="6" fill="#ccc"/>
+    <rect x="280" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="295" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
+    <rect x="315" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
+    <circle cx="330" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
 
-    <rect x="280" y="60" width="30" height="40" fill="#eee"/>
-      <circle cx="295" cy="73" r="6" fill="#ccc"/>
-      <circle cx="295" cy="87" r="6" fill="#ccc"/>
-    <rect x="315" y="60" width="30" height="40" fill="#eee"/>
-      <circle cx="330" cy="73" r="6" fill="#ccc"/>
-      <circle cx="330" cy="87" r="6" fill="#ccc"/>
-    </g>
-
-    <svg ng-repeat="comp in editMachine.baseComponents" 
+    <svg ng-repeat="row in editMachine.baseComponents" 
          ng-attr-x="{{350 + $index * 75}}" 
-         lx-tooltip="{{comp.Name}}" tooltip-position="bottom"
-         ng-click="editMachine.goTool(comp)">
+         ng-click="editMachine.goTool(row)">
       <a>
       <rect x="25" y="0" width="20" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
       <rect y="20" width="70" rx="10" ry="10" height="80" stroke="black" stroke-width="2" 
-            ng-attr-fill="{{editMachine.toolFill(comp)}}"
+            ng-attr-fill="{{editMachine.toolFill(row)}}"
             class="hoverme"/>
       <text x="5" y="50">{{$index + 1}}</text>
       </a>
     </svg>
 
-    <svg ng-repeat="comp in editMachine.baseComponents" 
+    <svg ng-repeat="row in editMachine.baseComponents" 
          ng-attr-x="{{350 + editMachine.baseComponents.length * 75}}" 
-         ng-click="editMachine.goTool(comp)">
+         ng-click="editMachine.goTool(row)">
       <a>
-      <text x="50" ng-attr-y="{{30 + $index * 20}}">{{$index+1}} {{comp.Name}}</text>
+      <text x="50" ng-attr-y="{{30 + $index * 20}}">{{$index+1}} {{row.Name}}</text>
       </a>
     </svg>
 
-    <g stroke="#114" stroke-width="2" 
-          ng-click="editMachine.raiseIssue(0,0,'Electrical')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue - Electrical" tooltip-position="top">
-      <rect x="100" y="175" width="100" rx="10" ry="10" height="45" fill="#eee" class="fillhover"/>
-      <text x="110" y="200" fill="black" stroke-width="1">Electrical</text>
-    </g>
-    <g stroke="#114" stroke-width="2" 
-          ng-click="editMachine.raiseIssue(0,0,'Hydraulic')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue - Hydraulic" tooltip-position="top">
-      <rect x="210" y="175" width="100" rx="10" ry="10" height="45" fill="#eee" class="fillhover"/>
-      <text x="220" y="200" fill="black" stroke-width="1">Hydraulic</text>
-    </g>
-    <g stroke="#114" stroke-width="2" 
-          ng-click="editMachine.raiseIssue(0,0,'Printer')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue - Printer" tooltip-position="top">
-      <rect x="320" y="175" width="100" rx="10" ry="10" height="45" fill="#eee" class="fillhover"/>
-      <text x="330" y="200" fill="black" stroke-width="1">Printer</text>
-    </g>
-    <g stroke="#114" stroke-width="2" 
-          ng-click="editMachine.raiseIssue(0,0,'Console')" 
-          class="fillhover"
-          lx-tooltip="Raise Issue - Console" tooltip-position="top">
-      <rect x="430" y="175" width="100" rx="10" ry="10" height="45" fill="#eee" class="fillhover"/>
-      <text x="440" y="200" fill="black" stroke-width="1">Console</text>
-    </g>
-<!-- 
+    <text x="110" y="200">Electrical</text>
+    <rect x="100" y="175" width="100" rx="10" ry="10" height="45" 
+      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
     <text x="220" y="200">Hydraulic</text>
     <rect x="210" y="175" width="100" rx="10" ry="10" height="45" 
-      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"
-      lx-tooltip="Raise Issue - Hydraulic" tooltip-position="top"
-      ng-click="Machines.raiseIssue(row,0,0,'Hydraulic')"/>
+      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
     <text x="330" y="200">Printer</text>
     <rect x="320" y="175" width="100" rx="10" ry="10" height="45" 
-      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"
-      lx-tooltip="Raise Issue - Printer" tooltip-position="top"
-      ng-click="Machines.raiseIssue(row,0,0,'Printer')"/>
+      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
     <text x="440" y="200">Console</text>
     <rect x="430" y="175" width="100" rx="10" ry="10" height="45" 
-      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"
-      lx-tooltip="Raise Issue - Console" tooltip-position="top"
-      ng-click="Machines.raiseIssue(row,0,0,'Console')"/>
- -->
+      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
+
   </svg>
   <svg ng-class="editMachine.getSVGClass()" xmlns="http://www.w3.org/2000/svg">
     <polygon points="50,100 10,160 90,160" style="fill:#bbb;stroke:black;stroke-width:2" />
@@ -173,14 +121,6 @@
       </a>
     </svg>
 
-<!--     <svg ng-repeat="row in editMachine.baseComponents" 
-         ng-attr-x="{{350 + editMachine.baseComponents.length * 75}}" 
-         ng-click="editMachine.goTool(row)">
-      <a>
-      <text x="50" ng-attr-y="{{30 + $index * 20}}">{{$index+1}} {{row.Name}}</text>
-      </a>
-    </svg>
- -->
     <text x="110" y="200">Electrical</text>
     <rect x="100" y="175" width="100" rx="10" ry="10" height="45" 
       stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
@@ -225,6 +165,36 @@
 
 <div class="card">
   <lx-tabs>
+
+    <lx-tab heading="Tasks">
+      <button type="button" 
+              class="btn btn--l btn--blue btn--raised" 
+              lx-ripple>
+        <i class="mdi mdi-plus-circle-outline"> Add</i>
+      </button>      
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th> Freq</th>
+              <th> Notes</th>
+              <th> Time</th>
+              <th> Costs</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="data-table"
+                ng-click="editMachine.goEvent(row)"
+                ng-repeat="row in editMachine.events">
+                  <td><a>{{row.StartDate}}</a></td>
+                  <td>{{row.Type}}</td>
+                  <td>{{row.Username}}</td>
+                  <td>{{row.Notes | firstline}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>     
+    </lx-tab>
 
     <lx-tab heading="Events">
       <div class="data-table-container">

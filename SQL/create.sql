@@ -400,6 +400,17 @@ create table sm_parts (
 );
 create index sm_part_idx on sm_parts (task_id, part_id, date);
 
+-- Sched Task Freq types
+---------------------------------------------------------
+-- Monthly  / Week N of the month  (n = 1..4)
+-- Weekly
+-- Days     / Every N days  (n = 1..365)
+-- Relative / N days after parent complete  (n = 1..365)
+-- Yearly   / Nth day of the year (n = 1..365)
+---------------------------------------------------------
+
+
+
 drop table if exists sched_task;
 create table sched_task (
 	seq serial not null primary key,
