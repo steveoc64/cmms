@@ -413,7 +413,7 @@ create index sm_part_idx on sm_parts (task_id, part_id, date);
 
 drop table if exists sched_task;
 create table sched_task (
-	seq serial not null primary key,
+	id serial not null primary key,
 	machine_id int not null,
 	tool_id int not null,
 	component text not null default '',
@@ -428,7 +428,7 @@ create table sched_task (
 
 drop table if exists task;
 create table task (
-	seq serial not null primary key,
+	id serial not null primary key,
 	user_id int not null,
 	machine_id int not null,
 	tool_id int not null,

@@ -486,6 +486,43 @@ func queryMachineParts(c *echo.Context) error {
 	return c.JSON(http.StatusOK, parts)
 }
 
+type DBSchedTask struct {
+	ID int `db:"id"`
+	MachineID int `db:"machine_id"`
+	ToolID int `db:"tool_id"`
+	Component string `db:"component"`
+	StartDate dat.NullTime `db:"startdate"`
+	Freq string `db:"freq"`
+	ParentTask int `db:"parent_task"`
+	Days int `db:"days"`
+	LabourCost float64 `db:"labour_cost"`
+	MaterialCost float64 `db:"materal_cost"`
+	OtherCost float64 `db:"other_cost"`
+}
+
+// Get a list of all task templates for the given machine
+func queryMachineTasks(c *echo.Context) error {
+
+	_, err := securityCheck(c, "readMachine")
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
+	var tasks []*DBSchedTask
+
+	machineID := getID(c)
+	err = DB.SQL(`
+		select id,tool_id,component,startdate,freq,days,labour_cost,materal_cost,other_cost
+		from sched_task
+		where machine_id=$1`, machineID).
+		QueryStructs(&tasks)
+
+	if err != nil {
+		return c.String(http.StatusNoContent, err.Error())
+	}
+	return c.JSON(http.StatusOK, tasks)
+}
+
 // Clear the machine - temp measure to use during testing
 // TODO - remove this function later, when the actual workflow allows for the tool to be
 // cleared through regular channels

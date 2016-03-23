@@ -33,7 +33,7 @@ func _initMailer(msg string) {
 
 func _MailerDaemon() {
 
-	d := gomail.NewDialer(Config.MailServer, Config.MailPort, Config.MailUser, Config.MailPasswd)
+	d := gomail.NewPlainDialer(Config.MailServer, Config.MailPort, Config.MailUser, Config.MailPasswd)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	// d := gomail.Dialer{
 	// 	Host: Config.MailServer,

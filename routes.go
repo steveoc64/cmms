@@ -78,6 +78,7 @@ func _initRoutes() {
 	e.Get("/machine/components/:id", queryMachineComponents)
 	e.Get("/machine/parts/:id", queryMachineParts)
 	e.Get("/machine/clear/:id", clearMachine)
+	e.Get("/machine/tasks/:id", queryMachineTasks)
 
 	e.Get("/component", queryComponents)
 	e.Get("/component/:id", getComponent)

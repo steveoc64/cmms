@@ -401,6 +401,9 @@ var getMapURI = function(addr) {
 			      		machine: function(DBMachine,$stateParams) {
 			      			return DBMachine.get({id: $stateParams.id})
 			      		},
+			      		tasks: function(DBMachineTasks, $stateParams) {
+			      			return DBMachineTasks.query({id: $stateParams.id})
+			      		},
 			      		components: function(DBMachineComponents,$stateParams) {
 			      			return DBMachineComponents.query({id: $stateParams.id})
 			      		},

@@ -46,4 +46,10 @@
 		})
 	})
 
+	angular.module('cmms').factory('DBMachineTasks', function($resource,ServerName,Session){
+		return $resource(ServerName+'/machine/tasks/:id',{id: '@_id'},{
+  		'query':  {method:'GET', isArray:true},
+		})
+	})
+
 })();

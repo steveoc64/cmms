@@ -20,6 +20,113 @@
     </div>
 </lx-dialog>
 
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='raiseIssueDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-indigo-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Raise Issue with {{editMachine.eventFields.machineName}} - {{editMachine.eventFields.toolName}} {{editMachine.eventFields.type}}
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+    </div>
+    <div class="dialog__content">   
+<!--       <lx-tabs links-tc="light" links-bgc="blue-500" indicator="yellow-500" no-divider="true" layout="inline">
+        <lx-tab heading="Needs Attention">
+ -->    
+        <div class="p++">
+            <form name="editMachine.alertForm" ng-submit="editMachine.submitAlert()">          
+              <div flex-container="row" ng-if="editMachine.eventFields.tool.subComp.length > 0">
+                <div ng-repeat="c in editMachine.eventFields.tool.subComp" flex-item="4">
+                  <svg x="0" y="0">
+                    <a>
+                    <rect x="80" y="0" width="20" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
+                    <rect y="20" width="180" rx="10" ry="10" height="80" stroke="black" stroke-width="2" 
+                          fill="#eee"/>
+                    <text x="10" y="50">{{c.Name}}</text>
+                    </a>
+                  </svg>
+                </div>
+              </div>
+              <div flex-container="row" ng-if="editMachine.eventFields.tool.subComp.length > 0">
+                <h4>Which Tools in this frame are part of the problem ?</h4>
+              </div>
+              <formly-form model="editMachine.eventFields" fields="editMachine.alertFields"></formly-form>
+                <div flex-item="10">
+                  <lx-file-input label="Add Photo / Document ..." value="filename" change="editMachine.eventUpload(e)"></lx-file-input>
+                </div>
+                <div flex-item="2">
+                  <div id="upload-progress">{{editMachine.uploadProgress}}</div>          
+                </div>              
+              <div class="dialog__actions">
+                <button type="button" class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+                <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Alert</button>
+              </div>    
+          </form>
+        </div>
+        <!-- </lx-tab> -->
+<!--         <lx-tab heading="Halt">
+          <div class="p++">
+            <form name="editMachine.haltForm" ng-submit="editMachine.submitHalt()">          
+              <formly-form model="editMachine.eventFields" fields="editMachine.haltFields"></formly-form>
+              <div class="dialog__actions">
+                <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Cancel</button>
+                <button type="submit" class="btn btn--m btn--black btn--flat" lx-ripple>Submit Halt</button>
+              </div>    
+              </form>
+          </div>
+        </lx-tab>
+ -->   
+    <!-- </lx-tabs> -->
+    </div>
+</lx-dialog>
+
+<lx-dialog class="dialog dialog__scrollable dialog--l bgc-light-gradient" id='showStatusDialog' escape-close="true">
+    <div class="dialog__header">
+        <div class="toolbar bgc-orange-800 pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Status of {{editMachine.eventFields.machineName}} - {{editMachine.eventFields.toolName}} {{editMachine.eventFields.type}} 
+                - {{editMachine.eventFields.status}}
+            </span>       
+            <span lx-dialog-close class="white">X</span>     
+        </div>
+    </div>
+    <div class="dialog__content">   
+      <div class="p++">
+        <form name="editMachine.statusForm">          
+          <formly-form model="editMachine.eventHistory" fields="editMachine.statusFields"></formly-form>
+          <!-- TODO - add viewers here for any docs attached to this event -->
+          <div>
+            <h5>Notes</h5>
+            <div ng-bind-html="editMachine.eventHistory.Notes | unsafe"></div>
+          </div>
+          <!-- Show the attached docs for this event -->
+          <div flex-container="row" ng-if="editMachine.eventHistory.Docs.length > 0">
+            <div flex-item ng-repeat="row in editMachine.eventHistory.Docs">
+              <div class="card" style="height: 240px">
+                <div flex-container="row">
+                    <div class="p+">
+                      <div flex-item flex-container="column">
+                        <div flex-item class="card__img card__img--left" style="height: 140px">
+                          <a ng-href="doc/{{row.ID}}" target="_doc">              
+                            <img ng-src="{{editMachine.getThumbnail(row)}}">
+                          </a>  
+                        </div>
+                        <span flex-item class="fs-subhead tc-black-2 display-block">
+                          {{row.Name}} 
+                        </span>
+                      </div>          
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dialog__actions">
+            <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Back</button>
+          </div>    
+        </form>
+      </div>
+    </div>
+</lx-dialog>
 
 <div class="main-section__title">
   <i class="icon icon--xs icon--blue-grey icon--circled mdi mdi-keg"></i>
@@ -28,11 +135,197 @@
 
 
 <!-- Machine IMG if present -->
-<div><img ng-src="img/machine/{{editMachine.machine.Serialnum}}.jpg"></div>
+<!-- <div><img ng-src="img/machine/{{editMachine.machine.Serialnum}}.jpg"></div> -->
 
 <!-- SVG copied from worker view -->
 
 <!-- Machine SVG representation -->
+<div>
+  <svg class="svg-panel" 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="95%"
+    vbox="0 0 {{250 + (editMachine.baseComponents.length * 50)}} 200">
+    <defs>
+      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#eee;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#869ab1;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="bgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#9ac;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="bgradh" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#abd;stop-opacity:1" />
+      </linearGradient>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="2 2" result="shadow"/>
+        <feOffset dx="3" dy="3"/>
+      </filter>      
+      <filter id="shadow1" x="0" y="0" width="200%" height="200%">
+        <feOffset result="offOut" in="SourceAlpha" dx="1" dy="1" />
+        <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+        <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+      </filter>
+      <radialGradient id="GreenBtn">
+          <stop offset="10%" stop-color="#4f2"/>
+          <stop offset="95%" stop-color="#2a1"/>
+      </radialGradient>
+      <radialGradient id="DullGreenBtn">
+          <stop offset="10%" stop-color="#898"/>
+          <stop offset="95%" stop-color="#888"/>
+      </radialGradient>
+      <radialGradient id="YellowBtn">
+          <stop offset="10%" stop-color="#ff0">
+            <animate attributeName="stop-color"
+            values="#da2;#ee0;#ff0;#ff0;#ee0;#da2"
+            dur="0.8s"
+            repeatCount="indefinite" />
+          </stop>
+          <stop offset="95%" stop-color="#da2"/>
+      </radialGradient>
+      <radialGradient id="DullYellowBtn">
+          <stop offset="10%" stop-color="#998"/>
+          <stop offset="95%" stop-color="#888"/>
+      </radialGradient>
+      <radialGradient id="RedBtn">   <!--  fx="60%" fy="30%"> -->
+          <stop offset="10%" stop-color="#fa0">
+            <animate attributeName="stop-color"
+            values="#f00;#f80;#fa0;#f80;#f00"
+            dur="0.8s"
+            repeatCount="indefinite" />
+          </stop>
+          <stop offset="95%" stop-color="#e00">
+            <animate attributeName="stop-color"
+            values="#800;#a00;#f00;#a00;#800"
+            dur="0.8s"
+            repeatCount="indefinite" />
+          </stop>
+      </radialGradient>
+    </defs>
+
+    <!-- Add picture for uncoiler -->
+    <g stroke="#114" stroke-width="2" 
+          ng-click="editMachine.raiseIssue(0,0,'Uncoiler')" 
+          class="fillhover"
+          lx-tooltip="Raise Issue with Uncoiler" tooltip-position="right">
+      <polygon points="30,90 0,148 60,148" fill="url(#grad1)"/>
+      <circle cx="30" cy="90" r="30"
+               ng-attr-fill="{{editMachine.nonToolFill('Uncoiler')}}"/>
+      <!-- <text x="170" y="105" stroke-width="1" fill="black">UnCoiler</text>        -->
+    </g>
+
+    <!-- Add buttons for elec, etc -->
+    <g stroke="#114" stroke-width="1" 
+          ng-click="editMachine.raiseIssue(0,0,'Electrical')" 
+          class="fillhover"
+          lx-tooltip="Electrical" tooltip-position="right">
+      <rect x="0" y="0" width="40" rx="3" ry="3" 
+            ng-attr-fill="{{editMachine.nonToolFill('Electrical')}}"
+            height="40" class="bhover"/>
+      <image xlink:href="/img/elec.png" x="1" y="2" height="38px" width="38px"/>
+    </g>
+    <g stroke="#114" stroke-width="1" 
+          ng-click="editMachine.raiseIssue(0,0,'Hydraulic')" 
+          class="fillhover"
+          lx-tooltip="Hydraulic" tooltip-position="top">
+      <rect x="50" y="0" width="40" rx="3" ry="3" height="40" 
+            ng-attr-fill="{{editMachine.nonToolFill('Hydraulic')}}"
+            class="bhover"/>
+      <image xlink:href="/img/hydraulic.png" x="51" y="2" height="38px" width="38px"/>
+    </g>
+    <g stroke="#114" stroke-width="1" 
+          ng-click="editMachine.raiseIssue(0,0,'Lube')" 
+          class="fillhover"
+          lx-tooltip="Lube" tooltip-position="top">
+      <rect x="100" y="0" width="40" rx="3" ry="3" height="40" 
+            ng-attr-fill="{{editMachine.nonToolFill('Lube')}}"
+            class="bhover"/>
+      <image xlink:href="/img/lube.png" x="101" y="2" height="38px" width="38px"/>
+    </g>
+    <g stroke="#114" stroke-width="1" 
+          ng-click="editMachine.raiseIssue(0,0,'Printer')" 
+          class="fillhover"
+          lx-tooltip="Printer" tooltip-position="top">
+      <rect x="150" y="0" width="40" rx="3" ry="3" height="40" 
+            ng-attr-fill="{{editMachine.nonToolFill('Printer')}}"
+            class="bhover"/>
+      <image xlink:href="/img/printer.png" x="151" y="2" height="38px" width="38px"/>
+    </g>
+    <g stroke="#114" stroke-width="1" 
+          ng-click="editMachine.raiseIssue(0,0,'Console')" 
+          class="fillhover"
+          lx-tooltip="Console" tooltip-position="top">
+      <rect x="200" y="0" width="40" rx="3" ry="3" height="40" 
+            ng-attr-fill="{{editMachine.nonToolFill('Console')}}"
+            class="bhover"/>
+      <image xlink:href="/img/console.png" x="201" y="2" height="38px" width="38px"/>
+    </g>
+    
+    <!-- Add main rectangle -->
+    <rect x="80" y="100" ng-attr-width="{{170 + (editMachine.baseComponents.length * 50)}}" 
+      height="48" stroke="black" stroke-width="2" fill="url(#grad1)"/>
+      <!-- ng-click="Machines.clickEdit(row)"/> -->
+    <!-- <text transform="translate(270 140)">{{row.SiteName}} - {{row.Name}}</text> -->
+    <text transform="translate(100 135)" style="font-size: 22;">{{row.Name}}</text>
+
+    <!-- Add the status indicators -->
+    <g ng-if="row.Status == 'Running'"
+       stroke="black" fill="url(#GreenBtn)">
+      <circle ng-attr-cx="{{250 + (editMachine.baseComponents.length * 50) - 26}}" cy="125" r="18"/>
+      <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 20}}" fill="url(#DullYellowBtn)" cy="120" r="18"/> -->
+    </g>
+    <g ng-if="row.Status == 'Needs Attention'"
+       stroke="black" fill="url(#YellowBtn)">
+      <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
+      <circle ng-attr-cx="{{250 + (editMachine.baseComponents.length * 50) - 26}}" cy="125" r="18"/>
+    </g>
+    <g ng-if="row.Status == 'Maintenance Pending'"
+       stroke="black" fill="url(#YellowBtn)">
+      <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
+      <circle ng-attr-cx="{{250 + (editMachine.baseComponents.length * 50) - 26}}" cy="125" r="18"/>
+    </g>
+    <g ng-if="row.Status == 'Stopped'"
+       stroke="black" fill="url(#RedBtn)">
+      <!-- <circle ng-attr-cx="{{240 + (row.baseComponents.length * 50) - 60}}" fill="url(#DullGreenBtn)" cy="120" r="18"/> -->
+      <circle ng-attr-cx="{{250 + (editMachine.baseComponents.length * 50) - 26}}" cy="125" r="18"/>
+    </g>
+
+    <g stroke="#114" stroke-width="2" 
+          ng-click="editMachine.raiseIssue(0,0,'Rollbed')" 
+          class="fillhover"
+          lx-tooltip="Raise Issue with Roll Bed" tooltip-position="right">
+  
+    <rect x="80" y="60" width="30" height="40" 
+          ng-attr-fill="{{editMachine.nonToolFill('Rollbed')}}"/>
+      <circle cx="95" cy="73" r="6" fill="#ccc"/>
+      <circle cx="95" cy="87" r="6" fill="#ccc"/>
+    <rect x="115" y="60" width="30" height="40" 
+          ng-attr-fill="{{editMachine.nonToolFill('Rollbed')}}"/>
+      <circle cx="130" cy="73" r="6" fill="#ccc"/>
+      <circle cx="130" cy="87" r="6" fill="#ccc"/>
+    <rect x="150" y="60" width="30" height="40"
+          ng-attr-fill="{{editMachine.nonToolFill('Rollbed')}}"/>
+      <circle cx="165" cy="73" r="6" fill="#ccc"/>
+      <circle cx="165" cy="87" r="6" fill="#ccc"/>
+    <rect x="185" y="60" width="30" height="40"
+          ng-attr-fill="{{editMachine.nonToolFill('Rollbed')}}"/>
+      <circle cx="200" cy="73" r="6" fill="#ccc"/>
+      <circle cx="200" cy="87" r="6" fill="#ccc"/>
+    </g>
+    <svg ng-repeat="comp in editMachine.baseComponents" 
+         ng-attr-x="{{250 + $index * 50}}" 
+         lx-tooltip="{{comp.Name}} - {{comp.Status}}" tooltip-position="bottom"
+         ng-click="editMachine.raiseIssue(comp,comp.ID,'tool')">
+      <a>
+      <rect x="16" y="0" width="15" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
+      <rect y="20" width="45" rx="10" ry="10" height="80" stroke="black" stroke-width="2" 
+            ng-attr-fill="{{editMachine.toolFill(comp)}}"
+            class="hoverme"/>
+      <text x="5" y="50">{{$index + 1}}</text>
+      </a>
+    </svg>
+<!-- 
   <svg ng-class="editMachine.getSVGClass()" xmlns="http://www.w3.org/2000/svg">
     <polygon points="50,100 10,160 90,160" style="fill:#bbb;stroke:black;stroke-width:2" />
     <circle cx="50" cy="100" r="40" stroke="black" stroke-width="2" fill="#eee" class="fillhover"/>
@@ -66,14 +359,6 @@
       </a>
     </svg>
 
-    <svg ng-repeat="row in editMachine.baseComponents" 
-         ng-attr-x="{{350 + editMachine.baseComponents.length * 75}}" 
-         ng-click="editMachine.goTool(row)">
-      <a>
-      <text x="50" ng-attr-y="{{30 + $index * 20}}">{{$index+1}} {{row.Name}}</text>
-      </a>
-    </svg>
-
     <text x="110" y="200">Electrical</text>
     <rect x="100" y="175" width="100" rx="10" ry="10" height="45" 
       stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
@@ -87,54 +372,7 @@
     <rect x="430" y="175" width="100" rx="10" ry="10" height="45" 
       stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
 
-  </svg>
-  <svg ng-class="editMachine.getSVGClass()" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="50,100 10,160 90,160" style="fill:#bbb;stroke:black;stroke-width:2" />
-    <circle cx="50" cy="100" r="40" stroke="black" stroke-width="2" fill="#eee" class="fillhover"/>
-    <text x="20" y="105">Uncoiler</text>   
-    <rect x="100" y="100" ng-attr-width="{{250 + (editMachine.baseComponents.length * 75)}}" height="60" stroke="black" stroke-width="2" fill="#eee"/>
-    <text transform="translate(120 140)">{{row.SiteName}} - {{row.Name}}</text>
-
-    <rect x="100" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
-    <circle cx="115" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
-    <rect x="135" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
-    <circle cx="150" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
-    <rect x="170" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
-    <circle cx="185" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
-    <rect x="205" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
-    <circle cx="220" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
-
-    <rect x="280" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
-    <circle cx="295" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
-    <rect x="315" y="60" width="30" height="40" stroke="black" stroke-width="2" fill="#eee"/>
-    <circle cx="330" cy="80" r="10" stroke="black" stroke-width="2" fill="#ccc"/>
-
-    <svg ng-repeat="row in editMachine.baseComponents" 
-         ng-attr-x="{{350 + $index * 75}}" 
-         ng-click="editMachine.goTool(row)">
-      <a>
-      <rect x="25" y="0" width="20" height="20" stroke="black" stroke-width="1" fill="#ddd"/>
-      <rect y="20" width="70" rx="10" ry="10" height="80" stroke="black" stroke-width="2" 
-            ng-attr-fill="{{editMachine.toolFill(row)}}"
-            class="hoverme"/>
-      <text x="5" y="50">{{$index + 1}}</text>
-      </a>
-    </svg>
-
-    <text x="110" y="200">Electrical</text>
-    <rect x="100" y="175" width="100" rx="10" ry="10" height="45" 
-      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
-    <text x="220" y="200">Hydraulic</text>
-    <rect x="210" y="175" width="100" rx="10" ry="10" height="45" 
-      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
-    <text x="330" y="200">Printer</text>
-    <rect x="320" y="175" width="100" rx="10" ry="10" height="45" 
-      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
-    <text x="440" y="200">Console</text>
-    <rect x="430" y="175" width="100" rx="10" ry="10" height="45" 
-      stroke="black" stroke-width="2" fill="white" class="fillhover" opacity="0.5"/>
-
-  </svg>
+  </svg> -->
 </div>
 
 <!-- End machine SVG representation -->
@@ -183,9 +421,10 @@
             </tr>
           </thead>
           <tbody>
+          tasks = {{editMachine.tasks}}
             <tr class="data-table"
-                ng-click="editMachine.goEvent(row)"
-                ng-repeat="row in editMachine.events">
+                ng-click="editMachine.goTask(row)"
+                ng-repeat="row in editMachine.tasks">
                   <td><a>{{row.StartDate}}</a></td>
                   <td>{{row.Type}}</td>
                   <td>{{row.Username}}</td>

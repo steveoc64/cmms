@@ -137,9 +137,11 @@
 		['$state','$stateParams','machine','logs','Session','$window','components','$timeout','LxDialogService','parts','events','docs',
 		'DBDocServer','LxProgressService','Upload','socket','DBDocs',
 		'DBMachine','DBMachineComponents','DBMachineParts','DBMachineEvents','DBSysLog',
+		'tasks','DBRaiseMachineEvent','DBComponentEvents','DBEventDocs',
 		function($state,$stateParams,machine,logs,Session,$window,components,$timeout,LxDialogService,parts,events,docs,
 			DBDocServer,LxProgressService,Upload,socket,DBDocs,
-			DBMachine,DBMachineComponents,DBMachineParts,DBMachineEvents,DBSysLog){
+			DBMachine,DBMachineComponents,DBMachineParts,DBMachineEvents,DBSysLog,
+			tasks,DBRaiseMachineEvent,DBComponentEvents,DBEventDocs){
 
 		// Subscribe to changes for just this machine
 		{
@@ -161,17 +163,36 @@
 			}) // socket.on
 		}
 
+console.log("tasks =",tasks)
 		angular.extend(this, {
 			session: Session,
 			machine: machine,
 			logs: logs,
 			parts: parts,
+			tasks: tasks,
 			events: events,
 			docs: docs,
 			baseComponents: components,
 			components: components,
 			formFields: getMachineForm(),		
 			logClass: logClass,
+			alertFields: getMachineAlertForm(),		
+			eventHandler: DBRaiseMachineEvent,	
+			eventFields: {
+				machineName: "",
+				machineID: 0,
+				toolID: 0,
+				toolName: "",
+				type: "Tool",
+				status: "",
+			},			
+			eventHistory: {
+				Status: "",
+				Startdate: "",
+				Username: "",
+				Notes: "",
+				Docs: [],
+			},
 			calcBaseComponents: function() {
 				this.baseComponents = []
 				for (var i = 0; i < this.components.length; i++) {
@@ -257,6 +278,45 @@
 						return 'white'
 				}
 			},
+			nonToolFill: function(comp,def) {
+				switch(comp) {
+					case "Electrical":
+						if (this.machine.Electrical == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Hydraulic":
+						if (this.machine.Hydraulic == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Lube":
+						if (this.machine.Lube == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Printer":
+						if (this.machine.Printer == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Console":
+						if (this.machine.Console == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "url(#bgrad)"
+					case "Uncoiler":
+						if (this.machine.Uncoiler == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "#eee"
+					case "Rollbed":
+						if (this.machine.Rollbed == "Needs Attention") {
+							return "#fff176"		
+						} 
+						return "#eee"
+				}
+			},										
 			toolWidth: function() {
 				if (this.baseComponents.length > 0) {
 					var percentage = 80 / (this.baseComponents.length + 1)
@@ -305,6 +365,120 @@
             vm.uploadProgress = '' + parseInt(100.0 * evt.loaded / evt.total) + '%';
         })
       },			
+			raiseIssue: function(comp,id,type) {
+				var machine = this.machine
+				console.log("we are here with comp ",comp,"and need to decide which dialog to raise",type)
+				if (comp == 0) {
+					console.log("we are looking at the",type,"on the",machine.Descr,machine)
+					comp = {}
+					this.eventFields.machineName = machine.Name
+					this.eventFields.type = type
+					this.eventFields.toolID = 0		
+					this.eventFields.toolName = ""
+					this.eventFields.machineID = machine.ID
+					this.eventFields.type = type
+					this.eventFields.tool = comp
+
+					switch(type) {
+						case "Electrical":
+							this.eventFields.status = machine.Electrical
+							break
+						case "Hydraulic":
+							this.eventFields.status = machine.Hydraulic
+							break
+						case "Lube":
+							this.eventFields.status = machine.Lube
+							break
+						case "Printer":
+							this.eventFields.status = machine.Printer
+							break
+						case "Console":
+							this.eventFields.status = machine.Console
+							break
+						case "Uncoiler":
+							this.eventFields.status = machine.Uncoiler
+							break
+						case "Rollbed":
+							this.eventFields.status = machine.Rollbed
+							break
+					}
+					this.eventHistory.Status = this.eventFields.status
+
+					if (this.eventFields.status == "Running") {
+						console.log("this bit is running, so raise new issue")
+						LxDialogService.open('raiseIssueDialog')			
+					} else {
+						console.log("this bit is not running - show last event")
+						var q = DBMachineCompEvents.query({id: machine.ID, type: type})
+						var vm = this
+						q.$promise.then(function(){
+							console.log("machine events = ", q)
+							var evt = q[0]
+							vm.eventHistory.StartDate = evt.StartDate
+							vm.eventHistory.Username = evt.Username
+							vm.eventHistory.Notes = evt.Notes
+							vm.eventHistory.Docs = DBEventDocs.query({id: evt.ID})
+							vm.eventHistory.Docs.$promise.then(function(){
+								console.log("docs for this machine event", evt.ID, vm.eventHistory.Docs)
+							})
+						})
+						LxDialogService.open('showStatusDialog')									
+					}
+
+					return
+				}
+
+				if (comp.Status == "Running") {
+					this.eventFields.machineName = machine.Name
+					this.eventFields.toolName = comp.Name
+					this.eventFields.toolID = id
+					this.eventFields.machineID = machine.ID
+					this.eventFields.type = type
+					this.eventFields.tool = comp
+					this.eventFields.status = comp.Status
+					// console.log(machine,comp,this.eventFields)
+					LxDialogService.open('raiseIssueDialog')			
+				} else {
+					this.eventFields.machineName = machine.Name
+					this.eventFields.toolName = comp.Name
+					this.eventFields.toolID = id
+					this.eventFields.machineID = machine.ID
+					this.eventFields.type = type
+					this.eventFields.tool = comp
+					this.eventFields.status = comp.Status
+					this.eventHistory.Status = comp.Status
+					// console.log(machine,comp,this.eventFields)
+					// Get most recent event for this machine
+					var q = DBComponentEvents.query({id: comp.ID})
+					var vm = this
+					q.$promise.then(function(){
+						console.log("comp events = ", q)
+						var evt = q[0]
+						vm.eventHistory.StartDate = evt.StartDate
+						vm.eventHistory.Username = evt.Username
+						vm.eventHistory.Notes = evt.Notes
+						vm.eventHistory.Docs = DBEventDocs.query({id: evt.ID})
+						vm.eventHistory.Docs.$promise.then(function(){
+							console.log("docs for this event", evt.ID, vm.eventHistory.Docs)
+						})
+					})
+					LxDialogService.open('showStatusDialog')			
+				}
+			},      
+			submitAlert: function() {
+				var vm = this
+				this.eventHandler.raise({
+					machineID: this.eventFields.machineID,
+					toolID: this.eventFields.toolID,
+					type: this.eventFields.type,
+					action: 'Alert',
+					descr: this.eventFields.AlertDescr
+				}).$promise.then(function(){
+					vm.eventFields.AlertDescr = ""
+				})
+				LxDialogService.close('raiseIssueDialog')
+			},
+
 		})
 
 		{
