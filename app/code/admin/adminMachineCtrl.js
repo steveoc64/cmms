@@ -177,6 +177,7 @@ console.log("tasks =",tasks)
 			formFields: getMachineForm(),		
 			logClass: logClass,
 			alertFields: getMachineAlertForm(),		
+			statusFields: getToolStatusForm(),			
 			eventHandler: DBRaiseMachineEvent,	
 			eventFields: {
 				machineName: "",
