@@ -137,11 +137,11 @@
 		['$state','$stateParams','machine','logs','Session','$window','components','$timeout','LxDialogService','parts','events','docs',
 		'DBDocServer','LxProgressService','Upload','socket','DBDocs',
 		'DBMachine','DBMachineComponents','DBMachineParts','DBMachineEvents','DBSysLog',
-		'tasks','DBRaiseMachineEvent','DBComponentEvents','DBEventDocs',
+		'tasks','DBRaiseMachineEvent','DBComponentEvents','DBEventDocs','DBMachineCompEvents',
 		function($state,$stateParams,machine,logs,Session,$window,components,$timeout,LxDialogService,parts,events,docs,
 			DBDocServer,LxProgressService,Upload,socket,DBDocs,
 			DBMachine,DBMachineComponents,DBMachineParts,DBMachineEvents,DBSysLog,
-			tasks,DBRaiseMachineEvent,DBComponentEvents,DBEventDocs){
+			tasks,DBRaiseMachineEvent,DBComponentEvents,DBEventDocs,DBMachineCompEvents){
 
 		// Subscribe to changes for just this machine
 		{
