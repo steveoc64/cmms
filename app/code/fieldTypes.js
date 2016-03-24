@@ -39,6 +39,10 @@ loadFieldDefinitions = function(formlyConfig) {
 		formlyConfig.setType(v)
 	})
 
+	angular.forEach(getTaskFields(), function(v,k) {
+		formlyConfig.setType(v)
+	})
+
 } // loadFieldDefintions
 
 

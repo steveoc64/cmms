@@ -1,0 +1,321 @@
+Haney Codes .NET
+Sharing my experiences as a programmer (C# .NET) and engineering manager.
+Skip to content
+HOMEABOUT MEPUBLICATIONS
+How To Guarantee Dev Team Failure
+4 Replies
+The Problem
+
+I think that most devs would agree when I state that the definition of success in the corporate world of development places less emphasis on “good” code and more emphasis on “working” code. Working code is code that can be released to production on or before the deadline, regardless of performance or even bugs in most cases. As a developer, you ultimately feel as if you’ve failed when you toil for nights on end to meet steep deadlines and churn out crappy code. As a business, however, you’ve succeeded when you hit the deadline. My experience tells me that the typical metric upon which development teams are measured is often not quality of code or unit tests or even performance, but instead ability to meet deadlines and deliver solutions to clients. You’ve failed when you do not meet the deadlines and thus piss off the clients/customers. Your job has become a veritable boolean result with the outcomes of true and false. Deadline met? True. Deadline missed? False.
+
+Doesn’t it feel awful to be measured in such a binary way? All or nothing, success or failure, deliver or delay. These are the only outcomes according to the people who write and sign your paychecks.
+
+The Conflict
+
+Why does this happen? A little introspective thought brings light to the subject, at least for me. The reason for these types of metrics becomes obvious when you consider their source. You work for a company who pays you (often with I.T. seen as a cost-center or “money pit”) to accomplish things which the company can then sell to clients. You’re an expensive tool by which they accomplish their means. Though these companies often see software as a profit source, they see the means by which they get the software as an expense and cost. Kind of strange, really.
+
+The problem begins at the very core of the organization; the structure of the company is the starting point for guaranteed failure. In my experience, the dichotomy that forms in most companies is “I.T.” versus “The Business” in a bout-to-knock-the-other-guy-out. The minute you create this relationship of opposing fronts, you’ve already guaranteed development failure. With competing and contrasting goals (the business wants to sell stuff ASAP while I.T. wants to build stuff properly which takes longer) it is not possible for trust to exist within the organization. The Business will not believe a word that I.T. says when it comes to estimates, deadlines, or things that need to happen to ensure stability of the product in the future (technical debt). I.T. will not trust The Business to make rational decisions when it comes to features, development timelines and ensuring product quality. The result is a boxing match where each side is trying to force the other into compliance. Now you have conflict. Conflict dismantles good companies.
+
+The Measurables
+
+The Business is used to tracking their sales teams by metrics like “how many calls did you make/receive today?” and “how many sales did you make?” and “did you make X sales by Y arbitrary date?” where Y could be the end of each month. These are things that they understand, and thus like to control. Ask your favourite sales person for their opinion on the metrics by which their success is measured, and I am confident you’ll find that most will sum it up as “the faster I sell things, and the more things I sell, the more successful I am.” This makes sense from an empirical, see-the-figures-on-paper-on-my-desk-in-my-executive-office point of view, but I bet that the sales person in this case is not loving their life. A constant push to sell more, make more money, and do more. Any success in the future just raises the bar for the success which must follow. It’s a losing scenario. Eventually, they either get promoted out of the trenches of sales or they move to another company, resetting the bar which has been set too high. This buys them another year or two of raising that bar, until they ultimately repeat the process again.
+
+Sales people who are put under the gun in such situations often resort to employing any tactic that they can to reach their goals… One of these strategies is saying anything at all to sign the client up. “Sure, the software can create rainbows and unicorns, just sign on the dotted line!” they say. It’s unfortunate, because customers who are hooked into these contracts tend to be very unhappy with the product when they find out that the software does not, in fact, create rainbows or unicorns. Or even a colour wheel and horses. It doesn’t even come close.
+
+In the above case, The Business fails to measure the things that, long-term, make you the most money: client satisfaction and relationships. A good sales person (they definitely exist) is one that keeps the client happy with rational discussions and promises, and who is very transparent about what can and cannot be done and why. A great sales person is one the client loves so much that they’ll keep using your product, even when a better product exists, simply because they fear losing the relationship. This client is a client for life (or at least a long while) and makes you a lot of money. But how do you measure “happiness” and “relationships” long term? It’s a hard problem. Dating sites have been trying to solve it for over a decade. The Business will likely not dedicate the time and resource to do so themselves. So, they measure phone calls, sales, and other crappy metrics to ensure that the sales team are doing their job.
+
+Here’s where we get back to the topic: developers and failure. The Business, who in most cases pays I.T. to create things to sell, employs these same arbitrary measurements when grading development teams. They often only know how to see success as a measured outcome of facts, and so they create the only measurements that they can empirically apply: features and deadlines. Does the dev team build all of the features and hit the deadline? Great. Do they not? Not great. These measurements themselves are acceptable (even good), but the combination of them (lots of features on short deadlines) is the problem.
+
+The Money Talks
+
+Where it gets tricky is in the realization that “show me the money” is how business ultimately tends to run. The sales people very overtly make the money, so they are seen as successful and important people in the company. The dev team also makes money, but is perceived to cost money, and they are seen as a cost-center that must be carefully weighed and measured to avoid excessive spending. What this leads to is an unhealthy practice of allowing sales people the freedom to employ any tactics necessary to land sales and make the money. In a business such as The Business as described, your life as a developer begins to suck.
+
+To close the deal, the sales person will often promise the client almost anything about the software that you develop. They may promise new feature X by the end of the month, they may even promise 10 new features by the middle of the month. Whatever makes the client sign on. Then, the client says let’s rock and your quality of life drops sharply.
+
+The very next thing that happens is The Business casually tries to confirm what seems obvious and even mandatory to them. “So your team will have these 10 things ready to go by the 15th, right?” they say. “This is a million dollar client, and it would be horrible if we lost them because you couldn’t deliver!” and now the pressure is on to do the nearly-impossible in virtually no time.
+
+The dev team might try to politely push back and say that this is practically impossible, but The Business sees the dollars on the dotted line and will not listen. Flip the kill switch. Forego the QA time, all developers must focus on all of these features, day and night, so that the deadline can be met. Why? Because that’s how the team is measured. If the team doesn’t hit that deadline, they’ve failed and the million dollar deal is lost with the dev team seemingly at fault. Developers don’t want to work extra? Order in pizzas and promise them time-in-lieu as soon as the deadline is over with. Note that they will likely never actually see this time-in-lieu because right after this deadline will be the next one, with similar outlandish expectations and even tighter deadlines. And after that, another one. And another one. And the cycle will probably never end.
+
+The Mad Production Dash
+
+So, as the developer, you develop it as fast as you can. The code starts to resemble Frankenstein as you tack on bits and pieces to make it work ASAP. You subdue your ego and uneasiness about the quality of code by commenting // HACK: undo this crap later everywhere. Somehow that makes you feel better as it creates the slight glimmer of hope that eventually you’ll have enough time to come back and undo this monstrous pile of garbage. But you never will get that time, because the next deal is coming down the pipe. And so the code becomes worse. Your development effort completes 1-2 days before the arbitrary sales deadline, and after your QA team flips their lids on having 48 hours to test 1000+ hours of work, they do “critical path testing” to make sure it at least does something correctly and certify it as “good enough.”
+
+The team releases to production early in the morning of the deadline day, and though it takes 5 hours because there are 17 untested things to fix on-the-fly (and realistically they have no option to abort the release or roll back because the consequences will be dire), they eventually shove the hacked up code out the door and declare it done. The Business shows their appreciation in the form of a short, impersonal e-mail that doesn’t name any person of achievement specifically. The development team is feeling underappreciated and pissed off.
+
+What does the future hold for such a company? The code will probably spiral into bug-filled oblivion until it can’t do anything correctly or in any reasonable amount of time. Despite the weeks and months during which the development team pleaded with the business for time to clean up the technical debt, they are brushed off because taking time off of features loses clients and thus money. Then, as it starts to come crashing down in production, they suddenly beg the developers for a quick fix. “Do whatever it is that needs to be done!” they plead as they see their sales going down the drain. And now, because it is on fire and burning to the ground, the dev team is finally given a moment to pay back some of the technical debt that has been accrued during this vicious cycle. Repeat.
+
+The Solution
+
+When a dev team has no say in the deadlines of the work they must do, they will usually fail. And when they are set up for failure from the start, they will likely get tired of being blamed for the problems without ever being given the time to devise the solutions. This leads to bad work culture, high turnover, and low productivity.
+
+The way to guarantee dev team success is obvious at this point. It’s really as simple as trust between I.T. and The Business. They must keep each other in the loop as stakeholders. The Business has no product without I.T. and I.T. has no job without The Business’s clients. It’s a mutually beneficial relationship and it should be treated as such, rather than mutually parasitic.
+
+A good company’s sales team will often consult with I.T. prior to promising any dates and deadlines when unknowns are involved. It is practical to ask the people responsible for a task how long it will take them to complete a task. This is much like how you might ask a waitress how long it will take for the food to arrive or a painter how many days they need to paint your home. This is a positive and productive discussion. Hallway conversations should become commonplace: “Hey dev team, I’ve got a client who wants to sign on but not until we build X, how long will that take?” The reply is as easy as “We’ll discuss it as a team and send you an estimate with some assumptions to confirm with the client” and just like that there’s a great working relationship that practically guarantees success. The team knows what work is coming, and also knows how long they have to complete it.
+
+The Correct Measurements
+
+If a dev team continues to fail in an environment where trust exists, then that team is likely not competent. They either cannot estimate correctly or cannot deliver within their own estimates. Sometimes devs suck at estimating because they’ve been making estimates under the oppressive sales gun for so long that they’ve effectively forgotten how to give themselves a fair amount of time. The blame for this remains entirely on the dev team, and they (or The Business) must repair the situation quickly and effectively to maintain the mutually beneficial relationship based on trust. As The Business owes I.T. input into the deadlines, I.T. carries the burden of being fair, accurate, and responsible with those deadlines.
+
+Assuming that The Business now has a competent, skilled dev team, the question turns to the customers. If the customers do not like the estimates given to them, this may cost the company sales. Perhaps the customer wanted the impossible and The Business is giving them a dose of reality. Perhaps The Business does not want such a needy customer and they’re in a situation to be able to afford to tell them no thanks. Perhaps The Business realizes that the client’s request is reasonable but the timeframe of the estimate feels a bit long. In that case they can ask I.T. why. If the answer is not sufficient and justifiable, then perhaps the dev team is still not competent. No dev team should be let loose without checks and measures on productivity, but those metrics should be reasonable.
+
+Ultimately, if you want to guarantee the failure of a development team, simply promise features to clients and customers without ever asking for (or trusting) the input of the team that is actually going to build those features. It’s just like telling the waitress that your food must be on the table in 10 minutes, without first asking the cooks how long it takes to safely and properly make it.
+
+If this situation sounds familiar, try talking with The Business about it. Try to help them see it from your point of view. Ask them “how successful would you be if I demanded that you sell 20 new clients by Friday?” and perhaps some light bulbs will start to go on. Ultimately, we as developers often know nothing about sales and have no business dictating their measurable work expectations. They similarly have no business dictating ours, but a relationship of trust can be built to allow us all to work together and accomplish great things.
+
+This entry was posted in Uncategorized . MAY 7 2014
+Post navigation← To Node.js Or Not To Node.jsHow I Got A Job At Stack Exchange →
+4 thoughts on “How To Guarantee Dev Team Failure”
+
+
+Mike
+May 8, 2014 at 10:40 am
+I’m V.P of Development and this is one of the best articles I’ve read in a long time. I’ve now sent it to ever department head and executive in the company. I love how this directly applies to every department. Great job.
+
+Reply ↓
+
+C F
+May 8, 2014 at 5:01 pm
+Great article. The buy in has to start with leadership which will allow it to permeate through the organization. Those that spend time making strong relationships would be great to help start this.
+
+Reply ↓
+
+Ann
+May 9, 2014 at 9:08 am
+Great read.
+
+I appreciate the clean, straight forward approach to the subject that can be consumed and understood by all parties in the SDLC.
+
+Thank you
+
+Reply ↓
+
+Jim
+May 10, 2014 at 7:30 am
+Wow! This is such a comprehensive and accurate portrait of the industry. Unfortunately, as long as “shareholder value” rules the world it is going to be a very very difficult cycle to break. Thank you so much for posting it.
+
+Reply ↓
+Leave a Reply
+Your email address will not be published. Required fields are marked *
+
+Comment
+
+
+Name *
+
+
+Email *
+
+
+Website
+
+
+Post Comment
+
+BIO
+
+I am currently an Engineering Manager at Stack Overflow. I love craft beer, movies, and video games.
+
+ profile for Haney at Stack Overflow, Q&A for professional and enthusiast programmers
+
+RECENT POSTS
+
+NPM & left-pad: Have We Forgotten How To Program?
+Developer Compensation: Stack Overflow Doesn’t Stack Rank
+Diversity Is Really Freaking Hard
+Developer Turned Manager
+Developers Shouldn’t Measure Twice, Cut Once
+RECENT COMMENTS
+
+Guy on NPM & left-pad: Have We Forgotten How To Program?
+Marvin on NPM & left-pad: Have We Forgotten How To Program?
+Jared on NPM & left-pad: Have We Forgotten How To Program?
+Robert Fletcher on NPM & left-pad: Have We Forgotten How To Program?
+One angry programmer almost broke the internet by deleting 11 lines of code (MSFT) | Who Runs The World on NPM & left-pad: Have We Forgotten How To Program?
+ARCHIVES
+
+March 2016
+February 2016
+September 2015
+August 2015
+April 2015
+March 2015
+January 2015
+December 2014
+October 2014
+September 2014
+June 2014
+May 2014
+March 2014
+February 2014
+December 2013
+November 2013
+October 2013
+September 2013
+August 2013
+July 2013
+May 2013
+April 2013
+March 2013
+February 2013
+January 2013
+December 2012
+November 2012
+October 2012
+August 2012
+July 2012
+June 2012
+May 2012
+April 2012
+CATEGORIES
+
+Generics
+Interfaces
+Uncategorized
+.NET BLOGS
+
+Brian Madsen's Blog
+Chris Harrington's Blog
+Josh Lane's Blog
+Peter Shaw's Blog
+Proudly powered by WordPress
+
+
+Last updated: Mon Feb 18 20:29:41 2002
+
+Turn One -- Start
+
+We are now ready to start Turn One. Below is the map at the start of the turn:
+
+map at start of turn one
+
+The armies are in place, and the Hrvatskan commander sees his predicament on his right flank. The time is 0700.
+
+Both commanders know their own army morale levels (Argozian: 28, Hrvatskan: 22), and the capabilities of his own units, but remains in the dark about those of his opponent. They do know the designations (1/2 Winkel Musketeers, 2nd Jaska Cuirassiers) and unit types (Elite Cuirassiers, Hungarian Line) of the other side's units, and can make educated guesses about their capabilities from that information. They also know the basic Sequence Decks for each other's army, but not if any special cards have been added. Argozia has 4 opportunity points banked, while Hrvatska has 3, per the Army lists
+
+Most of the battlefield is open ground (Type I) terrain, and the first level of the hills and the woods are Type II terrain. The Type II will impact combat but only minimally affect movement. The second level of the eastern hill is Type III terrain which impacts movement as well as combat.
+
+Sequence Decks have been shuffled. No adjustments to them for Turn One. Let's begin.
+
+Turn One -- Phase One
+
+The Phase has 20 initiative points to use
+
+Turn One -- Phase One -- First Initiative
+
+Both commanders roll a d20, and compare the results. High roller wins the initiative, and gets the difference in impetus points to spend. Ties end the Turn.
+
+The Argozian commander rolls a 10; the Hrvatskan commander rolls a 14. The Hrvatskan commander wins this initiative, and has 4 impetus points to spend.
+
+The first point is spent flipping over the top card in his Sequence Deck. It is an "Infantry Move in Open" card. For one initiative point, he may move an infantry unit. Units in the same command and still in command may all be moved for a single point; non-acting units are 'Out of Command' until later. Note: units in mixed commands, as in this period and battle, may have the non-infantry move under an infantry move card, but no further than an infantry unit in the same formation (or their normal move, if less), and once 'Out of Command' remain so for the rest of the battle. 3 impetus remains.
+
+The 1/ Prejdor Pandours, the 1 Kufina Hussars, and the 2 Vanograz Dragoons all maneuver-move. This allows a wheel of up to 45deg, and full move for cavalry, for 2 impetus points; since they are in a single command, the cost covers all 3 units. 1 impetus point remains. The Left Center is ordered forward; they stop at the bottom of the slope (transition from Type II to Type I terrain). This costs 1 impetus for the command group.
+
+The First Initiative is over. 16 impetus remain in the Phase.
+
+First Turn -- First Phase -- Second Initiative
+
+Both commanders again roll a d20. Argozia rolls a 19, Hrvatska a 6. Argozia wins this initiative, with 13 impetus points to spend.
+
+The Argozian commander spends the first point flipping over the first Sequence Deck card. It is a "Deployment" card. He does not want to change any formations at this time, so he spends another point to flip to the next card.
+
+It is an "Artillery Move" card. This allows artillery to move, limber or unlimber. Moving either artillery unit separately will put them out of command, so this card is skipped too.
+
+The next card is "Musket Reload". This would allow any unit that has fired to stop and become eligible to fire again. He could stop and have units fire, then use this card to reload them, but none are in range of any Hrvatskan units (12in is max long range for a musket). So he spends another point, and flips again.
+
+This time it is an "Infantry in Open" move card. 9 impetus remain to be spent. All four commands are ordered forward, for a total of 4 impetus. All commands are limited by the infantry move rate; the Center could move at this, or move at the artillery rate to stay in full formation. The Wings move at the infantry rate, the Center stays with the artillery, while the Maneuver command gets a double-move (period special rules).
+
+No unit may act on a specific card more than once, and everyone has acted one this one, so we have to spend another impetus to flip a new card. It is a "Cavalry in Open" card. They could move separately, causing them to fall out of command. This might be worth it if something useful, like entering melee, could be done. But we're not close enough, so we flip again.
+
+This card is "Elites Reload". This allows the Grenadiers their own reload, but they haven't fired, so we flip again.
+
+This one is "Officer Check". First, we check for officer casualties. No combat, so all are OK. Now we can spend impetus on officer actions. All units are in command, none are routing. The only viable choice is moving officers. One impetus is spent moving O2 closer to the FdM.
+
+That ends the initiative. 3 impetus remain in the Phase.
+
+Turn One -- Phase One -- Third Initiative
+
+Argozia rolls a 13, Hrvatska rolls a 20. Hrvatska wins the initiative, but only gets 3 impetus, since that is all the Phase has left.
+
+The commander could use this impetus with the "Infantry in Open" card from the first initiative, on units that have not acted on it yet. Instead, he chooses to flip a new card. It is another "Infantry in Open" card.
+
+All commands may now move again (ones that did not move on the previous card may not move twice; they lost the chance to move on the first card when the second was flipped.) The flankguard maneuver-moves, using 2 impetus points, and ending the initiative and the Phase.
+
+At the end of the first Phase, here are the positions of the units:
+
+
+
+Turn One -- Phase Two
+
+Turn One -- Phase Two -- First Initiative
+
+The Phase impetus counter is reset to 20. von Oman rolls a 9; Graf Burgess a 5. Argozia wins the initiative, and has 4 impetus to spend.
+
+There really isn't a need at this time to act further on the "Officer Check" card, so another is flipped (for 1 impetus). The new card is "Maneuver". This allows facing changes. No one needs to now, so another card is flipped.
+
+The new one is another "Cavalry in Open". Wanting to keep the commands together, this one will not be acted on.
+
+One more is flipped, and it is "Artillery Reload". Argozia interrupts the initiative and has the unlimbered Mesernech Artillery fire, for one impetus, on the Kufina Hussars. Range in 13in, medium range. The Mesernech start with a d8 for fire, and after adjustments, becomes a d10. The target always rolls a d6. Argozia rolls a 3, and Hrvatska a 6. No casualties are inflicted. This ends the impetus, but leaves the card available to reload the next time Argozia gets the initiative. The artillery is marked as firing as a reminder.
+
+Turn One -- Phase two -- Second Initiative
+
+16 impetus remain in the Phase. Argozia rolls an 11, and Hrvatska an 18. Hrvatska wins the initiative, and has 7 impetus to spend.
+
+Graf Burgess can act on the "Infantry in Open" move card, for those commands that have not acted on it yet. He has the Left Center maneuver ont he move card, which costs 2 impetus, leaving him 5 more.
+
+He then flips the next card. It is a "Deployment" card. No one needs to change formation.
+
+The next card is "Artillery Reload". No targets for the Visoko Artillery, so no action.
+
+He has 3 impetus remaining. Another flip reveals "Cavalry in Open". He chooses to move the flankguard cavalry, which puts the Pandours 'Out of Command'. The Hussars contact the Ganzem Fusileers, and the Dragoons close in on the Argozian Right Wing. Since the Fusileers are in good order, melee must wait for an appropriate card for resolution. Using the last impetus, he has the 2 Jaska Cuirassiers move forward; since they're the ones in the minority on this card for that command, it is they who become 'Out of Command', and are so marked.
+
+Turn One -- Phase Two -- Third Initiative
+
+11 impetus remain in the Phase. von Oman rolls a 7 for Argozia, while Graf Burgess rolls a 5. Argozia wins the initiative and 2 impetus.
+
+von Oman spends an impetus and reloads the Mesernech Artillery, then spends the second impetus on having them fire again. Their fire is modified to d12 + 3, while the Hussars roll a d6. von Oman rolls a 6, which becomes a 9, while Graf Burgess rolls a 2. 7 casualties are inflicted on the Hussars, enough to take out two stands, and a hit that will carry forward until the end of the initiative. He calls for a morale check, which costs him one of his morale points. von Oman will roll a d8 due to the number of casualties inflicted. Graf Burgess starts with a d6, the Hussar's morale die, which ends up modified to a d4. von Oman rolls a 5, while Graf Burgess rolls a 2. The Hussars fall back 3in and, since von Oman's roll was at least double Graf Burgess', they are also considered routed. Since they are moving without orders, they are also 'Out of Command'. Ouch! The leftover hit recovers at the end of the initiative.
+
+First Turn -- Phase Two -- Fourth Initiative
+
+9 impetus remain in the phase. von Oman rolls a 19, while Graf Burgess rolls a 16. Argozia gets the initiative and 3 impetus.
+
+He flips to the next card. It is another "Artillery Reload"! He spends one impetus to reload the Mesernech, then spends the last impetus of the initiative to fire them again, this time at the Pandours. They start at d8, and end up a d4; the Pandours roll a d6. von Oman rolls a 4, while the Pandours roll a 1. The result is 3 casualties, one stand down.
+
+First Turn -- Phase Two -- Fifth Initiative
+
+6 impetus remain. von Oman rolls a 7, and Graf Burgess rolls a 14. Hrvatska wins the initiative, and gets all 6 impetus, since that's all that remains.
+
+Graf Burgess flips another card, and it is "Dress Line", a non-action card. Another flip reveals "Artillery Move".
+
+Another flip reveals "Officer Check". O3 must check for injury. None results. O3 will attempt to Assert Command over the Pandours. He does so. He cannot do so with either cavalry unit, once they have moved independently of the infantry; they're out of range anyway
+
+He flips one more card. It is "Native Mobility", and the Pandours can use this as a bonus move card. he uses the last impetus to move them forward to delay the Left Wing.
+
+At the end of the second Phase, here are the positions of the units:
+
+
+
+Turn One -- Phase Three
+
+Turn One -- Phase Three -- First Initiative
+
+Once again, the impetus count is reset to 20. von Oman rolls an 11, while Graf Burgess rolls a 20. He wins the initiative and 9 impetus.
+
+He flips a card, and gets "Melee Resolution". Had the Hussars still been in contact, now is when their melee would be resolved.
+
+No one is in contact, so another card is flipped. It is "Maneuver". He uses this to begin turning more of his units. This period restricts turns to 45deg wheels. The Center and Right Center both turn, at one impetus apiece.
+
+With 5 impetus remaining, he flips again. he gets another "Melee Resolution" card.
+
+Another flip reveals "Infantry in Open". The Left Center moves forward for 1, and the Right Center incline-moves for 2. That ends the initiative.
+
+Turn One -- Phase Three -- Second Initiative
+
+11 impetus remain. von Oman rolls a 14, while Graf Burgess also gets a 14. The Turn is over!
+
+End of Turn Positions
+
+Here is the board at the end of Turn One:
+
+
+
+Use the 'Back' button, or click here to go to the next turn.

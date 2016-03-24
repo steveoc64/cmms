@@ -163,7 +163,6 @@
 			}) // socket.on
 		}
 
-console.log("tasks =",tasks)
 		angular.extend(this, {
 			session: Session,
 			machine: machine,
@@ -175,10 +174,14 @@ console.log("tasks =",tasks)
 			baseComponents: components,
 			components: components,
 			formFields: getMachineForm(),		
+			taskFields: getTaskForm(),
 			logClass: logClass,
 			alertFields: getMachineAlertForm(),		
 			statusFields: getToolStatusForm(),			
 			eventHandler: DBRaiseMachineEvent,	
+			taskModel: {
+				Freq: 'Monthly',
+			},
 			eventFields: {
 				machineName: "",
 				machineID: 0,
@@ -245,6 +248,7 @@ console.log("tasks =",tasks)
 			},
 			addTask: function() {
 				console.log("add a new task to machine", $stateParams.id)					
+				LxDialogService.open('taskDialog')
 			},
 			goPart: function(row) {
 				$state.go(base+'.editpart',{id: row.ID})

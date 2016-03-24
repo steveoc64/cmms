@@ -402,11 +402,17 @@ create index sm_part_idx on sm_parts (task_id, part_id, date);
 
 -- Sched Task Freq types
 ---------------------------------------------------------
+-- Old way of dividing periods --
+
 -- Monthly  / Week N of the month  (n = 1..4)
 -- Weekly
 -- Days     / Every N days  (n = 1..365)
 -- Relative / N days after parent complete  (n = 1..365)
 -- Yearly   / Nth day of the year (n = 1..365)
+
+-- Regular   / + tick which weeks of the month apply
+-- Days      / + set number of days
+-- Relative  / + set number of days
 ---------------------------------------------------------
 
 
