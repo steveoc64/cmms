@@ -240,6 +240,12 @@ console.log("tasks =",tasks)
 			goTool: function(row) {
 				$state.go(base+'.edittool',{id: row.ID})
 			},
+			goTask: function(row) {
+				$state.go(base+'.edittask',{id: row.ID})
+			},
+			addTask: function() {
+				console.log("add a new task to machine", $stateParams.id)					
+			},
 			goPart: function(row) {
 				$state.go(base+'.editpart',{id: row.ID})
 			},
@@ -318,6 +324,28 @@ console.log("tasks =",tasks)
 						return "#eee"
 				}
 			},										
+			getThumbnail: function(doc) {
+				var ext = doc.Filename.split('.').pop().toLowerCase()
+				// console.log("getThumbnail",doc.Filename,ext)
+				switch (ext) {
+					case 'jpg':
+					case 'png':
+					case 'gif':
+						return "doc/"+doc.ID
+					case 'doc':
+					case 'xls':
+					case 'odt':
+						return "img/doc.png"
+					case 'exe':
+						return "img/program.png"
+					case 'pdf':
+						return "img/pdf.png"
+					case 'zip':
+						return "img/zip.jpg"
+					default:
+						return "img/data.jpg"
+				}
+			},            
 			toolWidth: function() {
 				if (this.baseComponents.length > 0) {
 					var percentage = 80 / (this.baseComponents.length + 1)
