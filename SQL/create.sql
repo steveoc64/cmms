@@ -450,4 +450,14 @@ create table task (
 	has_issue boolean not null default false
 );
 
-
+drop table if exists user_log;
+create table user_log (
+	id serial not null primary key,
+	logdate timestamptz not null default localtimestamp,
+	duration text,
+	ms int,
+	func text,
+	input text,
+	output text
+);
+-- create unique index user_log_idx on user_log (logdate,id);
