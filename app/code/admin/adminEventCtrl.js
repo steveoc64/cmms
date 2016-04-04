@@ -10,10 +10,10 @@
 	
 		// Subscribe to changes in the machine list	
 		var vm = this
-		socket.on("event",function(msg){
-			console.log("Event update - reload full list",msg)
-			vm.events = DBEvent.query()					
-		})
+		// socket.on("event",function(msg){
+		// 	console.log("Event update - reload full list",msg)
+		// 	vm.events = DBEvent.query()					
+		// })
 
 		angular.extend(this, {
 			events: events,

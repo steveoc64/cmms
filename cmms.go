@@ -59,7 +59,7 @@ func main() {
 	_initMailer("mailer")
 
 	// Start the socket monitor
-	go pinger()
+	// go pinger()
 
 	// Start the web server
 	if Config.Debug {

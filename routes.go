@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/standard"
 
 	"github.com/thoas/stats"
 	//	"gopkg.in/mgutz/dat.v1"
@@ -28,7 +27,7 @@ var server_stats = stats.New()
 // Define Routes for the Server
 
 func _initRoutes() {
-	e.Use(standard.WrapMiddleware(server_stats.Handler))
+	// e.Use(fasthttp.WrapMiddleware(server_stats.Handler))
 
 	e.Get("/stats", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, server_stats.Data())
@@ -119,20 +118,21 @@ func _initRoutes() {
 
 	// Add a websocket handler
 	// e.WebSocket("/ws", webSocket)
-	// e.Get("/ws", standard.WrapHandler(websocket.Handler(webSocket)))
-	// e.Get("/ws", doNothing)
-	e.Get("/ws", standard.WrapHandler(websocket.Handler(func(ws *websocket.Conn) {
-		for {
-			websocket.Message.Send(ws, "Hello, Client!")
-			msg := ""
-			websocket.Message.Receive(ws, &msg)
-			println(msg)
-		}
-	})))
+	// e.Get("/ws", fasthttp.WrapHandler(websocket.Handler(webSocket)))
+	e.Get("/ws", doNothing)
+	// e.Get("/ws", standard.WrapHandler(websocket.Handler(func(ws *websocket.Conn) {
+	// 	for {
+	// 		websocket.Message.Send(ws, "Hello, Client!")
+	// 		msg := ""
+	// 		websocket.Message.Receive(ws, &msg)
+	// 		println(msg)
+	// 	}
+	// })))
 
 }
 
 func doNothing(c echo.Context) error {
+	log.Println("do nothing here")
 	return nil
 }
 

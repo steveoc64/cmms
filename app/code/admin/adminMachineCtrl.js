@@ -10,10 +10,10 @@
 
 		// Subscribe to changes in the machine list	
 		var vm = this
-		socket.on("machine",function(msg){
-			console.log("Machine event - reload full list",msg)
-			vm.machines = DBMachine.query()					
-		})
+		// socket.on("machine",function(msg){
+		// 	console.log("Machine event - reload full list",msg)
+		// 	vm.machines = DBMachine.query()					
+		// })
 
 		angular.extend(this, {
 			machines: machines,
