@@ -119,8 +119,21 @@ func _initRoutes() {
 
 	// Add a websocket handler
 	// e.WebSocket("/ws", webSocket)
-	e.Get("/ws", standard.WrapHandler(websocket.Handler(webSocket)))
+	// e.Get("/ws", standard.WrapHandler(websocket.Handler(webSocket)))
+	// e.Get("/ws", doNothing)
+	e.Get("/ws", standard.WrapHandler(websocket.Handler(func(ws *websocket.Conn) {
+		for {
+			websocket.Message.Send(ws, "Hello, Client!")
+			msg := ""
+			websocket.Message.Receive(ws, &msg)
+			println(msg)
+		}
+	})))
 
+}
+
+func doNothing(c echo.Context) error {
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

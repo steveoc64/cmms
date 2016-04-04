@@ -58,8 +58,10 @@ var getMapURI = function(addr) {
 			var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
 			//var socketUrl = 'ws://' + $location.host() + '/ws'
 			console.log("socketUrl =",socketUrl)
+			/*
 			var ws = $websocket.$get(socketUrl)
 			ws.$open() // open connection if not already done
+			console.log("opened socket", ws)
 			return {
 				url: socketUrl,
 				ws: ws,
@@ -68,6 +70,7 @@ var getMapURI = function(addr) {
 					ws.$on(msg, callback)
 				}
 			}
+			*/
 		})
 		.filter('firstline', function() {
 		  return function(input) {
@@ -902,19 +905,21 @@ var getMapURI = function(addr) {
 	  FastClick.attach(document.body);
 
 	  // Setup the websocket
-		var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'
+		var socketUrl = 'ws://' + $location.host() + ':' + $location.port() + '/ws'		
 		//var socketUrl = 'ws://' + $location.host() + '/ws'
-	  var ws = $websocket.$new({
-	  	url: socketUrl,
-	  	reconnect: true,
-	  	enqueue: true,
-	  })
+		console.log("run with ws",socketUrl, $websocket)
 
-	  ws.$on('$open', function() {
-	  	console.log('Established socket connection')
-	  }).$on('$close', function() {
-	  	console.log('Closed socket connection')
-	  })
+	  // var ws = $websocket.$new({
+	  // 	url: socketUrl,
+	  // 	reconnect: true,
+	  // 	enqueue: true,
+	  // })
+
+	  // ws.$on('$open', function() {
+	  // 	console.log('Established socket connection')
+	  // }).$on('$close', function() {
+	  // 	console.log('Closed socket connection')
+	  // })
 
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		  	var acl = toState.acl

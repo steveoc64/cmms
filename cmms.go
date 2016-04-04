@@ -35,7 +35,7 @@ func main() {
 	//   Browse: false,
 	// }
 	e = echo.New()
-	e.Use(middleware.Static("build"))
+	e.Use(middleware.Static("./build"))
 	// e.Index("./build/index.html")
 	// e.ServeDir("/", "./build")
 
