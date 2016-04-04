@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo"
-	"gopkg.in/mgutz/dat.v1"
+	dat "gopkg.in/mgutz/dat.v1"
 	// "time"
 )
 
@@ -81,7 +81,7 @@ type DBmachineReq struct {
 	Notes     string `db:"notes"`
 }
 
-func queryMachine(c *echo.Context) error {
+func queryMachine(c echo.Context) error {
 
 	claim, err := securityCheck(c, "readMachine")
 	if err != nil {
@@ -104,7 +104,7 @@ func queryMachine(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func queryMachineFull(c *echo.Context) error {
+func queryMachineFull(c echo.Context) error {
 
 	claim, err := securityCheck(c, "readMachine")
 	if err != nil {
@@ -144,7 +144,7 @@ func queryMachineFull(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func querySiteMachines(c *echo.Context) error {
+func querySiteMachines(c echo.Context) error {
 
 	_, err := securityCheck(c, "readMachine")
 	if err != nil {
@@ -190,7 +190,7 @@ func querySiteMachines(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func getMachine(c *echo.Context) error {
+func getMachine(c echo.Context) error {
 
 	_, err := securityCheck(c, "readMachine")
 	if err != nil {
@@ -230,7 +230,7 @@ func getMachine(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func newMachine(c *echo.Context) error {
+func newMachine(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeMachine")
 	if err != nil {
@@ -261,7 +261,7 @@ func newMachine(c *echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
-func saveMachine(c *echo.Context) error {
+func saveMachine(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeMachine")
 	if err != nil {
@@ -395,7 +395,7 @@ func saveMachine(c *echo.Context) error {
 	return c.JSON(http.StatusOK, machineID)
 }
 
-func deleteMachine(c *echo.Context) error {
+func deleteMachine(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeMachine")
 	if err != nil {
@@ -419,7 +419,7 @@ func deleteMachine(c *echo.Context) error {
 }
 
 // Get a list of all tools / components for the given machine
-func queryMachineComponents(c *echo.Context) error {
+func queryMachineComponents(c echo.Context) error {
 
 	_, err := securityCheck(c, "readMachine")
 	if err != nil {
@@ -459,7 +459,7 @@ type DBmachinePart struct {
 }
 
 // Get a list of all parts for the given machine
-func queryMachineParts(c *echo.Context) error {
+func queryMachineParts(c echo.Context) error {
 
 	_, err := securityCheck(c, "readMachine")
 	if err != nil {
@@ -487,21 +487,21 @@ func queryMachineParts(c *echo.Context) error {
 }
 
 type DBSchedTask struct {
-	ID int `db:"id"`
-	MachineID int `db:"machine_id"`
-	ToolID int `db:"tool_id"`
-	Component string `db:"component"`
-	StartDate dat.NullTime `db:"startdate"`
-	Freq string `db:"freq"`
-	ParentTask int `db:"parent_task"`
-	Days int `db:"days"`
-	LabourCost float64 `db:"labour_cost"`
-	MaterialCost float64 `db:"materal_cost"`
-	OtherCost float64 `db:"other_cost"`
+	ID           int          `db:"id"`
+	MachineID    int          `db:"machine_id"`
+	ToolID       int          `db:"tool_id"`
+	Component    string       `db:"component"`
+	StartDate    dat.NullTime `db:"startdate"`
+	Freq         string       `db:"freq"`
+	ParentTask   int          `db:"parent_task"`
+	Days         int          `db:"days"`
+	LabourCost   float64      `db:"labour_cost"`
+	MaterialCost float64      `db:"materal_cost"`
+	OtherCost    float64      `db:"other_cost"`
 }
 
 // Get a list of all task templates for the given machine
-func queryMachineTasks(c *echo.Context) error {
+func queryMachineTasks(c echo.Context) error {
 
 	_, err := securityCheck(c, "readMachine")
 	if err != nil {
@@ -526,7 +526,7 @@ func queryMachineTasks(c *echo.Context) error {
 // Clear the machine - temp measure to use during testing
 // TODO - remove this function later, when the actual workflow allows for the tool to be
 // cleared through regular channels
-func clearMachine(c *echo.Context) error {
+func clearMachine(c echo.Context) error {
 
 	machineID, _ := strconv.Atoi(c.Param("id"))
 	log.Println("Asked to clear machine !", machineID)

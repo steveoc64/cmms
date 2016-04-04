@@ -3,12 +3,14 @@ package main
 import (
 	"database/sql"
 	"fmt"
+
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/engine/standard"
+
 	"github.com/thoas/stats"
 	//	"gopkg.in/mgutz/dat.v1"
 	"encoding/json"
 	"errors"
-	"golang.org/x/net/websocket"
 	"io"
 	"log"
 	"net/http"
@@ -16,6 +18,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"golang.org/x/net/websocket"
 )
 
 var server_stats = stats.New()
@@ -24,9 +28,9 @@ var server_stats = stats.New()
 // Define Routes for the Server
 
 func _initRoutes() {
-	e.Use(server_stats.Handler)
+	e.Use(standard.WrapMiddleware(server_stats.Handler))
 
-	e.Get("/stats", func(c *echo.Context) error {
+	e.Get("/stats", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, server_stats.Data())
 	})
 
@@ -114,7 +118,9 @@ func _initRoutes() {
 	e.Put("/workorder/:id", updateWorkOrder)
 
 	// Add a websocket handler
-	e.WebSocket("/ws", webSocket)
+	// e.WebSocket("/ws", webSocket)
+	e.Get("/ws", standard.WrapHandler(websocket.Handler(webSocket)))
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,15 +139,16 @@ func showSubscriberPool(header string) {
 	fmt.Println("==================================")
 }
 
-func webSocket(c *echo.Context) error {
+func webSocket(ws *websocket.Conn) {
 
-	ws := c.Socket()
+	fmt.Println("here")
+	// ws := c.Socket()
 	msg := ""
 	subscribers = append(subscribers, ws)
 	showSubscriberPool("Pool Grows To:")
 	for {
 		if err := websocket.Message.Receive(ws, &msg); err != nil {
-			return c.String(http.StatusOK, "Rx ws")
+			return
 		}
 		fmt.Println(msg)
 	}
@@ -214,7 +221,7 @@ func (s *NullString) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func getID(c *echo.Context) int {
+func getID(c echo.Context) int {
 	id := c.Param("id")
 	i, err := strconv.Atoi(id)
 	if err != nil {
@@ -249,14 +256,20 @@ type SysLogRequest struct {
 	Limit   uint64
 }
 
-func sysLog(status int, t string, reftype string, ref int, descr string, c *echo.Context, claim map[string]interface{}) {
-
+func getIPAddr(c echo.Context) string {
 	req := c.Request()
-	ip := req.Header.Get("X-Real-Ip")
-	if len(ip) < 1 {
-		ip = req.RemoteAddr
+	ip := req.RemoteAddress()
+	if ra := req.Header().Get(echo.XRealIP); ra != "" {
+		return ra
+	} else if ip = req.Header().Get(echo.XForwardedFor); ip != "" {
+		return ra
 	}
+	return ip
+}
 
+func sysLog(status int, t string, reftype string, ref int, descr string, c echo.Context, claim map[string]interface{}) {
+
+	ip := getIPAddr(c)
 	Username := ""
 	UserID := 0
 	if claim != nil {
@@ -284,13 +297,9 @@ func sysLog(status int, t string, reftype string, ref int, descr string, c *echo
 	}
 }
 
-func sysLogUpdate(status int, t string, reftype string, ref int, descr string, c *echo.Context, claim map[string]interface{}, before interface{}, after interface{}) {
+func sysLogUpdate(status int, t string, reftype string, ref int, descr string, c echo.Context, claim map[string]interface{}, before interface{}, after interface{}) {
 
-	req := c.Request()
-	ip := req.Header.Get("X-Real-Ip")
-	if len(ip) < 1 {
-		ip = req.RemoteAddr
-	}
+	ip := getIPAddr(c)
 
 	Username := ""
 	UserID := 0
@@ -351,7 +360,7 @@ func sysLogUpdate(status int, t string, reftype string, ref int, descr string, c
 	}
 }
 
-func querySyslog(c *echo.Context) error {
+func querySyslog(c echo.Context) error {
 
 	_, err := securityCheck(c, "log")
 	if err != nil {
@@ -426,7 +435,7 @@ type loginResponse struct {
 	Token    string `db:"token"`
 }
 
-func login(c *echo.Context) error {
+func login(c echo.Context) error {
 	l := new(loginCreds)
 	err := c.Bind(&l)
 	if err != nil {
@@ -470,7 +479,7 @@ func login(c *echo.Context) error {
 	}
 }
 
-func logout(c *echo.Context) error {
+func logout(c echo.Context) error {
 
 	claim, err := securityCheck(c, "*")
 	if err != nil {
@@ -550,7 +559,7 @@ type DBdocRev struct {
 // sitemgr    - site manager can view this
 // contractor - service contractors can view this
 
-func uploadDocument(c *echo.Context) error {
+func uploadDocument(c echo.Context) error {
 
 	claim, err := securityCheck(c, "upload")
 	if err != nil {
@@ -558,116 +567,118 @@ func uploadDocument(c *echo.Context) error {
 	}
 
 	req := c.Request()
-	req.ParseMultipartForm(16 << 20) // Max memory 16 MiB
+	// req.ParseMultipartForm(16 << 20) // Max memory 16 MiB
 
 	doc := &DBdoc{}
 	doc.ID = 0
-	doc.Name = c.Form("desc")
-	doc.Type = c.Form("type")
-	Rev, _ := strconv.Atoi(c.Form("rev"))
-	doc.RefId, _ = strconv.Atoi(c.Form("ref_id"))
+	doc.Name = c.FormValue("desc")
+	doc.Type = c.FormValue("type")
+	Rev, _ := strconv.Atoi(c.FormValue("rev"))
+	doc.RefId, _ = strconv.Atoi(c.FormValue("ref_id"))
 	doc.UserId, _ = getClaimedUser(claim)
-	log.Println("Passed bools", c.Form("worker"), c.Form("sitemgr"), c.Form("contractor"))
-	doc.Worker = (c.Form("worker") == "true")
-	doc.Sitemgr = (c.Form("sitemgr") == "true")
-	doc.Contractor = (c.Form("contractor") == "true")
+	log.Println("Passed bools", c.FormValue("worker"), c.FormValue("sitemgr"), c.FormValue("contractor"))
+	doc.Worker = (c.FormValue("worker") == "true")
+	doc.Sitemgr = (c.FormValue("sitemgr") == "true")
+	doc.Contractor = (c.FormValue("contractor") == "true")
 	doc.Filesize = 0
 
 	// make upload dir if not already there, ignore errors
 	os.Mkdir("uploads", 0666)
 
 	// Read files
-	files := req.MultipartForm.File["file"]
+	// files := req.MultipartForm.File["file"]
+	files, _ := req.FormFile("file")
 	path := ""
 	//log.Println("files =", files)
-	for _, f := range files {
-		doc.Filename = f.Filename
+	// for _, f := range files {
+	f := files
+	doc.Filename = f.Filename
 
-		// Source file
-		src, err := f.Open()
+	// Source file
+	src, err := f.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	// While filename exists, append a version number to it
+	doc.Path = "uploads/" + doc.Filename
+	gotFile := false
+	revID := 1
+
+	for !gotFile {
+		log.Println("Try with path=", doc.Path)
+		dst, err := os.OpenFile(doc.Path, os.O_EXCL|os.O_RDWR|os.O_CREATE, 0666)
 		if err != nil {
-			return err
-		}
-		defer src.Close()
+			if os.IsExist(err) {
+				log.Println(doc.Path, "already exists")
+				doc.Path = fmt.Sprintf("uploads/%s.%d", doc.Filename, revID)
+				revID++
+				if revID > 999 {
+					log.Println("RevID limit exceeded, terminating")
+					return c.String(http.StatusBadRequest, doc.Path)
+				}
+			}
+		} else {
+			log.Println("Created file", doc.Path)
+			gotFile = true
+			defer dst.Close()
 
-		// While filename exists, append a version number to it
-		doc.Path = "uploads/" + doc.Filename
-		gotFile := false
-		revID := 1
+			if doc.Filesize, err = io.Copy(dst, src); err != nil {
+				return err
+			}
 
-		for !gotFile {
-			log.Println("Try with path=", doc.Path)
-			dst, err := os.OpenFile(doc.Path, os.O_EXCL|os.O_RDWR|os.O_CREATE, 0666)
-			if err != nil {
-				if os.IsExist(err) {
-					log.Println(doc.Path, "already exists")
-					doc.Path = fmt.Sprintf("uploads/%s.%d", doc.Filename, revID)
-					revID++
-					if revID > 999 {
-						log.Println("RevID limit exceeded, terminating")
-						return c.String(http.StatusBadRequest, doc.Path)
-					}
+			// If we get here, then the file transfer is complete
+
+			// If doc does not exist by this filename, create it
+			// If doc does exist, create rev, and update header details of doc
+
+			if Rev == 0 {
+				// New doc
+				err := DB.InsertInto("doc").
+					Whitelist("name", "filename", "path", "worker", "sitemgr", "contractor", "type", "ref_id", "filesize", "user_id").
+					Record(doc).
+					Returning("id").
+					QueryScalar(&doc.ID)
+
+				if err != nil {
+					log.Println("Inserting Record:", err.Error())
+				} else {
+					log.Println("Inserted new doc with ID", doc.ID)
 				}
 			} else {
-				log.Println("Created file", doc.Path)
-				gotFile = true
-				defer dst.Close()
+				// Revision to existing doc
+				docRev := &DBdocRev{}
+				docRev.Path = doc.Path
+				docRev.Filename = doc.Filename
+				docRev.Filesize = doc.Filesize
+				docRev.DocId = doc.ID
+				docRev.ID = Rev
+				docRev.Descr = doc.Name
+				docRev.UserId = doc.UserId
 
-				if doc.Filesize, err = io.Copy(dst, src); err != nil {
-					return err
-				}
+				_, err := DB.InsertInto("doc_rev").
+					Whitelist("doc_id", "id", "descr", "filename", "path", "filesize", "user_id").
+					Record(docRev).
+					Exec()
 
-				// If we get here, then the file transfer is complete
-
-				// If doc does not exist by this filename, create it
-				// If doc does exist, create rev, and update header details of doc
-
-				if Rev == 0 {
-					// New doc
-					err := DB.InsertInto("doc").
-						Whitelist("name", "filename", "path", "worker", "sitemgr", "contractor", "type", "ref_id", "filesize", "user_id").
-						Record(doc).
-						Returning("id").
-						QueryScalar(&doc.ID)
-
-					if err != nil {
-						log.Println("Inserting Record:", err.Error())
-					} else {
-						log.Println("Inserted new doc with ID", doc.ID)
-					}
+				if err != nil {
+					log.Println("Inserting revision:", err.Error())
 				} else {
-					// Revision to existing doc
-					docRev := &DBdocRev{}
-					docRev.Path = doc.Path
-					docRev.Filename = doc.Filename
-					docRev.Filesize = doc.Filesize
-					docRev.DocId = doc.ID
-					docRev.ID = Rev
-					docRev.Descr = doc.Name
-					docRev.UserId = doc.UserId
-
-					_, err := DB.InsertInto("doc_rev").
-						Whitelist("doc_id", "id", "descr", "filename", "path", "filesize", "user_id").
-						Record(docRev).
-						Exec()
-
-					if err != nil {
-						log.Println("Inserting revision:", err.Error())
-					} else {
-						log.Println("Inserted new revision with ID", docRev.ID)
-					}
-
+					log.Println("Inserted new revision with ID", docRev.ID)
 				}
 
-			} // managed to create the new file
-		} // loop until we have created a file
+			}
+
+		} // managed to create the new file
+		// } // loop until we have created a file
 	} // foreach file being uploaded this batch
 
 	return c.String(http.StatusOK, path)
 }
 
 // Get all documents related to any record
-func queryDocs(c *echo.Context) error {
+func queryDocs(c echo.Context) error {
 
 	refID := getID(c)
 	docType := c.Param("type")
@@ -685,7 +696,7 @@ func queryDocs(c *echo.Context) error {
 }
 
 // Get all documents related to a workorder
-func queryWODocs(c *echo.Context) error {
+func queryWODocs(c echo.Context) error {
 
 	refID := getID(c)
 
@@ -724,7 +735,7 @@ func queryWODocs(c *echo.Context) error {
 }
 
 // Send the specific document as a file
-func serveDoc(c *echo.Context) error {
+func serveDoc(c echo.Context) error {
 
 	docID := getID(c)
 	doc := &DBdoc{}
@@ -736,6 +747,6 @@ func serveDoc(c *echo.Context) error {
 		return c.String(http.StatusNotFound, "no file")
 	} else {
 		log.Println("Sending file", doc.Path, "as", doc.Filename)
-		return c.File(doc.Path, doc.Filename, false)
+		return c.File(doc.Path) //, doc.Filename, false)
 	}
 }

@@ -5,13 +5,15 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo"
 	"io/ioutil"
 	"log"
 	"reflect"
 	"runtime"
 	"time"
+
+	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/labstack/echo"
+	// "github.com/steveoc64/godev/jwt"
 )
 
 // location of the files used for signing and verification
@@ -101,9 +103,9 @@ func generateToken(ID int, Role string, Username string, Sites []int) (string, e
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-func securityCheck(c *echo.Context, action string) (map[string]interface{}, error) {
+func securityCheck(c echo.Context, action string) (map[string]interface{}, error) {
 
-	t := c.Request().Header["Authorization"]
+	t := c.Request().Header().Get("Authorization")
 	if len(t) < 1 {
 		return nil, errors.New("No Auth Token")
 	}
@@ -111,7 +113,7 @@ func securityCheck(c *echo.Context, action string) (map[string]interface{}, erro
 		return nil, errors.New("Too many Tokens")
 	}
 
-	token, err := jwt.Parse(t[0], func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(t, func(token *jwt.Token) (interface{}, error) {
 		return signKey, nil
 	})
 	if err != nil {

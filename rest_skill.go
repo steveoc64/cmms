@@ -22,7 +22,7 @@ type DBskill struct {
 	Notes string `db:"notes"`
 }
 
-func querySkills(c *echo.Context) error {
+func querySkills(c echo.Context) error {
 
 	_, err := securityCheck(c, "readSkill")
 	if err != nil {
@@ -38,7 +38,7 @@ func querySkills(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func getSkill(c *echo.Context) error {
+func getSkill(c echo.Context) error {
 
 	_, err := securityCheck(c, "readSkill")
 	if err != nil {
@@ -55,7 +55,7 @@ func getSkill(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func newSkill(c *echo.Context) error {
+func newSkill(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeSkill")
 	if err != nil {
@@ -84,7 +84,7 @@ func newSkill(c *echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
-func saveSkill(c *echo.Context) error {
+func saveSkill(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeSkill")
 	if err != nil {
@@ -117,7 +117,7 @@ func saveSkill(c *echo.Context) error {
 	return c.JSON(http.StatusOK, skillID)
 }
 
-func deleteSkill(c *echo.Context) error {
+func deleteSkill(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeSkill")
 	if err != nil {

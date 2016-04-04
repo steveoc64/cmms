@@ -55,7 +55,7 @@ type DBuserSkill struct {
 	SkillID int `db:"skill_id"`
 }
 
-func queryUsers(c *echo.Context) error {
+func queryUsers(c echo.Context) error {
 
 	_, err := securityCheck(c, "readUser")
 	if err != nil {
@@ -78,7 +78,7 @@ func queryUsers(c *echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
-func queryUsersWithSkill(c *echo.Context) error {
+func queryUsersWithSkill(c echo.Context) error {
 
 	_, err := securityCheck(c, "readUser")
 	if err != nil {
@@ -103,7 +103,7 @@ func queryUsersWithSkill(c *echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
-func getUser(c *echo.Context) error {
+func getUser(c echo.Context) error {
 
 	_, err := securityCheck(c, "readUser")
 	if err != nil {
@@ -143,7 +143,7 @@ func getUser(c *echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-func newUser(c *echo.Context) error {
+func newUser(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeUser")
 	if err != nil {
@@ -206,7 +206,7 @@ func newUser(c *echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
-func saveUser(c *echo.Context) error {
+func saveUser(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeUser")
 	if err != nil {
@@ -279,7 +279,7 @@ func saveUser(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func deleteUser(c *echo.Context) error {
+func deleteUser(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeUser")
 	if err != nil {

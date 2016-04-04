@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/labstack/echo"
 	"net/http"
+
+	"github.com/labstack/echo"
 )
 
 ///////////////////////////////////////////////////////////////////////
@@ -30,7 +31,7 @@ type DBcomponent struct {
 }
 
 // Get a list of all tools
-func queryComponents(c *echo.Context) error {
+func queryComponents(c echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
 	if err != nil {
@@ -51,7 +52,7 @@ func queryComponents(c *echo.Context) error {
 }
 
 // Get a list of parts used by this tool
-func queryComponentParts(c *echo.Context) error {
+func queryComponentParts(c echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
 	if err != nil {
@@ -74,7 +75,7 @@ func queryComponentParts(c *echo.Context) error {
 }
 
 // Get a specific tool
-func getComponent(c *echo.Context) error {
+func getComponent(c echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
 	if err != nil {
@@ -96,7 +97,7 @@ func getComponent(c *echo.Context) error {
 }
 
 // Get the machine associated with this tool
-func getComponentMachine(c *echo.Context) error {
+func getComponentMachine(c echo.Context) error {
 
 	_, err := securityCheck(c, "readMachine")
 	if err != nil {
@@ -117,7 +118,7 @@ func getComponentMachine(c *echo.Context) error {
 }
 
 // create a new tool
-func newComponent(c *echo.Context) error {
+func newComponent(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
 	if err != nil {
@@ -147,7 +148,7 @@ func newComponent(c *echo.Context) error {
 }
 
 // Update an existing tool
-func saveComponent(c *echo.Context) error {
+func saveComponent(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
 	if err != nil {
@@ -175,8 +176,8 @@ func saveComponent(c *echo.Context) error {
 
 	_, err = DB.Update("component").
 		SetWhitelist(record, "name", "position", "site_id",
-		"descr", "make", "model", "qty", "zindex",
-		"stock_code", "serialnum", "notes").
+			"descr", "make", "model", "qty", "zindex",
+			"stock_code", "serialnum", "notes").
 		Where("id = $1", componentID).
 		Exec()
 
@@ -189,7 +190,7 @@ func saveComponent(c *echo.Context) error {
 }
 
 // Delete and existing tool
-func deleteComponent(c *echo.Context) error {
+func deleteComponent(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
 	if err != nil {

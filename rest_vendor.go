@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/labstack/echo"
 	"log"
 	"net/http"
+
+	"github.com/labstack/echo"
 )
 
 ///////////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@ type DBvendorPrice struct {
 }
 
 // Get a list of vendors
-func queryVendor(c *echo.Context) error {
+func queryVendor(c echo.Context) error {
 
 	_, err := securityCheck(c, "readVendor")
 	if err != nil {
@@ -72,7 +73,7 @@ type DBvendorParts struct {
 }
 
 // Get a list of parts provided by this vendor
-func queryVendorParts(c *echo.Context) error {
+func queryVendorParts(c echo.Context) error {
 
 	_, err := securityCheck(c, "readVendor")
 	if err != nil {
@@ -99,7 +100,7 @@ func queryVendorParts(c *echo.Context) error {
 }
 
 // Get a specific vendor
-func getVendor(c *echo.Context) error {
+func getVendor(c echo.Context) error {
 
 	_, err := securityCheck(c, "readVendor")
 	if err != nil {
@@ -134,7 +135,7 @@ type NewPriceList struct {
 
 // Receive a new PriceList from the front end, and dynamically
 // Create the XRef records from vendor to part
-func newVendorPrices(c *echo.Context) error {
+func newVendorPrices(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeVendor")
 	if err != nil {
@@ -201,7 +202,7 @@ func newVendorPrices(c *echo.Context) error {
 }
 
 // Create a new vendor
-func newVendor(c *echo.Context) error {
+func newVendor(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeVendor")
 	if err != nil {
@@ -231,7 +232,7 @@ func newVendor(c *echo.Context) error {
 }
 
 // Update an existing vendor
-func saveVendor(c *echo.Context) error {
+func saveVendor(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeVendor")
 	if err != nil {
@@ -265,7 +266,7 @@ func saveVendor(c *echo.Context) error {
 }
 
 // Delete an existing vendor
-func deleteVendor(c *echo.Context) error {
+func deleteVendor(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeVendor")
 	if err != nil {

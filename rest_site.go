@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/labstack/echo"
 	"net/http"
+
+	"github.com/labstack/echo"
 )
 
 ///////////////////////////////////////////////////////////////////////
@@ -44,7 +45,7 @@ func getRelatedSites(siteID int) []int {
 }
 
 // Get a list of all sites, limited to the sites that this user can see !
-func querySites(c *echo.Context) error {
+func querySites(c echo.Context) error {
 
 	claim, err := securityCheck(c, "readSite")
 	if err != nil {
@@ -76,7 +77,7 @@ type SiteStatusReport struct {
 }
 
 // Get a record that describes the statuses for the main sites
-func siteStatus(c *echo.Context) error {
+func siteStatus(c echo.Context) error {
 
 	_, err := securityCheck(c, "readSite")
 	if err != nil {
@@ -175,7 +176,7 @@ func siteStatus(c *echo.Context) error {
 }
 
 // Get a list of sites that this site supplies
-func querySiteSupplies(c *echo.Context) error {
+func querySiteSupplies(c echo.Context) error {
 
 	_, err := securityCheck(c, "readSite")
 	if err != nil {
@@ -198,7 +199,7 @@ func querySiteSupplies(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func querySiteUsers(c *echo.Context) error {
+func querySiteUsers(c echo.Context) error {
 
 	_, err := securityCheck(c, "readUser")
 	if err != nil {
@@ -223,7 +224,7 @@ func querySiteUsers(c *echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
-func getSite(c *echo.Context) error {
+func getSite(c echo.Context) error {
 
 	_, err := securityCheck(c, "readSite")
 	if err != nil {
@@ -244,7 +245,7 @@ func getSite(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func newSite(c *echo.Context) error {
+func newSite(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeSite")
 	if err != nil {
@@ -273,7 +274,7 @@ func newSite(c *echo.Context) error {
 	return c.JSON(http.StatusCreated, record)
 }
 
-func saveSite(c *echo.Context) error {
+func saveSite(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeSite")
 	if err != nil {
@@ -306,7 +307,7 @@ func saveSite(c *echo.Context) error {
 	return c.JSON(http.StatusOK, siteID)
 }
 
-func deleteSite(c *echo.Context) error {
+func deleteSite(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeSite")
 	if err != nil {

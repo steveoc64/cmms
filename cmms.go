@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/steveoc64/godev/echocors"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
-	"github.com/labstack/echo/engine/standard"
-	_ "github.com/lib/pq"
 	"log"
 	"time"
+
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/engine/standard"
+	"github.com/labstack/echo/middleware"
+	_ "github.com/lib/pq"
+	"github.com/steveoc64/godev/echocors"
 )
 
 var e *echo.Echo
@@ -28,14 +29,13 @@ func main() {
 		log.Println("... Remaining SMS Balance =", smsbal)
 	}
 
-
 	// DefaultStaticConfig = StaticConfig{
 	//   Root:   "",
 	//   Index:  []string{"index.html"},
 	//   Browse: false,
-	// }	
+	// }
 	e = echo.New()
-	e.Use(middleware.Static("public"))	
+	e.Use(middleware.Static("build"))
 	// e.Index("./build/index.html")
 	// e.ServeDir("/", "./build")
 

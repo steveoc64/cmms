@@ -59,7 +59,7 @@ type DBpartVendors struct {
 }
 
 // Get a list of all parts
-func queryParts(c *echo.Context) error {
+func queryParts(c echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
 	if err != nil {
@@ -76,7 +76,7 @@ func queryParts(c *echo.Context) error {
 }
 
 // Get a list of components / tools that use this part
-func queryPartComponents(c *echo.Context) error {
+func queryPartComponents(c echo.Context) error {
 
 	claim, err := securityCheck(c, "readPart")
 	if err != nil {
@@ -107,7 +107,7 @@ func queryPartComponents(c *echo.Context) error {
 }
 
 // Get a list of vendors that supply this part
-func queryPartVendors(c *echo.Context) error {
+func queryPartVendors(c echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
 	if err != nil {
@@ -135,7 +135,7 @@ func queryPartVendors(c *echo.Context) error {
 }
 
 // Get a specific part
-func getPart(c *echo.Context) error {
+func getPart(c echo.Context) error {
 
 	_, err := securityCheck(c, "readPart")
 	if err != nil {
@@ -153,7 +153,7 @@ func getPart(c *echo.Context) error {
 }
 
 // Create a new part
-func newPart(c *echo.Context) error {
+func newPart(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
 	if err != nil {
@@ -183,7 +183,7 @@ func newPart(c *echo.Context) error {
 }
 
 // Update an existing part
-func savePart(c *echo.Context) error {
+func savePart(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
 	if err != nil {
@@ -217,7 +217,7 @@ func savePart(c *echo.Context) error {
 }
 
 // Delete an existing part
-func deletePart(c *echo.Context) error {
+func deletePart(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writePart")
 	if err != nil {

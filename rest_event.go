@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo"
-	"gopkg.in/guregu/null.v3"
-	"gopkg.in/mgutz/dat.v1"
+	"gopkg.in/guregu/null.v2/zero"
+	dat "gopkg.in/mgutz/dat.v1"
 )
 
 ///////////////////////////////////////////////////////////////////////
@@ -42,22 +42,22 @@ type DBeventResponse struct {
 	Type            string      `db:"type"`
 	ToolType        string      `db:"tool_type"`
 	MachineId       int         `db:"machine_id"`
-	MachineName     null.String `db:"machine_name"`
-	SiteName        null.String `db:"site_name"`
+	MachineName     zero.String `db:"machine_name"`
+	SiteName        zero.String `db:"site_name"`
 	ToolId          int         `db:"tool_id"`
-	ToolName        null.String `db:"tool_name"`
+	ToolName        zero.String `db:"tool_name"`
 	Priority        int         `db:"priority"`
 	StartDate       string      `db:"startdate"`
 	CreatedBy       int         `db:"created_by"`
 	Username        string      `db:"username"`
 	AllocatedBy     int         `db:"allocated_by"`
-	AllocatedByUser null.String `db:"allocated_by_user"`
+	AllocatedByUser zero.String `db:"allocated_by_user"`
 	AllocatedTo     int         `db:"allocated_to"`
-	AllocatedToUser null.String `db:"allocated_to_user"`
-	Completed       null.String `db:"completed"`
-	LabourCost      null.String `db:"labour_cost"`
-	MaterialCost    null.String `db:"material_cost"`
-	OtherCost       null.String `db:"other_cost"`
+	AllocatedToUser zero.String `db:"allocated_to_user"`
+	Completed       zero.String `db:"completed"`
+	LabourCost      zero.String `db:"labour_cost"`
+	MaterialCost    zero.String `db:"material_cost"`
+	OtherCost       zero.String `db:"other_cost"`
 	Notes           string      `db:"notes"`
 	Status          string      `db:"status"`
 }
@@ -76,7 +76,7 @@ type ToolEventRequest struct {
 	Action string `json:"action"`
 }
 
-func queryMachineEvents(c *echo.Context) error {
+func queryMachineEvents(c echo.Context) error {
 
 	_, err := securityCheck(c, "readEvent")
 	if err != nil {
@@ -113,7 +113,7 @@ func queryMachineEvents(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func queryMachineCompEvents(c *echo.Context) error {
+func queryMachineCompEvents(c echo.Context) error {
 
 	_, err := securityCheck(c, "readEvent")
 	if err != nil {
@@ -152,7 +152,7 @@ func queryMachineCompEvents(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func queryEvents(c *echo.Context) error {
+func queryEvents(c echo.Context) error {
 
 	claim, err := securityCheck(c, "readEvent")
 	if err != nil {
@@ -189,7 +189,7 @@ func queryEvents(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func getEvent(c *echo.Context) error {
+func getEvent(c echo.Context) error {
 
 	_, err := securityCheck(c, "readEvent")
 	if err != nil {
@@ -232,7 +232,7 @@ type EventUpdate struct {
 }
 
 // All this saves is the notes field
-func saveEvent(c *echo.Context) error {
+func saveEvent(c echo.Context) error {
 
 	_, err := securityCheck(c, "writeEvent")
 	if err != nil {
@@ -258,7 +258,7 @@ func saveEvent(c *echo.Context) error {
 	return c.JSON(http.StatusOK, id)
 }
 
-func queryToolEvents(c *echo.Context) error {
+func queryToolEvents(c echo.Context) error {
 
 	_, err := securityCheck(c, "readEvent")
 	if err != nil {
@@ -296,7 +296,7 @@ func queryToolEvents(c *echo.Context) error {
 // TODO - bring this code into line with the tool event, as this is the entry point for
 // raising events from the machine list screen now
 
-func raiseEventMachine(c *echo.Context) error {
+func raiseEventMachine(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeEvent")
 	if err != nil {
@@ -424,7 +424,7 @@ func raiseEventMachine(c *echo.Context) error {
 	// TODO - add a mega amount of auditing to the machine and event records
 }
 
-func raiseEventTool(c *echo.Context) error {
+func raiseEventTool(c echo.Context) error {
 
 	claim, err := securityCheck(c, "writeEvent")
 	if err != nil {
@@ -568,7 +568,7 @@ func raiseEventTool(c *echo.Context) error {
 	return c.String(http.StatusOK, "Event Raised on the Tool & Machine")
 }
 
-func clearTempEventTool(c *echo.Context) error {
+func clearTempEventTool(c echo.Context) error {
 
 	_, err := securityCheck(c, "writeEvent")
 	if err != nil {
@@ -591,7 +591,7 @@ type EventCost struct {
 	OtherCost    float64
 }
 
-func addCostToEvent(c *echo.Context) error {
+func addCostToEvent(c echo.Context) error {
 
 	_, err := securityCheck(c, "writeEvent")
 	if err != nil {
@@ -639,7 +639,7 @@ func addCostToEvent(c *echo.Context) error {
 	return c.String(http.StatusOK, "added costs")
 }
 
-func queryEventDocs(c *echo.Context) error {
+func queryEventDocs(c echo.Context) error {
 
 	_, err := securityCheck(c, "writeEvent")
 	if err != nil {
@@ -693,7 +693,7 @@ func queryEventDocs(c *echo.Context) error {
 	return c.JSON(http.StatusOK, docs)
 }
 
-func queryWorkOrders(c *echo.Context) error {
+func queryWorkOrders(c echo.Context) error {
 
 	_, err := securityCheck(c, "readEvent")
 	if err != nil {
@@ -827,17 +827,17 @@ type DBwo_docs struct {
 
 type EventNotes struct {
 	MachineName  string      `db:"machine_name"`
-	MachineNotes null.String `db:"machine_notes"`
-	ToolName     null.String `db:"tool_name"`
-	ToolNotes    null.String `db:"tool_notes"`
-	SiteName     null.String `db:"site_name"`
-	SiteAddress  null.String `db:"site_address"`
-	SiteNotes    null.String `db:"site_notes"`
-	EventNotes   null.String `db:"event_notes"`
+	MachineNotes zero.String `db:"machine_notes"`
+	ToolName     zero.String `db:"tool_name"`
+	ToolNotes    zero.String `db:"tool_notes"`
+	SiteName     zero.String `db:"site_name"`
+	SiteAddress  zero.String `db:"site_address"`
+	SiteNotes    zero.String `db:"site_notes"`
+	EventNotes   zero.String `db:"event_notes"`
 	ToolType     string      `db:"tool_type"`
 }
 
-func getString(s null.String) string {
+func getString(s zero.String) string {
 	r := s.String
 	if !s.Valid {
 		r = ""
@@ -845,7 +845,7 @@ func getString(s null.String) string {
 	return r
 }
 
-func newWorkOrder(c *echo.Context) error {
+func newWorkOrder(c echo.Context) error {
 
 	log.Println(`adding new workorder`)
 
@@ -1031,7 +1031,7 @@ func newWorkOrder(c *echo.Context) error {
 	return c.JSON(http.StatusOK, wo)
 }
 
-func updateWorkOrder(c *echo.Context) error {
+func updateWorkOrder(c echo.Context) error {
 
 	// TODO - a number of possible actions, including re-issuing the workorder
 	_, err := securityCheck(c, "readEvent")
@@ -1063,7 +1063,7 @@ func UrlEncoded(str string) (string, error) {
 	return u.String(), nil
 }
 
-func queryEventWorkorders(c *echo.Context) error {
+func queryEventWorkorders(c echo.Context) error {
 
 	_, err := securityCheck(c, "readEvent")
 	if err != nil {
@@ -1120,7 +1120,7 @@ func queryEventWorkorders(c *echo.Context) error {
 	return c.JSON(http.StatusOK, record)
 }
 
-func getWorkOrder(c *echo.Context) error {
+func getWorkOrder(c echo.Context) error {
 
 	_, err := securityCheck(c, "readEvent")
 	if err != nil {
