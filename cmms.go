@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/steveoc64/godev/echocors"
 	"github.com/labstack/echo"
-	mw "github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/engine/standard"
 	_ "github.com/lib/pq"
-	"github.com/rs/cors"
 	"log"
 	"time"
 )
@@ -27,24 +28,25 @@ func main() {
 		log.Println("... Remaining SMS Balance =", smsbal)
 	}
 
-	e = echo.New()
-	e.Index("./build/index.html")
-	e.ServeDir("/", "./build")
 
-	e.Use(mw.Logger())
-	e.Use(mw.Recover())
-	e.Use(mw.Gzip())
+	// DefaultStaticConfig = StaticConfig{
+	//   Root:   "",
+	//   Index:  []string{"index.html"},
+	//   Browse: false,
+	// }	
+	e = echo.New()
+	e.Use(middleware.Static("public"))	
+	// e.Index("./build/index.html")
+	// e.ServeDir("/", "./build")
+
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.Use(middleware.Gzip())
 	if Config.Debug {
 		e.SetDebug(true)
 	}
 
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
-		AllowCredentials: true,
-		Debug:            Config.Debug,
-	})
-	e.Use(c.Handler)
+	echocors.Init(e, Config.Debug)
 
 	// Define all the Routes
 	_initRoutes()
@@ -63,7 +65,7 @@ func main() {
 	if Config.Debug {
 		log.Printf("... Starting Web Server on port %d", Config.WebPort)
 	}
-	e.Run(fmt.Sprintf(":%d", Config.WebPort))
+	e.Run(standard.New(fmt.Sprintf(":%d", Config.WebPort)))
 }
 
 func pinger() {
