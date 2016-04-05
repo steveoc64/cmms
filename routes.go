@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/engine/standard"
 
 	"github.com/thoas/stats"
 	//	"gopkg.in/mgutz/dat.v1"
@@ -118,8 +119,8 @@ func _initRoutes() {
 
 	// Add a websocket handler
 	// e.WebSocket("/ws", webSocket)
-	// e.Get("/ws", fasthttp.WrapHandler(websocket.Handler(webSocket)))
-	e.Get("/ws", doNothing)
+	e.Get("/ws", standard.WrapHandler(websocket.Handler(webSocket)))
+	// e.Get("/ws", doNothing)
 	// e.Get("/ws", standard.WrapHandler(websocket.Handler(func(ws *websocket.Conn) {
 	// 	for {
 	// 		websocket.Message.Send(ws, "Hello, Client!")

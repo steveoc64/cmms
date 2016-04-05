@@ -10,6 +10,8 @@ import (
 	"github.com/labstack/echo/middleware"
 	_ "github.com/lib/pq"
 	"github.com/steveoc64/godev/echocors"
+
+	"github.com/facebookgo/grace/gracehttp"
 )
 
 var e *echo.Echo
@@ -43,8 +45,9 @@ func main() {
 
 	_initRoutes()
 	e.Static("/", "build")
-	e.File("/", "build/index.html")
+	// e.File("/", "build/index.html")
 
+	// e.Use(fasthttp.WrapHandler(middleware.Logger()))
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.Gzip())
@@ -68,7 +71,9 @@ func main() {
 	if Config.Debug {
 		log.Printf("... Starting Web Server on port %d", Config.WebPort)
 	}
-	e.Run(standard.New(fmt.Sprintf(":%d", Config.WebPort)))
+	std := standard.New(fmt.Sprintf(":%d", Config.WebPort))
+	std.SetHandler(e)
+	gracehttp.Serve(std.Server)
 }
 
 func pinger() {

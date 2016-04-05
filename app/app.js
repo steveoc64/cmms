@@ -909,17 +909,17 @@ var getMapURI = function(addr) {
 		//var socketUrl = 'ws://' + $location.host() + '/ws'
 		console.log("run with ws",socketUrl, $websocket)
 
-	  // var ws = $websocket.$new({
-	  // 	url: socketUrl,
-	  // 	reconnect: true,
-	  // 	enqueue: true,
-	  // })
+	  var ws = $websocket.$new({
+	  	url: socketUrl,
+	  	reconnect: true,
+	  	enqueue: true,
+	  })
 
-	  // ws.$on('$open', function() {
-	  // 	console.log('Established socket connection')
-	  // }).$on('$close', function() {
-	  // 	console.log('Closed socket connection')
-	  // })
+	  ws.$on('$open', function() {
+	  	console.log('Established socket connection')
+	  }).$on('$close', function() {
+	  	console.log('Closed socket connection')
+	  })
 
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		  	var acl = toState.acl
