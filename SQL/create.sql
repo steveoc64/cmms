@@ -417,19 +417,21 @@ create index sm_part_idx on sm_parts (task_id, part_id, date);
 
 drop table if exists sched_task;
 create table sched_task (
-	id serial not null primary key,
+	id serial not null primary key,	
 	machine_id int not null,
 	tool_id int not null,
 	component text not null default '',
+	descr text not null default '',
 	startdate timestamptz not null default localtimestamp,
 	freq text not null default 'R',
 	parent_task int,
 	days int,
 	week int,
+	duration_days int not null default 1,
 	labour_cost numeric(12,2) not null,
 	material_cost numeric(12,2) not null,
-	other_cost_desc text[] not null default '',
-	other_cost numeric(12,2)[] not null,
+	other_cost_desc text[] not null,
+	other_cost numeric(12,2)[] not null
 );
 
 drop table if exists sched_task_part;
@@ -444,19 +446,25 @@ create unique index sched_task_part_idx on sched_task_part(task_id, part_id);
 drop table if exists task;
 create table task (
 	id serial not null primary key,
-	user_id int not null,
 	machine_id int not null,
 	tool_id int not null,
 	component text not null default '',
-	startdate timestamptz not null default localtimestamp,
-	freq text not null default 'R',
-	parent_task int,
-	days int,
+	descr text not null default '',
+	log text not null default '',
+	created_date timestamptz not null default localtimestamp,
+	startdate timestamptz,
+	due_date timestamptz,
+	escalate_date timestamptz,
+	assigned_by int,
+	assigned_to int,
+	assigned_date timestamptz,	
+	completed_date timestamptz,
+	has_issue boolean not null default false,
+	issue_resolved_date timestamptz,
 	labour_cost numeric(12,2) not null,
 	materal_cost numeric(12,2) not null,
-	other_cost numeric(12,2) not null,
-	completed timestamptz,
-	has_issue boolean not null default false
+	other_cost_desc text[] not null default '',
+	other_cost numeric(12,2)[] not null,
 );
 
 drop table if exists task_part;

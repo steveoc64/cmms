@@ -42,6 +42,6 @@
     "c3-angular": "~1.0.1"
   },
   "resolutions": {
-    "angular": "1.5.0-rc.0"
+    "angular": "~1.4"
   }
 }
