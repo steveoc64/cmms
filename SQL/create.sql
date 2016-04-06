@@ -415,8 +415,6 @@ create index sm_part_idx on sm_parts (task_id, part_id, date);
 -- Relative  / + set number of days
 ---------------------------------------------------------
 
-
-
 drop table if exists sched_task;
 create table sched_task (
 	id serial not null primary key,
@@ -427,10 +425,21 @@ create table sched_task (
 	freq text not null default 'R',
 	parent_task int,
 	days int,
+	week int,
 	labour_cost numeric(12,2) not null,
-	materal_cost numeric(12,2) not null,
-	other_cost numeric(12,2) not null	
+	material_cost numeric(12,2) not null,
+	other_cost_desc text[] not null default '',
+	other_cost numeric(12,2)[] not null,
 );
+
+drop table if exists sched_task_part;
+create table sched_task_part (
+	task_id int not null,
+	part_id int not null,
+	qty numeric(12,2) not null,
+	notes text not null default ''	
+);
+create unique index sched_task_part_idx on sched_task_part(task_id, part_id);
 
 drop table if exists task;
 create table task (
@@ -449,6 +458,15 @@ create table task (
 	completed timestamptz,
 	has_issue boolean not null default false
 );
+
+drop table if exists task_part;
+create table task_part (
+	task_id int not null,
+	part_id int not null,
+	qty numeric(12,2) not null,
+	notes text not null default ''
+);
+create unique index task_part_idx on task_part(task_id, part_id);
 
 drop table if exists user_log;
 create table user_log (
