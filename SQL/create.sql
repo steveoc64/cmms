@@ -419,10 +419,11 @@ drop table if exists sched_task;
 create table sched_task (
 	id serial not null primary key,	
 	machine_id int not null,
+	comp_type text not null default 'C',
 	tool_id int not null,
 	component text not null default '',
 	descr text not null default '',
-	startdate timestamptz not null default localtimestamp,
+	startdate timestamptz,
 	freq text not null default 'R',
 	parent_task int,
 	days int,
@@ -430,8 +431,8 @@ create table sched_task (
 	duration_days int not null default 1,
 	labour_cost numeric(12,2) not null,
 	material_cost numeric(12,2) not null,
-	other_cost_desc text[] not null,
-	other_cost numeric(12,2)[] not null
+	other_cost_desc text[],
+	other_cost numeric(12,2)[]
 );
 
 drop table if exists sched_task_part;
@@ -463,8 +464,8 @@ create table task (
 	issue_resolved_date timestamptz,
 	labour_cost numeric(12,2) not null,
 	materal_cost numeric(12,2) not null,
-	other_cost_desc text[] not null default '',
-	other_cost numeric(12,2)[] not null,
+	other_cost_desc text[],
+	other_cost numeric(12,2)[] 
 );
 
 drop table if exists task_part;
