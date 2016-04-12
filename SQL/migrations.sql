@@ -83,3 +83,9 @@ alter table machine add	lube text not null default 'Running';
 
 alter table site add x int not null default 0;
 alter table site add y int not null default 0;
+
+
+alter table task alter startdate type date;
+alter table task alter due_date type date;
+alter table task alter escalate_date type date;
+alter table sched_task alter startdate type date;
