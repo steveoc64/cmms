@@ -33,6 +33,8 @@ type DBsite struct {
 	Notes          string  `db:"notes"`
 	X              int     `db:"x"`
 	Y              int     `db:"y"`
+	AlertsTo       int     `db:"alerts_to"`
+	TasksTo        int     `db:"tasks_to"`
 }
 
 // Return a slice, that contains This SiteID, and all child SiteIDs that have this site as a parent

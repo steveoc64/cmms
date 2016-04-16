@@ -273,9 +273,9 @@ type SysLogRequest struct {
 func getIPAddr(c echo.Context) string {
 	req := c.Request()
 	ip := req.RemoteAddress()
-	if ra := req.Header().Get(echo.XRealIP); ra != "" {
+	if ra := req.Header().Get(echo.HeaderXRealIP); ra != "" {
 		return ra
-	} else if ip = req.Header().Get(echo.XForwardedFor); ip != "" {
+	} else if ip = req.Header().Get(echo.HeaderXForwardedFor); ip != "" {
 		return ra
 	}
 	return ip

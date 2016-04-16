@@ -37,6 +37,8 @@ type DBmachine struct {
 	Rollbed    string       `db:"rollbed"`
 	Uncoiler   string       `db:"uncoiler"`
 	Lube       string       `db:"lube"`
+	AlertsTo   int          `db:"alerts_to"`
+	TasksTo    int          `db:"tasks_to"`
 	Components []*DBcomponent
 }
 
@@ -64,6 +66,8 @@ type DBmachineResponse struct {
 	Rollbed    string  `db:"rollbed"`
 	Uncoiler   string  `db:"uncoiler"`
 	Lube       string  `db:"lube"`
+	AlertsTo   int     `db:"alerts_to"`
+	TasksTo    int     `db:"tasks_to"`
 	Components []*DBcomponent
 }
 
