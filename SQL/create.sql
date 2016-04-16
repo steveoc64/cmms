@@ -25,7 +25,9 @@ create table site (
 	stock_site int not null default 0,
 	notes text not null default '',
 	x int not null default 0,
-	y int not null default 0
+	y int not null default 0,
+	alerts_to int not null default 0,
+	tasks_to int not null default 0
 );
 
 drop table if exists user_site;
@@ -140,7 +142,9 @@ create table machine (
 	console text not null default 'Running',
 	rollbed text not null default 'Running',
 	uncoiler text not null default 'Running',
-	lube text not null default 'Running'
+	lube text not null default 'Running',
+	alerts_to int not null default 0,
+	tasks_to int not null default 0
 );
 
 drop table if exists site_layout;
@@ -488,3 +492,4 @@ create table user_log (
 	output text
 );
 -- create unique index user_log_idx on user_log (logdate,id);
+
