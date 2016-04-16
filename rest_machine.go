@@ -499,7 +499,7 @@ type DBSchedTask struct {
 	ParentTask   int          `db:"parent_task"`
 	Days         int          `db:"days"`
 	LabourCost   float64      `db:"labour_cost"`
-	MaterialCost float64      `db:"materal_cost"`
+	MaterialCost float64      `db:"material_cost"`
 	OtherCost    float64      `db:"other_cost"`
 }
 
@@ -515,7 +515,7 @@ func queryMachineTasks(c echo.Context) error {
 
 	machineID := getID(c)
 	err = DB.SQL(`
-		select id,tool_id,component,startdate,freq,days,labour_cost,materal_cost,other_cost
+		select id,tool_id,component,startdate,freq,days,labour_cost,material_cost,other_cost
 		from sched_task
 		where machine_id=$1`, machineID).
 		QueryStructs(&tasks)
