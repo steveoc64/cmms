@@ -85,8 +85,12 @@ alter table site add x int not null default 0;
 alter table site add y int not null default 0;
 
 
-
 alter table site add	alerts_to int not null default 0;
 alter table site add tasks_to int not null default 0;
 alter table machine add tasks_to int not null default 0;
 alter table machine add alerts_to int not null default 0;
+
+alter table task alter startdate type date;
+alter table task alter due_date type date;
+alter table task alter escalate_date type date;
+alter table sched_task alter startdate type date;
