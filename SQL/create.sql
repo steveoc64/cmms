@@ -456,11 +456,21 @@ create table sched_control (
 	last_run date
 );
 
+drop table if exists sched_control_task;
+create table sched_control_task (
+	task_id int not null,
+	last_gen date,
+	last_jobcount int
+);
+
+
 drop table if exists task;
 create table task (
 	id serial not null primary key,
+	sched_id int not null default 0,
 	machine_id int not null,
 	tool_id int not null,
+	comp_type text not null default 'C',
 	component text not null default '',
 	descr text not null default '',
 	log text not null default '',
@@ -474,8 +484,10 @@ create table task (
 	completed_date timestamptz,
 	has_issue boolean not null default false,
 	issue_resolved_date timestamptz,
-	labour_cost numeric(12,2) not null,
-	materal_cost numeric(12,2) not null,
+	labour_est numeric(12,2) not null default 0,
+	material_est numeric(12,2) not null  default 0,
+	labour_cost numeric(12,2) not null default 0,
+	material_cost numeric(12,2) not null  default 0,
 	other_cost_desc text[],
 	other_cost numeric(12,2)[] 
 );
