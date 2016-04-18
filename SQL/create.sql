@@ -428,9 +428,11 @@ create table sched_task (
 	component text not null default '',
 	descr text not null default '',
 	startdate date,
+	oneoffdate date,
 	freq text not null default 'R',
 	parent_task int,
 	days int,
+	count int,
 	week int,
 	duration_days int not null default 1,
 	labour_cost numeric(12,2) not null,
@@ -447,6 +449,12 @@ create table sched_task_part (
 	notes text not null default ''	
 );
 create unique index sched_task_part_idx on sched_task_part(task_id, part_id);
+
+drop table if exists sched_control;
+create table sched_control (
+	id int not null primary key,
+	last_run date
+);
 
 drop table if exists task;
 create table task (
