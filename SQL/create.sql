@@ -186,20 +186,37 @@ create table component_part (
 );
 create unique index component_part_idx on component_part (component_id,part_id);
 
+drop table if exists part_class;
+create table part_class (
+	id serial not null,
+	name text not null default '',
+	descr text not null default ''
+);
+
 drop table if exists part;
 create table part (
 	id serial not null primary key,
+	class int not null default 0,
 	name text not null,
 	descr text not null default '',
 	stock_code text not null,
 	reorder_stocklevel numeric(12,2) not null default 1,
 	reorder_qty numeric(12,2) not null default 1,
 	latest_price numeric(12,2) not null default 0,
+	last_price_date date,
 	qty_type text not null default 'ea',
 	picture text not null default '',
 	notes text not null default ''	
 );
-create unique index part_stock_code_idx on part (stock_code);
+create index part_stock_code_idx on part (stock_code);
+
+drop table if exists part_price;
+create table part_price (
+	part_id int not null,
+	datefrom timestamptz not null default localtimestamp,
+	price numeric(12,2) not null default 0
+);
+create index part_price_idx on part_price (part_id, datefrom);
 
 drop table if exists vendor;
 create table vendor (
@@ -251,9 +268,9 @@ create table event (
 	allocated_by int not null default 0,
 	allocated_to int not null default 0,
 	completed timestamptz,
-	labour_cost money not null default 0.0,
-	material_cost money not null default 0.0,
-	other_cost money not null default 0.0,
+	labour_cost numeric(12,2) not null default 0.0,
+	material_cost numeric(12,2) not null default 0.0,
+	other_cost numeric(12,2) not null default 0.0,
 	notes text not null default ''	
 );
 create index event_site_idx on event (site_id,startdate);
@@ -434,11 +451,14 @@ create table sched_task (
 	days int,
 	count int,
 	week int,
+	weekday int,
 	duration_days int not null default 1,
 	labour_cost numeric(12,2) not null,
 	material_cost numeric(12,2) not null,
 	other_cost_desc text[],
-	other_cost numeric(12,2)[]
+	other_cost numeric(12,2)[],
+	last_generated date,
+	paused bool not null default false
 );
 
 drop table if exists sched_task_part;
