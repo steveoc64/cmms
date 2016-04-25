@@ -144,7 +144,8 @@ create table machine (
 	uncoiler text not null default 'Running',
 	lube text not null default 'Running',
 	alerts_to int not null default 0,
-	tasks_to int not null default 0
+	tasks_to int not null default 0,
+	part_class int not null default 0
 );
 
 drop table if exists site_layout;
@@ -204,6 +205,7 @@ create table part (
 	reorder_qty numeric(12,2) not null default 1,
 	latest_price numeric(12,2) not null default 0,
 	last_price_date date,
+	current_stock numeric(12,2) not null default 0,
 	qty_type text not null default 'ea',
 	picture text not null default '',
 	notes text not null default ''	
@@ -217,6 +219,14 @@ create table part_price (
 	price numeric(12,2) not null default 0
 );
 create index part_price_idx on part_price (part_id, datefrom);
+
+drop table if exists part_stock;
+create table part_stock (
+	part_id int not null,
+	datefrom timestamptz not null default localtimestamp,
+	stock_level numeric(12,2) not null default 0
+);
+create index part_stock_idx on part_stock (part_id, datefrom);
 
 drop table if exists vendor;
 create table vendor (
@@ -458,7 +468,7 @@ create table sched_task (
 	other_cost_desc text[],
 	other_cost numeric(12,2)[],
 	last_generated date,
-	paused bool not null default false
+	paused bool not null default true
 );
 
 drop table if exists sched_task_part;
@@ -520,6 +530,16 @@ create table task_part (
 	notes text not null default ''
 );
 create unique index task_part_idx on task_part(task_id, part_id);
+
+drop table if exists task_check;
+create table task_check (
+	task_id int not null,
+	seq int not null,
+	descr text not null,
+	done boolean not null default false,
+	done_date timestamptz
+);
+create unique index task_check_idx on task_check(task_id,seq);
 
 drop table if exists user_log;
 create table user_log (
