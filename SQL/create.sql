@@ -553,3 +553,9 @@ create table user_log (
 );
 -- create unique index user_log_idx on user_log (logdate,id);
 
+drop table if exists hashtag;
+create table hashtag (
+	id serial not null primary key,
+	name text not null default '',
+	descr text not null default ''
+);
